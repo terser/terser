@@ -93,13 +93,6 @@ module.exports = function () {
     ok.throws(function () {
         UglifyJS.parse('(function [a] { })');
     });
-
-    ok.throws(function () {
-        // Note: this *is* a valid destructuring, but before we implement
-        // destructuring (right now it's only destructuring *arguments*),
-        // this won't do.
-        UglifyJS.parse('[{a}]');
-    });
 }
 
 // Run standalone

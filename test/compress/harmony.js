@@ -25,6 +25,18 @@ arrow_function_parens_2: {
     expect_exact: "(()=>null)();"
 }
 
+template_strings: {
+    input: {
+        `x
+x1`;
+        `x\n\rfoo`;
+        `x\`y`;
+        `nobrea\
+k`;
+    }
+    expect_exact: "`x\nx1`;`x\\n\\rfoo`;`x\\`y`;`nobreak`;"
+}
+
 regression_arrow_functions_and_hoist: {
     options = {
         hoist_vars: true,

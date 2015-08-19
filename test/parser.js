@@ -5,7 +5,14 @@ var ok = require('assert');
 module.exports = function () {
     console.log("--- Parser tests");
 
-    // Destructuring arguments
+    // Template strings
+    var templ_1 = UglifyJS.parse("`I am a templ\\`ate\nstr\\ning!`").body[0].body;
+    var templ_2 = UglifyJS.parse("`\r\nxx\\\nx`").body[0].body.segments[0];
+    var templ_3 = UglifyJS.parse("`\r\rxx\\\rx`").body[0].body.segments[0];
+
+    ok.deepEqual(templ_1.segments, [ "I am a templ\\`ate\nstr\\ning!" ]);
+    ok.deepEqual(templ_2, "\nxxx");
+    ok.deepEqual(templ_3, "\n\nxxx");
 
     // Function argument nodes are correct
     function get_args(args) {

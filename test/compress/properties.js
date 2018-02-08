@@ -1894,3 +1894,227 @@ issue_2816_ecma6: {
     expect_stdout: "3 2 4"
     node_version: ">=4"
 }
+
+issue_2893_1: {
+    options = {
+        ecma: 5,
+        join_vars: true,
+    }
+    input: {
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect: {
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2893_2: {
+    options = {
+        ecma: 5,
+        join_vars: true,
+    }
+    input: {
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect: {
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2893_3: {
+    options = {
+        ecma: 6,
+        join_vars: true,
+    }
+    input: {
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect: {
+        var o = {
+            get a() {
+                return "PASS";
+            }
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2893_4: {
+    options = {
+        ecma: 6,
+        join_vars: true,
+    }
+    input: {
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect: {
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL"
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2893_5: {
+    options = {
+        ecma: 5,
+        join_vars: true,
+    }
+    input: {
+        "use strict";
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect: {
+        "use strict";
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect_stdout: true // TypeError: Cannot set property a of #<Object> which has only a getter
+}
+
+issue_2893_6: {
+    options = {
+        ecma: 5,
+        join_vars: true,
+    }
+    input: {
+        "use strict";
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect: {
+        "use strict";
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2893_7: {
+    options = {
+        ecma: 6,
+        join_vars: true,
+    }
+    input: {
+        "use strict";
+        var o = {
+            get a() {
+                return "PASS";
+            },
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect: {
+        "use strict";
+        var o = {
+            get a() {
+                return "PASS";
+            }
+        };
+        o.a = "FAIL";
+        console.log(o.a);
+    }
+    expect_stdout: true // TypeError: Cannot set property a of #<Object> which has only a getter
+}
+
+issue_2893_8: {
+    options = {
+        ecma: 6,
+        join_vars: true,
+    }
+    input: {
+        "use strict";
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL",
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect: {
+        "use strict";
+        var o = {
+            set a(v) {
+                this.b = v;
+            },
+            b: "FAIL"
+        };
+        o.a = "PASS";
+        console.log(o.b);
+    }
+    expect_stdout: "PASS"
+}

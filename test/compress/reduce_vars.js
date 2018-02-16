@@ -6195,3 +6195,21 @@ issue_3042_2: {
         "true",
     ]
 }
+
+issue_2919: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        var arr = [ function() {} ];
+        console.log(typeof arr[0]);
+    }
+    expect: {
+        console.log("function");
+    }
+    expect_stdout: "function"
+}

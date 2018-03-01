@@ -634,6 +634,9 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   the resultant code is shorter: `m(){return x}` becomes `m:()=>x`.
   This transform requires that the `ecma` compress option is set to `6` or greater.
 
+- `arguments` (default: `true`) -- replace `arguments[index]` with function
+  parameter name whenever possible.
+
 - `booleans` (default: `true`) -- various optimizations for boolean context,
   for example `!!a ? b : c → a ? b : c`
 

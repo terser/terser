@@ -254,7 +254,7 @@ export_default_anon_function: {
             console.log(1 + 2);
         }
     }
-    expect_exact: "export default function(){console.log(3)};"
+    expect_exact: "export default(function(){console.log(3)});"
 }
 
 export_default_anon_class: {

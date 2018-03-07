@@ -277,7 +277,7 @@ export_default_anonymous_function: {
             foo();
         }
     }
-    expect_exact: "export default function(){foo()};"
+    expect_exact: "export default(function(){foo()});"
 }
 
 export_default_arrow: {
@@ -305,11 +305,11 @@ export_default_anonymous_generator: {
         toplevel: true,
     }
     input: {
-        export default function * () {
+        export default (function * () {
             yield foo();
-        }
+        })
     }
-    expect_exact: "export default function*(){yield foo()};"
+    expect_exact: "export default(function*(){yield foo()});"
 }
 
 export_default_anonymous_async_function: {
@@ -322,11 +322,11 @@ export_default_anonymous_async_function: {
         toplevel: true,
     }
     input: {
-        export default async function() {
+        export default (async function() {
             return await foo();
-        }
+        })
     }
-    expect_exact: "export default async function(){return await foo()};"
+    expect_exact: "export default(async function(){return await foo()});"
 }
 
 export_default_async_arrow_function: {
@@ -426,7 +426,7 @@ export_default_anonymous_generator_not_call: {
         export default function*(){}(foo);
     }
     // agrees with `acorn` and `babylon 7`
-    expect_exact: "export default function*(){};foo;"
+    expect_exact: "export default(function*(){});foo;"
 }
 
 export_default_anonymous_async_function_not_call: {
@@ -442,5 +442,5 @@ export_default_anonymous_async_function_not_call: {
         export default async function(){}(foo);
     }
     // agrees with `acorn` and `babylon 7`
-    expect_exact: "export default async function(){};foo;"
+    expect_exact: "export default(async function(){});foo;"
 }

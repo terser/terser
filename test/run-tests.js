@@ -379,7 +379,6 @@ function parse_test(file) {
 }
 
 function make_code(ast, options) {
-    options.inline_script = true;
     var stream = U.OutputStream(options);
     ast.print(stream);
     return stream.get();

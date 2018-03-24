@@ -277,7 +277,7 @@ export_default_anonymous_function: {
             foo();
         }
     }
-    expect_exact: "export default function(){foo()};"
+    expect_exact: "export default function(){foo()}"
 }
 
 export_default_seq: {
@@ -401,7 +401,7 @@ export_default_anonymous_class: {
             }
         };
     }
-    expect_exact: "export default class{constructor(){foo()}};"
+    expect_exact: "export default class{constructor(){foo()}}"
 }
 
 export_default_anonymous_function_not_call: {

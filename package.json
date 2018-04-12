@@ -1,5 +1,5 @@
 {
-  "name": "uglify-es",
+  "name": "@fabiosantoscode/uglify-es",
   "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
   "homepage": "https://github.com/mishoo/UglifyJS2/tree/harmony",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",

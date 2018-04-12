@@ -12,7 +12,7 @@
     "Alex Lam <alexlamsl@gmail.com>",
     "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)"
   ],
-  "repository": "https://github.com/mishoo/UglifyJS2.git#harmony",
+  "repository": "https://github.com/fabiosantoscode/uglify-es.git",
   "main": "tools/node.js",
   "bin": {
     "uglifyjs": "bin/uglifyjs"

@@ -654,3 +654,53 @@ concise_method_with_super: {
     expect_stdout: "PASS"
     node_version: ">=4"
 }
+
+issue_3092a: {
+    options = {
+        arrows: true,
+    }
+    input: {
+        console.log({
+            *gen(x) {
+                return (yield x.toUpperCase()), 2;
+            }
+        }.gen("pass").next().value);
+    }
+    expect: {
+        console.log({
+            *gen(x) {
+                return yield x.toUpperCase(), 2;
+            }
+        }.gen("pass").next().value);
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}
+
+issue_3092b: {
+    options = {
+        arrows: true,
+    }
+    input: {
+        var obj = {
+            async bar(x) {
+                return (await x), 2;
+            },
+            *gen(x) {
+                return (yield x.toUpperCase()), 2;
+            },
+        };
+        console.log(obj.gen("pass").next().value);
+    }
+    expect: {
+        var obj = {
+            bar: async x => (await x, 2),
+            * gen(x) {
+                return yield x.toUpperCase(), 2;
+            }
+        };
+        console.log(obj.gen("pass").next().value);
+    }
+    expect_stdout: "PASS"
+    node_version: ">=8"
+}

@@ -321,3 +321,40 @@ issue_2344_2: {
     }
     expect_exact: "async()=>{+(await x);await y;return await z};"
 }
+
+issue_3079: {
+    input: {
+        async => 1;
+        var async = async => async;
+        console.log(async(1));
+        async = (async) => async;
+        console.log(async(2));
+        console.log({
+            m: async => async ? "3" : "4"
+        }.m(true));
+    }
+    expect: {
+        async => 1;
+        var async = async => async;
+        console.log(async(1));
+        async = (async) => async;
+        console.log(async(2));
+        console.log({
+            m: async => async ? "3" : "4"
+        }.m(true));
+    }
+    expect_stdout: [
+        "1",
+        "2",
+        "3",
+    ]
+    node_version: ">=6"
+}
+
+issue_3079_2: {
+    input: {
+        async async => async;
+        async (async) => async;
+    }
+    expect_exact: "async async=>async;async async=>async;"
+}

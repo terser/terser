@@ -1602,6 +1602,30 @@ issue_2874_3: {
     node_version: ">=6"
 }
 
+issue_3061: {
+    options = {
+        collapse_vars: true,
+        evaluate: true,
+        inline: 3,
+        reduce_funcs: false,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        console.log(new class extends(function(base) {
+            return class extends base {};
+        }(Error)){}() instanceof Error);
+    }
+    expect: {
+        console.log(new class extends(function(base) {
+            return class extends base {};
+        }(Error)){}() instanceof Error);
+    }
+    expect_stdout: "true"
+    node_version: ">=6"
+}
+
 module_enables_strict_mode: {
     options = {
         module: true,

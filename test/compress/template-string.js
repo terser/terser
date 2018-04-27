@@ -506,3 +506,55 @@ sequence_2: {
     expect_stdout: "2 /b/"
     node_version: ">=4"
 }
+
+return_template_string_with_trailing_backslash: {
+    input: {
+        function a() {
+            return `\
+foo`;
+        }
+        function b() {
+            return `
+bar`;
+        }
+        function c() {
+            return
+            `\
+baz`;
+        }
+        function d() {
+            return
+            `qux`;
+        }
+        function e() {
+            return `\nfin`;
+        }
+        console.log(a(), b(), c(), d(), e());
+    }
+    expect: {
+        function a() {
+            return `foo`;
+        }
+        function b() {
+            return `\nbar`;
+        }
+        function c() {
+            return;
+            `baz`;
+        }
+        function d() {
+            return;
+            `qux`;
+        }
+        function e() {
+            return `\nfin`;
+        }
+        console.log(a(), b(), c(), d(), e());
+    }
+    expect_stdout: [
+        "foo ",
+        "bar undefined undefined ",
+        "fin",
+    ]
+    node_version: ">=6"
+}

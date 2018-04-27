@@ -1,29 +1,24 @@
-**Bug report or feature request?** 
+**Bug report or feature request?**
 
 <!-- Note: sub-optimal but correct code is not a bug -->
 
-**ES5 or ES6+ input?** 
+**Version (complete output of `uglifyjs -V`)**
 
-<!-- Note: for ES6 see: https://github.com/mishoo/UglifyJS2/tree/harmony#harmony -->
+<!-- This is often found in "node_modules/@fabiosantoscode/uglify-es/bin/uglifyjs" -->
 
-**Uglify version (`uglifyjs -V`)**
-
-**JavaScript input**
+**ECMAScript input**
 
 <!--
-    A complete parsable JS program exhibiting the issue with
-    UglifyJS alone - without third party tools or libraries.
-    Ideally the input should be as small as possible.
-    Post a link to a gist if necessary.
+    Valid ECMAScript code exhibiting the issue with
+    `@fabiosantoscode/uglify-es` alone - without third party
+    tools or libraries. Ideally the input should be as small
+    as possible. Post a link to a gist if necessary.
 
     Issues without a reproducible test case will be closed.
 -->
 
-**The `uglifyjs` CLI command executed or `minify()` options used.**
+**Complete CLI command or `minify()` options used**
 
-**JavaScript output or error produced.**
+**Output or error**
 
-<!--
-    Note: `uglify-js` only supports ES5. 
-    Those wishing to minify ES6 should use `uglify-es`.
--->
+**Expected result**

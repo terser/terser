@@ -7,7 +7,7 @@ var assert = require("assert");
 var sandbox = require("./sandbox");
 var semver = require("semver");
 
-process.stdout.isTTY = false
+process.stdout.isTTY = false;
 
 var tests_dir = path.dirname(module.filename);
 var failures = 0;

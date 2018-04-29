@@ -2195,3 +2195,16 @@ issue_2783: {
     }
     expect_stdout: "PASS"
 }
+
+removed_async: {
+    options = {
+        inline: 2
+    }
+    input: {
+        (async()=>2)().catch(x=>null);
+    }
+    expect: {
+        (async()=>2)().catch(x=>null);
+    }
+}
+

@@ -8,12 +8,13 @@ var Console = require("console").Console;
 var sandbox = require("./sandbox");
 var semver = require("semver");
 
-var oldConsole = console;
-global.console = new Console({
-    stdout: process.stdout,
-    stderr: process.stderr,
-    colorMode: false
-})
+if (process.version.slice(0, 3) === 'v10') {
+    global.console = new Console({
+        stdout: process.stdout,
+        stderr: process.stderr,
+        colorMode: false
+    })
+}
 
 var tests_dir = path.dirname(module.filename);
 var failures = 0;

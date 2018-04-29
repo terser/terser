@@ -4,10 +4,16 @@ var U = require("./node");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");
+var Console = require("console").Console;
 var sandbox = require("./sandbox");
 var semver = require("semver");
 
-process.stdout.isTTY = false;
+var oldConsole = console;
+global.console = new Console({
+    stdout: process.stdout,
+    stderr: process.stderr,
+    colorMode: false
+})
 
 var tests_dir = path.dirname(module.filename);
 var failures = 0;

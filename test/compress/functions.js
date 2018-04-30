@@ -2196,15 +2196,22 @@ issue_2783: {
     expect_stdout: "PASS"
 }
 
-removed_async: {
+inline_function_expressions: {
     options = {
         inline: 2
     }
     input: {
         (async()=>2)().catch(x=>null);
+        (async function(){ return 3; })().catch(x => null);
+        (() => 4)();
+        (function(){ return 5; })();
+        (function*(){ return 6; })();
     }
     expect: {
         (async()=>2)().catch(x=>null);
+        (async function(){return 3})().catch(x=>null);
+        4;
+        5;
+        (function*(){return 6})();
     }
 }
-

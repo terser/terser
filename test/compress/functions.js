@@ -2431,3 +2431,19 @@ issue_3018: {
     }
     expect_stdout: "PASS"
 }
+
+issue_3125: {
+    options = {
+        inline: true,
+        unsafe: true,
+    }
+    input: {
+        console.log(function() {
+            return "PASS";
+        }.call());
+    }
+    expect: {
+        console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}

@@ -13,6 +13,8 @@ function run(command, args, done) {
     });
 }
 
+if (semver.satisfies(process.version, "0.12")) return;
+
 describe("test/benchmark.js", function() {
     this.timeout(10 * 60 * 1000);
     [
@@ -33,7 +35,6 @@ describe("test/benchmark.js", function() {
     });
 });
 
-if (semver.satisfies(process.version, "0.12")) return;
 describe("test/jetstream.js", function() {
     this.timeout(20 * 60 * 1000);
     [

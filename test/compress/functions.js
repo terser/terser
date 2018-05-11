@@ -2447,3 +2447,93 @@ issue_3125: {
     }
     expect_stdout: "PASS"
 }
+
+drop_lone_use_strict: {
+    options = {
+        side_effects: true,
+    }
+    input: {
+        function f1() {
+            "use strict";
+        }
+        function f2() {
+            "use strict";
+            function f3() {
+                "use strict";
+            }
+        }
+        (function f4() {
+            "use strict";
+        })();
+    }
+    expect: {
+        function f1() {
+        }
+        function f2() {
+            "use strict";
+            function f3() {
+            }
+        }
+    }
+}
+
+drop_lone_use_strict_arrows_1: {
+    options = {
+        side_effects: true,
+    }
+    input: {
+        var f0 = () => 0;
+        var f1 = () => {
+            "use strict";
+        }
+        var f2 = () => {
+            "use strict";
+            var f3 = () => {
+                "use strict";
+            }
+        }
+        (() => {
+            "use strict";
+        })();
+    }
+    expect: {
+        var f0 = () => 0;
+        var f1 = () => {};
+        var f2 = () => {
+            "use strict";
+            var f3 = () => {};
+        };
+    }
+    node_version: ">=6"
+}
+
+drop_lone_use_strict_arrows_2: {
+    options = {
+        dead_code: true,
+        passes: 2,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        let f0 = () => 0;
+        let f1 = () => {
+            "use strict";
+        }
+        let f2 = () => {
+            "use strict";
+            let f3 = () => {
+                "use strict";
+            }
+        }
+        (() => {
+            "use strict";
+            return undefined;
+        })();
+    }
+    expect: {
+        let f0 = () => 0;
+        let f1 = () => {};
+        let f2 = () => {};
+    }
+    node_version: ">=6"
+}

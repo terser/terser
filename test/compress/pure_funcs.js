@@ -595,6 +595,52 @@ issue_3065_2: {
     expect: {}
 }
 
+issue_3065_2b: {
+    rename = false
+    options = {
+        inline: true,
+        pure_funcs: [ "pureFunc" ],
+        reduce_vars: true,
+        side_effects: true,
+        toplevel: true,
+        unused: true,
+    }
+    mangle = {
+        toplevel: true,
+    }
+    input: {
+        function modifyWrapper(a, f, wrapper) {
+            wrapper.a = a;
+            wrapper.f = f;
+            return wrapper;
+        }
+        function pureFunc(fun) {
+            return modifyWrapper(1, fun, function(a) {
+                return fun(a);
+            });
+        }
+        var unused = pureFunc(function(x) {
+            return x;
+        });
+        function print(message) {
+            console.log(message);
+        }
+        print(2);
+        print(3);
+    }
+    expect: {
+        function o(o) {
+            console.log(o);
+        }
+        o(2);
+        o(3);
+    }
+    expect_stdout: [
+        "2",
+        "3",
+    ]
+}
+
 issue_3065_3: {
     options = {
         pure_funcs: [ "debug" ],

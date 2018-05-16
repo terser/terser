@@ -609,6 +609,12 @@ function createExpression(recurmax, noComma, stmtDepth, canThrow) {
         return '((--b) + (' + _createExpression(recurmax, noComma, stmtDepth, canThrow) + '))';
       case 2:
         return '((c = c + 1) + (' + _createExpression(recurmax, noComma, stmtDepth, canThrow) + '))'; // c only gets incremented
+      case 3:
+        return '(() => '
+            + _createExpression(recurmax, noComma, stmtDepth, canThrow)
+            + ')('
+            + _createExpression(recurmax, noComma, stmtDepth, canThrow)
+            + ')'
       default:
         return '(' + _createExpression(recurmax, noComma, stmtDepth, canThrow) + ')';
     }
@@ -848,6 +854,8 @@ function createObjectLiteral(recurmax, stmtDepth, canThrow) {
     for (var i = rng(6); --i >= 0;) {
         if (rng(20) == 0) {
             obj.push(createAccessor(recurmax, stmtDepth, canThrow));
+        } else if (rng(4) < 2) {
+            obj.push(getVarName() + ',');
         } else {
             var key = KEYS[rng(KEYS.length)];
             obj.push(key + ':(' + createExpression(recurmax, COMMA_OK, stmtDepth, canThrow) + '),');

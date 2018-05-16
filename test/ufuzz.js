@@ -140,7 +140,7 @@ var VALUES = [
     '2',
     '3',
     '4',
-    '5',
+    '0b110',
     '22',
     '-0', // 0/-0 !== 0
     '23..toString()',
@@ -768,6 +768,7 @@ function _createExpression(recurmax, noComma, stmtDepth, canThrow) {
         return name + ' && ' + name + '.' + getDotKey();
       case p++:
       case p++:
+        return '(class {})'
       case p++:
       case p++:
         var name = rng(3) == 0 ? getVarName() : 'f' + rng(funcs + 2);

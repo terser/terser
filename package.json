@@ -1,5 +1,5 @@
 {
-  "name": "@fabiosantoscode/uglify-es",
+  "name": "terser",
   "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
   "homepage": "https://github.com/fabiosantoscode/uglify-es",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",

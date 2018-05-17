@@ -1,11 +1,11 @@
-uglify-es
-=========
+terser
+======
 
 A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
 #### Note:
-- **`uglify-es` is API/CLI compatible with `uglify-js@3`.**
-- **`uglify-es` is not backwards compatible with `uglify-js@2`.**
+- **`terser` is API/CLI compatible with `uglify-js@3`.**
+- **`terser` is not backwards compatible with `uglify-js@2`.**
 
 Install
 -------
@@ -15,23 +15,23 @@ First make sure you have installed the latest version of [node.js](http://nodejs
 
 From NPM for use as a command line app:
 
-    npm install uglify-es -g
+    npm install terser -g
 
 From NPM for programmatic use:
 
-    npm install uglify-es
+    npm install terser
 
 # Command line usage
 
-    uglifyjs [input files] [options]
+    terser [input files] [options]
 
-UglifyJS can take multiple input files.  It's recommended that you pass the
-input files first, then pass the options.  UglifyJS will parse input files
+Terser can take multiple input files.  It's recommended that you pass the
+input files first, then pass the options.  Terser will parse input files
 in sequence and apply any compression options.  The files are parsed in the
 same global scope, that is, a reference from a file to some
 variable/function declared in another file will be matched properly.
 
-If no input file is specified, UglifyJS will read from STDIN.
+If no input file is specified, Terser will read from STDIN.
 
 If you wish to pass your options before the input files, separate the two with
 a double dash to prevent input files being used as option arguments:
@@ -86,7 +86,7 @@ a double dash to prevent input files being used as option arguments:
                                              want to disable `negate_iife` under
                                              compressor options.
     -o, --output <file>         Output file path (default STDOUT). Specify `ast` or
-                                `spidermonkey` to write UglifyJS or SpiderMonkey AST
+                                `spidermonkey` to write Terser or SpiderMonkey AST
                                 as JSON to STDOUT respectively.
     --comments [filter]         Preserve copyright comments in the output. By
                                 default this works like Google Closure, keeping
@@ -106,7 +106,7 @@ a double dash to prevent input files being used as option arguments:
     --ie8                       Support non-standard Internet Explorer 8.
                                 Equivalent to setting `ie8: true` in `minify()`
                                 for `compress`, `mangle` and `output` options.
-                                By default UglifyJS will not try to be IE-proof.
+                                By default Terser will not try to be IE-proof.
     --keep-classnames           Do not mangle/drop class names.
     --keep-fnames               Do not mangle/drop function names.  Useful for
                                 code relying on Function.prototype.name.
@@ -116,9 +116,9 @@ a double dash to prevent input files being used as option arguments:
     --safari10                  Support non-standard Safari 10/11.
                                 Equivalent to setting `safari10: true` in `minify()`
                                 for `mangle` and `output` options.
-                                By default `uglify-es` will not work around
+                                By default `terser` will not work around
                                 Safari 10/11 bugs.
-    --self                      Build UglifyJS as a library (implies --wrap UglifyJS)
+    --self                      Build Terser as a library (implies --wrap Terser)
     --source-map [options]      Enable source map/specify source map options:
                                 `base`  Path to compute relative paths from input files.
                                 `content`  Input source map, useful if you're compressing
@@ -149,7 +149,7 @@ goes to STDOUT.
 
 ## CLI source map options
 
-UglifyJS can generate a source map file, which is highly useful for
+Terser can generate a source map file, which is highly useful for
 debugging your compressed JavaScript.  To get a source map, pass
 `--source-map --output output.js` (source map will be written out to
 `output.js.map`).
@@ -161,7 +161,7 @@ Additional options:
 - `--source-map "root='<URL>'"` to pass the URL where the original files can be found.
 
 - `--source-map "url='<URL>'"` to specify the URL where the source map can be found.
-  Otherwise UglifyJS assumes HTTP `X-SourceMap` is being used and will omit the
+  Otherwise Terser assumes HTTP `X-SourceMap` is being used and will omit the
   `//# sourceMappingURL=` directive.
 
 For example:
@@ -181,9 +181,9 @@ as the source map root, and the original files as `js/file1.js` and
 
 When you're compressing JS code that was output by a compiler such as
 CoffeeScript, mapping to the JS code won't be too helpful.  Instead, you'd
-like to map back to the original code (i.e. CoffeeScript).  UglifyJS has an
+like to map back to the original code (i.e. CoffeeScript).  Terser has an
 option to take an input source map.  Assuming you have a mapping from
-CoffeeScript → compiled JS, UglifyJS can generate a map from CoffeeScript →
+CoffeeScript → compiled JS, Terser can generate a map from CoffeeScript →
 compressed JS by mapping every token in the compiled JS to its original
 location.
 
@@ -286,7 +286,7 @@ names that start with an underscore.
 When you compress multiple files using this option, in order for them to
 work together in the end we need to ensure somehow that one property gets
 mangled to the same name in all of them.  For this, pass `--name-cache filename.json`
-and UglifyJS will maintain these mappings in a file which can then be reused.
+and Terser will maintain these mappings in a file which can then be reused.
 It should be initially empty.  Example:
 
 ```bash
@@ -299,7 +299,7 @@ Now, `part1.js` and `part2.js` will be consistent with each other in terms
 of mangled property names.
 
 Using the name cache is not necessary if you compress all your files in a
-single call to UglifyJS.
+single call to Terser.
 
 ### Mangling unquoted names (`--mangle-props keep_quoted`)
 
@@ -348,10 +348,10 @@ identify mistakes like writing mangled keys to storage.
 
 # API Reference
 
-Assuming installation via NPM, you can load UglifyJS in your application
+Assuming installation via NPM, you can load Terser in your application
 like this:
 ```javascript
-var UglifyJS = require("uglify-es");
+var Terser = require("terser");
 ```
 
 There is a single high level function, **`minify(code, options)`**,
@@ -360,7 +360,7 @@ manner. By default `minify()` will enable the options [`compress`](#compress-opt
 and [`mangle`](#mangle-options). Example:
 ```javascript
 var code = "function add(first, second) { return first + second; }";
-var result = UglifyJS.minify(code);
+var result = Terser.minify(code);
 console.log(result.error); // runtime error, or `undefined` if no error
 console.log(result.code);  // minified output: function add(n,d){return n+d}
 ```
@@ -373,7 +373,7 @@ var code = {
     "file1.js": "function add(first, second) { return first + second; }",
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 };
-var result = UglifyJS.minify(code);
+var result = Terser.minify(code);
 console.log(result.code);
 // function add(d,n){return d+n}console.log(add(3,7));
 ```
@@ -385,7 +385,7 @@ var code = {
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 };
 var options = { toplevel: true };
-var result = UglifyJS.minify(code, options);
+var result = Terser.minify(code, options);
 console.log(result.code);
 // console.log(3+7);
 ```
@@ -398,10 +398,10 @@ var options = {
     },
     nameCache: {}
 };
-var result1 = UglifyJS.minify({
+var result1 = Terser.minify({
     "file1.js": "function add(first, second) { return first + second; }"
 }, options);
-var result2 = UglifyJS.minify({
+var result2 = Terser.minify({
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 }, options);
 console.log(result1.code);
@@ -419,11 +419,11 @@ var options = {
     },
     nameCache: JSON.parse(fs.readFileSync(cacheFileName, "utf8"))
 };
-fs.writeFileSync("part1.js", UglifyJS.minify({
+fs.writeFileSync("part1.js", Terser.minify({
     "file1.js": fs.readFileSync("file1.js", "utf8"),
     "file2.js": fs.readFileSync("file2.js", "utf8")
 }, options).code, "utf8");
-fs.writeFileSync("part2.js", UglifyJS.minify({
+fs.writeFileSync("part2.js", Terser.minify({
     "file3.js": fs.readFileSync("file3.js", "utf8"),
     "file4.js": fs.readFileSync("file4.js", "utf8")
 }, options).code, "utf8");
@@ -449,7 +449,7 @@ var options = {
         preamble: "/* uglified */"
     }
 };
-var result = UglifyJS.minify(code, options);
+var result = Terser.minify(code, options);
 console.log(result.code);
 // /* uglified */
 // alert(10);"
@@ -459,7 +459,7 @@ To produce warnings:
 ```javascript
 var code = "function f(){ var u; return 2 + 3; }";
 var options = { warnings: true };
-var result = UglifyJS.minify(code, options);
+var result = Terser.minify(code, options);
 console.log(result.error);    // runtime error, `undefined` in this case
 console.log(result.warnings); // [ 'Dropping unused variable u [0:1,18]' ]
 console.log(result.code);     // function f(){return 5}
@@ -467,14 +467,14 @@ console.log(result.code);     // function f(){return 5}
 
 An error example:
 ```javascript
-var result = UglifyJS.minify({"foo.js" : "if (0) else console.log(1);"});
+var result = Terser.minify({"foo.js" : "if (0) else console.log(1);"});
 console.log(JSON.stringify(result.error));
 // {"message":"Unexpected token: keyword (else)","filename":"foo.js","line":1,"col":7,"pos":7}
 ```
 Note: unlike `uglify-js@2.x`, the `3.x` API does not throw errors. To
 achieve a similar effect one could do the following:
 ```javascript
-var result = UglifyJS.minify(code, options);
+var result = Terser.minify(code, options);
 if (result.error) throw result.error;
 ```
 
@@ -572,7 +572,7 @@ if (result.error) throw result.error;
 
 To generate a source map:
 ```javascript
-var result = UglifyJS.minify({"file1.js": "var a = function() {};"}, {
+var result = Terser.minify({"file1.js": "var a = function() {};"}, {
     sourceMap: {
         filename: "out.js",
         url: "out.js.map"
@@ -593,7 +593,7 @@ be appended to code.
 
 You can also specify sourceRoot property to be included in source map:
 ```javascript
-var result = UglifyJS.minify({"file1.js": "var a = function() {};"}, {
+var result = Terser.minify({"file1.js": "var a = function() {};"}, {
     sourceMap: {
         root: "http://example.com/src",
         url: "out.js.map"
@@ -604,7 +604,7 @@ var result = UglifyJS.minify({"file1.js": "var a = function() {};"}, {
 If you're compressing compiled JavaScript and have a source map for it, you
 can use `sourceMap.content`:
 ```javascript
-var result = UglifyJS.minify({"compiled.js": "compiled code"}, {
+var result = Terser.minify({"compiled.js": "compiled code"}, {
     sourceMap: {
         content: "content from compiled.js.map",
         url: "minified.js.map"
@@ -731,10 +731,10 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   example `foo["bar"] → foo.bar`
 
 - `pure_funcs` (default: `null`) -- You can pass an array of names and
-  UglifyJS will assume that those functions do not produce side
+  Terser will assume that those functions do not produce side
   effects.  DANGER: will not check if the name is redefined in scope.
   An example case here, for instance `var q = Math.floor(a/b)`.  If
-  variable `q` is not used elsewhere, UglifyJS will drop it, but will
+  variable `q` is not used elsewhere, Terser will drop it, but will
   still keep the `Math.floor(a/b)`, not knowing what it does.  You can
   pass `pure_funcs: [ 'Math.floor' ]` to let it know that this
   function won't produce any side effect, in which case the whole
@@ -742,7 +742,7 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   overhead (compression will be slower).
 
 - `pure_getters` (default: `"strict"`) -- If you pass `true` for
-  this, UglifyJS will assume that object property access
+  this, Terser will assume that object property access
   (e.g. `foo.bar` or `foo["bar"]`) doesn't have any side effects.
   Specify `"strict"` to treat `foo.bar` as side-effect-free only when
   `foo` is certain to not throw, i.e. not `null` or `undefined`.
@@ -866,13 +866,13 @@ function funcName(firstLongName, anotherLongName) {
 ```javascript
 var code = fs.readFileSync("test.js", "utf8");
 
-UglifyJS.minify(code).code;
+Terser.minify(code).code;
 // 'function funcName(a,n){}var globalVar;'
 
-UglifyJS.minify(code, { mangle: { reserved: ['firstLongName'] } }).code;
+Terser.minify(code, { mangle: { reserved: ['firstLongName'] } }).code;
 // 'function funcName(firstLongName,a){}var globalVar;'
 
-UglifyJS.minify(code, { mangle: { toplevel: true } }).code;
+Terser.minify(code, { mangle: { toplevel: true } }).code;
 // 'function n(n,a){}var a;'
 ```
 
@@ -970,11 +970,11 @@ can pass additional arguments that control the code output:
   specifies an (orientative) line width that the beautifier will try to
   obey.  It refers to the width of the line text (excluding indentation).
   It doesn't work very well currently, but it does make the code generated
-  by UglifyJS more readable.
+  by Terser more readable.
 
 - `wrap_iife` (default `false`) -- pass `true` to wrap immediately invoked
   function expressions. See
-  [#640](https://github.com/mishoo/UglifyJS2/issues/640) for more details.
+  [#640](https://github.com/mishoo/Terser2/issues/640) for more details.
 
 # Miscellaneous
 
@@ -1021,9 +1021,9 @@ when this flag is on:
 ### Conditional compilation
 
 You can use the `--define` (`-d`) switch in order to declare global
-variables that UglifyJS will assume to be constants (unless defined in
+variables that Terser will assume to be constants (unless defined in
 scope).  For example if you pass `--define DEBUG=false` then, coupled with
-dead code removal UglifyJS will discard the following from the output:
+dead code removal Terser will discard the following from the output:
 ```javascript
 if (DEBUG) {
     console.log("debug stuff");
@@ -1032,7 +1032,7 @@ if (DEBUG) {
 
 You can specify nested constants in the form of `--define env.DEBUG=false`.
 
-UglifyJS will warn about the condition being always false and about dropping
+Terser will warn about the condition being always false and about dropping
 unreachable code; for now there is no option to turn off only this specific
 warning, you can pass `warnings=false` to turn off *all* warnings.
 
@@ -1049,7 +1049,7 @@ and build your code like this:
 
     uglifyjs build/defines.js js/foo.js js/bar.js... -c
 
-UglifyJS will notice the constants and, since they cannot be altered, it
+Terser will notice the constants and, since they cannot be altered, it
 will evaluate references to them to the value itself and drop unreachable
 code as usual.  The build will contain the `const` declarations if you use
 them. If you are targeting < ES6 environments which does not support `const`,
@@ -1061,7 +1061,7 @@ You can also use conditional compilation via the programmatic API. With the diff
 property name is `global_defs` and is a compressor property:
 
 ```javascript
-var result = UglifyJS.minify(fs.readFileSync("input.js", "utf8"), {
+var result = Terser.minify(fs.readFileSync("input.js", "utf8"), {
     compress: {
         dead_code: true,
         global_defs: {
@@ -1072,10 +1072,10 @@ var result = UglifyJS.minify(fs.readFileSync("input.js", "utf8"), {
 ```
 
 To replace an identifier with an arbitrary non-constant expression it is
-necessary to prefix the `global_defs` key with `"@"` to instruct UglifyJS
+necessary to prefix the `global_defs` key with `"@"` to instruct Terser
 to parse the value as an expression:
 ```javascript
-UglifyJS.minify("alert('hello');", {
+Terser.minify("alert('hello');", {
     compress: {
         global_defs: {
             "@alert": "console.log"
@@ -1087,7 +1087,7 @@ UglifyJS.minify("alert('hello');", {
 
 Otherwise it would be replaced as string literal:
 ```javascript
-UglifyJS.minify("alert('hello');", {
+Terser.minify("alert('hello');", {
     compress: {
         global_defs: {
             "alert": "console.log"
@@ -1101,7 +1101,7 @@ UglifyJS.minify("alert('hello');", {
 ```javascript
 // example: parse only, produce native Uglify AST
 
-var result = UglifyJS.minify(code, {
+var result = Terser.minify(code, {
     parse: {},
     compress: false,
     mangle: false,
@@ -1117,7 +1117,7 @@ var result = UglifyJS.minify(code, {
 // example: accept native Uglify AST input and then compress and mangle
 //          to produce both code and native AST.
 
-var result = UglifyJS.minify(ast, {
+var result = Terser.minify(ast, {
     compress: {},
     mangle: {},
     output: {
@@ -1138,19 +1138,19 @@ Transversal and transformation of the native AST can be performed through
 
 ### ESTree / SpiderMonkey AST
 
-UglifyJS has its own abstract syntax tree format; for
+Terser has its own abstract syntax tree format; for
 [practical reasons](http://lisperator.net/blog/uglifyjs-why-not-switching-to-spidermonkey-ast/)
 we can't easily change to using the SpiderMonkey AST internally.  However,
-UglifyJS now has a converter which can import a SpiderMonkey AST.
+Terser now has a converter which can import a SpiderMonkey AST.
 
 For example [Acorn][acorn] is a super-fast parser that produces a
 SpiderMonkey AST.  It has a small CLI utility that parses one file and dumps
-the AST in JSON on the standard output.  To use UglifyJS to mangle and
+the AST in JSON on the standard output.  To use Terser to mangle and
 compress that:
 
     acorn file.js | uglifyjs -p spidermonkey -m -c
 
-The `-p spidermonkey` option tells UglifyJS that all input files are not
+The `-p spidermonkey` option tells Terser that all input files are not
 JavaScript, but JS code described in SpiderMonkey AST in JSON.  Therefore we
 don't use our own parser in this case, but just transform that AST into our
 internal AST.
@@ -1158,11 +1158,11 @@ internal AST.
 ### Use Acorn for parsing
 
 More for fun, I added the `-p acorn` option which will use Acorn to do all
-the parsing.  If you pass this option, UglifyJS will `require("acorn")`.
+the parsing.  If you pass this option, Terser will `require("acorn")`.
 
 Acorn is really fast (e.g. 250ms instead of 380ms on some 650K code), but
 converting the SpiderMonkey tree that Acorn produces takes another 150ms so
-in total it's a bit more than just using UglifyJS's own parser.
+in total it's a bit more than just using Terser's own parser.
 
 [acorn]: https://github.com/ternjs/acorn
 [sm-spec]: https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k
@@ -1191,7 +1191,7 @@ uglifyjs file.js -m
 ```
 To enable fast minify mode with the API use:
 ```js
-UglifyJS.minify(code, { compress: false, mangle: true });
+Terser.minify(code, { compress: false, mangle: true });
 ```
 
 #### Source maps and debugging

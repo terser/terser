@@ -1,7 +1,7 @@
 {
   "name": "terser",
   "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
-  "homepage": "https://github.com/fabiosantoscode/uglify-es",
+  "homepage": "https://github.com/fabiosantoscode/terser",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
   "version": "3.7.1",
@@ -12,10 +12,10 @@
     "Alex Lam <alexlamsl@gmail.com>",
     "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)"
   ],
-  "repository": "https://github.com/fabiosantoscode/uglify-es.git",
+  "repository": "https://github.com/fabiosantoscode/terser.git",
   "main": "tools/node.js",
   "bin": {
-    "uglifyjs": "bin/uglifyjs"
+    "terser": "bin/uglifyjs"
   },
   "files": [
     "bin",
@@ -38,6 +38,7 @@
   },
   "keywords": [
     "uglify",
+    "terser",
     "uglify-es",
     "uglify-js",
     "minify",

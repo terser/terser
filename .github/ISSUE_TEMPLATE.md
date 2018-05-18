@@ -1,24 +1,23 @@
-**Bug report or feature request?**
+**Bug report or Feature request?**
 
 <!-- Note: sub-optimal but correct code is not a bug -->
 
-**Version (complete output of `uglifyjs -V`)**
+**Version (complete output of `terser -V`)**
 
-<!-- This is often found in "node_modules/@fabiosantoscode/uglify-es/bin/uglifyjs" -->
+**Complete CLI command or `minify()` options used**
 
-**ECMAScript input**
+**`terser` input**
 
 <!--
-    Valid ECMAScript code exhibiting the issue with
-    `@fabiosantoscode/uglify-es` alone - without third party
-    tools or libraries. Ideally the input should be as small
-    as possible. Post a link to a gist if necessary.
+    Complete valid ECMAScript code exhibiting the issue with
+    `terser` alone - without third party tools or libraries.
+    Ideally the input should be as small as possible.
+    Code must be in text form - not a screen cap.
+    Post a link to a gist if necessary.
 
     Issues without a reproducible test case will be closed.
 -->
 
-**Complete CLI command or `minify()` options used**
-
-**Output or error**
+**`terser` output or error**
 
 **Expected result**

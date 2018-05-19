@@ -978,3 +978,108 @@ issue_3046: {
     }
     expect_stdout: "1"
 }
+
+issue_3071_1: {
+    options = {
+        evaluate: true,
+        inline: true,
+        join_vars: true,
+        hoist_props: true,
+        passes: 3,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            var obj = {};
+            obj.one = 1;
+            obj.two = 2;
+            console.log(obj.one);
+        })();
+    }
+    expect_stdout: "1"
+}
+
+issue_3071_2: {
+    options = {
+        evaluate: true,
+        inline: true,
+        join_vars: true,
+        hoist_props: true,
+        passes: 3,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            obj = {};
+            obj.one = 1;
+            obj.two = 2;
+            console.log(obj.one);
+            var obj;
+        })();
+    }
+    expect_stdout: "1"
+}
+
+issue_3071_2_toplevel: {
+    options = {
+        evaluate: true,
+        inline: true,
+        join_vars: true,
+        hoist_props: true,
+        passes: 3,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            obj = {};
+            obj.one = 1;
+            obj.two = 2;
+            console.log(obj.one);
+            var obj;
+        })();
+    }
+    expect_stdout: "1"
+}
+
+issue_3071_3: {
+    options = {
+        hoist_props: true,
+        reduce_vars: true,
+    }
+    input: {
+        var c = 0;
+        (function(a, b) {
+            (function f(o) {
+                var n = 2;
+                while (--b + (o = {
+                    p: c++,
+                }) && --n > 0);
+            })();
+        })();
+        console.log(c);
+    }
+    expect: {
+        var c = 0;
+        (function(a, b) {
+            (function f(o) {
+                var n = 2;
+                while (--b + (o = {
+                    p: c++,
+                }) && --n > 0);
+            })();
+        })();
+        console.log(c);
+    }
+    expect_stdout: "2"
+}

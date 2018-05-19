@@ -1638,3 +1638,25 @@ optional_expect_when_expect_stdout_present: {
     }
     expect_stdout: "2"
 }
+
+issue_2968: {
+    options = {
+        collapse_vars: true,
+        evaluate: true,
+        inline: true,
+        passes: 2,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        var c = "FAIL";
+        (function() {
+            (function(a, b) {
+                a <<= 0;
+                a && (a[(c = "PASS", 0 >>> (b += 1))] = 0);
+            })(42, -42);
+        })();
+        console.log(c);
+    }
+    expect_stdout: "PASS"
+}

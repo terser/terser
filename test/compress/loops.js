@@ -715,3 +715,17 @@ issue_2740_8: {
     expect_stdout: "9 0"
     node_version: ">=6"
 }
+
+issue_2904: {
+    options = {
+        join_vars: true,
+        loops: true,
+    }
+    input: {
+        var a = 1;
+        do {
+            console.log(a);
+        } while (--a);
+    }
+    expect_stdout: "1"
+}

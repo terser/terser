@@ -1485,6 +1485,27 @@ join_object_assignments_3: {
     expect_stdout: "PASS"
 }
 
+join_object_assignments_4: {
+    options = {
+        join_vars: true,
+        sequences: true,
+    }
+    input: {
+        var o;
+        console.log(o);
+        o = {};
+        o.a = "foo";
+        console.log(o.b);
+        o.b = "bar";
+        console.log(o.a);
+    }
+    expect_stdout: [
+        "undefined",
+        "undefined",
+        "foo",
+    ]
+}
+
 join_object_assignments_return_1: {
     options = {
         join_vars: true,

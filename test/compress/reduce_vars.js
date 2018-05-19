@@ -6387,3 +6387,360 @@ issue_3068_2: {
     }
     expect_stdout: true
 }
+
+issue_3110_1: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        inline: true,
+        passes: 3,
+        properties: true,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function foo() {
+                return isDev ? "foo" : "bar";
+            }
+            var isDev = true;
+            var obj = {
+                foo: foo
+            };
+            console.log(foo());
+            console.log(obj.foo());
+        })();
+    }
+    expect_stdout: [
+        "foo",
+        "foo",
+    ]
+}
+
+issue_3110_2: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        inline: true,
+        passes: 4,
+        properties: true,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function foo() {
+                return isDev ? "foo" : "bar";
+            }
+            var isDev = true;
+            console.log(foo());
+            var obj = {
+                foo: foo
+            };
+            console.log(obj.foo());
+        })();
+    }
+    expect_stdout: [
+        "foo",
+        "foo",
+    ]
+}
+
+issue_3110_3: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        inline: true,
+        properties: true,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function foo() {
+                return isDev ? "foo" : "bar";
+            }
+            console.log(foo());
+            var isDev = true;
+            var obj = {
+                foo: foo
+            };
+            console.log(obj.foo());
+        })();
+    }
+    expect: {
+        (function() {
+            function foo() {
+                return isDev ? "foo" : "bar";
+            }
+            console.log(foo());
+            var isDev = true;
+            var obj = {
+                foo: foo
+            };
+            console.log(obj.foo());
+        })();
+    }
+    expect_stdout: [
+        "bar",
+        "foo",
+    ]
+}
+
+issue_3113_1: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+    }
+    input: {
+        var c = 0;
+        (function() {
+            function f() {
+                while (g());
+            }
+            var a = f();
+            function g() {
+                a && a[c++];
+            }
+            g(a = 1);
+        })();
+        console.log(c);
+    }
+    expect: {
+        var c = 0;
+        (function() {
+            function f() {
+                while (g());
+            }
+            var a = f();
+            function g() {
+                a && a[c++];
+            }
+            g(a = 1);
+        })();
+        console.log(c);
+    }
+    expect_stdout: "1"
+}
+
+issue_3113_2: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+    }
+    input: {
+        var c = 0;
+        (function() {
+            function f() {
+                while (g());
+            }
+            var a = f();
+            function g() {
+                a && a[c++];
+            }
+            a = 1;
+            g();
+        })();
+        console.log(c);
+    }
+    expect: {
+        var c = 0;
+        (function() {
+            function f() {
+                while (g());
+            }
+            var a = f();
+            function g() {
+                a && a[c++];
+            }
+            a = 1;
+            g();
+        })();
+        console.log(c);
+    }
+    expect_stdout: "1"
+}
+
+issue_3113_3: {
+    options = {
+        evaluate: true,
+        inline: true,
+        passes: 2,
+        pure_getters: "strict",
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        var c = 0;
+        (function() {
+            function f() {
+                while (g());
+            }
+            var a;
+            function g() {
+                a && a[c++];
+            }
+            g(a = 1);
+        })();
+        console.log(c);
+    }
+    expect_stdout: "1"
+}
+
+issue_3113_4: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        toplevel: true,
+    }
+    input: {
+        var a = 0, b = 0;
+        function f() {
+            b += a;
+        }
+        f(f(), ++a);
+        console.log(a, b);
+    }
+    expect: {
+        var a = 0, b = 0;
+        function f() {
+            b += a;
+        }
+        f(f(), ++a);
+        console.log(a, b);
+    }
+    expect_stdout: "1 1"
+}
+
+issue_3113_5: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        toplevel: true,
+    }
+    input: {
+        function f() {
+            console.log(a);
+        }
+        function g() {
+            f();
+        }
+        while (g());
+        var a = 1;
+        f();
+    }
+    expect: {
+        function f() {
+            console.log(a);
+        }
+        function g() {
+            f();
+        }
+        while (g());
+        var a = 1;
+        f();
+    }
+    expect_stdout: [
+        "undefined",
+        "1",
+    ]
+}
+
+conditional_nested_1: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+    }
+    input: {
+        var a = 1, b = 0;
+        (function f(c) {
+            function g() {
+                c && (c.a = 0);
+                c && (c.a = 0);
+                c && (c[b++] *= 0);
+            }
+            g(a-- && f(g(c = 42)));
+        })();
+        console.log(b);
+    }
+    expect: {
+        var a = 1, b = 0;
+        (function f(c) {
+            function g() {
+                c && (c.a = 0);
+                c && (c.a = 0);
+                c && (c[b++] *= 0);
+            }
+            g(a-- && f(g(c = 42)));
+        })();
+        console.log(b);
+    }
+    expect_stdout: "2"
+}
+
+conditional_nested_2: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+    }
+    input: {
+        var c = 0;
+        (function(a) {
+            function f() {
+                a && c++;
+            }
+            f(!c && f(), a = 1);
+        })();
+        console.log(c);
+    }
+    expect: {
+        var c = 0;
+        (function(a) {
+            function f() {
+                a && c++;
+            }
+            f(!c && f(), a = 1);
+        })();
+        console.log(c);
+    }
+    expect_stdout: "1"
+}
+
+conditional_nested_3: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+    }
+    input: {
+        var n = 2, c = 0;
+        (function f(a) {
+            0 < n-- && g(a = 1);
+            function g() {
+                a && c++;
+            }
+            g();
+            0 < n-- && f();
+        })();
+        console.log(c);
+    }
+    expect: {
+        var n = 2, c = 0;
+        (function f(a) {
+            0 < n-- && g(a = 1);
+            function g() {
+                a && c++;
+            }
+            g();
+            0 < n-- && f();
+        })();
+        console.log(c);
+    }
+    expect_stdout: "2"
+}

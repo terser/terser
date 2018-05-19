@@ -1628,3 +1628,13 @@ issue_2926_2: {
     }
     expect_stdout: "function"
 }
+
+optional_expect_when_expect_stdout_present: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        console.log(5 % 3);
+    }
+    expect_stdout: "2"
+}

@@ -2432,6 +2432,63 @@ issue_3018: {
     expect_stdout: "PASS"
 }
 
+issue_3054: {
+    options = {
+        booleans: true,
+        collapse_vars: true,
+        inline: 1,
+        reduce_vars: true,
+        toplevel: true,
+    }
+    input: {
+        "use strict";
+        function f() {
+            return { a: true };
+        }
+        console.log(function(b) {
+            b = false;
+            return f();
+        }().a, f.call().a);
+    }
+    expect_stdout: "true true"
+}
+
+issue_3076: {
+    options = {
+        dead_code: true,
+        inline: true,
+        sequences: true,
+        unused: true,
+    }
+    input: {
+        var c = "PASS";
+        (function(b) {
+            var n = 2;
+            while (--b + function() {
+                e && (c = "FAIL");
+                e = 5;
+                return 1;
+                try {
+                    var a = 5;
+                } catch (e) {
+                    var e;
+                }
+            }().toString() && --n > 0);
+        })(2);
+        console.log(c);
+    }
+    expect: {
+        var c = "PASS";
+        (function(b) {
+            var n = 2;
+            while (--b + (e = void 0, e && (c = "FAIL"), e = 5, 1).toString() && --n > 0);
+            var e;
+        })(2),
+        console.log(c);
+    }
+    expect_stdout: "PASS"
+}
+
 issue_3125: {
     options = {
         inline: true,

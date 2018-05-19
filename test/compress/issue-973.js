@@ -97,3 +97,32 @@ this_binding_side_effects: {
         }());
     }
 }
+
+this_binding_sequences: {
+    options = {
+        sequences: true,
+        side_effects: true,
+    }
+    input: {
+        console.log(typeof function() {
+            return eval("this");
+        }());
+        console.log(typeof function() {
+            "use strict";
+            return eval("this");
+        }());
+        console.log(typeof function() {
+            return (0, eval)("this");
+        }());
+        console.log(typeof function() {
+            "use strict";
+            return (0, eval)("this");
+        }());
+    }
+    expect_stdout: [
+        "object",
+        "undefined",
+        "object",
+        "object",
+    ]
+}

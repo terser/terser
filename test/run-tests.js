@@ -160,7 +160,10 @@ function run_compress_tests() {
                 }
             }
             output = make_code(output, output_options);
-            if (expect != output) {
+            if (test.expect_stdout && typeof expect == "undefined") {
+                // Do not verify generated `output` against `expect` or `expect_exact`.
+                // Rely on the pending `expect_stdout` check below.
+            } else if (expect != output) {
                 log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED---\n{expected}\n\n", {
                     input: input_formatted,
                     output: output,
@@ -168,7 +171,6 @@ function run_compress_tests() {
                 });
                 return false;
             }
-            // expect == output
             try {
                 U.parse(output);
             } catch (ex) {
@@ -216,8 +218,9 @@ function run_compress_tests() {
                 }
                 stdout = sandbox.run_code(output);
                 if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
-                    log("!!! failed\n---INPUT---\n{input}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
+                    log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
                         input: input_formatted,
+                        output: output,
                         expected_type: typeof test.expect_stdout == "string" ? "STDOUT" : "ERROR",
                         expected: test.expect_stdout,
                         actual_type: typeof stdout == "string" ? "STDOUT" : "ERROR",

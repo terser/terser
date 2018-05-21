@@ -4,8 +4,7 @@ terser
 A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
 #### Note:
-- **`terser` is API/CLI compatible with `uglify-js@3`.**
-- **`terser` is not backwards compatible with `uglify-js@2`.**
+- **`terser` is API/CLI compatible with `uglify-es` and `uglify-js@3`.**
 
 Install
 -------
@@ -36,7 +35,7 @@ If no input file is specified, Terser will read from STDIN.
 If you wish to pass your options before the input files, separate the two with
 a double dash to prevent input files being used as option arguments:
 
-    uglifyjs --compress --mangle -- input.js
+    terser --compress --mangle -- input.js
 
 ### Command line options
 
@@ -166,7 +165,7 @@ Additional options:
 
 For example:
 
-    uglifyjs js/file1.js js/file2.js \
+    terser js/file1.js js/file2.js \
              -o foo.min.js -c -m \
              --source-map "root='http://foo.com/src',url='foo.min.js.map'"
 
@@ -202,7 +201,7 @@ shortcut for `foo=true`).
 
 Example:
 
-    uglifyjs file.js -c toplevel,sequences=false
+    terser file.js -c toplevel,sequences=false
 
 ## CLI mangle options
 
@@ -217,7 +216,7 @@ When mangling is enabled but you want to prevent certain names from being
 mangled, you can declare those names with `--mangle reserved` — pass a
 comma-separated list of names.  For example:
 
-    uglifyjs ... -m reserved=['$','require','exports']
+    terser ... -m reserved=['$','require','exports']
 
 to prevent the `require`, `exports` and `$` names from being changed.
 
@@ -244,21 +243,21 @@ console.log(x.calc());
 ```
 Mangle all properties (except for JavaScript `builtins`):
 ```bash
-$ uglifyjs example.js -c -m --mangle-props
+$ terser example.js -c -m --mangle-props
 ```
 ```javascript
 var x={o:0,_:1,l:function(){return this._+this.o}};x.t=2,x.o=3,console.log(x.l());
 ```
 Mangle all properties except for `reserved` properties:
 ```bash
-$ uglifyjs example.js -c -m --mangle-props reserved=[foo_,bar_]
+$ terser example.js -c -m --mangle-props reserved=[foo_,bar_]
 ```
 ```javascript
 var x={o:0,foo_:1,_:function(){return this.foo_+this.o}};x.bar_=2,x.o=3,console.log(x._());
 ```
 Mangle all properties matching a `regex`:
 ```bash
-$ uglifyjs example.js -c -m --mangle-props regex=/_$/
+$ terser example.js -c -m --mangle-props regex=/_$/
 ```
 ```javascript
 var x={o:0,_:1,calc:function(){return this._+this.o}};x.l=2,x.o=3,console.log(x.calc());
@@ -266,7 +265,7 @@ var x={o:0,_:1,calc:function(){return this._+this.o}};x.l=2,x.o=3,console.log(x.
 
 Combining mangle properties options:
 ```bash
-$ uglifyjs example.js -c -m --mangle-props regex=/_$/,reserved=[bar_]
+$ terser example.js -c -m --mangle-props regex=/_$/,reserved=[bar_]
 ```
 ```javascript
 var x={o:0,_:1,calc:function(){return this._+this.o}};x.bar_=2,x.o=3,console.log(x.calc());
@@ -291,8 +290,8 @@ It should be initially empty.  Example:
 
 ```bash
 $ rm -f /tmp/cache.json  # start fresh
-$ uglifyjs file1.js file2.js --mangle-props --name-cache /tmp/cache.json -o part1.js
-$ uglifyjs file3.js file4.js --mangle-props --name-cache /tmp/cache.json -o part2.js
+$ terser file1.js file2.js --mangle-props --name-cache /tmp/cache.json -o part1.js
+$ terser file3.js file4.js --mangle-props --name-cache /tmp/cache.json -o part2.js
 ```
 
 Now, `part1.js` and `part2.js` will be consistent with each other in terms
@@ -317,7 +316,7 @@ o.foo += o.bar;
 console.log(o.foo);
 ```
 ```bash
-$ uglifyjs stuff.js --mangle-props keep_quoted -c -m
+$ terser stuff.js --mangle-props keep_quoted -c -m
 ```
 ```javascript
 var o={foo:1,o:3};o.foo+=o.o,console.log(o.foo);
@@ -332,7 +331,7 @@ of a large codebase while still being able to debug the code and identify
 where mangling is breaking things.
 
 ```bash
-$ uglifyjs stuff.js --mangle-props debug -c -m
+$ terser stuff.js --mangle-props debug -c -m
 ```
 ```javascript
 var o={_$foo$_:1,_$bar$_:3};o._$foo$_+=o._$bar$_,console.log(o._$foo$_);
@@ -446,12 +445,12 @@ var options = {
     },
     output: {
         beautify: false,
-        preamble: "/* uglified */"
+        preamble: "/* minified */"
     }
 };
 var result = Terser.minify(code, options);
 console.log(result.code);
-// /* uglified */
+// /* minified */
 // alert(10);"
 ```
 
@@ -471,8 +470,8 @@ var result = Terser.minify({"foo.js" : "if (0) else console.log(1);"});
 console.log(JSON.stringify(result.error));
 // {"message":"Unexpected token: keyword (else)","filename":"foo.js","line":1,"col":7,"pos":7}
 ```
-Note: unlike `uglify-js@2.x`, the `3.x` API does not throw errors. To
-achieve a similar effect one could do the following:
+Note: unlike `uglify-js@2.x`, the Terser API does not throw errors.
+To achieve a similar effect one could do the following:
 ```javascript
 var result = Terser.minify(code, options);
 if (result.error) throw result.error;
@@ -931,7 +930,7 @@ can pass additional arguments that control the code output:
 - `keep_quoted_props` (default `false`) -- when turned on, prevents stripping
   quotes from property names in object literals.
 
-- `max_line_len` (default `false`) -- maximum line length (for uglified code)
+- `max_line_len` (default `false`) -- maximum line length (for minified code)
 
 - `preamble` (default `null`) -- when passed it must be a string and
   it will be prepended to the output literally.  The source map will
@@ -958,7 +957,7 @@ can pass additional arguments that control the code output:
 
 - `semicolons` (default `true`) -- separate statements with semicolons.  If
   you pass `false` then whenever possible we will use a newline instead of a
-  semicolon, leading to more readable output of uglified code (size before
+  semicolon, leading to more readable output of minified code (size before
   gzip could be smaller; size after gzip insignificantly larger).
 
 - `shebang` (default `true`) -- preserve shebang `#!` in preamble (bash scripts)
@@ -1047,7 +1046,7 @@ var PRODUCTION = true;
 
 and build your code like this:
 
-    uglifyjs build/defines.js js/foo.js js/bar.js... -c
+    terser build/defines.js js/foo.js js/bar.js... -c
 
 Terser will notice the constants and, since they cannot be altered, it
 will evaluate references to them to the value itself and drop unreachable
@@ -1097,9 +1096,9 @@ Terser.minify("alert('hello');", {
 // returns: '"console.log"("hello");'
 ```
 
-### Using native Uglify AST with `minify()`
+### Using native Terser AST with `minify()`
 ```javascript
-// example: parse only, produce native Uglify AST
+// example: parse only, produce native Terser AST
 
 var result = Terser.minify(code, {
     parse: {},
@@ -1111,10 +1110,10 @@ var result = Terser.minify(code, {
     }
 });
 
-// result.ast contains native Uglify AST
+// result.ast contains native Terser AST
 ```
 ```javascript
-// example: accept native Uglify AST input and then compress and mangle
+// example: accept native Terser AST input and then compress and mangle
 //          to produce both code and native AST.
 
 var result = Terser.minify(ast, {
@@ -1126,20 +1125,20 @@ var result = Terser.minify(ast, {
     }
 });
 
-// result.ast contains native Uglify AST
+// result.ast contains native Terser AST
 // result.code contains the minified code in string form.
 ```
 
-### Working with Uglify AST
+### Working with Terser AST
 
 Transversal and transformation of the native AST can be performed through
-[`TreeWalker`](http://lisperator.net/uglifyjs/walk) and
-[`TreeTransformer`](http://lisperator.net/uglifyjs/transform) respectively.
+[`TreeWalker`](http://lisperator.net/terser/walk) and
+[`TreeTransformer`](http://lisperator.net/terser/transform) respectively.
 
 ### ESTree / SpiderMonkey AST
 
 Terser has its own abstract syntax tree format; for
-[practical reasons](http://lisperator.net/blog/uglifyjs-why-not-switching-to-spidermonkey-ast/)
+[practical reasons](http://lisperator.net/blog/terser-why-not-switching-to-spidermonkey-ast/)
 we can't easily change to using the SpiderMonkey AST internally.  However,
 Terser now has a converter which can import a SpiderMonkey AST.
 
@@ -1148,7 +1147,7 @@ SpiderMonkey AST.  It has a small CLI utility that parses one file and dumps
 the AST in JSON on the standard output.  To use Terser to mangle and
 compress that:
 
-    acorn file.js | uglifyjs -p spidermonkey -m -c
+    acorn file.js | terser -p spidermonkey -m -c
 
 The `-p spidermonkey` option tells Terser that all input files are not
 JavaScript, but JS code described in SpiderMonkey AST in JSON.  Therefore we
@@ -1167,27 +1166,26 @@ in total it's a bit more than just using Terser's own parser.
 [acorn]: https://github.com/ternjs/acorn
 [sm-spec]: https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k
 
-### Uglify Fast Minify Mode
+### Terser Fast Minify Mode
 
 It's not well known, but whitespace removal and symbol mangling accounts
 for 95% of the size reduction in minified code for most JavaScript - not
 elaborate code transforms. One can simply disable `compress` to speed up
-Uglify builds by 3 to 4 times. In this fast `mangle`-only mode Uglify has
-comparable minify speeds and gzip sizes to
-[`butternut`](https://www.npmjs.com/package/butternut):
+Terser builds by 3 to 4 times.
 
-| d3.js | minify size | gzip size | minify time (seconds) |
-| --- | ---: | ---: | ---: |
-| original | 451,131 | 108,733 | - |
-| uglify-js@3.0.24 mangle=false, compress=false | 316,600 | 85,245 | 0.70 |
-| uglify-js@3.0.24 mangle=true, compress=false | 220,216 | 72,730 | 1.13 |
-| butternut@0.4.6 | 217,568 | 72,738 | 1.41 |
-| uglify-js@3.0.24 mangle=true, compress=true | 212,511 | 71,560 | 3.36 |
-| babili@0.1.4 | 210,713 | 72,140 | 12.64 |
+| d3.js | size | gzip size | time (s) |
+|   --- | ---: |      ---: |     ---: |
+| original                                    | 451,131 | 108,733 |     - |
+| terser@3.7.5 mangle=false, compress=false   | 316,600 |  85,245 |  0.82 |
+| terser@3.7.5 mangle=true, compress=false    | 220,216 |  72,730 |  1.45 |
+| terser@3.7.5 mangle=true, compress=true     | 212,046 |  70,954 |  5.87 |
+| babili@0.1.4                                | 210,713 |  72,140 | 12.64 |
+| babel-minify@0.4.3                          | 210,321 |  72,242 | 48.67 |
+| babel-minify@0.5.0-alpha.01eac1c3           | 210,421 |  72,238 | 14.17 |
 
 To enable fast minify mode from the CLI use:
 ```
-uglifyjs file.js -m
+terser file.js -m
 ```
 To enable fast minify mode with the API use:
 ```js
@@ -1200,7 +1198,7 @@ Various `compress` transforms that simplify, rearrange, inline and remove code
 are known to have an adverse effect on debugging with source maps. This is
 expected as code is optimized and mappings are often simply not possible as
 some code no longer exists. For highest fidelity in source map debugging
-disable the Uglify `compress` option and just use `mangle`.
+disable the `compress` option and just use `mangle`.
 
 ### Compiler assumptions
 

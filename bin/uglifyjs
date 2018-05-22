@@ -195,6 +195,7 @@ function run() {
             if (program.parse.acorn) {
                 files = convert_ast(function(toplevel, name) {
                     return require("acorn").parse(files[name], {
+                        ecmaVersion: 2018,
                         locations: true,
                         program: toplevel,
                         sourceFile: name,

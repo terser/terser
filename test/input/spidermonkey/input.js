@@ -27,6 +27,7 @@ function*gen() {
 
 class Class extends Object {
     constructor(...args) {
+        super.init(args);
     }
     foo() {}
 }

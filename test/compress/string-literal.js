@@ -14,6 +14,15 @@ issue_1929: {
         function f(s) {
             return s.split(/[\\/]/);
         }
+        var r = f("A/B\\C\\D/E\\F");
+        console.log(r.length, r[5], r[4], r[3], r[2], r[1], r[0]);
     }
-    expect_exact: "function f(s){return s.split(/[\\\\/]/)}"
+    expect: {
+        function f(s) {
+            return s.split(/[\\/]/);
+        }
+        var r = f("A/B\\C\\D/E\\F");
+        console.log(r.length, r[5], r[4], r[3], r[2], r[1], r[0]);
+    }
+    expect_stdout: "6 'F' 'E' 'D' 'C' 'B' 'A'"
 }

@@ -144,3 +144,11 @@ var a = {
     [a]() {}
 };
 
+// RegExp literals
+
+console.log(/rx/ig.test("RX"));
+/rx1/;
+/\/rx2\//ig;
+/\\rx3\\/ig;
+/[\\/]/ig;
+/[\\/]/;

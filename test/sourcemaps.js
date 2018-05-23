@@ -23,6 +23,21 @@ module.exports = function () {
     ].join("\n"));
 
     ok.deepEqual(issue836.names, ['enabled', 'x']);
+
+    // Test inline source maps with unicode characters
+    var with_inline_map = UglifyJS.minify([
+        "var tëst = '→unicøde←';",
+        "alert(tëst);",
+    ].join("\n"), {
+        sourceMap: { url: 'inline', includeSources: true }
+    }).code;
+    var unicode_result = UglifyJS.minify(with_inline_map, {
+        sourceMap: { content: 'inline', includeSources: true }
+    });
+    ok.ifError(unicode_result.error);
+    var unicode_map = JSON.parse(unicode_result.map);
+
+    ok.deepEqual(unicode_map.names, ['tëst', 'alert']);
 }
 
 function source_map(js) {

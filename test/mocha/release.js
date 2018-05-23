@@ -14,6 +14,7 @@ function run(command, args, done) {
 }
 
 if (semver.satisfies(process.version, "0.12")) return;
+if (semver.satisfies(process.version, "4")) return;
 
 describe("test/benchmark.js", function() {
     this.timeout(10 * 60 * 1000);

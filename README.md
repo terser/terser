@@ -102,6 +102,8 @@ a double dash to prevent input files being used as option arguments:
     --config-file <file>        Read `minify()` options from JSON file.
     -d, --define <expr>[=value] Global definitions.
     --ecma <version>            Specify ECMAScript release: 5, 6, 7 or 8.
+    -e, --enclose [arg[:value]] Embed output in a big function with configurable
+                                arguments and values.
     --ie8                       Support non-standard Internet Explorer 8.
                                 Equivalent to setting `ie8: true` in `minify()`
                                 for `compress`, `mangle` and `output` options.

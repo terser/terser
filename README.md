@@ -19,6 +19,10 @@ From NPM for use as a command line app:
 From NPM for programmatic use:
 
     npm install terser
+    
+# Use in Build Systems:
+
+**Rollup:** [`rollup-plugin-terser`](https://github.com/TrySound/rollup-plugin-terser)
 
 # Command line usage
 

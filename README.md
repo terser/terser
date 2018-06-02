@@ -20,10 +20,6 @@ From NPM for programmatic use:
 
     npm install terser
     
-# Use in Build Systems:
-
-**Rollup:** [`rollup-plugin-terser`](https://github.com/TrySound/rollup-plugin-terser)
-
 # Command line usage
 
     terser [input files] [options]
@@ -1221,3 +1217,7 @@ To allow for better optimizations, the compiler makes various assumptions:
 - Object properties can be added, removed and modified (not prevented with
   `Object.defineProperty()`, `Object.defineProperties()`, `Object.freeze()`,
   `Object.preventExtensions()` or `Object.seal()`).
+
+# Build Tools and Adaptors using Terser
+
+**Rollup:** [`rollup-plugin-terser`](https://github.com/TrySound/rollup-plugin-terser)

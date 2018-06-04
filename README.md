@@ -1133,9 +1133,13 @@ var result = Terser.minify(ast, {
 
 ### Working with Terser AST
 
-Transversal and transformation of the native AST can be performed through
-[`TreeWalker`](http://lisperator.net/terser/walk) and
-[`TreeTransformer`](http://lisperator.net/terser/transform) respectively.
+Traversal and transformation of the native AST can be performed through
+[`TreeWalker`](https://github.com/fabiosantoscode/terser/blob/master/lib/ast.js) and
+[`TreeTransformer`](https://github.com/fabiosantoscode/terser/blob/master/lib/transform.js)
+respectively.
+
+Largely compatible native AST examples can be found in the original
+[UglifyJS documention](http://lisperator.net/uglifyjs/).
 
 ### ESTree / SpiderMonkey AST
 

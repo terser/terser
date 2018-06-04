@@ -1138,8 +1138,9 @@ Traversal and transformation of the native AST can be performed through
 [`TreeTransformer`](https://github.com/fabiosantoscode/terser/blob/master/lib/transform.js)
 respectively.
 
-Largely compatible native AST examples can be found in the original
-[UglifyJS documention](http://lisperator.net/uglifyjs/).
+Largely compatible native AST examples can be found in the original UglifyJS
+documention. See: [tree walker](http://lisperator.net/uglifyjs/walk) and
+[tree transform](http://lisperator.net/uglifyjs/transform).
 
 ### ESTree / SpiderMonkey AST
 

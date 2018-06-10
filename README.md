@@ -975,7 +975,7 @@ can pass additional arguments that control the code output:
 
 - `wrap_iife` (default `false`) -- pass `true` to wrap immediately invoked
   function expressions. See
-  [#640](https://github.com/mishoo/Terser2/issues/640) for more details.
+  [#640](https://github.com/mishoo/UglifyJS2/issues/640) for more details.
 
 # Miscellaneous
 

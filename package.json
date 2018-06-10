@@ -15,6 +15,7 @@
   ],
   "repository": "https://github.com/fabiosantoscode/terser.git",
   "main": "tools/node.js",
+  "browser": "tools/browser.bundle.js",
   "bin": {
     "terser": "bin/uglifyjs"
   },
@@ -35,7 +36,8 @@
     "semver": "~5.5.0"
   },
   "scripts": {
-    "test": "node test/run-tests.js"
+    "test": "node test/run-tests.js",
+    "prepublish": "node bin/uglifyjs --self -e Terser:module.exports --beautify -o tools/browser.bundle.js"
   },
   "keywords": [
     "uglify",

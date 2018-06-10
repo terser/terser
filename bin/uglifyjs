@@ -161,7 +161,7 @@ if (program.self) {
     if (program.args.length) {
         print_error("WARN: Ignoring input files since --self was passed");
     }
-    if (!options.wrap) options.wrap = "UglifyJS";
+    if (!options.wrap) options.wrap = "Terser";
     simple_glob(UglifyJS.FILES).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });

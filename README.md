@@ -785,7 +785,8 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   `foo === void 0`.  Note: recommend to set this value to `false` for IE10 and
   earlier versions due to known issues.
 
-- `unsafe` (default: `false`) -- apply "unsafe" transformations (discussion below)
+- `unsafe` (default: `false`) -- apply "unsafe" transformations
+  ([details](#the-unsafe-compress-option)).
 
 - `unsafe_arrows` (default: `false`) -- Convert ES5 style anonymous function
   expressions to arrow functions if the function body does not reference `this`.
@@ -1010,14 +1011,16 @@ needs to be kept in the output) are comments attached to toplevel nodes.
 ### The `unsafe` `compress` option
 
 It enables some transformations that *might* break code logic in certain
-contrived cases, but should be fine for most code.  You might want to try it
-on your own code, it should reduce the minified size.  Here's what happens
-when this flag is on:
+contrived cases, but should be fine for most code.  It assumes that standard
+built-in ECMAScript functions and classes have not been altered or replaced.
+You might want to try it on your own code; it should reduce the minified size.
+Some examples of the optimizations made when this option is enabled:
 
 - `new Array(1, 2, 3)` or `Array(1, 2, 3)` → `[ 1, 2, 3 ]`
 - `new Object()` → `{}`
 - `String(exp)` or `exp.toString()` → `"" + exp`
 - `new Object/RegExp/Function/Error/Array (...)` → we discard the `new`
+- `"foo bar".substr(4)` → `"bar"`
 
 ### Conditional compilation
 

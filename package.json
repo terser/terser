@@ -15,13 +15,14 @@
   ],
   "repository": "https://github.com/fabiosantoscode/terser.git",
   "main": "tools/node.js",
-  "browser": "tools/browser.bundle.js",
+  "browser": "dist/browser.bundle.js",
   "bin": {
     "terser": "bin/uglifyjs"
   },
   "files": [
     "bin",
     "lib",
+    "dist",
     "tools",
     "LICENSE"
   ],
@@ -37,7 +38,7 @@
   },
   "scripts": {
     "test": "node test/run-tests.js",
-    "prepublish": "node bin/uglifyjs --self -e Terser:module.exports --beautify -o tools/browser.bundle.js"
+    "prepublish": "node bin/uglifyjs --self -e Terser:module.exports --beautify -o dist/browser.bundle.js"
   },
   "keywords": [
     "uglify",

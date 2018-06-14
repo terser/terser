@@ -1226,6 +1226,29 @@ To allow for better optimizations, the compiler makes various assumptions:
   `Object.defineProperty()`, `Object.defineProperties()`, `Object.freeze()`,
   `Object.preventExtensions()` or `Object.seal()`).
 
-# Build Tools and Adaptors using Terser
+### Build Tools and Adaptors using Terser
 
 **Rollup:** [`rollup-plugin-terser`](https://github.com/TrySound/rollup-plugin-terser)
+
+### Replacing `uglify-es` with `terser` in a project using `yarn`
+
+A number of JS bundlers and uglify wrappers are still using buggy versions
+of `uglify-es` and have not yet upgraded to `terser`. If you are using `yarn`
+you can add the following alias to your project's `package.json` file:
+
+```js
+  "resolutions": {
+    "uglify-es": "npm:terser"
+  }
+```
+
+to use `terser` instead of `uglify-es` in all deeply nested dependencies
+without changing any code.
+
+Note: for this change to take effect you must run the following commands
+to remove the existing `yarn` lock file and reinstall all packages:
+
+```
+$ rm -rf node_modules yarn.lock
+$ yarn
+```

@@ -1,4 +1,4 @@
 /node_modules/
 /npm-debug.log
 tmp/
-tools/browser.bundle.js
+dist/browser.bundle.js

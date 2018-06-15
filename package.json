@@ -38,7 +38,7 @@
   },
   "scripts": {
     "test": "node test/run-tests.js",
-    "prepublish": "node bin/uglifyjs --self -d MOZ_SourceMap=require('source-map') -e Terser:module.exports --beautify -o dist/browser.bundle.js"
+    "prepublish": "node bin/uglifyjs --self -d \"MOZ_SourceMap=require('source-map')\" -e Terser:module.exports --beautify -o dist/browser.bundle.js"
   },
   "keywords": [
     "uglify",

@@ -3,8 +3,14 @@ terser
 
 A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
-#### Note:
-- **`terser` is API/CLI compatible with `uglify-es` and `uglify-js@3`.**
+
+Why choose terser?
+------------------
+
+`uglify-es` is no longer maintained and `uglify-js` does not support ES6+.
+
+**`terser`** is a fork of `uglify-es` that retains API and CLI compatibility
+with `uglify-es` and `uglify-js@3`.
 
 Install
 -------

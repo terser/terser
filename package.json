@@ -58,5 +58,15 @@
     "es2017",
     "async",
     "await"
-  ]
+  ],
+  "eslintConfig": {
+    "rules": {
+      "quotes": ["error", "double", "avoid-escape"],
+      "no-debugger": "error",
+      "semi": ["error", "always"],
+      "no-extra-semi": "error",
+      "no-irregular-whitespace": "error",
+      "space-before-blocks": ["error", "always"]
+    }
+  }
 }

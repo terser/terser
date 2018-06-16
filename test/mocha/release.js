@@ -1,4 +1,6 @@
 var assert = require("assert");
+var crypto = require("crypto");
+var fs = require("fs");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
 
@@ -48,5 +50,20 @@ describe("test/jetstream.js", function() {
             args.push("-b", "beautify=false,webkit");
             run(process.argv[0], args, done);
         });
+    });
+});
+
+describe("List tmp files", function() {
+    it("Should list files in ./tmp", function(done) {
+        var directory = "./tmp";
+        fs.readdirSync(directory).forEach(function(name) {
+            var path = directory + "/" + name;
+            var stat = fs.statSync(path);
+            if (!stat.isFile()) return;
+            var sha1 = crypto.createHash("sha1");
+            sha1.update(fs.readFileSync(path));
+            console.log("%s %s %s", path, stat.size, sha1.digest("hex"));
+        });
+        done();
     });
 });

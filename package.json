@@ -34,8 +34,8 @@
     "acorn": "~5.4.1",
     "escodegen": "^1.9.1",
     "eslint": "^4.19.1",
-    "husky": "^1.0.0-rc.9",
     "mocha": "~3.5.1",
+    "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },
   "scripts": {
@@ -83,9 +83,5 @@
       ]
     }
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
-  }
+  "pre-commit": "lint"
 }

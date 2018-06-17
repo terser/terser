@@ -36,6 +36,10 @@ describe("test/benchmark.js", function() {
     });
 });
 
+// have node 10 skip jetstream test until stream truncation issue resolved
+// https://github.com/fabiosantoscode/terser/issues/56
+if (semver.satisfies(process.version, "10")) return;
+
 describe("test/jetstream.js", function() {
     this.timeout(20 * 60 * 1000);
     [

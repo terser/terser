@@ -203,6 +203,7 @@ describe("bin/uglifyjs", function() {
         });
     });
     it("Should fail with multiple input and inline source map", function(done) {
+        this.timeout(60000);
         var command = uglifyjscmd + " test/input/issue-520/input.js test/input/issue-520/output.js --source-map content=inline,url=inline";
 
         exec(command, function (err, stdout, stderr) {

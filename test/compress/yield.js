@@ -251,3 +251,31 @@ issue_2832: {
     ]
     node_version: ">=4"
 }
+
+issue_t60: {
+    options = {
+        collapse_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        function* t() {
+            const v = yield 1;
+            yield 2;
+            return v;
+        }
+        var g = t();
+        console.log(g.next().value, g.next().value);
+    }
+    expect: {
+        function* t() {
+            const v = yield 1;
+            yield 2;
+            return v;
+        }
+        var g = t();
+        console.log(g.next().value, g.next().value);
+    }
+    expect_stdout: "1 2"
+    node_version: ">=6"
+}

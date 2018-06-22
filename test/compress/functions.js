@@ -2594,3 +2594,13 @@ drop_lone_use_strict_arrows_2: {
     }
     node_version: ">=6"
 }
+
+deduplicate_parenthesis: {
+    input: {
+        ({}).a = b;
+        (({}).a = b)();
+        (function() {}).a = b;
+        ((function() {}).a = b)();
+    }
+    expect_exact: "({}).a=b;({}.a=b)();(function(){}).a=b;(function(){}.a=b)();"
+}

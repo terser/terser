@@ -33,11 +33,15 @@
   "devDependencies": {
     "acorn": "~5.4.1",
     "escodegen": "^1.9.1",
+    "eslint": "^4.19.1",
     "mocha": "~3.5.1",
+    "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },
   "scripts": {
     "test": "node test/run-tests.js",
+    "lint": "eslint lib",
+    "lint-fix": "eslint --fix lib",
     "prepublish": "node bin/uglifyjs --self -d \"MOZ_SourceMap=require('source-map')\" -e Terser:module.exports --beautify -o dist/browser.bundle.js"
   },
   "keywords": [
@@ -58,5 +62,26 @@
     "es2017",
     "async",
     "await"
-  ]
+  ],
+  "eslintConfig": {
+    "rules": {
+      "quotes": [
+        "error",
+        "double",
+        "avoid-escape"
+      ],
+      "no-debugger": "error",
+      "semi": [
+        "error",
+        "always"
+      ],
+      "no-extra-semi": "error",
+      "no-irregular-whitespace": "error",
+      "space-before-blocks": [
+        "error",
+        "always"
+      ]
+    }
+  },
+  "pre-commit": "lint"
 }

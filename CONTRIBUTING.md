@@ -25,11 +25,12 @@ Tests that cannot be expressed as a simple AST can be found in `test/mocha`.
 - Identifiers use `snake_case`.
 - Strings use double quotes (`"`).
 - Use a trailing comma for multiline array and object literals to minimize diffs.
-- The Uglify code only uses ES5, even in the `harmony` branch.
+- The Uglify code only uses ES5.
 - Line length should be at most 80 cols, except when it is easier to read a
   longer line.
 - If both sides of a comparison are of the same type, `==` and `!=` are used.
 - Multiline conditions place `&&` and `||` first on the line.
+- Code must pass the lint (`npm run lint`, or `npm run lint-fix` for auto-fix).
 
 **Example feature**
 

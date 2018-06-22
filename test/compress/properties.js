@@ -2292,3 +2292,47 @@ issue_3188_3: {
     }
     expect_stdout: "PASS"
 }
+
+issue_t64: {
+    options = {
+        collapse_vars: true,
+        join_vars: true,
+        properties: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        var obj = {};
+        obj.Base = class {
+            constructor() {
+                this.id = "PASS";
+            }
+        };
+        obj.Derived = class extends obj.Base {
+            constructor() {
+                super();
+                console.log(this.id);
+            }
+        };
+        new obj.Derived;
+    }
+    expect: {
+        var obj = {
+            Base: class {
+                constructor() {
+                    this.id = "PASS";
+                }
+            }
+        };
+        obj.Derived = class extends obj.Base {
+            constructor() {
+                super();
+                console.log(this.id);
+            }
+        };
+        new obj.Derived();
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}

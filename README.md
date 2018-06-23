@@ -1234,7 +1234,7 @@ To allow for better optimizations, the compiler makes various assumptions:
 
 ### Build Tools and Adaptors using Terser
 
-**Rollup:** [`rollup-plugin-terser`](https://github.com/TrySound/rollup-plugin-terser)
+https://www.npmjs.com/browse/depended/terser
 
 ### Replacing `uglify-es` with `terser` in a project using `yarn`
 

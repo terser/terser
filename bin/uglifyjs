@@ -343,7 +343,7 @@ function read_file(path, default_value) {
     try {
         return fs.readFileSync(path, "utf8");
     } catch (ex) {
-        if (ex.code == "ENOENT" && default_value != null) return default_value;
+        if ((ex.code == "ENOENT" || ex.code == "ENAMETOOLONG") && default_value != null) return default_value;
         fatal(ex);
     }
 }

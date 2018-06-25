@@ -481,4 +481,30 @@ describe("minify", function() {
             assert.strictEqual(result.code, '(function(window,undefined){(function(exports){function enclose(){console.log("test enclose")}enclose()})(typeof exports=="undefined"?exports={}:exports)})(window);');
         });
     });
+
+    describe("for-await-of", function() {
+        it("should fail in invalid contexts", function() {
+            [
+                [ "async function f(x){ for await (e of x) {} }" ],
+                [ "async function f(x){ for await (const e of x) {} }" ],
+                [ "async function f(x){ for await (var e of x) {} }" ],
+                [ "async function f(x){ for await (let e of x) {} }" ],
+                [ "for await(e of x){}", "`for await` invalid in this context" ],
+                [ "for await(const e of x){}", "`for await` invalid in this context" ],
+                [ "for await(const e in x){}", "`for await` invalid in this context" ],
+                [ "for await(;;){}", "`for await` invalid in this context" ],
+                [ "function f(x){ for await (e of x) {} }", "`for await` invalid in this context" ],
+                [ "function f(x){ for await (var e of x) {} }", "`for await` invalid in this context" ],
+                [ "function f(x){ for await (const e of x) {} }", "`for await` invalid in this context" ],
+                [ "function f(x){ for await (let e of x) {} }", "`for await` invalid in this context" ],
+                [ "async function f(x){ for await (const e in x) {} }", "`for await` invalid in this context" ],
+                [ "async function f(x){ for await (;;) {} }", "`for await` invalid in this context" ],
+            ].forEach(function(entry) {
+                var code = entry[0];
+                var expected_error = entry[1];
+                var result = Uglify.minify(code);
+                assert.strictEqual(result.error && result.error.message, expected_error, JSON.stringify(entry));
+            });
+        });
+    });
 });

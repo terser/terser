@@ -441,6 +441,21 @@ describe("minify", function() {
         assert.strictEqual(Uglify.minify(code, options).code, 'if(true)console.log(3);');
     });
 
+    describe("AST_RegExp", function() {
+        it("should preserve raw_source", function() {
+            var result = Uglify.minify("console.log(/\\/rx\\//ig);", {
+                output: {
+                    ast: true,
+                    code: true,
+                }
+            });
+            assert.strictEqual(result.code, "console.log(/\\/rx\\//gi);");
+            assert.strictEqual(result.ast.body[0].body.args[0].TYPE, "RegExp");
+            assert.strictEqual(result.ast.body[0].body.args[0].value.toString(), "/\\/rx\\//gi");
+            assert.strictEqual(result.ast.body[0].body.args[0].value.raw_source, "/\\/rx\\//ig");
+        });
+    });
+
     describe("enclose", function() {
         var code = read("test/input/enclose/input.js");
         it("Should work with true", function() {

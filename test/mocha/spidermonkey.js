@@ -6,7 +6,7 @@ var escodegen = require("escodegen");
 var UglifyJS = require("../..");
 
 describe("spidermonkey export/import sanity test", function() {
-    it("should produce a functional build when using --self with spidermonkey", function(done) {
+    it("Should produce a functional build when using --self with spidermonkey", function(done) {
         this.timeout(60000);
 
         var uglifyjs = '"' + process.argv[0] + '" bin/uglifyjs';

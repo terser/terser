@@ -2246,6 +2246,37 @@ issue_2898: {
     expect_stdout: "2"
 }
 
+deduplicate_parenthesis: {
+    input: {
+        ({}).a = b;
+        (({}).a = b)();
+        (function() {}).a = b;
+        ((function() {}).a = b)();
+    }
+    expect_exact: "({}).a=b;({}.a=b)();(function(){}).a=b;(function(){}.a=b)();"
+}
+
+issue_3166: {
+    options = {
+        directives: true,
+    }
+    input: {
+        "foo";
+        "use strict";
+        function f() {
+            "use strict";
+            "bar";
+            "use asm";
+        }
+    }
+    expect: {
+        "use strict";
+        function f() {
+            "use asm";
+        }
+    }
+}
+
 issue_3016_1: {
     options = {
         inline: true,
@@ -2507,6 +2538,7 @@ issue_3125: {
 
 drop_lone_use_strict: {
     options = {
+        directives: true,
         side_effects: true,
     }
     input: {
@@ -2537,6 +2569,7 @@ drop_lone_use_strict: {
 drop_lone_use_strict_arrows_1: {
     options = {
         side_effects: true,
+        directives: true,
     }
     input: {
         var f0 = () => 0;
@@ -2593,14 +2626,4 @@ drop_lone_use_strict_arrows_2: {
         let f2 = () => {};
     }
     node_version: ">=6"
-}
-
-deduplicate_parenthesis: {
-    input: {
-        ({}).a = b;
-        (({}).a = b)();
-        (function() {}).a = b;
-        ((function() {}).a = b)();
-    }
-    expect_exact: "({}).a=b;({}.a=b)();(function(){}).a=b;(function(){}.a=b)();"
 }

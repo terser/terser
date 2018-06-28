@@ -1,4 +1,7 @@
 class_directives_compression: {
+    options = {
+        directives: true,
+    }
     input: {
         class foo {
             foo() {

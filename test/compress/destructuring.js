@@ -693,3 +693,144 @@ issue_2140: {
     expect_stdout: "42"
     node_version: ">=6"
 }
+
+issue_3205_1: {
+    options = {
+        inline: 3,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        function f(a) {
+            function g() {
+                var {b, c} = a;
+                console.log(b, c);
+            }
+            g();
+        }
+        f({ b: 2, c: 3 });
+    }
+    expect: {
+        function f(a) {
+            (function() {
+                var {b: b, c: c} = a;
+                console.log(b, c);
+            })();
+        }
+        f({ b: 2, c: 3 });
+    }
+    expect_stdout: "2 3"
+    node_version: ">=6"
+}
+
+issue_3205_2: {
+    options = {
+        inline: 3,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function f() {
+                var o = { a: "PASS" }, {a: x} = o;
+                console.log(x);
+            }
+            f();
+        })();
+    }
+    expect: {
+        (function() {
+            function f() {
+                var o = { a: "PASS" }, {a: x} = o;
+                console.log(x);
+            }
+            f();
+        })();
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}
+
+issue_3205_3: {
+    options = {
+        inline: 3,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function f(o, {a: x} = o) {
+                console.log(x);
+            }
+            f({ a: "PASS" });
+        })();
+    }
+    expect: {
+        (function() {
+            function f(o, {a: x} = o) {
+                console.log(x);
+            }
+            f({ a: "PASS" });
+        })();
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}
+
+issue_3205_4: {
+    options = {
+        inline: 3,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function f(o) {
+                var {a: x} = o;
+                console.log(x);
+            }
+            f({ a: "PASS" });
+        })();
+    }
+    expect: {
+        (function() {
+            function f(o) {
+                var {a: x} = o;
+                console.log(x);
+            }
+            f({ a: "PASS" });
+        })();
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}
+
+issue_3205_5: {
+    options = {
+        inline: 3,
+        passes: 4,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function f(g) {
+                var o = g, {a: x} = o;
+                console.log(x);
+            }
+            f({ a: "PASS" });
+        })();
+    }
+    expect: {
+        !function(g) {
+            var {a: x} = {
+                a: "PASS"
+            };
+            console.log(x);
+        }();
+    }
+    expect_stdout: "PASS"
+    node_version: ">=6"
+}

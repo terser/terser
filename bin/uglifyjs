@@ -3,13 +3,25 @@
 
 "use strict";
 
-require("../tools/exit");
+require("../tools/exit.js");
 
 var fs = require("fs");
 var info = require("../package.json");
 var path = require("path");
 var program = require("commander");
-var UglifyJS = require("../tools/node");
+
+var bundle_path = __dirname + "/../dist/browser.bundle.js";
+if (process.env.TERSER_DEBUG
+    /* note: commander not initialized yet */
+    && !/--help|--self/.test(process.argv.toString())
+    && fs.existsSync(bundle_path)) {
+    var UglifyJS = require(bundle_path);
+    try {
+        require("source-map-support").install();
+    } catch (err) {}
+} else {
+    var UglifyJS = require("../tools/node.js");
+}
 
 var skip_keys = [ "cname", "inlined", "parent_scope", "scope", "uses_eval", "uses_with" ];
 var files = {};
@@ -50,7 +62,7 @@ program.option("--name-cache <file>", "File to hold mangled name mappings.");
 program.option("--rename", "Force symbol expansion.");
 program.option("--no-rename", "Disable symbol expansion.");
 program.option("--safari10", "Support non-standard Safari 10.");
-program.option("--self", "Build UglifyJS as a library (implies --wrap UglifyJS)");
+program.option("--self", "Build Terser as a library (implies --wrap Terser)");
 program.option("--source-map [options]", "Enable source map/specify source map options.", parse_source_map());
 program.option("--timings", "Display operations run time on STDERR.");
 program.option("--toplevel", "Compress and/or mangle variables in toplevel scope.");
@@ -112,7 +124,7 @@ if (program.mangleProps) {
     } else {
         if (typeof program.mangleProps != "object") program.mangleProps = {};
         if (!Array.isArray(program.mangleProps.reserved)) program.mangleProps.reserved = [];
-        require("../tools/domprops").forEach(function(name) {
+        require("../tools/domprops.json").forEach(function(name) {
             UglifyJS._push_uniq(program.mangleProps.reserved, name);
         });
     }

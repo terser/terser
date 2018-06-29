@@ -28,7 +28,8 @@
   ],
   "dependencies": {
     "commander": "~2.14.1",
-    "source-map": "~0.6.1"
+    "source-map": "~0.6.1",
+    "source-map-support": "~0.5.6"
   },
   "devDependencies": {
     "acorn": "~5.4.1",
@@ -42,7 +43,7 @@
     "test": "node test/run-tests.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepublish": "node bin/uglifyjs --self -d \"MOZ_SourceMap=require('source-map')\" -e Terser:module.exports --beautify -o dist/browser.bundle.js"
+    "prepublish": "node bin/uglifyjs lib/utils.js lib/ast.js lib/parse.js lib/transform.js lib/scope.js lib/output.js lib/compress.js lib/sourcemap.js lib/mozilla-ast.js lib/propmangle.js lib/minify.js tools/exports.js -c defaults=false -d \"MOZ_SourceMap=require('source-map')\" --source-map \"includeSources=true,url='browser.bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b ascii_only --comments /license/ -o dist/browser.bundle.js"
   },
   "keywords": [
     "uglify",

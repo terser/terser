@@ -27,12 +27,12 @@
     "LICENSE"
   ],
   "dependencies": {
-    "commander": "~2.14.1",
+    "commander": "~2.16.0",
     "source-map": "~0.6.1",
     "source-map-support": "~0.5.6"
   },
   "devDependencies": {
-    "acorn": "~5.4.1",
+    "acorn": "~5.7.1",
     "escodegen": "^1.9.1",
     "eslint": "^4.19.1",
     "mocha": "~3.5.1",

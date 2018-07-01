@@ -1,15 +1,15 @@
 reduce_vars: {
     options = {
-        conditionals  : true,
-        evaluate      : true,
-        inline        : true,
-        global_defs   : {
-            C : 0
+        conditionals: true,
+        evaluate: true,
+        global_defs: {
+            C: 0,
         },
-        reduce_funcs  : true,
-        reduce_vars   : true,
-        toplevel      : true,
-        unused        : true
+        inline: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        toplevel: true,
+        unused: true,
     }
     input: {
         var A = 1;
@@ -63,11 +63,11 @@ reduce_vars: {
 
 modified: {
     options = {
-        conditionals  : true,
-        evaluate      : true,
-        reduce_funcs  : true,
-        reduce_vars   : true,
-        unused        : true,
+        conditionals: true,
+        evaluate: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
     }
     input: {
         function f0() {
@@ -184,12 +184,12 @@ modified: {
 
 unsafe_evaluate: {
     options = {
-        evaluate     : true,
-        reduce_funcs : true,
-        reduce_vars  : true,
-        side_effects : true,
-        unsafe       : true,
-        unused       : true
+        evaluate: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        side_effects: true,
+        unsafe: true,
+        unused: true,
     }
     input: {
         function f0(){
@@ -344,10 +344,10 @@ unsafe_evaluate_unknown: {
 
 unsafe_evaluate_object_1: {
     options = {
-        evaluate     : true,
-        reduce_funcs : true,
-        reduce_vars  : true,
-        unsafe       : true
+        evaluate: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        unsafe: true,
     }
     input: {
         function f0(){
@@ -463,10 +463,10 @@ unsafe_evaluate_object_3: {
 
 unsafe_evaluate_array_1: {
     options = {
-        evaluate     : true,
-        reduce_funcs : true,
-        reduce_vars  : true,
-        unsafe       : true
+        evaluate: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        unsafe: true,
     }
     input: {
         function f0(){
@@ -642,11 +642,11 @@ unsafe_evaluate_array_5: {
 
 unsafe_evaluate_equality_1: {
     options = {
-        evaluate     : true,
-        reduce_funcs : true,
-        reduce_vars  : true,
-        unsafe       : true,
-        unused       : true
+        evaluate: true,
+        reduce_funcs: true,
+        reduce_vars: true,
+        unsafe: true,
+        unused: true,
     }
     input: {
         function f0() {
@@ -674,12 +674,12 @@ unsafe_evaluate_equality_1: {
 unsafe_evaluate_equality_2: {
     options = {
         collapse_vars: true,
-        evaluate     : true,
-        passes       : 2,
-        reduce_funcs : true,
-        reduce_vars  : true,
-        unsafe       : true,
-        unused       : true
+        evaluate: true,
+        passes: 2,
+        reduce_funcs: true,
+        reduce_vars: true,
+        unsafe: true,
+        unused: true,
     }
     input: {
         function f2() {
@@ -1123,7 +1123,7 @@ toplevel_on: {
         evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:true,
+        toplevel: true,
         unused: true,
     }
     input: {
@@ -1141,7 +1141,7 @@ toplevel_off: {
         evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:false,
+        toplevel: false,
         unused: true,
     }
     input: {
@@ -1161,7 +1161,7 @@ toplevel_on_loops_1: {
         loops: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:true,
+        toplevel: true,
         unused: true,
     }
     input: {
@@ -1191,7 +1191,7 @@ toplevel_off_loops_1: {
         loops: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:false,
+        toplevel: false,
         unused: true,
     }
     input: {
@@ -1222,7 +1222,7 @@ toplevel_on_loops_2: {
         reduce_funcs: true,
         reduce_vars: true,
         side_effects: true,
-        toplevel:true,
+        toplevel: true,
         unused: true,
     }
     input: {
@@ -1248,7 +1248,7 @@ toplevel_off_loops_2: {
         loops: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:false,
+        toplevel: false,
         unused: true,
     }
     input: {
@@ -1277,7 +1277,7 @@ toplevel_on_loops_3: {
         loops: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:true,
+        toplevel: true,
         unused: true,
     }
     input: {
@@ -1295,7 +1295,7 @@ toplevel_off_loops_3: {
         loops: true,
         reduce_funcs: true,
         reduce_vars: true,
-        toplevel:false,
+        toplevel: false,
         unused: true,
     }
     input: {
@@ -1879,8 +1879,8 @@ issue_1670_1: {
     options = {
         comparisons: true,
         conditionals: true,
-        evaluate: true,
         dead_code: true,
+        evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
         side_effects: true,
@@ -1912,8 +1912,8 @@ issue_1670_1: {
 issue_1670_2: {
     options = {
         conditionals: true,
-        evaluate: true,
         dead_code: true,
+        evaluate: true,
         passes: 2,
         reduce_funcs: true,
         reduce_vars: true,
@@ -1945,8 +1945,8 @@ issue_1670_3: {
     options = {
         comparisons: true,
         conditionals: true,
-        evaluate: true,
         dead_code: true,
+        evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
         side_effects: true,
@@ -1978,8 +1978,8 @@ issue_1670_3: {
 issue_1670_4: {
     options = {
         conditionals: true,
-        evaluate: true,
         dead_code: true,
+        evaluate: true,
         passes: 2,
         reduce_funcs: true,
         reduce_vars: true,

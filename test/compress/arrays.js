@@ -17,9 +17,9 @@ holes_and_undefined: {
 
 constant_join: {
     options = {
-        unsafe   : true,
-        evaluate : true
-    };
+        evaluate: true,
+        unsafe: true,
+    }
     input: {
         var a = [ "foo", "bar", "baz" ].join("");
         var a1 = [ "foo", "bar", "baz" ].join();
@@ -66,9 +66,9 @@ constant_join: {
 
 constant_join_2: {
     options = {
-        unsafe   : true,
-        evaluate : true
-    };
+        evaluate: true,
+        unsafe: true,
+    }
     input: {
         var a = [ "foo", "bar", boo(), "baz", "x", "y" ].join("");
         var b = [ "foo", "bar", boo(), "baz", "x", "y" ].join("-");
@@ -168,9 +168,9 @@ spread_with_logical_expression_at_middle: {
 
 constant_join_3: {
     options = {
-        unsafe: true,
         evaluate: true,
-    };
+        unsafe: true,
+    }
     input: {
         var a = [ null ].join();
         var b = [ , ].join();
@@ -208,7 +208,7 @@ for_loop: {
         reduce_vars: true,
         unsafe: true,
         unused: true,
-    };
+    }
     input: {
         function f0() {
             var a = [1, 2, 3];

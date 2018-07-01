@@ -186,7 +186,9 @@ unary_prefix: {
 }
 
 negative_zero: {
-    options = { evaluate: true }
+    options = {
+        evaluate: true,
+    }
     input: {
         console.log(
             -"",
@@ -207,7 +209,9 @@ negative_zero: {
 }
 
 positive_zero: {
-    options = { evaluate: true }
+    options = {
+        evaluate: true,
+    }
     input: {
         console.log(
             +"",
@@ -323,8 +327,8 @@ pow_with_number_constants: {
 
 unsafe_constant: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -515,8 +519,8 @@ prop_function: {
 
 unsafe_integer_key: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -543,8 +547,8 @@ unsafe_integer_key: {
 
 unsafe_integer_key_complex: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -571,8 +575,8 @@ unsafe_integer_key_complex: {
 
 unsafe_float_key: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -599,8 +603,8 @@ unsafe_float_key: {
 
 unsafe_float_key_complex: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -627,8 +631,8 @@ unsafe_float_key_complex: {
 
 unsafe_array: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -663,8 +667,8 @@ unsafe_array: {
 
 unsafe_string: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -691,8 +695,8 @@ unsafe_string: {
 
 unsafe_array_bad_index: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -713,8 +717,8 @@ unsafe_array_bad_index: {
 
 unsafe_string_bad_index: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -847,8 +851,8 @@ in_boolean_context: {
 
 unsafe_charAt: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -875,8 +879,8 @@ unsafe_charAt: {
 
 unsafe_charAt_bad_index: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -897,8 +901,8 @@ unsafe_charAt_bad_index: {
 
 unsafe_charAt_noop: {
     options = {
-        evaluate  : true,
-        unsafe    : true
+        evaluate: true,
+        unsafe: true,
     }
     input: {
         console.log(
@@ -1288,7 +1292,7 @@ issue_2231_1: {
     }
     expect_stdout: true
     expect_warnings: [
-        "WARN: Error evaluating Object.keys(void 0) [test/compress/evaluate.js:1284,20]",
+        "WARN: Error evaluating Object.keys(void 0) [test/compress/evaluate.js:1288,20]",
     ]
 }
 
@@ -1305,7 +1309,7 @@ issue_2231_2: {
     }
     expect_stdout: true
     expect_warnings: [
-        "WARN: Error evaluating Object.getOwnPropertyNames(null) [test/compress/evaluate.js:1301,20]",
+        "WARN: Error evaluating Object.getOwnPropertyNames(null) [test/compress/evaluate.js:1305,20]",
     ]
 }
 
@@ -1443,14 +1447,14 @@ issue_2535_3: {
     }
     expect_stdout: true
     expect_warnings: [
-        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1429,20]",
-        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1430,20]",
-        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1431,20]",
-        "WARN: Condition left of && always false [test/compress/evaluate.js:1431,20]",
-        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1432,20]",
-        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1433,20]",
-        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1434,20]",
-        "WARN: Condition left of || always true [test/compress/evaluate.js:1434,20]",
+        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1433,20]",
+        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1434,20]",
+        "WARN: Dropping side-effect-free && [test/compress/evaluate.js:1435,20]",
+        "WARN: Condition left of && always false [test/compress/evaluate.js:1435,20]",
+        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1436,20]",
+        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1437,20]",
+        "WARN: Dropping side-effect-free || [test/compress/evaluate.js:1438,20]",
+        "WARN: Condition left of || always true [test/compress/evaluate.js:1438,20]",
     ]
 }
 

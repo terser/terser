@@ -68,8 +68,8 @@ this_binding_collapse_vars: {
 
 this_binding_side_effects: {
     options = {
-        side_effects : true
-    };
+        side_effects: true,
+    }
     input: {
         (function (foo) {
             (0, foo)();

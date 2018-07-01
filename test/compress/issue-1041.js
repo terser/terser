@@ -16,7 +16,7 @@ const_pragma: {
         evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
-    };
+    }
 
     input: {
         /** @const */ var goog = goog || {};
@@ -32,7 +32,7 @@ not_const: {
         evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
-    };
+    }
 
     input: {
         var goog = goog || {};

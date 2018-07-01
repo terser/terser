@@ -12,4 +12,6 @@ matrix:
   fast_finish: true
 sudo: false
 cache:
-  directories: tmp
+  directories:
+    - tmp
+    - node_modules

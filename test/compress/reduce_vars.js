@@ -1545,6 +1545,32 @@ func_modified: {
     }
 }
 
+unused_modified: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        console.log(function() {
+            var b = 1, c = "FAIL";
+            if (0 || b--)
+                c = "PASS";
+            b = 1;
+            return c;
+        }());
+    }
+    expect: {
+        console.log(function() {
+            var b = 1, c = "FAIL";
+            if (0 || b--)
+                c = "PASS";
+            b = 1;
+            return c;
+        }());
+    }
+    expect_stdout: "PASS"
+}
+
 defun_label: {
     options = {
         passes: 2,

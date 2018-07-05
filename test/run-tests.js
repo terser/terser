@@ -29,9 +29,6 @@ if (process.argv.length > 2) {
 var mocha_tests = require("./mocha.js");
 mocha_tests();
 
-var run_sourcemaps_tests = require('./sourcemaps');
-run_sourcemaps_tests();
-
 /* -----[ utils ]----- */
 
 function tmpl() {

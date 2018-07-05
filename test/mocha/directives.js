@@ -1,9 +1,9 @@
 var assert = require("assert");
-var uglify = require("../node");
+var UglifyJS = require("../node");
 
 describe("Directives", function() {
     it ("Should allow tokenizer to store directives state", function() {
-        var tokenizer = uglify.tokenizer("", "foo.js");
+        var tokenizer = UglifyJS.tokenizer("", "foo.js");
 
         // Stack level 0
         assert.strictEqual(tokenizer.has_directive("use strict"), false);
@@ -171,13 +171,13 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             // Fail parser deliberately to get state at failure
-            var tokenizer = uglify.tokenizer(tests[i].input + "]", "foo.js");
+            var tokenizer = UglifyJS.tokenizer(tests[i].input + "]", "foo.js");
 
             try {
-                var parser = uglify.parse(tokenizer);
+                var parser = UglifyJS.parse(tokenizer);
                 throw new Error("Expected parser to fail");
             } catch (e) {
-                assert.strictEqual(e instanceof uglify.JS_Parse_Error, true);
+                assert.strictEqual(e instanceof UglifyJS.JS_Parse_Error, true);
                 assert.strictEqual(e.message, "Unexpected token: punc (])");
             }
 
@@ -196,7 +196,7 @@ describe("Directives", function() {
             ["'tests';\n\n", true],
             ["\n\n\"use strict\";\n\n", true]
         ].forEach(function(test) {
-            var out = uglify.OutputStream();
+            var out = UglifyJS.OutputStream();
             out.print(test[0]);
             out.print_string("", null, true);
             assert.strictEqual(out.get() === test[0] + ';""', test[1], test[0]);
@@ -205,7 +205,7 @@ describe("Directives", function() {
 
     it("Should only print 2 semicolons spread over 2 lines in beautify mode", function() {
         assert.strictEqual(
-            uglify.minify(
+            UglifyJS.minify(
                 '"use strict";\'use strict\';"use strict";"use strict";;\'use strict\';console.log(\'use strict\');',
                 {output: {beautify: true, quote_style: 3}, compress: false}
             ).code,
@@ -235,7 +235,7 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(
-                uglify.minify(tests[i][0], {compress: false, mangle: false}).code,
+                UglifyJS.minify(tests[i][0], {compress: false, mangle: false}).code,
                 tests[i][1],
                 tests[i][0]
             );
@@ -243,7 +243,7 @@ describe("Directives", function() {
     });
 
     it("Should add double semicolon when relying on automatic semicolon insertion", function() {
-        var code = uglify.minify('"use strict";"use\\x20strict";',
+        var code = UglifyJS.minify('"use strict";"use\\x20strict";',
             {output: {semicolons: false}, compress: false}
         ).code;
         assert.strictEqual(code, '"use strict";;"use strict"\n');
@@ -350,7 +350,7 @@ describe("Directives", function() {
         ];
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(
-                uglify.minify(tests[i][0], {output:{quote_style: tests[i][1]}, compress: false}).code,
+                UglifyJS.minify(tests[i][0], {output:{quote_style: tests[i][1]}, compress: false}).code,
                 tests[i][2],
                 tests[i][0] + " using mode " + tests[i][1]
             );
@@ -382,7 +382,7 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(
-                uglify.minify(tests[i][0]).code,
+                UglifyJS.minify(tests[i][0]).code,
                 tests[i][1],
                 tests[i][0]
             );
@@ -404,8 +404,8 @@ describe("Directives", function() {
 
         var i = 0;
         var checked;
-        var checkWalker = new uglify.TreeWalker(function(node, descend) {
-            if (node instanceof uglify.AST_Symbol && node.name === "_check_") {
+        var checkWalker = new UglifyJS.TreeWalker(function(node, descend) {
+            if (node instanceof UglifyJS.AST_Symbol && node.name === "_check_") {
                 checked = true;
                 for (var j = 0; j < tests[i].directives.length; j++) {
                     assert.ok(checkWalker.has_directive(tests[i].directives[j]),
@@ -421,7 +421,7 @@ describe("Directives", function() {
         for (; i < tests.length; i++) {
             // Do tests - iterate the ast in each test - check only when _check_ occurs - fail when no _check_ has been found
             checked = false;
-            var ast = uglify.parse(tests[i].input);
+            var ast = UglifyJS.parse(tests[i].input);
             ast.walk(checkWalker);
             if (!checked) {
                 throw "No _check_ symbol found in " + tests[i].input;

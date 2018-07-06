@@ -78,6 +78,19 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.code, "({}).wat([]);");
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["wat"],"mappings":"CAAU,IACNA,IAAI"}');
     });
+    it("Should mark class literals", function() {
+        var result = UglifyJS.minify([
+            "class bar {};",
+            "var obj = class {};",
+            "obj.wat(bar);",
+        ].join("\n"), {
+            sourceMap: true,
+            toplevel: true,
+        });
+        if (result.error) throw result.error;
+        assert.strictEqual(result.code, "(class{}).wat(class{});");
+        assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["wat"],"mappings":"CACU,SACNA,IAFJ"}');
+    });
     it("Should give correct sourceRoot", function() {
         var code = "console.log(42);";
         var result = UglifyJS.minify(code, {

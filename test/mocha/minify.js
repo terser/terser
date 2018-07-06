@@ -268,6 +268,9 @@ describe("minify", function() {
         });
         it("should work with max_line_len", function() {
             var result = UglifyJS.minify(read("./test/input/issue-505/input.js"), {
+                compress: {
+                    directives: false
+                },
                 output: {
                     max_line_len: 20
                 },

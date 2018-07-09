@@ -1699,3 +1699,29 @@ issue_3028: {
     expect_stdout: "3 1 2"
     node_version: ">=6"
 }
+
+issue_t80: {
+    options = {
+        unused: true,
+    }
+    input: {
+        function foo(data = []) {
+            var u, v = "unused";
+            if (arguments.length == 1) {
+                data = [data];
+            }
+            return data;
+        }
+        console.log(JSON.stringify([foo(), foo(null), foo(5, 6)]));
+    }
+    expect: {
+        function foo(data = []) {
+            if (1 == arguments.length)
+                data = [data];
+            return data;
+        }
+        console.log(JSON.stringify([foo(), foo(null), foo(5, 6)]));
+    }
+    expect_stdout: "[[],[null],5]"
+    node_version: ">=6"
+}

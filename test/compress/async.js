@@ -402,3 +402,15 @@ for_await_of_2: {
         }
     }
 }
+
+issue_87: {
+    input: {
+        function async(async) {
+            console.log(async[0], async.prop)
+        }
+        async({0: 1, prop: 2})
+    }
+    expect_stdout: [
+        "1 2"
+    ]
+}

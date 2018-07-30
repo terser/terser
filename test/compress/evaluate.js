@@ -325,6 +325,74 @@ pow_with_number_constants: {
     }
 }
 
+pow_sequence_with_parens: {
+    input: {
+        var one = 1;
+        var two = 2;
+        var four = 4;
+        console.log((four ** one) ** two, (four ** one) ** (one / two));
+    }
+    expect: {
+        var one=1;
+        var two=2;
+        var four=4;
+        console.log((four**one)**two,(four**one)**(one/two));
+    }
+    expect_stdout: "16 2"
+    node_version: ">=8"
+}
+
+pow_sequence_with_parens_evaluated: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var one = 1;
+        var two = 2;
+        var four = 4;
+        console.log((four ** one) ** two, (four ** one) ** (one / two));
+    }
+    expect: {
+        console.log(16,2);
+    }
+    expect_stdout: "16 2"
+    node_version: ">=8"
+}
+
+pow_sequence_with_constants_and_parens: {
+    options = {
+        evaluate: true,
+        toplevel: true,
+    }
+    input: {
+        console.log((4 ** 1) ** 2, (4 ** 1) ** (1 / 2));
+    }
+    expect: {
+        console.log(16,2);
+    }
+    expect_stdout: "16 2"
+    node_version: ">=8"
+}
+
+pow_sequence_with_parens_exact: {
+    input: {
+        console.log((4 ** 1) ** 2, (4 ** 1) ** (1 / 2));
+        var one = 1;
+        var two = 2;
+        var four = 4;
+        console.log((four ** one) ** two, (four ** one) ** (one / two));
+    }
+    expect_exact: "console.log((4**1)**2,(4**1)**(1/2));var one=1;var two=2;var four=4;console.log((four**one)**two,(four**one)**(one/two));"
+    expect_stdout: [
+        "16 2",
+        "16 2",
+    ]
+    node_version: ">=8"
+}
+
 unsafe_constant: {
     options = {
         evaluate: true,

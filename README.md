@@ -7,7 +7,7 @@ A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 Why choose terser?
 ------------------
 
-`uglify-es` is no longer maintained and `uglify-js` does not support ES6+.
+`uglify-es` is [no longer maintained](https://github.com/mishoo/UglifyJS2/issues/3156#issuecomment-392943058) and `uglify-js` does not support ES6+.
 
 **`terser`** is a fork of `uglify-es` that retains API and CLI compatibility
 with `uglify-es` and `uglify-js@3`.

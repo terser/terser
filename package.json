@@ -66,6 +66,13 @@
   ],
   "eslintConfig": {
     "rules": {
+      "brace-style": [
+        "error",
+        "1tbs",
+        {
+          "allowSingleLine": true
+        }
+      ],
       "quotes": [
         "error",
         "double",

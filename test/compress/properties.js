@@ -2336,3 +2336,35 @@ issue_t64: {
     expect_stdout: "PASS"
     node_version: ">=6"
 }
+
+dont_mangle_computed_property: {
+    mangle = {
+        properties: {}
+    }
+    input: {
+        "AAAAAAAAAAAAAAAAAA";
+        "BBBBBBBBBBBBBBBBB";
+        const prop = Symbol("foo");
+        const obj = {
+            [prop]: "bar",
+            "baz": 1,
+            qux: 2,
+            [3 + 4]: "seven",
+        }
+        console.log(obj[prop], obj["baz"], obj.qux, obj[7]);
+    }
+    expect: {
+        "AAAAAAAAAAAAAAAAAA";
+        "BBBBBBBBBBBBBBBBB";
+        const prop = Symbol("foo");
+        const obj = {
+            [prop]: "bar",
+            A: 1,
+            B: 2,
+            [3 + 4]: "seven",
+        };
+        console.log(obj[prop], obj["A"], obj.B, obj[7]);
+    }
+    expect_stdout: "bar 1 2 seven"
+    node_version: ">=6"
+}

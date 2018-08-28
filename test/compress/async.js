@@ -414,3 +414,59 @@ issue_87: {
         "1 2"
     ]
 }
+
+async_generator_function: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        async function* baz() {
+            yield await Promise.resolve(1);
+        }
+    }
+    expect_exact: "async function*baz(){yield await Promise.resolve(1)}"
+}
+
+async_generator_class_method: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        class Foo {
+            async* bar() {
+                yield await Promise.resolve(2);
+            }
+        }
+    }
+    expect_exact: "class Foo{async*bar(){yield await Promise.resolve(2)}}"
+}
+
+async_generator_static_class_method: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        class Foo {
+            static async* bar() {
+                yield await Promise.resolve(4);
+            }
+        }
+    }
+    expect_exact: "class Foo{static async*bar(){yield await Promise.resolve(4)}}"
+}
+
+async_generator_object_literal_method: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        foo({
+            baz: 4,
+            async* bar() {
+                yield await Promise.resolve(3);
+            },
+            qux,
+        });
+    }
+    expect_exact: "foo({baz:4,async*bar(){yield await Promise.resolve(3)},qux:qux});"
+}

@@ -62,7 +62,7 @@ y = {
     *bar() {},
     *['constructor']() {}
 }
-function f () {
+function f2 () {
     console.log(new.target);
 }
 console.log([10, ...[], 20, ...[30, 40], 50]["length"]);

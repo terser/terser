@@ -639,7 +639,6 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
 - `arrows` (default: `true`) -- Converts `()=>{return x}` to `()=>x`. Class
   and object literal methods will also be converted to arrow expressions if
   the resultant code is shorter: `m(){return x}` becomes `m:()=>x`.
-  This transform requires that the `ecma` compress option is set to `6` or greater.
 
 - `arguments` (default: `false`) -- replace `arguments[index]` with function
   parameter name whenever possible.

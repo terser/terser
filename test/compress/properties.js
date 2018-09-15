@@ -2336,3 +2336,110 @@ issue_t64: {
     expect_stdout: "PASS"
     node_version: ">=6"
 }
+
+dont_mangle_computed_property_1: {
+    mangle = {
+        properties: {}
+    }
+    input: {
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
+        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+        const prop = Symbol("foo");
+        const obj = {
+            [prop]: "bar",
+            "baz": 1,
+            qux: 2,
+            [3 + 4]: "seven",
+            0: "zero",
+            1: "one",
+            null: "Null",
+            undefined: "Undefined",
+            Infinity: "infinity",
+            NaN: "nan",
+            void: "Void",
+        }
+        console.log(obj[prop], obj["baz"], obj.qux, obj[7], obj[0], obj[1+0],
+            obj[null], obj[undefined], obj[1/0], obj[NaN], obj.void);
+        console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
+    }
+    expect: {
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+        "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
+        "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+        const prop = Symbol("foo");
+        const obj = {
+            [prop]: "bar",
+            A: 1,
+            B: 2,
+            [3 + 4]: "seven",
+            0: "zero",
+            1: "one",
+            null: "Null",
+            undefined: "Undefined",
+            Infinity: "infinity",
+            NaN: "nan",
+            C: "Void",
+        };
+        console.log(obj[prop], obj["A"], obj.B, obj[7], obj[0], obj[1+0],
+            obj[null], obj[void 0], obj[1/0], obj[NaN], obj.C);
+        console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
+    }
+    expect_stdout: [
+        "bar 1 2 seven zero one Null Undefined infinity nan Void",
+        "Null Undefined infinity nan",
+    ]
+    node_version: ">=6"
+}
+
+dont_mangle_computed_property_2: {
+    options = {
+        defaults: true,
+        toplevel: true,
+    }
+    mangle = {
+        properties: {},
+        toplevel: true,
+    }
+    input: {
+        const prop = Symbol("foo");
+        const obj = {
+            [prop]: "bar",
+            "baz": 1,
+            qux: 2,
+            [3 + 4]: "seven",
+            0: "zero",
+            1: "one",
+            null: "Null",
+            undefined: "Undefined",
+            Infinity: "infinity",
+            NaN: "nan",
+            void: "Void",
+        }
+        console.log(obj[prop], obj["baz"], obj.qux, obj[7], obj[0], obj[1+0],
+            obj[null], obj[undefined], obj[1/0], obj[NaN], obj.void);
+        console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
+    }
+    expect: {
+        const n = Symbol("foo"), o = {
+            [n]: "bar",
+            n: 1,
+            o: 2,
+            7: "seven",
+            0: "zero",
+            1: "one",
+            null: "Null",
+            undefined: "Undefined",
+            Infinity: "infinity",
+            NaN: "nan",
+            e: "Void"
+        };
+        console.log(o[n], o.n, o.o, o[7], o[0], o[1], o.null, o[void 0], o[1 / 0], o.NaN, o.e),
+        console.log(o.null, o.undefined, o.Infinity, o.NaN);
+    }
+    expect_stdout: [
+        "bar 1 2 seven zero one Null Undefined infinity nan Void",
+        "Null Undefined infinity nan",
+    ]
+    node_version: ">=6"
+}

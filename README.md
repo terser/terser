@@ -533,7 +533,7 @@ if (result.error) throw result.error;
 
 - `keep_fnames` (default: `false`) - pass `true` to prevent discarding or mangling
   of function names.  Useful for code relying on `Function.prototype.name`. If the
-  top level minify option `keep_classnames` is `undefined` it will be overriden with
+  top level minify option `keep_classnames` is `undefined` it will be overridden with
   the value of the top level minify option `keep_fnames`.
 
 - `safari10` (default: `false`) - pass `true` to work around Safari 10/11 bugs in
@@ -1146,7 +1146,7 @@ Traversal and transformation of the native AST can be performed through
 respectively.
 
 Largely compatible native AST examples can be found in the original UglifyJS
-documention. See: [tree walker](http://lisperator.net/uglifyjs/walk) and
+documentation. See: [tree walker](http://lisperator.net/uglifyjs/walk) and
 [tree transform](http://lisperator.net/uglifyjs/transform).
 
 ### ESTree / SpiderMonkey AST

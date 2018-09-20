@@ -1327,3 +1327,121 @@ unused_destructuring_multipass: {
     expect_stdout: "1"
     node_version: ">=6"
 }
+
+issue_t111_1: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var p = x => (console.log(x), x), unused = p(1), {} = p(2);
+    }
+    expect: {
+        var p = x => (console.log(x), x), {} = (p(1), p(2));
+    }
+    expect_stdout: [
+        "1",
+        "2",
+    ]
+    node_version: ">=6"
+}
+
+issue_t111_2a: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var p = x => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
+    }
+    expect: {
+        var p = x => (console.log(x), x), {} = (p(1), p(2));
+        p(3), p(4);
+    }
+    expect_stdout: [
+        "1",
+        "2",
+        "3",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+issue_t111_2b: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let p = x => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
+    }
+    expect: {
+        let p = x => (console.log(x), x), {} = (p(1), p(2));
+        p(3), p(4);
+    }
+    expect_stdout: [
+        "1",
+        "2",
+        "3",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+issue_t111_2c: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        const p = x => (console.log(x), x), a = p(1), {} = p(2), c = p(3), d = p(4);
+    }
+    expect: {
+        const p = x => (console.log(x), x), {} = (p(1), p(2));
+        p(3), p(4);
+    }
+    expect_stdout: [
+        "1",
+        "2",
+        "3",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+issue_t111_3: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let p = x => (console.log(x), x), a = p(1), {} = p(2), c = p(3), {} = p(4);
+    }
+    expect: {
+        let p = x => (console.log(x), x), {} = (p(1), p(2)), {} = (p(3), p(4));
+    }
+    expect_stdout: [
+        "1",
+        "2",
+        "3",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+issue_t111_4: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let p = x => (console.log(x), x), a = 1, {length} = [0], c = 3, {x} = {x: 2};
+        p(`${length} ${x}`);
+    }
+    expect: {
+        let p = x => (console.log(x), x), {length} = [0], {x} = {x: 2};
+        p(`${length} ${x}`);
+    }
+    expect_stdout: "1 2"
+    node_version: ">=6"
+}

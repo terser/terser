@@ -834,3 +834,496 @@ issue_3205_5: {
     expect_stdout: "PASS"
     node_version: ">=6"
 }
+
+unused_destructuring_decl_1: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let { x: L, y } = { x: 2 };
+        var { U: u, V } = { V: 3 };
+        const { C, D } = { C: 1, D: 4 };
+        console.log(L, V);
+    }
+    expect: {
+        let { x: L } = { x: 2 };
+        var { V } = { V: 3 };
+        const {} = { C: 1, D: 4 };  // TODO: future optimization opportunity
+        console.log(L, V);
+    }
+    expect_stdout: "2 3"
+    node_version: ">=6"
+}
+
+unused_destructuring_decl_2: {
+    options = {
+        pure_getters: true,
+        toplevel: false,
+        unused: true,
+    }
+    input: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect_stdout: "7 8 3"
+    node_version: ">=6"
+}
+
+unused_destructuring_decl_3: {
+    options = {
+        pure_getters: false,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect_stdout: "7 8 3"
+    node_version: ">=6"
+}
+
+unused_destructuring_decl_4: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unused: false,
+    }
+    input: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect_stdout: "7 8 3"
+    node_version: ">=6"
+}
+
+unused_destructuring_decl_5: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        top_retain: [ "a", "e", "w" ],
+        unused: true,
+    }
+    input: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, f: g, h = new Object(2) } = { e: 8 };
+        var { w, x: y, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect: {
+        const { a, b: c, d = new Object(1) } = { b: 7 };
+        let { e, h = new Object(2) } = { e: 8 };
+        var { w, z = new Object(3) } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z + 0);
+    }
+    expect_stdout: "7 8 3"
+    node_version: ">=6"
+}
+
+unused_destructuring_function_param: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        function foo({w = console.log("side effect"), x, y: z}) {
+            console.log(x);
+        }
+        foo({x: 1, y: 2, z: 3});
+    }
+    expect: {
+        function foo({w = console.log("side effect"), x}) {
+            console.log(x);
+        }
+        foo({x: 1, y: 2, z: 3});
+    }
+    expect_stdout: [
+        "side effect",
+        "1",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_arrow_param: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        let bar = ({w = console.log("side effect"), x, y: z}) => {
+            console.log(x);
+        };
+        bar({x: 4, y: 5, z: 6});
+    }
+    expect: {
+        let bar = ({w = console.log("side effect"), x}) => {
+            console.log(x);
+        };
+        bar({x: 4, y: 5, z: 6});
+    }
+    expect_stdout: [
+        "side effect",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_object_method_param: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        ({
+            baz({w = console.log("side effect"), x, y: z}) {
+                console.log(x);
+            }
+        }).baz({x: 7, y: 8, z: 9});
+    }
+    expect: {
+        ({
+            baz({w = console.log("side effect"), x}) {
+                console.log(x);
+            }
+        }).baz({x: 7, y: 8, z: 9});
+    }
+    expect_stdout: [
+        "side effect",
+        "7",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_class_method_param: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        (new class {
+            baz({w = console.log("side effect"), x, y: z}) {
+                console.log(x);
+            }
+        }).baz({x: 7, y: 8, z: 9});
+    }
+    expect: {
+        (new class {
+            baz({w = console.log("side effect"), x}) {
+                console.log(x);
+            }
+        }).baz({x: 7, y: 8, z: 9});
+    }
+    expect_stdout: [
+        "side effect",
+        "7",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_getter_side_effect_1: {
+    options = {
+        pure_getters: false,
+        unused: true,
+    }
+    input: {
+        function extract(obj) {
+            const { a, b } = obj;
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    expect: {
+        function extract(obj) {
+            const { a, b } = obj;
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    expect_stdout: [
+        "2",
+        "side effect",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_getter_side_effect_2: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        function extract(obj) {
+            const { a, b } = obj;
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    expect: {
+        function extract(obj) {
+            const { b } = obj;
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    // No `expect_stdout` clause here because `pure_getters`
+    // drops the getter side effect as expected and produces
+    // different output than the original `input` code.
+}
+
+unused_destructuring_assign_1: {
+    options = {
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        function extract(obj) {
+            var a;
+            let b;
+            ({ a, b } = obj);
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({b: 4});
+    }
+    expect: {
+        function extract(obj) {
+            var a;
+            let b;
+            ({ a, b } = obj);  // TODO: future optimization opportunity
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({b: 4});
+    }
+    expect_stdout: [
+        "2",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+unused_destructuring_assign_2: {
+    options = {
+        pure_getters: false,
+        unused: true,
+    }
+    input: {
+        function extract(obj) {
+            var a;
+            let b;
+            ({ a, b } = obj);
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    expect: {
+        function extract(obj) {
+            var a;
+            let b;
+            ({ a, b } = obj);
+            console.log(b);
+        }
+        extract({a: 1, b: 2});
+        extract({
+            get a() {
+                var s = "side effect";
+                console.log(s);
+                return s;
+            },
+            b: 4,
+        });
+    }
+    expect_stdout: [
+        "2",
+        "side effect",
+        "4",
+    ]
+    node_version: ">=6"
+}
+
+export_unreferenced_declarations_1: {
+    options = {
+        module: true,
+        pure_getters: true,
+        unused: true,
+    }
+    beautify = {
+        beautify: false,
+        ecma: 6,
+    }
+    input: {
+        export const { keys } = Object;
+        export let { L, M } = Object;
+        export var { V, W } = Object;
+    }
+    expect_exact: "export const{keys}=Object;export let{L,M}=Object;export var{V,W}=Object;"
+}
+
+export_unreferenced_declarations_2: {
+    options = {
+        module: true,
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        var {unused} = obj;
+        export const [{a, b = 1}] = obj;
+        export let [[{c, d = 2}]] = obj;
+        export var [, [{e, f = 3}]] = obj;
+    }
+    expect: {
+        var {} = obj;
+        export const [{a, b = 1}] = obj;
+        export let [[{c, d = 2}]] = obj;
+        export var [, [{e, f = 3}]] = obj;
+    }
+}
+
+export_function_containing_destructuring_decl: {
+    options = {
+        module: true,
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        export function f() {
+            let [{x, y, z}] = [{x: 1, y: 2}];
+            return x;
+        }
+    }
+    expect: {
+        export function f() {
+            let [{x}] = [{x: 1, y: 2}];
+            return x;
+        }
+    }
+}
+
+unused_destructuring_declaration_complex_1: {
+    options = {
+        toplevel: true,
+        pure_getters: true,
+        unused: true,
+    }
+    input: {
+        const [, w, , x, {y, z}] = [1, 2, 3, 4, {z: 5}];
+        console.log(x, z);
+    }
+    expect: {
+        // TODO: unused destructuring array declarations not optimized
+        const [, w, , x, {z}] = [1, 2, 3, 4, {z: 5}];
+        console.log(x, z);
+    }
+    expect_stdout: "4 5"
+    node_version: ">=6"
+}
+
+unused_destructuring_declaration_complex_2: {
+    options = {
+        toplevel: true,
+        pure_getters: false,
+        unused: true,
+    }
+    input: {
+        const [, w, , x, {y, z}] = [1, 2, 3, 4, {z: 5}];
+        console.log(x, z);
+    }
+    expect: {
+        const [, w, , x, {y, z}] = [1, 2, 3, 4, {z: 5}];
+        console.log(x, z);
+    }
+    expect_stdout: "4 5"
+    node_version: ">=6"
+}
+
+unused_destructuring_multipass: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        toplevel: true,
+        passes: 2,
+        pure_getters: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        let { w, x: y, z } = { x: 1, y: 2, z: 3 };
+        console.log(y);
+        if (0) {
+            console.log(z);
+        }
+    }
+    expect: {
+        let { x: y } = { x: 1, y: 2, z: 3 };
+        console.log(y);
+    }
+    expect_stdout: "1"
+    node_version: ">=6"
+}

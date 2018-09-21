@@ -31,6 +31,10 @@ mocha_tests();
 
 /* -----[ utils ]----- */
 
+function HOP(obj, prop) {
+    return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
 function tmpl() {
     return U.string_template.apply(this, arguments);
 }
@@ -98,13 +102,64 @@ function run_compress_tests() {
             } else {
                 expect = test.expect_exact;
             }
-            var input = as_toplevel(test.input, test.mangle);
-            var input_code = make_code(input, output_options);
-            var input_formatted = make_code(test.input, {
-                beautify: true,
-                quote_style: 3,
-                keep_quoted_props: true
-            });
+            if (test.expect_error && (test.expect || test.expect_exact || test.expect_stdout)) {
+                log("!!! Test cannot have an `expect_error` with other expect clauses\n", {});
+                return false;
+            }
+            if (test.input instanceof U.AST_SimpleStatement
+                && test.input.body instanceof U.AST_TemplateString) {
+                if (test.input.body.segments.length == 1) {
+                    try {
+                        var input = U.parse(test.input.body.segments[0].value);
+                    } catch (ex) {
+                        if (!test.expect_error) {
+                            log("!!! Test is missing an `expect_error` clause\n", {});
+                            return false;
+                        }
+                        if (test.expect_error instanceof U.AST_SimpleStatement
+                        && test.expect_error.body instanceof U.AST_Object) {
+                            var expect_error = eval("(" + test.expect_error.body.print_to_string() + ")");
+                            var ex_normalized = JSON.parse(JSON.stringify(ex));
+                            ex_normalized.name = ex.name;
+                            for (var prop in expect_error) {
+                                if (prop == "name" || HOP(expect_error, prop)) {
+                                    if (expect_error[prop] != ex_normalized[prop]) {
+                                        log("!!! Failed `expect_error` property `{prop}`:\n\n---expect_error---\n{expect_error}\n\n---ACTUAL exception--\n{actual_ex}\n\n", {
+                                            prop: prop,
+                                            expect_error: JSON.stringify(expect_error, null, 2),
+                                            actual_ex: JSON.stringify(ex_normalized, null, 2),
+                                        });
+                                        return false;
+                                    }
+                                }
+                            }
+                            return true;
+                        }
+                        log("!!! Test `expect_error` clause must be an object literal\n---expect_error---\n{expect_error}\n\n", {
+                            expect_error: test.expect_error.print_to_string(),
+                        });
+                        return false;
+                    }
+                    var input_code = make_code(input, output_options);
+                    var input_formatted = test.input.body.segments[0].value;
+                } else {
+                    log("!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {
+                        input: test.input.body.print_to_string(),
+                    });
+                    return false;
+                }
+            } else if (test.expect_error) {
+                log("!!! Test cannot have an `expect_error` clause without a template string `input`\n", {});
+                return false;
+            } else {
+                var input = as_toplevel(test.input, test.mangle);
+                var input_code = make_code(input, output_options);
+                var input_formatted = make_code(test.input, {
+                    beautify: true,
+                    quote_style: 3,
+                    keep_quoted_props: true
+                });
+            }
             try {
                 U.parse(input_code);
             } catch (ex) {
@@ -333,6 +388,7 @@ function parse_test(file) {
                     [
                         "input",
                         "expect",
+                        "expect_error",
                         "expect_exact",
                         "expect_warnings",
                         "expect_stdout",

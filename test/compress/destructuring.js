@@ -850,7 +850,6 @@ unused_destructuring_decl_1: {
     expect: {
         let { x: L } = { x: 2 };
         var { V } = { V: 3 };
-        const {} = { C: 1, D: 4 };  // TODO: future optimization opportunity
         console.log(L, V);
     }
     expect_stdout: "2 3"
@@ -1239,7 +1238,7 @@ export_unreferenced_declarations_2: {
         export var [, [{e, f = 3}]] = obj;
     }
     expect: {
-        var {} = obj;
+        obj;
         export const [{a, b = 1}] = obj;
         export let [[{c, d = 2}]] = obj;
         export var [, [{e, f = 3}]] = obj;
@@ -1443,5 +1442,166 @@ issue_t111_4: {
         p(`${length} ${x}`);
     }
     expect_stdout: "1 2"
+    node_version: ">=6"
+}
+
+empty_object_destructuring_1: {
+    options = {
+        pure_getters: false,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var {} = Object;
+        let {L} = Object, L2 = "foo";
+        const bar = "bar", {prop: C1, C2 = console.log("side effect"), C3} = Object;
+    }
+    expect: {
+        var {} = Object;
+        let {L: L} = Object;
+        const {prop: C1, C2: C2 = console.log("side effect"), C3: C3} = Object;
+    }
+    expect_stdout: "side effect"
+    node_version: ">=6"
+}
+
+empty_object_destructuring_2: {
+    options = {
+        pure_getters: "strict",
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var {} = Object;
+        let {L} = Object, L2 = "foo";
+        const bar = "bar", {prop: C1, C2 = console.log("side effect"), C3} = Object;
+    }
+    expect: {
+        var {} = Object;
+        let {L: L} = Object;
+        const {prop: C1, C2: C2 = console.log("side effect"), C3: C3} = Object;
+    }
+    expect_stdout: "side effect"
+    node_version: ">=6"
+}
+
+empty_object_destructuring_3: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        var {} = Object;
+        let {L} = Object, L2 = "foo";
+        const bar = "bar", {prop: C1, C2 = console.log("side effect"), C3} = Object;
+    }
+    expect: {
+        Object;
+        Object;
+        const {C2: C2 = console.log("side effect")} = Object;
+    }
+    expect_stdout: "side effect"
+    node_version: ">=6"
+}
+
+empty_object_destructuring_4: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        var {} = Object;
+        let {L} = Object, L2 = "foo";
+        const bar = "bar", {prop: C1, C2 = console.log("side effect"), C3} = Object;
+    }
+    expect: {
+        const {C2: C2 = console.log("side effect")} = Object;
+    }
+    expect_stdout: "side effect"
+    node_version: ">=6"
+}
+
+empty_object_destructuring_misc: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        let out = [],
+            foo = (out.push(0), 1),
+            {} = {k: 9},
+            bar = out.push(2),
+            {unused} = (out.push(3), {unused: 7}),
+            {a: b, prop, w, x: y, z} = {prop: 8},
+            baz = (out.push(4), 5);
+        console.log(`${foo} ${prop} ${baz} ${JSON.stringify(out)}`);
+    }
+    expect: {
+        let out = [],
+            foo = (out.push(0), 1),
+            {prop: prop} = (out.push(2), out.push(3), {prop: 8}),
+            baz = (out.push(4), 5);
+        console.log(`${foo} ${prop} ${baz} ${JSON.stringify(out)}`);
+    }
+    expect_stdout: "1 8 5 [0,2,3,4]"
+    node_version: ">=6"
+}
+
+destructure_empty_array_1: {
+    options = {
+        pure_getters: false,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        let {} = Object, [] = {}, unused = console.log("not reached");
+    }
+    expect: {
+        let {} = Object, [] = {};
+        console.log("not reached");
+    }
+    expect_stdout: true // TypeError: {} is not iterable
+    node_version: ">=6"
+}
+
+destructure_empty_array_2: {
+    options = {
+        pure_getters: "strict",
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        let {} = Object, [] = {}, unused = console.log("not reached");
+    }
+    expect: {
+        let {} = Object, [] = {};
+        console.log("not reached");
+    }
+    expect_stdout: true // TypeError: {} is not iterable
+    node_version: ">=6"
+}
+
+destructure_empty_array_3: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        let {} = Object, [] = {}, unused = console.log("not reached");
+    }
+    expect: {
+        let [] = {};
+        console.log("not reached");
+    }
+    expect_stdout: true // TypeError: {} is not iterable
     node_version: ">=6"
 }

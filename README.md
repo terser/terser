@@ -1,6 +1,8 @@
 terser
 ======
 
+[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser)
+
 A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
 

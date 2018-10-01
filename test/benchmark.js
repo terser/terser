@@ -30,13 +30,6 @@ function done() {
         var failures = [];
         urls.forEach(function(url) {
             var info = results[url];
-            console.log();
-            console.log(url);
-            console.log(info.log);
-            console.log("Original:", info.input, "bytes");
-            console.log("Uglified:", info.output, "bytes");
-            console.log("GZipped: ", info.gzip, "bytes");
-            console.log("SHA1 sum:", info.sha1);
             if (info.code) {
                 failures.push(url);
             }
@@ -79,6 +72,16 @@ urls.forEach(function(url) {
         });
         uglifyjs.on("exit", function(code) {
             results[url].code = code;
+            var info = results[url];
+            if (!info.code) {
+                console.log();
+                console.log(url);
+                console.log(info.log);
+                console.log("Original:", info.input, "bytes");
+                console.log("Uglified:", info.output, "bytes");
+                console.log("GZipped: ", info.gzip, "bytes");
+                console.log("SHA1 sum:", info.sha1);
+            }
             done();
         });
     });

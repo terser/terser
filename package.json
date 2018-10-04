@@ -35,7 +35,7 @@
     "acorn": "~5.7.1",
     "escodegen": "^1.9.1",
     "eslint": "^4.19.1",
-    "mocha": "~3.5.1",
+    "mocha": "^5.2.0",
     "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },

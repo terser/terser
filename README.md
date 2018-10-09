@@ -648,6 +648,9 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
 - `booleans` (default: `true`) -- various optimizations for boolean context,
   for example `!!a ? b : c → a ? b : c`
 
+- `booleans_as_integers` (default: `false`) -- Turn booleans into 0 and 1, also
+  makes comparisons with booleans use `==` and `!=` instead of `===` and `!==`.
+
 - `collapse_vars` (default: `true`) -- Collapse single-use non-constant variables,
   side effects permitting.
 

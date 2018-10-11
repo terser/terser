@@ -3,3 +3,4 @@
 tmp/
 dist/browser.bundle.js
 dist/browser.bundle.js.map
+coverage/

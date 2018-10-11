@@ -85,12 +85,11 @@ describe("parentheses", function() {
     });
 
     it("Should compress leading parenthesis with reasonable performance", function() {
-        this.timeout(30000);
         var code = [
             "({}?0:1)&&x();",
             "(function(){}).name;",
         ];
-        for (var i = 16; --i >= 0;) {
+        for (var i = 9; --i >= 0;) {
             code = code.concat(code);
         }
         code = code.join("");

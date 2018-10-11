@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+global.__IS_TESTING__ = true;
+
 var U = require("./node");
 var path = require("path");
 var fs = require("fs");
@@ -28,6 +30,11 @@ if (process.argv.length > 2) {
 
 var mocha_tests = require("./mocha.js");
 mocha_tests();
+
+var coverageVar = Object.keys(global).find(x => x.match(/^\$\$cov_/));
+for (var key in global['__coverage__']) {
+    global[coverageVar][key] = global['__coverage__'][key]
+}
 
 /* -----[ utils ]----- */
 

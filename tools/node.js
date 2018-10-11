@@ -1,4 +1,5 @@
 var fs = require("fs");
+var istanbul = require("istanbul");
 
 var UglifyJS = exports;
 var FILES = UglifyJS.FILES = [
@@ -18,9 +19,13 @@ var FILES = UglifyJS.FILES = [
     return require.resolve(file);
 });
 
+var instrumenter = new istanbul.Instrumenter();
+
 new Function("MOZ_SourceMap", "exports", function() {
     var code = FILES.map(function(file) {
-        return fs.readFileSync(file, "utf8");
+        var contents = fs.readFileSync(file, "utf8");
+        if (global.__IS_TESTING__) return instrumenter.instrumentSync(contents, file);
+        return contents;
     });
     code.push("exports.describe_ast = " + describe_ast.toString());
     return code.join("\n\n");

@@ -2,7 +2,7 @@ var assert = require("assert");
 var UglifyJS = require("../..");
 
 describe("let", function() {
-    this.timeout(30000);
+    this.timeout(60000);
     it("Should not produce reserved keywords as variable name in mangle", function() {
         // Produce a lot of variables in a function and run it through mangle.
         var s = '"dddddeeeeelllllooooottttt"; function foo() {';

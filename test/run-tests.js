@@ -28,13 +28,13 @@ if (process.argv.length > 2) {
     return;
 }
 
-//var mocha_tests = require("./mocha.js");
-//mocha_tests();
+var mocha_tests = require("./mocha.js");
+mocha_tests();
 
 var coverageVar = Object.keys(global).filter(function(x) { return x.match(/^\$\$cov_/); })[0];
 if (global[coverageVar]) {
-    for (var key in global['__coverage__']) {
-        global[coverageVar][key] = global['__coverage__'][key]
+    for (var key in global["__coverage__"]) {
+        global[coverageVar][key] = global["__coverage__"][key];
     }
 }
 

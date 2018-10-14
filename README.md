@@ -531,12 +531,13 @@ if (result.error) throw result.error;
 - `ie8` (default `false`) - set to `true` to support IE8.
 
 - `keep_classnames` (default: `undefined`) - pass `true` to prevent discarding or mangling
-  of class names.
+  of class names. Pass a regular expression to only keep class names matching that regex.
 
 - `keep_fnames` (default: `false`) - pass `true` to prevent discarding or mangling
-  of function names.  Useful for code relying on `Function.prototype.name`. If the
-  top level minify option `keep_classnames` is `undefined` it will be overridden with
-  the value of the top level minify option `keep_fnames`.
+  of function names. Pass a regular expression to only keep class names matching that regex.
+  Useful for code relying on `Function.prototype.name`. If the top level minify option
+  `keep_classnames` is `undefined` it will be overridden with the value of the top level
+  minify option `keep_fnames`.
 
 - `safari10` (default: `false`) - pass `true` to work around Safari 10/11 bugs in
   loop scoping and `await`. See `safari10` options in [`mangle`](#mangle-options)
@@ -712,16 +713,17 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
 
 - `join_vars` (default: `true`) -- join consecutive `var` statements
 
-- `keep_classnames` (default: `false`) -- Pass `true` to prevent the
-  compressor from discarding class names.  See also: the `keep_classnames`
-  [mangle option](#mangle).
+- `keep_classnames` (default: `false`) -- Pass `true` to prevent the compressor from
+  discarding class names. Pass a regular expression to only keep class names matching
+  that regex. See also: the `keep_classnames` [mangle option](#mangle).
 
 - `keep_fargs` (default: `true`) -- Prevents the compressor from discarding unused
   function arguments.  You need this for code which relies on `Function.length`.
 
 - `keep_fnames` (default: `false`) -- Pass `true` to prevent the
-  compressor from discarding function names.  Useful for code relying on
-  `Function.prototype.name`. See also: the `keep_fnames` [mangle option](#mangle).
+  compressor from discarding function names. Pass a regular expression to only keep
+  class names matching that regex. Useful for code relying on `Function.prototype.name`.
+  See also: the `keep_fnames` [mangle option](#mangle).
 
 - `keep_infinity` (default: `false`) -- Pass `true` to prevent `Infinity` from
   being compressed into `1/0`, which may cause performance issues on Chrome.
@@ -848,9 +850,11 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   where `eval` or `with` are used.
 
 - `keep_classnames` (default `false`) -- Pass `true` to not mangle class names.
+  Pass a regular expression to only keep class names matching that regex.
   See also: the `keep_classnames` [compress option](#compress-options).
 
 - `keep_fnames` (default `false`) -- Pass `true` to not mangle function names.
+  Pass a regular expression to only keep class names matching that regex.
   Useful for code relying on `Function.prototype.name`. See also: the `keep_fnames`
   [compress option](#compress-options).
 

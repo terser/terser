@@ -7,6 +7,7 @@ import { Bar2 as kex, Baz as food } from "lel";
 
 const x = 0b01;
 let y = 6;
+const array_holes = [1,2,,3]
 
 export default x;
 export const z = 4;
@@ -142,6 +143,7 @@ var a = {
     *["%"]() {
         return 2;
     },
+    meth() { },
     [a]() {}
 };
 
@@ -153,3 +155,13 @@ console.log(/rx/ig.test("RX"));
 /\\rx3\\/ig;
 /[\\/]/ig;
 /[\\/]/;
+
+// Try catch clauses
+
+try {
+    foo();
+} catch (e) {
+    console.error(e);
+} finally {
+    foo();
+}

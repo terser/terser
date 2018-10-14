@@ -1,11 +1,12 @@
 var fs = require("fs");
-var Mocha = require("mocha");
+var Mocha = require("mocha-parallel-tests").default;
 var path = require("path");
 
 // Instantiate a Mocha instance
 var mocha = new Mocha({
     timeout: 5000
 });
+mocha.setMaxParallel(4)
 var testDir = __dirname + "/mocha/";
 
 // Add each .js file to the Mocha instance

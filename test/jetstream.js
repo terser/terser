@@ -6,6 +6,7 @@
 var site = "https://browserbench.org/JetStream";
 if (typeof phantom == "undefined") {
     require("../tools/exit");
+    var this_file = process.argv[1];
     var args = process.argv.slice(2);
     var debug = args.indexOf("--debug");
     if (debug >= 0) {
@@ -64,7 +65,7 @@ if (typeof phantom == "undefined") {
         } else {
             child_process.exec("npm install phantomjs-prebuilt@2.1.14 --no-save", function(error) {
                 if (error) throw error;
-                var program = require("phantomjs-prebuilt").exec(process.argv[1], port);
+                var program = require("phantomjs-prebuilt").exec(this_file, port);
                 program.stdout.pipe(process.stdout);
                 program.stderr.pipe(process.stderr);
                 program.on("exit", function(code) {

@@ -1,6 +1,6 @@
 /node_modules/
 /npm-debug.log
 tmp/
-dist/browser.bundle.js
-dist/browser.bundle.js.map
+dist/bundle.js
+dist/bundle.js.map
 coverage/

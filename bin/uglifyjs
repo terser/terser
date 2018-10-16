@@ -10,7 +10,7 @@ var info = require("../package.json");
 var path = require("path");
 var program = require("commander");
 
-var bundle_path = __dirname + "/../dist/browser.bundle.js";
+var bundle_path = __dirname + "/../dist/bundle.js";
 if (process.env.TERSER_DEBUG
     /* note: commander not initialized yet */
     && !/--help|--self/.test(process.argv.toString())
@@ -19,6 +19,8 @@ if (process.env.TERSER_DEBUG
     try {
         require("source-map-support").install();
     } catch (err) {}
+} else if (fs.existsSync(bundle_path)) {
+    var UglifyJS = require(bundle_path)
 } else {
     var UglifyJS = require("../tools/node.js");
 }

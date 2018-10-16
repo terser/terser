@@ -20,6 +20,7 @@ describe("bin/uglifyjs", function() {
         });
     });
     it("Should be able to filter comments correctly with `--comment <RegExp>`", function (done) {
+        this.timeout(10 * 1000);
         var command = uglifyjscmd + ' test/input/comments/filter.js --comments /r/';
 
         exec(command, function (err, stdout) {

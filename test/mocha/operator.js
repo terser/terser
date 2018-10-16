@@ -3,6 +3,8 @@ var UglifyJS = require("../..");
 
 describe("operator", function() {
     it("Should handle mixing of ++/+/--/- correctly", function() {
+        this.timeout(10000);
+
         function evaluate(exp) {
             return new Function("var a=1,b=2,c=" + exp + ";return{a:a,b:b,c:c}")();
         }

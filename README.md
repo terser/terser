@@ -127,7 +127,6 @@ a double dash to prevent input files being used as option arguments:
                                 for `mangle` and `output` options.
                                 By default `terser` will not work around
                                 Safari 10/11 bugs.
-    --self                      Build Terser as a library (implies --wrap Terser)
     --source-map [options]      Enable source map/specify source map options:
                                 `base`  Path to compute relative paths from input files.
                                 `content`  Input source map, useful if you're compressing

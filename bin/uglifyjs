@@ -13,7 +13,7 @@ var program = require("commander");
 var bundle_path = __dirname + "/../dist/bundle.js";
 if (process.env.TERSER_DEBUG
     /* note: commander not initialized yet */
-    && !/--help|--self/.test(process.argv.toString())
+    && !/--help/.test(process.argv.toString())
     && fs.existsSync(bundle_path)) {
     var UglifyJS = require(bundle_path);
     try {
@@ -64,7 +64,6 @@ program.option("--name-cache <file>", "File to hold mangled name mappings.");
 program.option("--rename", "Force symbol expansion.");
 program.option("--no-rename", "Disable symbol expansion.");
 program.option("--safari10", "Support non-standard Safari 10.");
-program.option("--self", "Build Terser as a library (implies --wrap Terser)");
 program.option("--source-map [options]", "Enable source map/specify source map options.", parse_source_map());
 program.option("--timings", "Display operations run time on STDERR.");
 program.option("--toplevel", "Compress and/or mangle variables in toplevel scope.");
@@ -171,16 +170,7 @@ if (program.verbose) {
 } else if (program.warn) {
     options.warnings = true;
 }
-if (program.self) {
-    if (program.args.length) {
-        print_error("WARN: Ignoring input files since --self was passed");
-    }
-    if (!options.wrap) options.wrap = "Terser";
-    simple_glob(UglifyJS.FILES).forEach(function(name) {
-        files[convert_path(name)] = read_file(name);
-    });
-    run();
-} else if (program.args.length) {
+if (program.args.length) {
     simple_glob(program.args).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });
@@ -330,7 +320,7 @@ function simple_glob(glob) {
     if (Array.isArray(glob)) {
         return [].concat.apply([], glob.map(simple_glob));
     }
-    if (glob.match(/\*|\?/)) {
+    if (glob && glob.match(/\*|\?/)) {
         var dir = path.dirname(glob);
         try {
             var entries = fs.readdirSync(dir);

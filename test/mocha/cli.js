@@ -9,26 +9,6 @@ function read(path) {
 
 describe("bin/uglifyjs", function() {
     var uglifyjscmd = '"' + process.argv[0] + '" bin/uglifyjs';
-    it("Should produce a functional build when using --self", function (done) {
-        this.timeout(120000);
-
-        var command = uglifyjscmd + ' --self -mc ecma=';
-        command += semver.satisfies(process.version, ">=4") ? "6" : "5";
-        command += ',passes=3,keep_fargs=false,unsafe --wrap WrappedUglifyJS';
-
-        exec(command, { maxBuffer: 1048576 }, function (err, stdout) {
-            if (err) throw err;
-
-            eval(stdout);
-
-            assert.strictEqual(typeof WrappedUglifyJS, 'object');
-            var result = WrappedUglifyJS.minify("foo([true,,2+3]);");
-            assert.strictEqual(result.error, undefined);
-            assert.strictEqual(result.code, "foo([!0,,5]);");
-
-            done();
-        });
-    });
     it("Should be able to filter comments correctly with `--comments all`", function (done) {
         var command = uglifyjscmd + ' test/input/comments/filter.js --comments all';
 

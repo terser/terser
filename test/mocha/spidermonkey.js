@@ -6,26 +6,6 @@ var escodegen = require("escodegen");
 var UglifyJS = require("../..");
 
 describe("spidermonkey export/import sanity test", function() {
-    it("Should produce a functional build when using --self with spidermonkey", function(done) {
-        this.timeout(60000);
-
-        var uglifyjs = '"' + process.argv[0] + '" bin/uglifyjs';
-        var command = uglifyjs + " --self -cm --wrap SpiderUglify -o spidermonkey | " +
-            uglifyjs + " -p spidermonkey -cm";
-
-        exec(command, { maxBuffer: 1048576 }, function(err, stdout) {
-            if (err) throw err;
-
-            eval(stdout);
-            assert.strictEqual(typeof SpiderUglify, "object");
-            var result = SpiderUglify.minify("foo([true,,2+3]);");
-            assert.strictEqual(result.error, undefined);
-            assert.strictEqual(result.code, "foo([!0,,5]);");
-
-            done();
-        });
-    });
-
     it("Should judge between directives and strings correctly on import", function() {
         var tests = [
             {

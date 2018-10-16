@@ -1,9 +1,9 @@
 var fs = require("fs");
-var Mocha = require("mocha");
+var Mochallel = require("mochallel");
 var path = require("path");
 
 // Instantiate a Mocha instance
-var mocha = new Mocha({
+var mocha = new Mochallel({
     timeout: 5000
 });
 var testDir = __dirname + "/mocha/";

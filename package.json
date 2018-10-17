@@ -37,7 +37,7 @@
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
-    "mochallel": "^1.6.0",
+    "mochallel": "^1.6.2",
     "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },

@@ -2627,3 +2627,83 @@ drop_lone_use_strict_arrows_2: {
     }
     node_version: ">=6"
 }
+
+issue_t131a: {
+    options = {
+        inline: 1,
+        join_vars: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function thing() {
+                return {
+                    a: 1,
+                };
+            }
+            function one() {
+                return thing();
+            }
+            function two() {
+                var x = thing();
+                x.a = 2;
+                x.b = 3;
+                return x;
+            }
+            console.log(JSON.stringify(one()), JSON.stringify(two()));
+        })();
+    }
+    expect: {
+        (function() {
+            console.log(JSON.stringify({
+                a: 1
+            }), JSON.stringify(function() {
+                var x = {
+                    a: 1,
+                    a: 2,
+                    b: 3
+                };
+                return x;
+            }()));
+        })();
+    }
+    expect_stdout: '{"a":1} {"a":2,"b":3}'
+}
+
+issue_t131b: {
+    options = {
+        defaults: true,
+        passes: 2,
+    }
+    input: {
+        (function() {
+            function thing() {
+                return {
+                    a: 1,
+                };
+            }
+            function one() {
+                return thing();
+            }
+            function two() {
+                var x = thing();
+                x.a = 2;
+                x.b = 3;
+                return x;
+            }
+            console.log(JSON.stringify(one()), JSON.stringify(two()));
+        })();
+    }
+    expect: {
+        console.log(JSON.stringify({
+            a: 1
+        }), JSON.stringify({
+            a: 1,
+            a: 2,
+            b: 3
+        }));
+    }
+    expect_stdout: '{"a":1} {"a":2,"b":3}'
+}

@@ -42,7 +42,7 @@
     "semver": "~5.5.0"
   },
   "scripts": {
-    "test": "node test/run-tests.js",
+    "test": "rm -f dist/* && npm run prepublish && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",

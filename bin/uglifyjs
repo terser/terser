@@ -11,16 +11,13 @@ var path = require("path");
 var program = require("commander");
 
 var bundle_path = __dirname + "/../dist/bundle.js";
-if (process.env.TERSER_DEBUG
-    /* note: commander not initialized yet */
-    && !/--help/.test(process.argv.toString())
-    && fs.existsSync(bundle_path)) {
-    var UglifyJS = require(bundle_path);
-    try {
-        require("source-map-support").install();
-    } catch (err) {}
-} else if (fs.existsSync(bundle_path)) {
+if (fs.existsSync(bundle_path)) {
     var UglifyJS = require(bundle_path)
+    if (process.env.TERSER_DEBUG) {
+        try {
+            require("source-map-support").install();
+        } catch (err) {}
+    }
 } else {
     var UglifyJS = require("../tools/node.js");
 }
@@ -34,7 +31,7 @@ var options = {
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
 program.parse = undefined;
-if (process.argv.indexOf("ast") >= 0) program.helpInformation = UglifyJS.describe_ast;
+if (process.argv.indexOf("ast") >= 0) program.helpInformation = describe_ast;
 else if (process.argv.indexOf("options") >= 0) program.helpInformation = function() {
     var text = [];
     var options = UglifyJS.default_options();
@@ -446,4 +443,39 @@ function print_error(msg) {
 function print(txt) {
     process.stdout.write(txt);
     process.stdout.write("\n");
+}
+
+function describe_ast() {
+    var out = UglifyJS.OutputStream({ beautify: true });
+    function doitem(ctor) {
+        out.print("AST_" + ctor.TYPE);
+        var props = ctor.SELF_PROPS.filter(function(prop){
+            return !/^\$/.test(prop);
+        });
+        if (props.length > 0) {
+            out.space();
+            out.with_parens(function(){
+                props.forEach(function(prop, i){
+                    if (i) out.space();
+                    out.print(prop);
+                });
+            });
+        }
+        if (ctor.documentation) {
+            out.space();
+            out.print_string(ctor.documentation);
+        }
+        if (ctor.SUBCLASSES.length > 0) {
+            out.space();
+            out.with_block(function(){
+                ctor.SUBCLASSES.forEach(function(ctor, i){
+                    out.indent();
+                    doitem(ctor);
+                    out.newline();
+                });
+            });
+        }
+    };
+    doitem(UglifyJS.AST_Node);
+    return out + "\n";
 }

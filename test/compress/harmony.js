@@ -1,3 +1,11 @@
+template_strings_unfinished_slash_u: {
+    input: {
+        console.log(String.raw`\u`)
+    }
+    expect_stdout: ["\\u"]
+    node_version: ">=10"
+}
+
 arrow_function_parens: {
     input: {
         something && (() => {});

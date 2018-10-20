@@ -93,3 +93,16 @@ broken_safari_catch_scope_caveat: {
     expect_stdout: "PASS"
     node_version: ">=6"
 }
+
+parameterless_catch: {
+    input: {
+        try {
+            unknown();
+        } catch {
+            console.log("PASS");
+        }
+    }
+    expect_exact: 'try{unknown()}catch{console.log("PASS")}'
+    expect_stdout: "PASS"
+    node_version: ">=10"
+}

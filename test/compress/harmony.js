@@ -1,14 +1,15 @@
 template_strings: {
     input: {
-        function x() {}
+        function x(strings) { return strings.raw[0]; }
         console.log(String.raw`\u`);
         console.log(x`\u`);
     }
+    expect_exact: "function x(strings){return strings.raw[0]}console.log(String.raw`\\u`);console.log(x`\\u`);"
     expect_stdout: [
         "\\u",
-        "undefined"
+        "\\u"
     ]
-    node_version: ">=4"
+    node_version: ">=10"
 }
 arrow_function_parens: {
     input: {

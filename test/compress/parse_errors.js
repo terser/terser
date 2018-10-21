@@ -40,3 +40,15 @@ invalid_template_string_example: {
         col: 35,
     })
 }
+
+invalid_unicode_escape_sequence: {
+    input: `
+        console.log("FAIL\u")
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid Unicode escape sequence",
+        line: 2,
+        col: 35,
+    })
+}

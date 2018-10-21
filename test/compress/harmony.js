@@ -1,3 +1,15 @@
+template_strings: {
+    input: {
+        function x() {}
+        console.log(String.raw`\u`);
+        console.log(x`\u`);
+    }
+    expect_stdout: [
+        "\\u",
+        "undefined"
+    ]
+    node_version: ">=4"
+}
 arrow_function_parens: {
     input: {
         something && (() => {});

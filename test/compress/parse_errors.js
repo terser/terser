@@ -43,12 +43,13 @@ invalid_template_string_example: {
 
 invalid_unicode_escape_sequence: {
     input: `
-        console.log("FAIL\u")
+        console.log("FAIL\\u")
     `
     expect_error: ({
         name: "SyntaxError",
-        message: "Invalid Unicode escape sequence",
+        message: "Invalid hex-character pattern in string",
         line: 2,
-        col: 35,
+        col: 20,
+        pos: 21
     })
 }

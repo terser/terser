@@ -309,9 +309,9 @@ keep_raw_content_in_tagged_template: {
         evaluate: true
     }
     input: {
-        var foo = tag`\u0020\u{20}\u{00020}\x20\40\040 `;
+        var foo = tag`\u0020\u{20}\u{00020}\x20 `;
     }
-    expect_exact: "var foo=tag`\\u0020\\u{20}\\u{00020}\\x20\\40\\040 `;";
+    expect_exact: "var foo=tag`\\u0020\\u{20}\\u{00020}\\x20 `;";
 }
 
 allow_chained_templates: {
@@ -325,9 +325,9 @@ allow_chained_templates: {
 
 check_escaped_chars: {
     input: {
-        var foo = `\u0020\u{20}\u{00020}\x20\40\040 `;
+        var foo = `\u0020\u{20}\u{00020}\x20 `;
     }
-    expect_exact: "var foo=`       `;";
+    expect_exact: "var foo=`     `;";
 }
 
 escape_dollar_curly: {
@@ -557,4 +557,136 @@ baz`;
         "fin",
     ]
     node_version: ">=6"
+}
+
+tagged_template_with_invalid_escape: {
+    input: {
+        function x(s) { return s.raw[0]; }
+        console.log(String.raw`\u`);
+        console.log(x`\u`);
+    }
+    expect_exact: "function x(s){return s.raw[0]}console.log(String.raw`\\u`);console.log(x`\\u`);"
+    expect_stdout: [
+        "\\u",
+        "\\u",
+    ]
+    node_version: ">=10"
+}
+
+es2018_revision_of_template_escapes_1: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        console.log(String.raw`\unicode \xerces`);
+    }
+    expect_exact: "console.log(String.raw\`\\unicode \\xerces\`);"
+    expect_stdout: "\\unicode \\xerces"
+    node_version: ">=10"
+}
+
+invalid_unicode_escape_in_regular_string: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\u")
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20,
+    })
+}
+
+/* TODO
+invalid_escape_in_template_string_1: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log(\`\\unicode \\xerces\ \\1234567890\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "xxx", // FIXME
+        "line": 0, // FIXME
+        "col": 0, // FIXME
+    })
+}
+
+invalid_escape_in_template_string_2: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log(\`\\u\`.charCodeAt(0));
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "xxx",
+        "line": 0,
+        "col": 0
+    })
+}
+*/
+
+invalid_escape_in_template_string_3: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\041" + \`\\041\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Octal escape sequences are not allowed in template strings",
+        "line": 2,
+        "col": 33,
+    })
+}
+
+/* TODO
+invalid_escape_in_template_string_4: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\x21" + \`\\x\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "xxx", // FIXME
+        "line": 0, // FIXME
+        "col": 0, // FIXME
+    })
+}
+
+invalid_escape_in_template_string_5: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\x21" + \`\\xERROR\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "xxx", // FIXME
+        "line": 0, // FIXME
+        "col": 0, // FIXME
+    })
+}
+*/
+
+invalid_hex_character_pattern: {
+    input: `
+        var bar = '\\u{-1}'
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 18
+    })
 }

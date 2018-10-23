@@ -38,6 +38,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
     "mochallel": "^1.6.8",
+    "multiprocess-map": "^1.2.5",
     "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },

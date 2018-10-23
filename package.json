@@ -38,18 +38,18 @@
     "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
-    "mochallel": "^1.6.8",
+    "mochallel": "^1.7.4",
     "multiprocess-map": "^1.2.5",
     "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },
   "scripts": {
-    "test": "rm -f dist/* && npm run prepublish && node test/run-tests.js",
+    "test": "rm -f dist/* && npm run prepare && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepublish": "cd dist && node ../bin/uglifyjs ../lib/utils.js ../lib/ast.js ../lib/parse.js ../lib/transform.js ../lib/scope.js ../lib/output.js ../lib/compress.js ../lib/sourcemap.js ../lib/mozilla-ast.js ../lib/propmangle.js ../lib/minify.js ../tools/exports.js -c defaults=false -d \"MOZ_SourceMap=require('source-map')\" --source-map \"includeSources=true,url='bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b ascii_only --comments /license/ -o ../dist/bundle.js"
+    "prepare": "cd dist && TERSER_NO_BUNDLE=1 node ../bin/uglifyjs ../lib/utils.js ../lib/ast.js ../lib/parse.js ../lib/transform.js ../lib/scope.js ../lib/output.js ../lib/compress.js ../lib/sourcemap.js ../lib/mozilla-ast.js ../lib/propmangle.js ../lib/minify.js ../tools/exports.js -c defaults=false -d \"MOZ_SourceMap=require('source-map')\" --source-map \"includeSources=true,url='bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b ascii_only --comments /license/ -o ../dist/bundle.js"
   },
   "keywords": [
     "uglify",

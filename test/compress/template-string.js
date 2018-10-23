@@ -309,9 +309,9 @@ keep_raw_content_in_tagged_template: {
         evaluate: true
     }
     input: {
-        var foo = tag`\u0020\u{20}\u{00020}\x20 `;
+        var foo = tag`\u0020\u{20}\u{00020}\x20\40\040 `;
     }
-    expect_exact: "var foo=tag`\\u0020\\u{20}\\u{00020}\\x20 `;";
+    expect_exact: "var foo=tag`\\u0020\\u{20}\\u{00020}\\x20\\40\\040 `;";
 }
 
 allow_chained_templates: {
@@ -578,10 +578,10 @@ es2018_revision_of_template_escapes_1: {
         defaults: true,
     }
     input: {
-        console.log(String.raw`\unicode \xerces`);
+        console.log(String.raw`\unicode \xerces \1234567890`);
     }
-    expect_exact: "console.log(String.raw\`\\unicode \\xerces\`);"
-    expect_stdout: "\\unicode \\xerces"
+    expect_exact: "console.log(String.raw\`\\unicode \\xerces \\1234567890\`);"
+    expect_stdout: "\\unicode \\xerces \\1234567890"
     node_version: ">=10"
 }
 
@@ -600,7 +600,6 @@ invalid_unicode_escape_in_regular_string: {
     })
 }
 
-/* TODO
 invalid_escape_in_template_string_1: {
     options = {
         defaults: true,
@@ -610,9 +609,9 @@ invalid_escape_in_template_string_1: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "xxx", // FIXME
-        "line": 0, // FIXME
-        "col": 0, // FIXME
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
     })
 }
 
@@ -625,12 +624,11 @@ invalid_escape_in_template_string_2: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "xxx",
-        "line": 0,
-        "col": 0
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
     })
 }
-*/
 
 invalid_escape_in_template_string_3: {
     options = {
@@ -647,7 +645,6 @@ invalid_escape_in_template_string_3: {
     })
 }
 
-/* TODO
 invalid_escape_in_template_string_4: {
     options = {
         defaults: true,
@@ -657,9 +654,9 @@ invalid_escape_in_template_string_4: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "xxx", // FIXME
-        "line": 0, // FIXME
-        "col": 0, // FIXME
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 33
     })
 }
 
@@ -672,21 +669,20 @@ invalid_escape_in_template_string_5: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "xxx", // FIXME
-        "line": 0, // FIXME
-        "col": 0, // FIXME
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 33,
     })
 }
-*/
 
 invalid_hex_character_pattern: {
     input: `
-        var bar = '\\u{-1}'
+        console.log('\\u{-1}')
     `
     expect_error: ({
         "name": "SyntaxError",
         "message": "Invalid hex-character pattern in string",
         "line": 2,
-        "col": 18
+        "col": 20
     })
 }

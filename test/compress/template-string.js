@@ -686,3 +686,33 @@ invalid_hex_character_pattern: {
         "col": 20
     })
 }
+
+invalid_unicode_patterns: {
+    input: `
+        "\\u{110000}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounce"
+    })
+}
+
+invalid_unicode_patterns_2: {
+    input: `
+        "\\u{100000061}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounce"
+    })
+}
+
+invalid_unicode_patterns_3: {
+    input: `
+        "\\u{fffffffffff}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounce"
+    })
+}

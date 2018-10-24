@@ -11,4 +11,6 @@ env:
 matrix:
   fast_finish: true
 cache:
-  directories: tmp
+  directories:
+    - tmp
+    - node_modules

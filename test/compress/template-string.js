@@ -693,7 +693,7 @@ invalid_unicode_patterns: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "Unicode reference out of bounce"
+        "message": "Unicode reference out of bounds"
     })
 }
 
@@ -703,7 +703,7 @@ invalid_unicode_patterns_2: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "Unicode reference out of bounce"
+        "message": "Unicode reference out of bounds"
     })
 }
 
@@ -713,6 +713,6 @@ invalid_unicode_patterns_3: {
     `
     expect_error: ({
         "name": "SyntaxError",
-        "message": "Unicode reference out of bounce"
+        "message": "Unicode reference out of bounds"
     })
 }

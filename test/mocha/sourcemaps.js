@@ -201,7 +201,7 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             var encoded = result.code.slice(result.code.lastIndexOf(",") + 1);
-            map = JSON.parse(new Buffer(encoded, "base64").toString());
+            map = JSON.parse(UglifyJS.to_ascii(encoded).toString());
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             result = UglifyJS.minify(result.code, {

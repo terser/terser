@@ -17,13 +17,7 @@ var tests_dir = path.dirname(module.filename);
 var failures = 0;
 var failed_files = {};
 
-if (semver.satisfies(process.version, "<4")) {
-    var activity_indicator_interval = setInterval(function () {
-        console.log("\nstill running...");
-    }, 2 * 50 * 1000);
-}
 run_compress_tests().then(function (result) {
-    if (activity_indicator_interval) clearInterval(activity_indicator_interval);
     if (failures) {
         console.error("\n!!! Failed " + failures + " test cases.");
         console.error("!!! " + Object.keys(failed_files).join(", "));
@@ -46,7 +40,7 @@ run_compress_tests().then(function (result) {
 });
 
 function find_test_files(dir) {
-    var files = fs.readdirSync(dir).filter(function(name){
+    var files = fs.readdirSync(dir).filter(function(name) {
         return /\.js$/i.test(name);
     });
     if (process.argv.length > 2) {
@@ -228,7 +222,7 @@ function run_compress_tests() {
                     U.AST_Node.warn_function = function(text) {
                         text = text.replace(/:(\d+),/, function(_, $1) {
                             var relative_line = Number($1) - input.start.line;
-                            return ':' + relative_line + ',';
+                            return ":" + relative_line + ",";
                         });
                         warnings_emitted.push("WARN: " + text);
                     };
@@ -290,8 +284,8 @@ function run_compress_tests() {
                     if (expected_warnings != actual_warnings) {
                         log("!!! failed\n---INPUT---\n{input}\n---EXPECTED WARNINGS---\n{expected_warnings}\n---ACTUAL WARNINGS---\n{actual_warnings}\n\n", {
                             input: input_formatted,
-                            expected_warnings: JSON.parse(expected_warnings).join('\n'),
-                            actual_warnings: JSON.parse(actual_warnings).join('\n'),
+                            expected_warnings: JSON.parse(expected_warnings).join("\n"),
+                            actual_warnings: JSON.parse(actual_warnings).join("\n"),
                         });
                         return false;
                     }
@@ -353,7 +347,7 @@ function run_compress_tests() {
                 throw e;
             }
             var tests = {};
-            var tw = new U.TreeWalker(function(node, descend){
+            var tw = new U.TreeWalker(function(node, descend) {
                 if (node instanceof U.AST_LabeledStatement
                     && tw.parent() instanceof U.AST_Toplevel) {
                     var name = node.label.name;
@@ -410,7 +404,7 @@ function run_compress_tests() {
                     options: {},
                     reminify: true,
                 };
-                var tw = new U.TreeWalker(function(node, descend){
+                var tw = new U.TreeWalker(function(node, descend) {
                     if (node instanceof U.AST_Assign) {
                         if (!(node.left instanceof U.AST_SymbolRef)) {
                             croak(node);
@@ -472,7 +466,7 @@ function run_compress_tests() {
                 });
                 block.walk(tw);
                 return test;
-            };
+            }
         }
 
         function make_code(ast, options) {

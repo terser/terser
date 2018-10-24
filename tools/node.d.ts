@@ -161,12 +161,13 @@ declare class NodeElement {
     TYPE: string;
     documentation: string;
     propdoc?: Record<string, string>;
+    expressions?: NodeElement[];
     warn?: (text: string, props: any) => void;
     from_mozilla_ast?: (node: NodeElement) => any;
 }
 
 export class TreeWalker {
-    constructor(callback: Function);
+    constructor(callback: (node: NodeElement, descend: boolean) => NodeElement);
     directives: object;
     find_parent(type: NodeElement): NodeElement | undefined;
     has_directive(type: string): boolean;
@@ -176,7 +177,13 @@ export class TreeWalker {
     push(node: NodeElement): void;
     self(): NodeElement | undefined;
     stack: NodeElement[];
-    visit: Function;
+    visit: (node: NodeElement, descend: boolean) => NodeElement;
+}
+
+export class TreeTransformer extends TreeWalker {
+    constructor(before: (node: NodeElement) => NodeElement, after?: (node: NodeElement) => NodeElement);
+    before: (node: NodeElement) => NodeElement;
+    after?: (node: NodeElement) => NodeElement;
 }
 
 export function push_uniq<T>(array: T[], el: T): void;

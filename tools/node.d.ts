@@ -152,19 +152,30 @@ export interface SourceMapOptions {
 
 declare function parse(text: string, options?: any): string;
 
-type NodeE = any;
+declare class NodeElement {
+    constructor(props: any);
+    BASE?: NodeElement;
+    PROPS: string[];
+    SELF_PROPS: string[];
+    SUBCLASSES: NodeElement[];
+    TYPE: string;
+    documentation: string;
+    propdoc?: Record<string, string>;
+    warn?: (text: string, props: any) => void;
+    from_mozilla_ast?: (node: NodeElement) => any;
+}
 
 export class TreeWalker {
     constructor(callback: Function);
     directives: object;
-    find_parent(type: any): NodeE | undefined;
-    has_directive(type: any): void;
-    loopcontrol_target(node: NodeE): NodeE | undefined;
-    parent(n: number): NodeE | undefined;
+    find_parent(type: NodeElement): NodeElement | undefined;
+    has_directive(type: string): boolean;
+    loopcontrol_target(node: NodeElement): NodeElement | undefined;
+    parent(n: number): NodeElement | undefined;
     pop(): void;
-    push(node: NodeE): void;
-    self(): NodeE | undefined;
-    stack: NodeE[];
+    push(node: NodeElement): void;
+    self(): NodeElement | undefined;
+    stack: NodeElement[];
     visit: Function;
 }
 

@@ -2,12 +2,13 @@
 
 global.__IS_TESTING__ = true;
 
-var U = require("../dist/bundle");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");
 var Console = require("console").Console;
+var semver = require("semver");
 var map = require("multiprocess-map");
+var U = require("../dist/bundle");
 
 require("../tools/colorless-console");
 
@@ -15,7 +16,13 @@ var tests_dir = path.dirname(module.filename);
 var failures = 0;
 var failed_files = {};
 
+if (semver.satisfies(process.version, "<4")) {
+    var activity_indicator_interval = setInterval(function () {
+        console.log("\nstill running...");
+    }, 2 * 50 * 1000);
+}
 run_compress_tests().then(function (result) {
+    if (activity_indicator_interval) clearInterval(activity_indicator_interval);
     if (failures) {
         console.error("\n!!! Failed " + failures + " test cases.");
         console.error("!!! " + Object.keys(failed_files).join(", "));
@@ -35,7 +42,7 @@ run_compress_tests().then(function (result) {
             global[coverageVar][key] = global["__coverage__"][key];
         }
     }
-})
+});
 
 function find_test_files(dir) {
     var files = fs.readdirSync(dir).filter(function(name){
@@ -43,7 +50,7 @@ function find_test_files(dir) {
     });
     if (process.argv.length > 2) {
         var x = process.argv.slice(2);
-        files = files.filter(function(f){
+        files = files.filter(function(f) {
             return x.indexOf(f) >= 0;
         });
     }

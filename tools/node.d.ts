@@ -167,7 +167,7 @@ declare class NodeElement {
 }
 
 export class TreeWalker {
-    constructor(callback: (node: NodeElement, descend: boolean) => NodeElement);
+    constructor(callback: (node: NodeElement, descend: boolean) => any);
     directives: object;
     find_parent(type: NodeElement): NodeElement | undefined;
     has_directive(type: string): boolean;
@@ -177,7 +177,7 @@ export class TreeWalker {
     push(node: NodeElement): void;
     self(): NodeElement | undefined;
     stack: NodeElement[];
-    visit: (node: NodeElement, descend: boolean) => NodeElement;
+    visit: (node: NodeElement, descend: boolean) => any;
 }
 
 export class TreeTransformer extends TreeWalker {

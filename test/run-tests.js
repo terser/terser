@@ -80,16 +80,18 @@ function run_compress_tests() {
     var files = find_test_files(dir).map(function (file) {
         return { file: file, dir: dir };
     });
-    return (semver.satisfies(process.version, ">=4") ? map.bind(null, files) : files.map.bind(files))(function (file) {
+    var node4_or_above = semver.satisfies(process.version, ">=4");
+    return (node4_or_above ? map.bind(null, files) : files.map.bind(files))(function (file) {
         var dir = file.dir;
         file = file.file;
         var path = require("path");
         var assert = require("assert");
         var fs = require("fs");
         var semver = require("semver");
-        var minify_options = require("../../../../test/ufuzz.json").map(JSON.stringify);
-        var sandbox = require("../../../../test/sandbox");
-        var U = require("../../../../dist/bundle");
+        var node4_or_above = semver.satisfies(process.version, ">=4");
+        var minify_options = require(node4_or_above ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
+        var sandbox = require(node4_or_above ? "../../../../test/sandbox" : "./sandbox");
+        var U = require(node4_or_above ? "../../../../dist/bundle" : "../dist/bundle");
 
         /* -----[ utils ]----- */
 

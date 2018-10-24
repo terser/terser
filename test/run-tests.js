@@ -80,7 +80,7 @@ function run_compress_tests() {
     var files = find_test_files(dir).map(function (file) {
         return { file: file, dir: dir };
     });
-    return map(files, function (file) {
+    return (semver.satisfies(process.version, ">=4") ? map.bind(null, files) : files.map.bind(files))(function (file) {
         var dir = file.dir;
         file = file.file;
         var path = require("path");

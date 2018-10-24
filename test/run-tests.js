@@ -8,6 +8,7 @@ var assert = require("assert");
 var Console = require("console").Console;
 var semver = require("semver");
 var map = require("multiprocess-map");
+var Promise = require("es6-promise");
 var U = require("../dist/bundle");
 
 require("../tools/colorless-console");
@@ -81,7 +82,7 @@ function run_compress_tests() {
         return { file: file, dir: dir };
     });
     var node4_or_above = semver.satisfies(process.version, ">=4");
-    return (node4_or_above ? map.bind(null, files) : files.map.bind(files))(function (file) {
+    return (node4_or_above ? map.bind(null, files) : function (fn) { var mapped = files.map(fn); return Promise.resolve(mapped); })(function (file) {
         var dir = file.dir;
         file = file.file;
         var path = require("path");

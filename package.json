@@ -44,7 +44,7 @@
     "semver": "~5.5.0"
   },
   "scripts": {
-    "test": "rm -f dist/* && npm run prepare && istanbul instrument dist/bundle.js > dist/bundle.instrumented.js node test/run-tests.js",
+    "test": "rm -f dist/* && npm run prepare && istanbul instrument dist/bundle.js > dist/bundle.instrumented.js && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",

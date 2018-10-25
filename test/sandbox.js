@@ -74,14 +74,6 @@ exports.run_code = function(code) {
         process.stdout.write = original_write;
     }
 };
-exports.same_stdout = semver.satisfies(process.version, "0.12") ? function(expected, actual) {
-    if (typeof expected != typeof actual) return false;
-    if (typeof expected != "string") {
-        if (expected.name != actual.name) return false;
-        expected = expected.message.slice(expected.message.lastIndexOf("\n") + 1);
-        actual = actual.message.slice(actual.message.lastIndexOf("\n") + 1);
-    }
-    return strip_func_ids(expected) == strip_func_ids(actual);
-} : function(expected, actual) {
+exports.same_stdout = function(expected, actual) {
     return typeof expected == typeof actual && strip_func_ids(expected) == strip_func_ids(actual);
 };

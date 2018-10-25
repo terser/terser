@@ -75,9 +75,9 @@ function run_compress_tests() {
     var files = find_test_files(dir).map(function (file) {
         return { file: file, dir: dir };
     });
-    var node10_or_above = semver.satisfies(process.version, ">=10");
+    var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
     var fn = (
-        node10_or_above
+        async_code
             ? map.bind(null, files)
             : function (fn) {
                 var mapped = files.map(fn); return Promise.resolve(mapped);
@@ -90,10 +90,10 @@ function run_compress_tests() {
         var assert = require("assert");
         var fs = require("fs");
         var semver = require("semver");
-        var node10_or_above = semver.satisfies(process.version, ">=10");
-        var minify_options = require(node10_or_above ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
-        var sandbox = require(node10_or_above ? "../../../../test/sandbox" : "./sandbox");
-        var U = require(node10_or_above ? "../../../../dist/bundle" : "../dist/bundle");
+        var async_code = semver.satisfies(process.version, ">=10");
+        var minify_options = require(async_code ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
+        var sandbox = require(async_code ? "../../../../test/sandbox" : "./sandbox");
+        var U = require(async_code ? "../../../../dist/bundle" : "../dist/bundle");
 
         /* -----[ utils ]----- */
 

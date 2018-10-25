@@ -8,6 +8,7 @@ node_js:
     - 11
 env:
     - UGLIFYJS_TEST_ALL=1
+    - TRAVIS=1
 matrix:
   fast_finish: true
 cache:

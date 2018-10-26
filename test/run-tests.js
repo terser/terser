@@ -90,7 +90,7 @@ function run_compress_tests() {
         var assert = require("assert");
         var fs = require("fs");
         var semver = require("semver");
-        var async_code = semver.satisfies(process.version, ">=10");
+        var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
         var minify_options = require(async_code ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
         var sandbox = require(async_code ? "../../../../test/sandbox" : "./sandbox");
         var U = require(async_code ? "../../../../dist/bundle" : "../dist/bundle");

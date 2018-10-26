@@ -585,6 +585,21 @@ es2018_revision_of_template_escapes_1: {
     node_version: ">=10"
 }
 
+tagged_call_with_invalid_escape: {
+    input: {
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect: {
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect_stdout: [
+        "\\4321\\u\\x",
+    ]
+    node_version: ">=10"
+}
+
 invalid_unicode_escape_in_regular_string: {
     options = {
         defaults: true,

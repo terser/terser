@@ -132,7 +132,7 @@ function run_compress_tests() {
         }
 
         function test_file(file) {
-            var failures;
+            var failures = 0;
             log_start_file(file);
             function test_case(test) {
                 log_test(test.name);

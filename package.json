@@ -97,5 +97,5 @@
       ]
     }
   },
-  "pre-commit": "lint"
+  "pre-commit": ["lint", "test"]
 }

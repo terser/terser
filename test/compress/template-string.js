@@ -731,3 +731,24 @@ invalid_unicode_patterns_3: {
         "message": "Unicode reference out of bounds"
     })
 }
+
+untagged_template_with_ill_formed_unicode_escape: {
+    input: `
+        console.log(\`\\u{-1}\`)
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
+    })
+}
+
+tagged_template_with_ill_formed_unicode_escape: {
+    input: {
+        console.log(String.raw`\u{-1}`);
+    }
+    expect_exact: "console.log(String.raw`\\u{-1}`);";
+    expect_stdout: "\\u{-1}"
+    node_version: ">=10"
+}

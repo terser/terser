@@ -2,14 +2,12 @@
 
 global.__IS_TESTING__ = true;
 
+var U = require("../dist/bundle");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");
 var Console = require("console").Console;
-var semver = require("semver");
 var map = require("multiprocess-map");
-var Promise = require("es6-promise");
-var U = require("../dist/bundle");
 
 require("../tools/colorless-console");
 
@@ -37,15 +35,15 @@ run_compress_tests().then(function (result) {
             global[coverageVar][key] = global["__coverage__"][key];
         }
     }
-});
+})
 
 function find_test_files(dir) {
-    var files = fs.readdirSync(dir).filter(function(name) {
+    var files = fs.readdirSync(dir).filter(function(name){
         return /\.js$/i.test(name);
     });
     if (process.argv.length > 2) {
         var x = process.argv.slice(2);
-        files = files.filter(function(f) {
+        files = files.filter(function(f){
             return x.indexOf(f) >= 0;
         });
     }
@@ -75,25 +73,16 @@ function run_compress_tests() {
     var files = find_test_files(dir).map(function (file) {
         return { file: file, dir: dir };
     });
-    var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
-    var fn = (
-        async_code
-            ? map.bind(null, files)
-            : function (fn) {
-                var mapped = files.map(fn); return Promise.resolve(mapped);
-            }
-    );
-    return fn(function (file) {
+    return map(files, function (file) {
         var dir = file.dir;
         file = file.file;
         var path = require("path");
         var assert = require("assert");
         var fs = require("fs");
         var semver = require("semver");
-        var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
-        var minify_options = require(async_code ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
-        var sandbox = require(async_code ? "../../../../test/sandbox" : "./sandbox");
-        var U = require(async_code ? "../../../../dist/bundle" : "../dist/bundle");
+        var minify_options = require("../../../../test/ufuzz.json").map(JSON.stringify);
+        var sandbox = require("../../../../test/sandbox");
+        var U = require("../../../../dist/bundle");
 
         /* -----[ utils ]----- */
 
@@ -132,7 +121,7 @@ function run_compress_tests() {
         }
 
         function test_file(file) {
-            var failures = 0;
+            var failures;
             log_start_file(file);
             function test_case(test) {
                 log_test(test.name);
@@ -229,7 +218,7 @@ function run_compress_tests() {
                     U.AST_Node.warn_function = function(text) {
                         text = text.replace(/:(\d+),/, function(_, $1) {
                             var relative_line = Number($1) - input.start.line;
-                            return ":" + relative_line + ",";
+                            return ':' + relative_line + ',';
                         });
                         warnings_emitted.push("WARN: " + text);
                     };
@@ -291,8 +280,8 @@ function run_compress_tests() {
                     if (expected_warnings != actual_warnings) {
                         log("!!! failed\n---INPUT---\n{input}\n---EXPECTED WARNINGS---\n{expected_warnings}\n---ACTUAL WARNINGS---\n{actual_warnings}\n\n", {
                             input: input_formatted,
-                            expected_warnings: JSON.parse(expected_warnings).join("\n"),
-                            actual_warnings: JSON.parse(actual_warnings).join("\n"),
+                            expected_warnings: JSON.parse(expected_warnings).join('\n'),
+                            actual_warnings: JSON.parse(actual_warnings).join('\n'),
                         });
                         return false;
                     }
@@ -354,7 +343,7 @@ function run_compress_tests() {
                 throw e;
             }
             var tests = {};
-            var tw = new U.TreeWalker(function(node, descend) {
+            var tw = new U.TreeWalker(function(node, descend){
                 if (node instanceof U.AST_LabeledStatement
                     && tw.parent() instanceof U.AST_Toplevel) {
                     var name = node.label.name;
@@ -411,7 +400,7 @@ function run_compress_tests() {
                     options: {},
                     reminify: true,
                 };
-                var tw = new U.TreeWalker(function(node, descend) {
+                var tw = new U.TreeWalker(function(node, descend){
                     if (node instanceof U.AST_Assign) {
                         if (!(node.left instanceof U.AST_SymbolRef)) {
                             croak(node);
@@ -473,7 +462,7 @@ function run_compress_tests() {
                 });
                 block.walk(tw);
                 return test;
-            }
+            };
         }
 
         function make_code(ast, options) {
@@ -539,7 +528,7 @@ function run_compress_tests() {
         return {failures: failures, file: file};
     }).then(function (test_results) {
         test_results.forEach(function (result) {
-            if (result.failures) failed_files[result.file] = true;
+            failed_files[result.file] = !!result.failures;
         });
         var fails = test_results.reduce(function (a, b) {
             return a + b.failures;

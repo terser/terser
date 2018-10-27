@@ -18,7 +18,9 @@ fs.readdirSync(testDir).filter(function(file) {
 
 module.exports = function() {
     mocha.run(function(failures) {
-        if (failures) process.exitCode = failures;
+        if (failures) process.on("exit", function() {
+            process.exit(failures);
+        });
     });
 };
 

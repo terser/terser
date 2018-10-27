@@ -4,6 +4,7 @@ node_js:
     - "0.12"
     - 6
     - 8
+    - 10
     - 11
 env:
     - UGLIFYJS_TEST_ALL=1

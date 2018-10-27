@@ -1,3 +1,4 @@
+/*
 tagged_template_parens: {
     input: {
         (a) `0`;
@@ -796,9 +797,10 @@ tagged_template_with_ill_formed_unicode_escape: {
 
 tagged_template_with_comment: {
     input: {
-        console.log(String.raw/*foo*/`\u`);
+        console.log(String.raw/*foo*//*`\u`);
     }
     expect_exact: "console.log(String.raw`\\u`);"
     expect_stdout: "\\u"
     node_version: ">=10"
 }
+    */

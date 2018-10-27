@@ -793,3 +793,12 @@ tagged_template_with_ill_formed_unicode_escape: {
     expect_stdout: "\\u{-1}"
     node_version: ">=10"
 }
+
+tagged_template_with_comment: {
+    input: {
+        console.log(String.raw/*foo*/`\u`);
+    }
+    expect_exact: "console.log(String.raw`\\u`);"
+    expect_stdout: "\\u"
+    node_version: ">=10"
+}

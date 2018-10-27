@@ -539,7 +539,7 @@ function run_compress_tests() {
         return {failures: failures, file: file};
     }).then(function (test_results) {
         test_results.forEach(function (result) {
-            failed_files[result.file] = !!result.failures;
+            if (result.failures) failed_files[result.file] = true;
         });
         var fails = test_results.reduce(function (a, b) {
             return a + b.failures;

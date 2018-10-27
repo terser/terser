@@ -589,6 +589,31 @@ tagged_template_with_invalid_escape: {
     node_version: ">=10"
 }
 
+tagged_call_with_invalid_escape_2: {
+    options = {
+        defaults: true,
+        toplevel: true,
+    }
+    input: {
+        var x = {
+            y: () => String.raw
+        };
+        console.log(x.y()`\4321\u\x`);
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect: {
+        var x_y = () => String.raw;
+        console.log(x_y()`\4321\u\x`);
+        console.log((() => String.raw)()`\4321\u\x`);
+    }
+    expect_stdout: [
+        "\\4321\\u\\x",
+        "\\4321\\u\\x",
+    ]
+    node_version: ">=10"
+}
+
 es2018_revision_of_template_escapes_1: {
     options = {
         defaults: true,

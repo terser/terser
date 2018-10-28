@@ -17,27 +17,26 @@ var tests_dir = path.dirname(module.filename);
 var failures = 0;
 var failed_files = {};
 
-run_compress_tests().then(function (result) {
-    if (failures) {
-        console.error("\n!!! Failed " + failures + " test cases.");
-        console.error("!!! " + Object.keys(failed_files).join(", "));
-        process.exit(1);
-    }
-    if (process.argv.length > 2) {
-        // User specified a specific compress/ test, don't run entire test suite
-        return;
-    }
+run_compress_tests();
+if (failures) {
+    console.error("\n!!! Failed " + failures + " test cases.");
+    console.error("!!! " + Object.keys(failed_files).join(", "));
+    process.exit(1);
+}
+if (process.argv.length > 2) {
+    // User specified a specific compress/ test, don't run entire test suite
+    return;
+}
 
-    var mocha_tests = require("./mocha.js");
-    mocha_tests();
+var mocha_tests = require("./mocha.js");
+mocha_tests();
 
-    var coverageVar = Object.keys(global).filter(function(x) { return x.match(/^\$\$cov_/); })[0];
-    if (global[coverageVar]) {
-        for (var key in global["__coverage__"]) {
-            global[coverageVar][key] = global["__coverage__"][key];
-        }
+var coverageVar = Object.keys(global).filter(function(x) { return x.match(/^\$\$cov_/); })[0];
+if (global[coverageVar]) {
+    for (var key in global["__coverage__"]) {
+        global[coverageVar][key] = global["__coverage__"][key];
     }
-});
+}
 
 function find_test_files(dir) {
     var files = fs.readdirSync(dir).filter(function(name) {
@@ -75,25 +74,16 @@ function run_compress_tests() {
     var files = find_test_files(dir).map(function (file) {
         return { file: file, dir: dir };
     });
-    var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
-    var fn = (
-        async_code
-            ? map.bind(null, files)
-            : function (fn) {
-                var mapped = files.map(fn); return Promise.resolve(mapped);
-            }
-    );
-    return fn(function (file) {
+    var test_results = files.map(function (file) {
         var dir = file.dir;
         file = file.file;
         var path = require("path");
         var assert = require("assert");
         var fs = require("fs");
         var semver = require("semver");
-        var async_code = semver.satisfies(process.version, ">=10") && !process.env.TRAVIS;
-        var minify_options = require(async_code ? "../../../../test/ufuzz.json" : "./ufuzz.json").map(JSON.stringify);
-        var sandbox = require(async_code ? "../../../../test/sandbox" : "./sandbox");
-        var U = require(async_code ? "../../../../dist/bundle" : "../dist/bundle");
+        var minify_options = require("./ufuzz.json").map(JSON.stringify);
+        var sandbox = require("./sandbox");
+        var U = require("../dist/bundle");
 
         /* -----[ utils ]----- */
 
@@ -537,15 +527,9 @@ function run_compress_tests() {
         var failures = test_file(file);
 
         return {failures: failures, file: file};
-    }).then(function (test_results) {
-        test_results.forEach(function (result) {
-            if (result.failures) failed_files[result.file] = true;
-        });
-        var fails = test_results.reduce(function (a, b) {
-            return a + b.failures;
-        }, 0);
-
-        failures += fails;
+    });
+    test_results.forEach(function (result) {
+        if (result.failures) failed_files[result.file] = true;
     });
 }
 

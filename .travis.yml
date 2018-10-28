@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+    - "0.10"
+env:
+    - UGLIFYJS_TEST_ALL=1
+matrix:
+  fast_finish: true
+cache:
+  directories: tmp

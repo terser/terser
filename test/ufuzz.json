@@ -1,0 +1,44 @@
+[
+    {
+        "compress": false,
+        "mangle": false,
+        "output": {
+            "beautify": true,
+            "braces": true
+        },
+        "rename": true
+    },
+    {
+        "compress": false
+    },
+    {
+        "mangle": false
+    },
+    {},
+    {
+        "toplevel": true
+    },
+    {
+        "compress": {
+            "passes": 1e6,
+            "unsafe": true
+        },
+        "toplevel": true
+    },
+    {
+        "compress": {
+            "arguments": true,
+            "keep_fargs": false,
+            "passes": 1e6,
+            "sequences": 1e6,
+            "unsafe": true,
+            "unsafe_Function": true,
+            "unsafe_math": true,
+            "unsafe_proto": true,
+            "unsafe_regexp": true
+        }
+    },
+    {
+        "safari10": true
+    }
+]

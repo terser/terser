@@ -2087,8 +2087,9 @@ use_before_init_in_loop: {
     expect: {
         var a = "PASS";
         for (var b = 2; --b >= 0;)
-            c = void 0, c = (c && (a = "FAIL"), 1);
-        var c;
+            (function() {
+                var c = (c && (a="FAIL"), 1);
+            })();
         console.log(a);
     }
     expect_stdout: "PASS"
@@ -2238,8 +2239,11 @@ issue_2898: {
     expect: {
         var c = 0;
         (function() {
-            while (b = void 0, void ((b = void (c = 1 + (c = 1 + c))) && b[0]));
-            var b;
+            while (f());
+            function f() {
+                var b = void (c = 1 + (c = 1 + c));
+                b && b[0];
+            }
         })(),
         console.log(c);
     }
@@ -2295,10 +2299,11 @@ issue_3016_1: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a) {
+                return a[b];
+                var a
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2327,10 +2332,11 @@ issue_3016_2: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a) {
+                return a[b];
+                var a
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2360,10 +2366,11 @@ issue_3016_2_ie8: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a) {
+                return a[b];
+                var a
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2391,9 +2398,8 @@ issue_3016_3: {
     expect: {
         var b = 1;
         do {
-            console.log((a = void 0, a ? "FAIL" : a = "PASS"));
+            console.log(function () {return a ? "FAIL" : a = "PASS";var a}());
         } while(b--);
-        var a;
     }
     expect_stdout: [
         "PASS",
@@ -2424,9 +2430,8 @@ issue_3016_3_ie8: {
     expect: {
         var b = 1;
         do {
-            console.log((a = void 0, a ? "FAIL" : a = "PASS"));
+            console.log(function () {return a ? "FAIL" : a = "PASS";var a}());
         } while(b--);
-        var a;
     }
     expect_stdout: [
         "PASS",
@@ -2454,10 +2459,8 @@ issue_3018: {
     expect: {
         var b = 1, c = "PASS";
         do {
-            a = void 0,
-            a = 0 != (a && (c = "FAIL"));
+            (function(){a=0!=(a&&(c="FAIL")); var a})()
         } while (b--);
-        var a;
         console.log(c);
     }
     expect_stdout: "PASS"
@@ -2512,8 +2515,7 @@ issue_3076: {
         var c = "PASS";
         (function(b) {
             var n = 2;
-            while (--b + (e = void 0, e && (c = "FAIL"), e = 5, 1).toString() && --n > 0);
-            var e;
+            while (--b + function(){return e && (c="FAIL"), e= 5, 1; var e}().toString() && --n > 0);
         })(2),
         console.log(c);
     }

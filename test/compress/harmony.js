@@ -1,22 +1,10 @@
-template_strings: {
-    input: {
-        function x(strings) { return strings.raw[0]; }
-        console.log(String.raw`\u`);
-        console.log(x`\u`);
-    }
-    expect_exact: "function x(strings){return strings.raw[0]}console.log(String.raw`\\u`);console.log(x`\\u`);"
-    expect_stdout: [
-        "\\u",
-        "\\u"
-    ]
-    node_version: ">=10"
-}
 arrow_function_parens: {
     input: {
         something && (() => {});
     }
     expect_exact: "something&&(()=>{});"
 }
+
 arrow_function_parens_2: {
     input: {
         (() => null)();

@@ -11,7 +11,7 @@ var path = require("path");
 var program = require("commander");
 
 var bundle_path = __dirname + "/../dist/bundle.js";
-if (fs.existsSync(bundle_path)) {
+if (!process.env.TERSER_NO_BUNDLE && fs.existsSync(bundle_path)) {
     var UglifyJS = require(bundle_path)
     if (process.env.TERSER_DEBUG) {
         try {

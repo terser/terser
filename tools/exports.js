@@ -11,3 +11,4 @@ exports["defaults"] = defaults;
 exports["base54"] = base54;
 exports["mangle_properties"] = mangle_properties;
 exports["reserve_quoted_keys"] = reserve_quoted_keys;
+exports["to_ascii"] = to_ascii;

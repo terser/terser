@@ -3,52 +3,6 @@ var semver = require("semver");
 var uglify = require("../node");
 
 describe("Unicode", function() {
-    it("Should not accept invalid code ranges in unicode escape", function() {
-        var tests = [
-            "\\u{110000}", // A bit over the unicode range
-            "\\u{100000061} = 'foo'", // 32-bit overflow resulting in "a"
-            "\\u{fffffffffff}", // A bit too much over the unicode range
-        ];
-
-        var exec = function(test) {
-            return function() {
-                uglify.parse(test);
-            }
-        }
-
-        var fail = function(e) {
-            return e instanceof uglify.JS_Parse_Error
-                && e.message === "Unicode reference out of bounce";
-        }
-
-        for (var i = 0; i < tests.length; i++) {
-            assert.throws(exec(tests[i]), fail);
-        }
-    });
-
-    it("Should not accept invalid unicode sequences", function() {
-        var tests = [
-            "var foo = '\\u-111'",
-            "var bar = '\\u{-1}'",
-            "var baz = '\\ugggg'"
-        ];
-
-        var exec = function(test) {
-            return function() {
-                uglify.parse(test);
-            }
-        }
-
-        var fail = function(e) {
-            return e instanceof uglify.JS_Parse_Error
-                && e.message === "Invalid hex-character pattern in string";
-        }
-
-        for (var i = 0; i < tests.length; i++) {
-            assert.throws(exec(tests[i]), fail);
-        }
-    });
-
     it("Should throw error if escaped first identifier char is not part of ID_start", function() {
         var tests = [
             'var \\u{0} = "foo";',

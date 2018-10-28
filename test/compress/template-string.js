@@ -1,3 +1,19 @@
+tagged_template_parens: {
+    input: {
+        (a) `0`;
+        (a => b) `1`;
+        (a = b) `2`;
+        (a + b) `3`;
+        (a ? b : c) `4`;
+        (a, b, c) `5`;
+        (~a) `6`;
+        (a.b) `7`;
+        (a["b"]) `8`;
+        (a()) `9`;
+    }
+    expect_exact: 'a`0`;(a=>b)`1`;(a=b)`2`;(a+b)`3`;(a?b:c)`4`;(a,b,c)`5`;(~a)`6`;a.b`7`;a["b"]`8`;a()`9`;'
+}
+
 template_strings: {
     beautify = {
         quote_style: 3
@@ -325,9 +341,9 @@ allow_chained_templates: {
 
 check_escaped_chars: {
     input: {
-        var foo = `\u0020\u{20}\u{00020}\x20\40\040 `;
+        var foo = `\u0020\u{20}\u{00020}\x20 `;
     }
-    expect_exact: "var foo=`       `;";
+    expect_exact: "var foo=`     `;";
 }
 
 escape_dollar_curly: {
@@ -557,4 +573,246 @@ baz`;
         "fin",
     ]
     node_version: ">=6"
+}
+
+tagged_template_with_invalid_escape: {
+    input: {
+        function x(s) { return s.raw[0]; }
+        console.log(String.raw`\u`);
+        console.log(x`\u`);
+    }
+    expect_exact: "function x(s){return s.raw[0]}console.log(String.raw`\\u`);console.log(x`\\u`);"
+    expect_stdout: [
+        "\\u",
+        "\\u",
+    ]
+    node_version: ">=10"
+}
+
+tagged_call_with_invalid_escape_2: {
+    options = {
+        defaults: true,
+        toplevel: true,
+    }
+    input: {
+        var x = {
+            y: () => String.raw
+        };
+        console.log(x.y()`\4321\u\x`);
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect: {
+        var x_y = () => String.raw;
+        console.log(x_y()`\4321\u\x`);
+        console.log((() => String.raw)()`\4321\u\x`);
+    }
+    expect_stdout: [
+        "\\4321\\u\\x",
+        "\\4321\\u\\x",
+    ]
+    node_version: ">=10"
+}
+
+es2018_revision_of_template_escapes_1: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        console.log(String.raw`\unicode \xerces \1234567890`);
+    }
+    expect_exact: "console.log(String.raw\`\\unicode \\xerces \\1234567890\`);"
+    expect_stdout: "\\unicode \\xerces \\1234567890"
+    node_version: ">=10"
+}
+
+tagged_call_with_invalid_escape: {
+    input: {
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect: {
+        let z = () => String.raw;
+        console.log(z()`\4321\u\x`);
+    }
+    expect_stdout: [
+        "\\4321\\u\\x",
+    ]
+    node_version: ">=10"
+}
+
+invalid_unicode_escape_in_regular_string: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\u")
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20,
+    })
+}
+
+invalid_escape_in_template_string_1: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log(\`\\unicode \\xerces\ \\1234567890\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
+    })
+}
+
+invalid_escape_in_template_string_2: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log(\`\\u\`.charCodeAt(0));
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
+    })
+}
+
+invalid_escape_in_template_string_3: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\041" + \`\\041\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Octal escape sequences are not allowed in template strings",
+        "line": 2,
+        "col": 33,
+    })
+}
+
+invalid_escape_in_template_string_4: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\x21" + \`\\x\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 33
+    })
+}
+
+invalid_escape_in_template_string_5: {
+    options = {
+        defaults: true,
+    }
+    input: `
+        console.log("FAIL\\x21" + \`\\xERROR\`);
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 33,
+    })
+}
+
+invalid_hex_character_pattern: {
+    input: `
+        console.log('\\u{-1}')
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
+    })
+}
+
+invalid_unicode_patterns: {
+    input: `
+        "\\u{110000}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounds"
+    })
+}
+
+invalid_unicode_patterns_2: {
+    input: `
+        "\\u{100000061}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounds"
+    })
+}
+
+invalid_unicode_patterns_3: {
+    input: `
+        "\\u{fffffffffff}"
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Unicode reference out of bounds"
+    })
+}
+
+untagged_template_with_ill_formed_unicode_escape: {
+    input: `
+        console.log(\`\\u{-1}\`)
+    `
+    expect_error: ({
+        "name": "SyntaxError",
+        "message": "Invalid hex-character pattern in string",
+        "line": 2,
+        "col": 20
+    })
+}
+
+tagged_template_with_ill_formed_unicode_escape: {
+    input: {
+        console.log(String.raw`\u{-1}`);
+    }
+    expect_exact: "console.log(String.raw`\\u{-1}`);";
+    expect_stdout: "\\u{-1}"
+    node_version: ">=10"
+}
+
+tagged_template_with_comment: {
+    input: {
+        console.log(String.raw/*foo*/`\u`);
+        console.log((() => String.raw)()/*bar*/`\x`);
+    }
+    expect_exact: "console.log(String.raw`\\u`);console.log((()=>String.raw)()`\\x`);"
+    expect_stdout: [
+        "\\u",
+        "\\x"
+    ]
+    node_version: ">=10"
+}
+
+tagged_template_valid_strict_legacy_octal: {
+    input: {
+        "use strict";
+        console.log(String.raw`\u\x\567`);
+    }
+    expect_exact: '"use strict";console.log(String.raw`\\u\\x\\567`);'
+    expect_stdout: "\\u\\x\\567"
+    node_version: ">=10"
 }

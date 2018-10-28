@@ -806,3 +806,13 @@ tagged_template_with_comment: {
     ]
     node_version: ">=10"
 }
+
+tagged_template_valid_strict_legacy_octal: {
+    input: {
+        "use strict";
+        console.log(String.raw`\u\x\567`);
+    }
+    expect_exact: '"use strict";console.log(String.raw`\\u\\x\\567`);'
+    expect_stdout: "\\u\\x\\567"
+    node_version: ">=10"
+}

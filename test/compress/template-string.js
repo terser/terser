@@ -797,8 +797,12 @@ tagged_template_with_ill_formed_unicode_escape: {
 tagged_template_with_comment: {
     input: {
         console.log(String.raw/*foo*/`\u`);
+        console.log((() => String.raw)()/*bar*/`\x`);
     }
-    expect_exact: "console.log(String.raw`\\u`);"
-    expect_stdout: "\\u"
+    expect_exact: "console.log(String.raw`\\u`);console.log((()=>String.raw)()`\\x`);"
+    expect_stdout: [
+        "\\u",
+        "\\x"
+    ]
     node_version: ">=10"
 }

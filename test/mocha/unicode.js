@@ -102,7 +102,7 @@ describe("Unicode", function() {
         it("Should not unescape unpaired surrogates", function() {
             this.timeout(20000);
             var code = [];
-            for (var i = 0; i <= 0x20001; i+=100) {
+            for (var i = 0; i <= 0x20001; i++) {
                 code.push("\\u{" + i.toString(16) + "}");
             }
             code = '"' + code.join() + '"';

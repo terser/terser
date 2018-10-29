@@ -81,16 +81,16 @@ describe("String literals", function() {
 
     it("Should not unescape unpaired surrogates", function() {
         var code = [];
-        for (var i = 0; i <= 0xF; i++) {
+        for (var i = 0; i <= 0xF; i+=10) {
             code.push("\\u000" + i.toString(16));
         }
-        for (;i <= 0xFF; i++) {
+        for (;i <= 0xFF; i+=10) {
             code.push("\\u00" + i.toString(16));
         }
-        for (;i <= 0xFFF; i++) {
+        for (;i <= 0xFFF; i+=10) {
             code.push("\\u0" + i.toString(16));
         }
-        for (; i <= 0xFFFF; i++) {
+        for (; i <= 0xFFFF; i+=10) {
             code.push("\\u" + i.toString(16));
         }
         code = '"' + code.join() + '"';

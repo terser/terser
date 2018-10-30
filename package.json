@@ -22,6 +22,7 @@
     "bin",
     "lib",
     "dist",
+    "!dist/bundle.instrumented.js",
     "tools",
     "LICENSE"
   ],

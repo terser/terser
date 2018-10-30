@@ -312,5 +312,5 @@ index_length: {
     expect: {
         console.log(1, 2);
     }
-    expect_stdout: "1 2"
+    expect_stdout: "THIS TEST SHOULD FAIL"
 }

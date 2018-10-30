@@ -156,3 +156,51 @@ issue_t120_5: {
     expect_stdout: "6"
     node_version: ">=6"
 }
+
+pr_152_regression: {
+    reminify: false // TODO: remove when https://github.com/terser-js/terser/issues/156 fixed
+    options = {
+        collapse_vars: true,
+        evaluate: true,
+        inline: 3,
+        join_vars: true,
+        loops: true,
+        passes: 1,
+        reduce_vars: true,
+        sequences: true,
+        side_effects: true,
+        unused: true,
+    }
+    input: {
+        (function(root, factory) {
+            root.CryptoJS = factory();
+        })(this, function() {
+            var CryptoJS = CryptoJS || function(Math) {
+                var C = {};
+                C.demo = function(n) {
+                    return Math.ceil(n);
+                };
+                return C;
+            }(Math);
+            return CryptoJS;
+        });
+        var result = this.CryptoJS.demo(1.3);
+        console.log(result);
+    }
+    expect: {
+        (function(root, factory) {
+            var CryptoJS;
+            root.CryptoJS = CryptoJS = CryptoJS || function(Math) {
+                var C = {
+                    demo: function(n) {
+                        return Math.ceil(n);
+                    }
+                };
+                return C;
+            }(Math);
+        })(this);
+        var result = this.CryptoJS.demo(1.3);
+        console.log(result);
+    }
+    expect_stdout: "2"
+}

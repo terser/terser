@@ -753,3 +753,23 @@ issue_2904: {
     }
     expect_stdout: "1"
 }
+
+compress_to_increment: {
+    options = {
+        loops: true
+    }
+    input: {
+        for(var i = 0; i < 3; i += 1){
+              console.log(i);
+        }
+    }
+    expect: {
+        for(var i = 0; i < 3; ++i)
+              console.log(i);
+    }
+    expect_stdout: [
+        "0",
+        "1",
+        "2"
+    ]
+}

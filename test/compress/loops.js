@@ -773,3 +773,17 @@ compress_to_increment: {
         "2"
     ]
 }
+
+ignore_strings: {
+    options = {
+        loops: true
+    }
+    input: {
+        for (var i = "A"; i.length < 4; i += 1)
+            console.log(i);
+    }
+    expect: {
+        for (var i = "A"; i.length < 4; i += 1)
+            console.log(i);
+    }
+}

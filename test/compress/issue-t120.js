@@ -157,8 +157,7 @@ issue_t120_5: {
     node_version: ">=6"
 }
 
-pr_152_regression: {
-    reminify: false // TODO: remove when https://github.com/terser-js/terser/issues/156 fixed
+issue_t156_1: {
     options = {
         collapse_vars: true,
         evaluate: true,
@@ -201,6 +200,191 @@ pr_152_regression: {
         })(this);
         var result = this.CryptoJS.demo(1.3);
         console.log(result);
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_2: {
+    options = {
+        inline: 2,
+        passes: 1,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Math) {
+                return function(n) {
+                    return Math.ceil(n);
+                };
+            }(Math);
+        })(1.3));
+    }
+    expect: {
+        console.log(function(n) {
+            return Math.ceil(n);
+        }(1.3));
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_3: {
+    options = {
+        inline: 2,
+        passes: 2,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Math) {
+                return function(n) {
+                    return Math.ceil(n);
+                };
+            }(Math);
+        })(1.3));
+    }
+    expect: {
+        console.log(Math.ceil(1.3));
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_4: {
+    options = {
+        inline: 3,
+        passes: 1,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Math) {
+                var method = "ceil";
+                return function(n) {
+                    return Math[method](n);
+                };
+            }(Math);
+        })(1.3));
+    }
+    expect: {
+        console.log(function(factory) {
+            return method = "ceil", function(n) {
+                return Math[method](n);
+            };
+            var method;
+        }()(1.3));
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_5: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Math) {
+                var method = "ceil";
+                return function(n) {
+                    return Math[method](n);
+                };
+            }(Math);
+        })(1.3));
+    }
+    expect: {
+        console.log(Math.ceil(1.3));
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_6: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Bath, Math) {
+                var method = "ceil";
+                return function(n) {
+                    return Math[method](n);
+                };
+            }(String, Math, Number);
+        })(1.3));
+    }
+    expect: {
+        console.log((String, Number, function(n) {
+            return Math.ceil(n);
+        })(1.3));
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_7: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        unsafe: true,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Bath, Math) {
+                var method = "ceil";
+                return function(n) {
+                    return Math[method](n);
+                };
+            }(String, Math, Number);
+        })(1.3));
+    }
+    expect: {
+        console.log(2);
+    }
+    expect_stdout: "2"
+}
+
+issue_t156_8: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 1,
+        unsafe: true,
+    }
+    input: {
+        console.log((function(factory) {
+            return factory();
+        })(function() {
+            return function(Sea, Math, Bath) {
+                var method = Sea + "il";
+                return function(n) {
+                    return Bath[method](n);
+                };
+            }("ce", String, Math, Number);
+        })(1.3));
+    }
+    expect: {
+        console.log(function(factory) {
+            return Bath = Math, function(n) {
+                return Bath.ceil(n);
+            };
+            var Bath;
+        }()(1.3));
     }
     expect_stdout: "2"
 }

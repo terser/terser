@@ -13,11 +13,9 @@ var program = require("commander");
 var bundle_path = __dirname + "/../dist/bundle.js";
 if (!process.env.TERSER_NO_BUNDLE && fs.existsSync(bundle_path)) {
     var UglifyJS = require(bundle_path)
-    if (process.env.TERSER_DEBUG) {
-        try {
-            require("source-map-support").install();
-        } catch (err) {}
-    }
+    try {
+        require("source-map-support").install();
+    } catch (err) {}
 } else {
     var UglifyJS = require("../tools/node.js");
 }

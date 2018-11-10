@@ -458,3 +458,334 @@ issue_2977: {
     }
     expect_exact: "export default(function(){}());"
 }
+
+name_cache_do_not_mangle_export_function_name: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        export function add(x, y) { return x + y; }
+        function sub(x, y) { return x - y; }
+        console.log(add(1, 2), add(3, 4), sub(5, 6), sub(7, 8));
+    }
+    expect: {
+        export function add(n, d) {
+            return n + d;
+        }
+        function _$SUB$_(n, d) {
+            return n - d;
+        }
+        console.log(add(1, 2), add(3, 4), _$SUB$_(5, 6), _$SUB$_(7, 8));
+    }
+}
+
+name_cache_do_not_mangle_export_class_name: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        export class add {}
+        class sub {}
+        console.log(add, add, sub, sub);
+    }
+    expect: {
+        export class add {}
+        class _$SUB$_ {}
+        console.log(add, add, _$SUB$_, _$SUB$_);
+    }
+}
+
+name_cache_do_not_mangle_export_var_name: {
+    options = {
+        defaults: true,
+        reduce_vars: false,
+        toplevel: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        toplevel: true,
+    }
+    input: {
+        export var add = 1;
+        var sub = 2, mul = 3;
+        console.log(add, add, sub, sub, mul, mul);
+    }
+    expect: {
+        export var add = 1;
+        var _$SUB$_ = 2, d = 3;
+        console.log(add, add, _$SUB$_, _$SUB$_, d, d);
+    }
+}
+
+name_cache_do_not_mangle_export_let_name: {
+    options = {
+        defaults: true,
+        reduce_vars: false,
+        toplevel: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        toplevel: true,
+    }
+    input: {
+        export let add = 1;
+        let sub = 2, mul = 3;
+        console.log(add, add, sub, sub, mul, mul);
+    }
+    expect: {
+        export let add = 1;
+        let _$SUB$_ = 2, d = 3;
+        console.log(add, add, _$SUB$_, _$SUB$_, d, d);
+    }
+}
+
+name_cache_do_not_mangle_export_const_name: {
+    options = {
+        defaults: true,
+        reduce_vars: false,
+        toplevel: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        toplevel: true,
+    }
+    input: {
+        export const add = 1;
+        const sub = 2, mul = 3;
+        console.log(add, add, sub, sub, mul, mul);
+    }
+    expect: {
+        export const add = 1;
+        const _$SUB$_ = 2, d = 3;
+        console.log(add, add, _$SUB$_, _$SUB$_, d, d);
+    }
+}
+
+name_cache_do_not_mangle_export_destructuring_name: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $sub: "_$SUB$_",
+            }
+        },
+        toplevel: true,
+    }
+    input: {
+        export const [add] = [1, 2, 3];
+        const [mul, sub] = [1, 2, 3];
+        console.log(add, add, sub, sub, mul, mul);
+    }
+    expect: {
+        export const [add] = [ 1, 2, 3 ];
+        const [d, _$SUB$_] = [ 1, 2, 3 ];
+        console.log(add, add, _$SUB$_, _$SUB$_, d, d);
+    }
+}
+
+name_cache_do_not_mangle_export_from_names: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $add: "_$ADD$_",
+                $div: "_$DIV$_",
+                $mul: "_$MUL$_",
+                $divide: "_$DIVIDE$_",
+                $minus: "_$MINUS$_",
+                $keep: "_$KEEP$_",
+            }
+        },
+        toplevel: true,
+    }
+    input: {
+        // these symbols are unrelated to the `export {} from` statement
+        function add() { console.log("should be dropped"); }
+        function div() { console.log("should be dropped"); }
+        function mul() { console.log("should be dropped"); }
+        function divide() { console.log("should be dropped"); }
+        function minus() { console.log("should be dropped"); }
+        function keep() { console.log("should be kept"); }
+
+        export { add, div as divide, sub as minus, mul } from "path";
+        export { keep };
+    }
+    expect: {
+        function _$KEEP$_() { console.log("should be kept"); }
+        export { add, div as divide, sub as minus, mul } from "path";
+        export { _$KEEP$_ as keep };
+    }
+}
+
+name_cache_do_not_mangle_export_default_class: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $foo: "_$FOO$_",
+                $bar: "_$BAR$_",
+                $qux: "_$QUX$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        export default class foo {}
+        export class bar {}
+        class qux {}
+        console.log(foo, bar, qux, qux);
+    }
+    expect: {
+        export default class foo {}
+        export class bar {}
+        class _$QUX$_ {}
+        console.log(foo, bar, _$QUX$_, _$QUX$_);
+    }
+}
+
+name_cache_do_not_mangle_export_default_function: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $foo: "_$FOO$_",
+                $bar: "_$BAR$_",
+                $qux: "_$QUX$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        export default function foo(value) {
+            console.log(value * 10);
+        }
+        export function bar(value) {
+            console.log(value);
+        }
+        function qux(value) {
+            console.log(value);
+        }
+        foo(1);
+        bar(2);
+        qux(3);
+        qux(4);
+    }
+    expect: {
+        export default function foo(o) {
+            console.log(10 * o);
+        }
+        export function bar(o) {
+            console.log(o);
+        }
+        function _$QUX$_(o) {
+            console.log(o);
+        }
+        foo(1), bar(2), _$QUX$_(3), _$QUX$_(4);
+    }
+}
+
+name_cache_mangle_local_import_and_export_aliases: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $foo: "_$FOO$_",
+                $bar: "_$BAR$_",
+                $qux: "_$QUX$_",
+                $cat: "_$CAT$_",
+                $dog: "_$DOG$_",
+                $bird: "_$BIRD$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        import { foo as bar, cat as dog, bird } from "stuff";
+        console.log(bar, dog, bird);
+        export { bar as qux, dog, bird };
+    }
+    expect: {
+        import { foo as _$BAR$_, cat as _$DOG$_, bird as _$BIRD$_ } from "stuff";
+        console.log(_$BAR$_, _$DOG$_, _$BIRD$_);
+        export { _$BAR$_ as qux, _$DOG$_ as dog, _$BIRD$_ as bird };
+    }
+}
+
+name_cache_import_star_as_name_from_module: {
+    options = {
+        defaults: true,
+        module: true,
+    }
+    mangle = {
+        cache: {
+            props: {
+                $fs: "_$FS$_",
+            }
+        },
+        module: true,
+    }
+    input: {
+        import * as fs from "filesystem";
+        import * as stuff from "whatever";
+        fs.resolve();
+        stuff.search();
+        export { fs, stuff };
+    }
+    expect: {
+        import * as _$FS$_ from "filesystem";
+        import * as e from "whatever";
+        _$FS$_.resolve(), e.search();
+        export { _$FS$_ as fs, e as stuff };
+    }
+}

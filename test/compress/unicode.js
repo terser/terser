@@ -126,3 +126,26 @@ issue_2569: {
     }
     expect_exact: 'new RegExp("[\\udc42-\\udcaa\\udd74-\\udd96\\ude45-\\ude4f\\udea3-\\udecc]");'
 }
+
+issue_3271: {
+    input: {
+        function string2buf(str) {
+            var i=0,
+                buf = new Array(2),
+                c = str.charCodeAt(0);
+            if (c < 0x800) {
+                /* two byte char */
+                buf[i++] = 0xC0 | (c >>> 6);
+                buf[i++] = 0x80 | (c & 0x3f);
+            } else {
+                /* three byte char */
+                buf[i++] = 0xE0 | (c >>> 12);
+                buf[i++] = 0x80 | (c >>> 6 & 0x3f);
+                buf[i++] = 0x80 | (c & 0x3f);
+            }
+            return buf;
+        };
+        console.log(string2buf("é"));
+    }
+    expect_stdout: "[ 195, 169 ]"
+}

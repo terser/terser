@@ -150,7 +150,7 @@ export interface SourceMapOptions {
     url?: string | 'inline';
 }
 
-declare function parse(text: string, options?: any): string;
+declare function parse(text: string, options?: ParseOptions): string;
 
 declare class NodeElement {
     constructor(props: any);

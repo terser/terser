@@ -210,6 +210,14 @@ function run_compress_tests() {
             if (test.mangle) {
                 U.base54.reset();
                 output.compute_char_frequency(test.mangle);
+                (function(cache) {
+                    if (!cache) return;
+                    if (!("props" in cache)) {
+                        cache.props = new U.Dictionary();
+                    } else if (!(cache.props instanceof U.Dictionary)) {
+                        cache.props = U.Dictionary.fromObject(cache.props);
+                    }
+                })(test.mangle.cache);
                 output.mangle_names(test.mangle);
                 if (test.mangle.properties) {
                     output = U.mangle_properties(output, test.mangle.properties);

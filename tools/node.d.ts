@@ -115,7 +115,7 @@ export interface OutputOptions {
     indent_level?: number;
     indent_start?: boolean;
     inline_script?: boolean;
-    is8?: boolean;
+    ie8?: boolean;
     keep_quoted_props?: boolean;
     max_line_len?: boolean;
     preamble?: string;

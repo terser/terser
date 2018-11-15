@@ -135,10 +135,15 @@ export interface MinifyOptions {
     warnings?: boolean | 'verbose';
 }
 
+interface AST {
+    [key: string]: AST;
+}
+
 export interface MinifyOutput {
-    code: string;
+    ast?: AST;
+    code?: string;
     error?: Error;
-    map: string;
+    map?: string;
     warnings?: string[];
 }
 

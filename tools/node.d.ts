@@ -135,12 +135,8 @@ export interface MinifyOptions {
     warnings?: boolean | 'verbose';
 }
 
-interface AST {
-    [key: string]: AST;
-}
-
 export interface MinifyOutput {
-    ast?: AST;
+    ast?: AST_Node;
     code?: string;
     error?: Error;
     map?: string;
@@ -157,38 +153,38 @@ export interface SourceMapOptions {
 
 declare function parse(text: string, options?: ParseOptions): string;
 
-declare class NodeElement {
+declare class AST_Node {
     constructor(props: any);
-    BASE?: NodeElement;
+    BASE?: AST_Node;
     PROPS: string[];
     SELF_PROPS: string[];
-    SUBCLASSES: NodeElement[];
+    SUBCLASSES: AST_Node[];
     TYPE: string;
     documentation: string;
     propdoc?: Record<string, string>;
-    expressions?: NodeElement[];
+    expressions?: AST_Node[];
     warn?: (text: string, props: any) => void;
-    from_mozilla_ast?: (node: NodeElement) => any;
+    from_mozilla_ast?: (node: AST_Node) => any;
 }
 
 export class TreeWalker {
-    constructor(callback: (node: NodeElement, descend: boolean) => any);
+    constructor(callback: (node: AST_Node, descend: boolean) => any);
     directives: object;
-    find_parent(type: NodeElement): NodeElement | undefined;
+    find_parent(type: AST_Node): AST_Node | undefined;
     has_directive(type: string): boolean;
-    loopcontrol_target(node: NodeElement): NodeElement | undefined;
-    parent(n: number): NodeElement | undefined;
+    loopcontrol_target(node: AST_Node): AST_Node | undefined;
+    parent(n: number): AST_Node | undefined;
     pop(): void;
-    push(node: NodeElement): void;
-    self(): NodeElement | undefined;
-    stack: NodeElement[];
-    visit: (node: NodeElement, descend: boolean) => any;
+    push(node: AST_Node): void;
+    self(): AST_Node | undefined;
+    stack: AST_Node[];
+    visit: (node: AST_Node, descend: boolean) => any;
 }
 
 export class TreeTransformer extends TreeWalker {
-    constructor(before: (node: NodeElement) => NodeElement, after?: (node: NodeElement) => NodeElement);
-    before: (node: NodeElement) => NodeElement;
-    after?: (node: NodeElement) => NodeElement;
+    constructor(before: (node: AST_Node) => AST_Node, after?: (node: AST_Node) => AST_Node);
+    before: (node: AST_Node) => AST_Node;
+    after?: (node: AST_Node) => AST_Node;
 }
 
 export function push_uniq<T>(array: T[], el: T): void;

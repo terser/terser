@@ -212,7 +212,7 @@ export class Dictionary {
 
 export function minify(files: string | string[] | { [file: string]: string } | AST_Node, options?: MinifyOptions): MinifyOutput;
 
-declare class AST_Node {
+export class AST_Node {
     constructor(props?: object);
     static BASE?: AST_Node;
     static PROPS: string[];
@@ -227,28 +227,28 @@ declare class AST_Node {
     CTOR: typeof AST_Node;
 }
 
-declare class AST_Statement extends AST_Node {
+export class AST_Statement extends AST_Node {
     _codegen: Function;
     _eval: Function;
     negate: Function;
     aborts: Function;
 }
 
-declare class AST_Debugger extends AST_Statement {
+export class AST_Debugger extends AST_Statement {
     _codegen: Function;
     add_source_map: Function;
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Directive extends AST_Statement {
+export class AST_Directive extends AST_Statement {
     _codegen: Function;
     add_source_map: Function;
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_SimpleStatement extends AST_Statement {
+export class AST_SimpleStatement extends AST_Statement {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -258,7 +258,7 @@ declare class AST_SimpleStatement extends AST_Statement {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Block extends AST_Statement {
+export class AST_Block extends AST_Statement {
     _walk: Function;
     clone: Function;
     transform: Function;
@@ -270,7 +270,7 @@ declare class AST_Block extends AST_Statement {
     to_mozilla_ast: Function;
 }
 
-declare class AST_BlockStatement extends AST_Block {
+export class AST_BlockStatement extends AST_Block {
     _codegen: Function;
     add_source_map: Function;
     aborts: Function;
@@ -278,7 +278,7 @@ declare class AST_BlockStatement extends AST_Block {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Scope extends AST_Block {
+export class AST_Scope extends AST_Block {
     get_defun_scope: Function;
     clone: Function;
     pinned: Function;
@@ -295,7 +295,7 @@ declare class AST_Scope extends AST_Block {
     hoist_properties: Function;
 }
 
-declare class AST_Toplevel extends AST_Scope {
+export class AST_Toplevel extends AST_Scope {
     wrap_commonjs: Function;
     wrap_enclose: Function;
     figure_out_scope: Function;
@@ -316,7 +316,7 @@ declare class AST_Toplevel extends AST_Scope {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Lambda extends AST_Scope {
+export class AST_Lambda extends AST_Scope {
     args_as_names: Function;
     _walk: Function;
     transform: Function;
@@ -334,12 +334,12 @@ declare class AST_Lambda extends AST_Scope {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Accessor extends AST_Lambda {
+export class AST_Accessor extends AST_Lambda {
     reduce_vars: Function;
     drop_side_effect_free: Function;
 }
 
-declare class AST_Function extends AST_Lambda {
+export class AST_Function extends AST_Lambda {
     next_mangled: Function;
     needs_parens: Function;
     reduce_vars: Function;
@@ -351,7 +351,7 @@ declare class AST_Function extends AST_Lambda {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Arrow extends AST_Lambda {
+export class AST_Arrow extends AST_Lambda {
     init_scope_vars: Function;
     needs_parens: Function;
     _do_print: Function;
@@ -363,12 +363,12 @@ declare class AST_Arrow extends AST_Lambda {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Defun extends AST_Lambda {
+export class AST_Defun extends AST_Lambda {
     reduce_vars: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Class extends AST_Scope {
+export class AST_Class extends AST_Scope {
     _walk: Function;
     transform: Function;
     is_block_scope: Function;
@@ -382,18 +382,18 @@ declare class AST_Class extends AST_Scope {
     to_mozilla_ast: Function;
 }
 
-declare class AST_DefClass extends AST_Class {
+export class AST_DefClass extends AST_Class {
     reduce_vars: Function;
     has_side_effects: Function;
 }
 
-declare class AST_ClassExpression extends AST_Class {
+export class AST_ClassExpression extends AST_Class {
     needs_parens: Function;
     reduce_vars: Function;
     drop_side_effect_free: Function;
 }
 
-declare class AST_Switch extends AST_Block {
+export class AST_Switch extends AST_Block {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -404,7 +404,7 @@ declare class AST_Switch extends AST_Block {
     to_mozilla_ast: Function;
 }
 
-declare class AST_SwitchBranch extends AST_Block {
+export class AST_SwitchBranch extends AST_Block {
     is_block_scope: Function;
     _do_print_body: Function;
     add_source_map: Function;
@@ -412,12 +412,12 @@ declare class AST_SwitchBranch extends AST_Block {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Default extends AST_SwitchBranch {
+export class AST_Default extends AST_SwitchBranch {
     _codegen: Function;
     reduce_vars: Function;
 }
 
-declare class AST_Case extends AST_SwitchBranch {
+export class AST_Case extends AST_SwitchBranch {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -426,7 +426,7 @@ declare class AST_Case extends AST_SwitchBranch {
     may_throw: Function;
 }
 
-declare class AST_Try extends AST_Block {
+export class AST_Try extends AST_Block {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -438,7 +438,7 @@ declare class AST_Try extends AST_Block {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Catch extends AST_Block {
+export class AST_Catch extends AST_Block {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -446,24 +446,24 @@ declare class AST_Catch extends AST_Block {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Finally extends AST_Block {
+export class AST_Finally extends AST_Block {
     _codegen: Function;
     add_source_map: Function;
 }
 
-declare class AST_EmptyStatement extends AST_Statement {
+export class AST_EmptyStatement extends AST_Statement {
     _codegen: Function;
     has_side_effects: Function;
     may_throw: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_StatementWithBody extends AST_Statement {
+export class AST_StatementWithBody extends AST_Statement {
     _do_print_body: Function;
     add_source_map: Function;
 }
 
-declare class AST_LabeledStatement extends AST_StatementWithBody {
+export class AST_LabeledStatement extends AST_StatementWithBody {
     _walk: Function;
     clone: Function;
     transform: Function;
@@ -476,16 +476,16 @@ declare class AST_LabeledStatement extends AST_StatementWithBody {
     to_mozilla_ast: Function;
 }
 
-declare class AST_IterationStatement extends AST_StatementWithBody {
+export class AST_IterationStatement extends AST_StatementWithBody {
     clone: Function;
     is_block_scope: Function;
 }
 
-declare class AST_DWLoop extends AST_IterationStatement {
+export class AST_DWLoop extends AST_IterationStatement {
 
 }
 
-declare class AST_Do extends AST_DWLoop {
+export class AST_Do extends AST_DWLoop {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -494,7 +494,7 @@ declare class AST_Do extends AST_DWLoop {
     to_mozilla_ast: Function;
 }
 
-declare class AST_While extends AST_DWLoop {
+export class AST_While extends AST_DWLoop {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -503,7 +503,7 @@ declare class AST_While extends AST_DWLoop {
     to_mozilla_ast: Function;
 }
 
-declare class AST_For extends AST_IterationStatement {
+export class AST_For extends AST_IterationStatement {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -512,7 +512,7 @@ declare class AST_For extends AST_IterationStatement {
     to_mozilla_ast: Function;
 }
 
-declare class AST_ForIn extends AST_IterationStatement {
+export class AST_ForIn extends AST_IterationStatement {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -520,18 +520,18 @@ declare class AST_ForIn extends AST_IterationStatement {
     to_mozilla_ast: Function;
 }
 
-declare class AST_ForOf extends AST_ForIn {
+export class AST_ForOf extends AST_ForIn {
     to_mozilla_ast: Function;
 }
 
-declare class AST_With extends AST_StatementWithBody {
+export class AST_With extends AST_StatementWithBody {
     _walk: Function;
     transform: Function;
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_If extends AST_StatementWithBody {
+export class AST_If extends AST_StatementWithBody {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -543,46 +543,46 @@ declare class AST_If extends AST_StatementWithBody {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Jump extends AST_Statement {
+export class AST_Jump extends AST_Statement {
     add_source_map: Function;
     aborts: Function;
 }
 
-declare class AST_Exit extends AST_Jump {
+export class AST_Exit extends AST_Jump {
     _walk: Function;
     transform: Function;
     _do_print: Function;
 }
 
-declare class AST_Return extends AST_Exit {
+export class AST_Return extends AST_Exit {
     _codegen: Function;
     may_throw: Function;
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Throw extends AST_Exit {
+export class AST_Throw extends AST_Exit {
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_LoopControl extends AST_Jump {
+export class AST_LoopControl extends AST_Jump {
     _walk: Function;
     transform: Function;
     _do_print: Function;
 }
 
-declare class AST_Break extends AST_LoopControl {
+export class AST_Break extends AST_LoopControl {
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Continue extends AST_LoopControl {
+export class AST_Continue extends AST_LoopControl {
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Definitions extends AST_Statement {
+export class AST_Definitions extends AST_Statement {
     _walk: Function;
     transform: Function;
     _do_print: Function;
@@ -595,26 +595,26 @@ declare class AST_Definitions extends AST_Statement {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Var extends AST_Definitions {
+export class AST_Var extends AST_Definitions {
     _codegen: Function;
 }
 
-declare class AST_Let extends AST_Definitions {
+export class AST_Let extends AST_Definitions {
     _codegen: Function;
 }
 
-declare class AST_Const extends AST_Definitions {
+export class AST_Const extends AST_Definitions {
     _codegen: Function;
 }
 
-declare class AST_Export extends AST_Statement {
+export class AST_Export extends AST_Statement {
     _walk: Function;
     transform: Function;
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Expansion extends AST_Node {
+export class AST_Expansion extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -623,7 +623,7 @@ declare class AST_Expansion extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Destructuring extends AST_Node {
+export class AST_Destructuring extends AST_Node {
     _walk: Function;
     all_symbols: Function;
     transform: Function;
@@ -632,7 +632,7 @@ declare class AST_Destructuring extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_PrefixedTemplateString extends AST_Node {
+export class AST_PrefixedTemplateString extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -640,7 +640,7 @@ declare class AST_PrefixedTemplateString extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_TemplateString extends AST_Node {
+export class AST_TemplateString extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -652,18 +652,18 @@ declare class AST_TemplateString extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_TemplateSegment extends AST_Node {
+export class AST_TemplateSegment extends AST_Node {
     has_side_effects: Function;
     drop_side_effect_free: Function;
 }
 
-declare class AST_NameMapping extends AST_Node {
+export class AST_NameMapping extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
 }
 
-declare class AST_Import extends AST_Node {
+export class AST_Import extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -672,7 +672,7 @@ declare class AST_Import extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_VarDef extends AST_Node {
+export class AST_VarDef extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -682,7 +682,7 @@ declare class AST_VarDef extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Call extends AST_Node {
+export class AST_Call extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -696,7 +696,7 @@ declare class AST_Call extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_New extends AST_Call {
+export class AST_New extends AST_Call {
     needs_parens: Function;
     _codegen: Function;
     add_source_map: Function;
@@ -705,7 +705,7 @@ declare class AST_New extends AST_Call {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Sequence extends AST_Node {
+export class AST_Sequence extends AST_Node {
     _walk: Function;
     transform: Function;
     tail_node: Function;
@@ -724,14 +724,14 @@ declare class AST_Sequence extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_PropAccess extends AST_Node {
+export class AST_PropAccess extends AST_Node {
     needs_parens: Function;
     _eval: Function;
     flatten_object: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Dot extends AST_PropAccess {
+export class AST_Dot extends AST_PropAccess {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -744,7 +744,7 @@ declare class AST_Dot extends AST_PropAccess {
     optimize: Function;
 }
 
-declare class AST_Sub extends AST_PropAccess {
+export class AST_Sub extends AST_PropAccess {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -754,7 +754,7 @@ declare class AST_Sub extends AST_PropAccess {
     optimize: Function;
 }
 
-declare class AST_Unary extends AST_Node {
+export class AST_Unary extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -768,7 +768,7 @@ declare class AST_Unary extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_UnaryPrefix extends AST_Unary {
+export class AST_UnaryPrefix extends AST_Unary {
     _codegen: Function;
     _dot_throw: Function;
     is_boolean: Function;
@@ -778,13 +778,13 @@ declare class AST_UnaryPrefix extends AST_Unary {
     optimize: Function;
 }
 
-declare class AST_UnaryPostfix extends AST_Unary {
+export class AST_UnaryPostfix extends AST_Unary {
     _codegen: Function;
     _dot_throw: Function;
     optimize: Function;
 }
 
-declare class AST_Binary extends AST_Node {
+export class AST_Binary extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -805,7 +805,7 @@ declare class AST_Binary extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Assign extends AST_Binary {
+export class AST_Assign extends AST_Binary {
     needs_parens: Function;
     reduce_vars: Function;
     _dot_throw: Function;
@@ -819,11 +819,11 @@ declare class AST_Assign extends AST_Binary {
     to_mozilla_ast: Function;
 }
 
-declare class AST_DefaultAssign extends AST_Binary {
+export class AST_DefaultAssign extends AST_Binary {
     optimize: Function;
 }
 
-declare class AST_Conditional extends AST_Node {
+export class AST_Conditional extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -842,7 +842,7 @@ declare class AST_Conditional extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Array extends AST_Node {
+export class AST_Array extends AST_Node {
     _walk: Function;
     transform: Function;
     _codegen: Function;
@@ -857,7 +857,7 @@ declare class AST_Array extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Object extends AST_Node {
+export class AST_Object extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -873,7 +873,7 @@ declare class AST_Object extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_ObjectProperty extends AST_Node {
+export class AST_ObjectProperty extends AST_Node {
     _walk: Function;
     transform: Function;
     _print_getter_setter: Function;
@@ -887,29 +887,29 @@ declare class AST_ObjectProperty extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_ObjectKeyVal extends AST_ObjectProperty {
+export class AST_ObjectKeyVal extends AST_ObjectProperty {
     _codegen: Function;
     optimize: Function;
 }
 
-declare class AST_ObjectSetter extends AST_ObjectProperty {
+export class AST_ObjectSetter extends AST_ObjectProperty {
     _codegen: Function;
     add_source_map: Function;
 }
 
-declare class AST_ObjectGetter extends AST_ObjectProperty {
+export class AST_ObjectGetter extends AST_ObjectProperty {
     _codegen: Function;
     add_source_map: Function;
     _dot_throw: Function;
 }
 
-declare class AST_ConciseMethod extends AST_ObjectProperty {
+export class AST_ConciseMethod extends AST_ObjectProperty {
     _codegen: Function;
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Symbol extends AST_Node {
+export class AST_Symbol extends AST_Node {
     mark_enclosed: Function;
     reference: Function;
     unmangleable: Function;
@@ -923,70 +923,70 @@ declare class AST_Symbol extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_SymbolDeclaration extends AST_Symbol {
+export class AST_SymbolDeclaration extends AST_Symbol {
     _find_defs: Function;
     has_side_effects: Function;
     may_throw: Function;
 }
 
-declare class AST_SymbolVar extends AST_SymbolDeclaration {
+export class AST_SymbolVar extends AST_SymbolDeclaration {
 
 }
 
-declare class AST_SymbolFunarg extends AST_SymbolVar {
+export class AST_SymbolFunarg extends AST_SymbolVar {
 
 }
 
-declare class AST_SymbolBlockDeclaration extends AST_SymbolDeclaration {
+export class AST_SymbolBlockDeclaration extends AST_SymbolDeclaration {
 
 }
 
-declare class AST_SymbolConst extends AST_SymbolBlockDeclaration {
+export class AST_SymbolConst extends AST_SymbolBlockDeclaration {
 
 }
 
-declare class AST_SymbolLet extends AST_SymbolBlockDeclaration {
+export class AST_SymbolLet extends AST_SymbolBlockDeclaration {
 
 }
 
-declare class AST_SymbolDefClass extends AST_SymbolBlockDeclaration {
+export class AST_SymbolDefClass extends AST_SymbolBlockDeclaration {
 
 }
 
-declare class AST_SymbolCatch extends AST_SymbolBlockDeclaration {
+export class AST_SymbolCatch extends AST_SymbolBlockDeclaration {
     reduce_vars: Function;
 }
 
-declare class AST_SymbolImport extends AST_SymbolBlockDeclaration {
+export class AST_SymbolImport extends AST_SymbolBlockDeclaration {
 
 }
 
-declare class AST_SymbolDefun extends AST_SymbolDeclaration {
+export class AST_SymbolDefun extends AST_SymbolDeclaration {
 
 }
 
-declare class AST_SymbolLambda extends AST_SymbolDeclaration {
+export class AST_SymbolLambda extends AST_SymbolDeclaration {
 
 }
 
-declare class AST_SymbolClass extends AST_SymbolDeclaration {
+export class AST_SymbolClass extends AST_SymbolDeclaration {
 
 }
 
-declare class AST_SymbolMethod extends AST_Symbol {
+export class AST_SymbolMethod extends AST_Symbol {
 
 }
 
-declare class AST_SymbolImportForeign extends AST_Symbol {
+export class AST_SymbolImportForeign extends AST_Symbol {
 
 }
 
-declare class AST_Label extends AST_Symbol {
+export class AST_Label extends AST_Symbol {
     initialize: Function;
     unmangleable: Function;
 }
 
-declare class AST_SymbolRef extends AST_Symbol {
+export class AST_SymbolRef extends AST_Symbol {
     reduce_vars: Function;
     is_immutable: Function;
     is_declared: Function;
@@ -999,19 +999,19 @@ declare class AST_SymbolRef extends AST_Symbol {
     optimize: Function;
 }
 
-declare class AST_SymbolExport extends AST_SymbolRef {
+export class AST_SymbolExport extends AST_SymbolRef {
     optimize: Function;
 }
 
-declare class AST_SymbolExportForeign extends AST_Symbol {
+export class AST_SymbolExportForeign extends AST_Symbol {
 
 }
 
-declare class AST_LabelRef extends AST_Symbol {
+export class AST_LabelRef extends AST_Symbol {
 
 }
 
-declare class AST_This extends AST_Symbol {
+export class AST_This extends AST_Symbol {
     _codegen: Function;
     has_side_effects: Function;
     may_throw: Function;
@@ -1019,17 +1019,17 @@ declare class AST_This extends AST_Symbol {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Super extends AST_This {
+export class AST_Super extends AST_This {
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_NewTarget extends AST_Node {
+export class AST_NewTarget extends AST_Node {
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Constant extends AST_Node {
+export class AST_Constant extends AST_Node {
     getValue: Function;
     _codegen: Function;
     add_source_map: Function;
@@ -1042,71 +1042,71 @@ declare class AST_Constant extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_String extends AST_Constant {
+export class AST_String extends AST_Constant {
     _codegen: Function;
     is_string: Function;
 }
 
-declare class AST_Number extends AST_Constant {
+export class AST_Number extends AST_Constant {
     needs_parens: Function;
     _codegen: Function;
     is_number: Function;
 }
 
-declare class AST_RegExp extends AST_Constant {
+export class AST_RegExp extends AST_Constant {
     _codegen: Function;
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Atom extends AST_Constant {
+export class AST_Atom extends AST_Constant {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Null extends AST_Atom {
+export class AST_Null extends AST_Atom {
     value: object;
     _dot_throw: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_NaN extends AST_Atom {
+export class AST_NaN extends AST_Atom {
     value: number;
     optimize: Function;
 }
 
-declare class AST_Undefined extends AST_Atom {
+export class AST_Undefined extends AST_Atom {
     value: any;
     _dot_throw: Function;
     optimize: Function;
 }
 
-declare class AST_Hole extends AST_Atom {
+export class AST_Hole extends AST_Atom {
     value: any;
     _codegen: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_Infinity extends AST_Atom {
+export class AST_Infinity extends AST_Atom {
     value: number;
     optimize: Function;
 }
 
-declare class AST_Boolean extends AST_Atom {
+export class AST_Boolean extends AST_Atom {
     optimize: Function;
     to_mozilla_ast: Function;
 }
 
-declare class AST_False extends AST_Boolean {
+export class AST_False extends AST_Boolean {
     value: boolean;
     is_boolean: Function;
 }
 
-declare class AST_True extends AST_Boolean {
+export class AST_True extends AST_Boolean {
     value: boolean;
     is_boolean: Function;
 }
 
-declare class AST_Await extends AST_Node {
+export class AST_Await extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;
@@ -1114,7 +1114,7 @@ declare class AST_Await extends AST_Node {
     to_mozilla_ast: Function;
 }
 
-declare class AST_Yield extends AST_Node {
+export class AST_Yield extends AST_Node {
     _walk: Function;
     transform: Function;
     needs_parens: Function;

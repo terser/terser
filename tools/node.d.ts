@@ -203,6 +203,7 @@ export class AST_Node {
     static expressions?: AST_Node[];
     static warn?: (text: string, props: any) => void;
     static from_mozilla_ast?: (node: AST_Node) => any;
+    print_to_string(options?: OutputOptions);
     TYPE: string;
     CTOR: typeof AST_Node;
 }

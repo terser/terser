@@ -206,9 +206,9 @@ export class AST_Node {
     static expressions?: AST_Node[];
     static warn?: (text: string, props: any) => void;
     static from_mozilla_ast?: (node: AST_Node) => any;
-    walk(visitor: TreeWalker);
+    walk: (visitor: TreeWalker) => void;
     print_to_string: (options?: OutputOptions) => string;
-    transform: (tt: TreeTransformer, in_list: boolean) => AST_Node;
+    transform: (tt: TreeTransformer, in_list?: boolean) => AST_Node;
     TYPE: string;
     CTOR: typeof AST_Node;
 }
@@ -411,7 +411,7 @@ declare class AST_With extends AST_StatementWithBody {
 declare class AST_If extends AST_StatementWithBody {
     constructor(props?: object);
     condition: AST_Node;
-    alternative: AST_Node;
+    alternative: AST_Node | null;
 }
 
 declare class AST_Jump extends AST_Statement {
@@ -579,7 +579,7 @@ declare class AST_Conditional extends AST_Node {
     constructor(props?: object);
     condition: AST_Node;
     consequent: AST_Node;
-    alternative: AST_Node | null;
+    alternative: AST_Node;
 }
 
 declare class AST_Array extends AST_Node {

@@ -2348,3 +2348,364 @@ issue_3192: {
         "foo bar",
     ]
 }
+
+issue_t161_top_retain_1: {
+    options = {
+        reduce_vars: true,
+        top_retain: "f",
+        unused: true,
+    }
+    input: {
+        function f() { return 2; }
+        function g() { return 3; }
+        console.log(f(), g());
+    }
+    expect: {
+        function f() { return 2; }
+        console.log(f(), function() {
+            return 3;
+        }());
+    }
+    expect_stdout: "2 3"
+}
+
+issue_t161_top_retain_2: {
+    options = {
+        reduce_vars: true,
+        top_retain: "f",
+        unused: true,
+    }
+    input: {
+        function f() { return 2; }
+        function g() { return 3; }
+        console.log(f(), f(), g(), g());
+    }
+    expect: {
+        function f() { return 2; }
+        function g() { return 3; }
+        console.log(f(), f(), g(), g());
+    }
+    expect_stdout: "2 2 3 3"
+}
+
+issue_t161_top_retain_3: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 3,
+        top_retain: "f",
+    }
+    input: {
+        function f() { return 2; }
+        function g() { return 3; }
+        console.log(f(), g());
+    }
+    expect: {
+        function f() { return 2; }
+        console.log(f(), 3);
+    }
+    expect_stdout: "2 3"
+}
+
+issue_t161_top_retain_4: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 3,
+        top_retain: "f",
+    }
+    input: {
+        function f() { return 2; }
+        function g() { return 3; }
+        console.log(f(), f(), g(), g());
+    }
+    expect: {
+        function f() { return 2; }
+        console.log(f(), f(), 3, 3);
+    }
+    expect_stdout: "2 2 3 3"
+}
+
+issue_t161_top_retain_5: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 3,
+        top_retain: "f",
+    }
+    input: {
+        (function() {
+            function f() { return 2; }
+            function g() { return 3; }
+            console.log(f(), g());
+        })();
+    }
+    expect: {
+        console.log(2, 3);
+    }
+    expect_stdout: "2 3"
+}
+
+issue_t161_top_retain_6: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 3,
+        top_retain: "f",
+    }
+    input: {
+        (function() {
+            function f() { return 2; }
+            function g() { return 3; }
+            console.log(f(), f(), g(), g());
+        })();
+    }
+    expect: {
+        console.log(2, 2, 3, 3);
+    }
+    expect_stdout: "2 2 3 3"
+}
+
+issue_t161_top_retain_7: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        side_effects: true,
+        top_retain: "y",
+        unused: true,
+    }
+    input: {
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z);
+    }
+    expect: {
+        var y = 3;
+        console.log(2, y, 4, 2 * y, 8, 4 * y);
+    }
+    expect_stdout: "2 3 4 6 8 12"
+}
+
+issue_t161_top_retain_8: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "y",
+    }
+    input: {
+        function f() { return x; }
+        function g() { return y; }
+        function h() { return z; }
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        var y = 3;
+        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, y, 4);
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+}
+
+issue_t161_top_retain_9: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "y",
+    }
+    input: {
+        function f() { return x; }
+        function g() { return y; }
+        function h() { return z; }
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        var y = 3;
+        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, y, 4);
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+}
+
+issue_t161_top_retain_10: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "y,f",
+    }
+    input: {
+        function f() { return x; }
+        function g() { return y; }
+        function h() { return z; }
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        function f() { return x; }
+        var x = 2, y = 3;
+        console.log(x, y, 4, x * y, 4 * x, 4 * y, f(), y, 4);
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+}
+
+issue_t161_top_retain_11: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "g,x,y",
+    }
+    input: {
+        function f() { return x; }
+        function g() { return y; }
+        function h() { return z; }
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        function g() { return y; }
+        var x = 2, y = 3;
+        console.log(x, y, 4, x * y, 4 * x, 4 * y, x, g(), 4);
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+}
+
+issue_t161_top_retain_12: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "g,h",
+    }
+    input: {
+        function f() { return x; }
+        function g() { return y; }
+        function h() { return z; }
+        var x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        function g() { return y; }
+        function h() { return z; }
+        var y = 3, z = 4;
+        console.log(2, y, z, 2 * y, 2 * z, y * z, 2, g(), h());
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+}
+
+issue_t161_top_retain_13: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "g",
+    }
+    input: {
+        const f = () => x;
+        const g = () => y;
+        const h = () => z;
+        const x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h());
+    }
+    expect: {
+        const g = () => y, y = 3;
+        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, g(), 4);
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4"
+    node_version: ">=6"
+}
+
+issue_t161_top_retain_14: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "Alpha,z",
+    }
+    input: {
+        class Alpha {
+            num() { return x; }
+        }
+        class Beta {
+            num() { return y; }
+        }
+        class Carrot {
+            num() { return z; }
+        }
+        function f() { return x; }
+        const g = () => y;
+        const h = () => z;
+        let x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h(),
+            (new Alpha).num(), (new Beta).num(), (new Carrot).num());
+    }
+    expect: {
+        class Alpha {
+            num() {
+                return x;
+            }
+        }
+        let x = 2, z = 4;
+        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, (() => z)(), new Alpha().num(), new class {
+            num() {
+                return 3;
+            }
+        }().num(), new class {
+            num() {
+                return z;
+            }
+        }().num());
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4 2 3 4"
+    node_version: ">=6"
+}
+
+issue_t161_top_retain_15: {
+    options = {
+        defaults: true,
+        inline: 3,
+        passes: 2,
+        top_retain: "Alpha,z",
+    }
+    mangle = {
+        keep_classnames: /^Alpha$/,
+        toplevel: true,
+    }
+    input: {
+        class Alpha {
+            num() { return x; }
+        }
+        class Beta {
+            num() { return y; }
+        }
+        class Carrot {
+            num() { return z; }
+        }
+        function f() { return x; }
+        const g = () => y;
+        const h = () => z;
+        let x = 2, y = 3, z = 4;
+        console.log(x, y, z, x * y, x * z, y * z, f(), g(), h(),
+            (new Alpha).num(), (new Beta).num(), (new Carrot).num());
+    }
+    expect: {
+        class Alpha {
+            num() {
+                return n;
+            }
+        }
+        let n = 2, u = 4;
+        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, (() => u)(), new Alpha().num(), new class {
+            num() {
+                return 3;
+            }
+        }().num(), new class {
+            num() {
+                return u;
+            }
+        }().num());
+    }
+    expect_stdout: "2 3 4 6 8 12 2 3 4 2 3 4"
+    node_version: ">=6"
+}

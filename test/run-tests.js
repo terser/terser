@@ -1,5 +1,9 @@
 #! /usr/bin/env node
 
+try {
+    require("source-map-support").install();
+} catch (err) {}
+
 var U = require("../dist/bundle");
 var path = require("path");
 var fs = require("fs");

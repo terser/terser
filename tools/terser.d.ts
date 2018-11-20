@@ -154,7 +154,7 @@ export interface SourceMapOptions {
 declare function parse(text: string, options?: ParseOptions): AST_Node;
 
 export class TreeWalker {
-    constructor(callback: (node: AST_Node, descend: boolean) => any);
+    constructor(callback: (node: AST_Node, descend?: (node: AST_Node) => void) => boolean | undefined);
     directives: object;
     find_parent(type: AST_Node): AST_Node | undefined;
     has_directive(type: string): boolean;
@@ -168,7 +168,10 @@ export class TreeWalker {
 }
 
 export class TreeTransformer extends TreeWalker {
-    constructor(before: (node: AST_Node) => AST_Node, after?: (node: AST_Node) => AST_Node);
+    constructor(
+        before: (node: AST_Node, descend?: (node: AST_Node, tw: TreeWalker) => void, in_list?: boolean) => AST_Node | undefined,
+        after?: (node: AST_Node, in_list?: boolean) => AST_Node | undefined
+    );
     before: (node: AST_Node) => AST_Node;
     after?: (node: AST_Node) => AST_Node;
 }
@@ -203,7 +206,9 @@ export class AST_Node {
     static expressions?: AST_Node[];
     static warn?: (text: string, props: any) => void;
     static from_mozilla_ast?: (node: AST_Node) => any;
-    print_to_string(options?: OutputOptions);
+    walk(visitor: TreeWalker);
+    print_to_string: (options?: OutputOptions) => string;
+    transform: (tt: TreeTransformer, in_list: boolean) => AST_Node;
     TYPE: string;
     CTOR: typeof AST_Node;
 }
@@ -406,7 +411,7 @@ declare class AST_With extends AST_StatementWithBody {
 declare class AST_If extends AST_StatementWithBody {
     constructor(props?: object);
     condition: AST_Node;
-    alternative: AST_Node | null;
+    alternative: AST_Node;
 }
 
 declare class AST_Jump extends AST_Statement {

@@ -6995,3 +6995,135 @@ issue_3140_5: {
     }
     expect_stdout: "1"
 }
+
+reduce_funcs_in_array_1: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function Foo() {
+                return 123;
+            }
+            function bar() {
+                return [Foo].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], a[0][0]());
+        })();
+    }
+    expect_stdout: "true 123"
+}
+
+reduce_funcs_in_array_2: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function Foo() {
+                return 123;
+            }
+            function bar(val) {
+                return [val || Foo].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], a[0][0]());
+        })();
+    }
+    expect_stdout: "true 123"
+}
+
+reduce_funcs_in_object_literal_1: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function Foo() {
+                return 123;
+            }
+            function bar() {
+                return [({prop: Foo}).prop].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], a[0][0]());
+        })();
+    }
+    expect_stdout: "true 123"
+}
+
+reduce_funcs_in_object_literal_2: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            function Foo() {
+                return 123;
+            }
+            function bar(val) {
+                return [val || Foo].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], a[0][0]());
+        })();
+    }
+    expect_stdout: "true 123"
+}
+
+single_use_class_referenced_in_array: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            class Foo {
+                data() {
+                    return 123;
+                }
+            }
+            function bar(val) {
+                return [val || Foo].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], (new a[0][0]).data());
+        })();
+    }
+    expect_stdout: "true 123"
+    node_version: ">=6"
+}
+
+single_use_class_referenced_in_object_literal: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        (function() {
+            class Foo {
+                data() {
+                    return 123;
+                }
+            }
+            function bar(val) {
+                return [({prop: val || Foo}).prop].concat([2]);
+            }
+            var a = [bar(), bar()];
+            console.log(a[0][0] === a[1][0], (new a[0][0]).data());
+        })();
+    }
+    expect_stdout: "true 123"
+    node_version: ">=6"
+}

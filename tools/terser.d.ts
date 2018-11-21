@@ -67,6 +67,7 @@ export enum InlineFunctions {
     WithArguments = 2,
     WithArgumentsAndVariables = 3
 }
+
 export interface MangleOptions {
     eval?: boolean;
     keep_classnames?: boolean | RegExp;

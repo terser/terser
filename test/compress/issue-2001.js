@@ -119,7 +119,7 @@ export_default_class_1: {
         unused: true,
     }
     input: {
-        export default class C {};
+        export default class C {}
     }
     expect_exact: "export default class C{}"
 }
@@ -169,9 +169,9 @@ export_mangle_2: {
     input: {
         export default function foo(one, two) {
             return one - two;
-        };
+        }
     }
-    expect_exact: "export default function foo(o,t){return o-t}"
+    expect_exact: "export default function t(t,e){return t-e}"
 }
 
 export_mangle_3: {
@@ -207,9 +207,9 @@ export_mangle_4: {
                 var z = one;
                 return one - two + z;
             }
-        };
+        }
     }
-    expect_exact: "export default class C{go(e,r){return e-r+e}}"
+    expect_exact: "export default class e{go(e,r){return e-r+e}}"
 }
 
 export_mangle_5: {
@@ -244,12 +244,12 @@ export_toplevel_1: {
     }
     input: {
         function f(){}
-        export function g(){};
-        export default function h(){};
+        export function g(){}
+        export default function h(){}
     }
     expect: {
-        export function g(){};
-        export default function h(){};
+        export function g(){}
+        export default function h(){}
     }
 }
 
@@ -260,12 +260,12 @@ export_toplevel_2: {
     }
     input: {
         class A {}
-        export class B {};
-        export default class C {};
+        export class B {}
+        export default class C {}
     }
     expect: {
-        export class B {};
-        export default class C {};
+        export class B {}
+        export default class C {}
     }
 }
 

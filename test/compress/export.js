@@ -358,6 +358,11 @@ export_default_named_generator: {
         unused: true,
     }
     mangle = {
+        cache: {
+            props: {
+                $gen: "_$GEN$_",
+            }
+        },
         toplevel: true,
     }
     input: {
@@ -365,7 +370,7 @@ export_default_named_generator: {
             yield foo();
         }
     }
-    expect_exact: "export default function*gen(){yield foo()}"
+    expect_exact: "export default function*_$GEN$_(){yield foo()}"
 }
 
 export_default_named_async_function: {
@@ -375,6 +380,11 @@ export_default_named_async_function: {
         unused: true,
     }
     mangle = {
+        cache: {
+            props: {
+                $bar: "_$BAR$_",
+            }
+        },
         toplevel: true,
     }
     input: {
@@ -382,7 +392,7 @@ export_default_named_async_function: {
             return await foo();
         }
     }
-    expect_exact: "export default async function bar(){return await foo()}"
+    expect_exact: "export default async function _$BAR$_(){return await foo()}"
 }
 
 export_default_anonymous_class: {
@@ -608,7 +618,7 @@ name_cache_do_not_mangle_export_destructuring_name: {
                 $sub: "_$SUB$_",
             }
         },
-        toplevel: true,
+        module: true,
     }
     input: {
         export const [add] = [1, 2, 3];
@@ -638,7 +648,7 @@ name_cache_do_not_mangle_export_from_names: {
                 $keep: "_$KEEP$_",
             }
         },
-        toplevel: true,
+        module: true,
     }
     input: {
         // these symbols are unrelated to the `export {} from` statement
@@ -659,7 +669,7 @@ name_cache_do_not_mangle_export_from_names: {
     }
 }
 
-name_cache_do_not_mangle_export_default_class: {
+name_cache_mangle_export_default_class: {
     options = {
         defaults: true,
         module: true,
@@ -669,6 +679,7 @@ name_cache_do_not_mangle_export_default_class: {
             props: {
                 $foo: "_$FOO$_",
                 $bar: "_$BAR$_",
+                $baz: "_$BAZ$_",
                 $qux: "_$QUX$_",
             }
         },
@@ -677,21 +688,50 @@ name_cache_do_not_mangle_export_default_class: {
     input: {
         export default class foo {}
         export class bar {}
+        class baz {
+            meth() {}
+        }
         class qux {}
-        console.log(foo, bar, qux, qux);
+        console.log(foo, bar, baz, qux, qux);
     }
     expect: {
-        export default class foo {}
+        export default class _$FOO$_ {}
         export class bar {}
         class _$QUX$_ {}
-        console.log(foo, bar, _$QUX$_, _$QUX$_);
+        console.log(_$FOO$_, bar, class {
+            meth() {}
+        }, _$QUX$_, _$QUX$_);
     }
 }
 
-name_cache_do_not_mangle_export_default_function: {
+module_mangle_export_default_class: {
     options = {
         defaults: true,
         module: true,
+        passes: 3,
+    }
+    mangle = {
+        module: true,
+    }
+    input: {
+        export default class foo {}
+        export class bar {}
+        class baz { meth(){} }
+        class qux {}
+        console.log(foo, bar, baz, qux);
+    }
+    expect: {
+        export default class s {}
+        export class bar {}
+        console.log(s, bar, class { meth(){} }, class {});
+    }
+}
+
+name_cache_mangle_export_default_function: {
+    options = {
+        defaults: true,
+        module: true,
+        passes: 3,
     }
     mangle = {
         cache: {
@@ -704,31 +744,57 @@ name_cache_do_not_mangle_export_default_function: {
         module: true,
     }
     input: {
-        export default function foo(value) {
-            console.log(value * 10);
+        export default function foo() {
+            return 1;
         }
-        export function bar(value) {
-            console.log(value);
+        export function bar() {
+            return 2;
         }
-        function qux(value) {
-            console.log(value);
+        function qux() {
+            return 3;
         }
-        foo(1);
-        bar(2);
-        qux(3);
-        qux(4);
+        console.log(foo(), bar(), qux());
     }
     expect: {
-        export default function foo(o) {
-            console.log(10 * o);
+        export default function _$FOO$_() {
+            return 1;
         }
-        export function bar(o) {
-            console.log(o);
+        export function bar() {
+            return 2;
         }
-        function _$QUX$_(o) {
-            console.log(o);
+        console.log(_$FOO$_(), bar(), 3);
+    }
+}
+
+module_mangle_export_default_function: {
+    options = {
+        defaults: true,
+        module: true,
+        passes: 3,
+    }
+    mangle = {
+        module: true,
+    }
+    input: {
+        export default function foo() {
+            return 1;
         }
-        foo(1), bar(2), _$QUX$_(3), _$QUX$_(4);
+        export function bar() {
+            return 2;
+        }
+        function qux() {
+            return 3;
+        }
+        console.log(foo(), bar(), qux());
+    }
+    expect: {
+        export default function r() {
+            return 1;
+        }
+        export function bar() {
+            return 2;
+        }
+        console.log(r(), bar(), 3);
     }
 }
 

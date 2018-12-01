@@ -2709,3 +2709,27 @@ issue_t161_top_retain_15: {
     expect_stdout: "2 3 4 6 8 12 2 3 4 2 3 4"
     node_version: ">=6"
 }
+
+issue_t183: {
+    options = {
+        defaults: true,
+        top_retain: [],
+    }
+    input: {
+        function foo(val) {
+            function bar(x) {
+                if (x) return x;
+                bar(x-1);
+            }
+            return bar(val);
+        }
+        console.log(foo("PASS"));
+    }
+    expect: {
+        console.log(function bar(x) {
+            if (x) return x;
+            bar(x - 1);
+        }("PASS"));
+    }
+    expect_stdout: "PASS"
+}

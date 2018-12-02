@@ -1,10 +1,12 @@
 **Bug report or Feature request?**
 
-<!-- Note: sub-optimal but correct code is not a bug -->
+<!-- Note: sub-optimal but correct code is NOT a bug. -->
 
 **Version (complete output of `terser -V`)**
 
 **Complete CLI command or `minify()` options used**
+
+<!-- Note: if you used the API, you're expected to enable the source-map-support module. -->
 
 **`terser` input**
 

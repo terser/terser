@@ -360,6 +360,8 @@ identify mistakes like writing mangled keys to storage.
 
 # API Reference
 
+**note:** In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will make good issues.
+
 Assuming installation via NPM, you can load Terser in your application
 like this:
 ```javascript

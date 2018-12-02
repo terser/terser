@@ -1,7 +1,7 @@
 terser
 ======
 
-*note:* Support this project with patreon by clicking [here](https://www.patreon.com/fabiosantoscode) and becoming a patron.
+*note:* Support this project with patreon by clicking [here](https://www.patreon.com/fabiosantoscode) and becoming a patron. Check PATRONS.md for our patrons.
 
 [![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser) [![Coverage Status](https://coveralls.io/repos/github/terser-js/terser/badge.svg?branch=master)](https://coveralls.io/github/terser-js/terser?branch=master)
 

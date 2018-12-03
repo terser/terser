@@ -1,10 +1,8 @@
 var fs = require("fs");
-var Mocha = require("mocha");
-var Mochallel = require("mochallel");
 var path = require("path");
 
 // Instantiate a Mocha instance
-var mocha = new (process.env.TRAVIS ? Mocha : Mochallel)({
+var mocha = new (process.env.TRAVIS ? require("mocha") : require("mochallel"))({
     timeout: 5000
 });
 var testDir = __dirname + "/mocha/";

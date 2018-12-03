@@ -34,6 +34,7 @@
   "devDependencies": {
     "acorn": "~5.7.1",
     "coveralls": "^3.0.2",
+    "csv": "^5.0.0",
     "es6-promise": "^4.2.5",
     "escodegen": "^1.9.1",
     "eslint": "^4.19.1",

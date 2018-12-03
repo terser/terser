@@ -1,3 +1,3 @@
-Philippe Léger
-Piotrek Koszuliński
-Viktor Hubert
+ * Philippe Léger
+ * Piotrek Koszuliński
+ * Viktor Hubert

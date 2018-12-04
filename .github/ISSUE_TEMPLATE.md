@@ -12,7 +12,8 @@
 
 <!--
     Complete valid ECMAScript code exhibiting the issue with
-    `terser` alone - without third party tools or libraries.
+    `terser` ALONE - without third party tools or libraries.
+    This means no webpack, rollup, browserify or parcel, among others.
     Ideally the input should be as small as possible.
     Code must be in text form - not a screen cap.
     Post a link to a gist if necessary.

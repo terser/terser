@@ -1,9 +1,13 @@
 terser
 ======
 
+<<<<<<< HEAD
 ![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.png)
 
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out PATRONS.md for our first-tier patrons.
+=======
+*Note:* Support this project with patreon by clicking [here](https://www.patreon.com/fabiosantoscode) and becoming a patron.
+>>>>>>> update issue template and readme
 
 [![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser) [![Coverage Status](https://coveralls.io/repos/github/terser-js/terser/badge.svg?branch=master)](https://coveralls.io/github/terser-js/terser?branch=master)
 
@@ -1269,9 +1273,14 @@ $ rm -rf node_modules yarn.lock
 $ yarn
 ```
 
+# Reporting issues
+
+In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will make good issues.
+
 # README.md Patrons:
 
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out PATRONS.md for our first-tier patrons.
 
 
  * CKEditor ![CKEditor](https://c10.patreonusercontent.com/3/eyJoIjoxMDAsInciOjEwMH0%3D/patreon-media/p/user/15452278/f8548dcf48d740619071e8d614459280/1?token-time=2145916800&token-hash=SIQ54PhIPHv3M7CVz9LxS8_8v4sOw4H304HaXsXj8MM%3D)
+

@@ -15,6 +15,7 @@
   ],
   "repository": "https://github.com/fabiosantoscode/terser.git",
   "main": "dist/bundle.js",
+  "types": "tools/terser.d.ts",
   "bin": {
     "terser": "bin/uglifyjs"
   },

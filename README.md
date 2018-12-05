@@ -1166,7 +1166,7 @@ documentation. See: [tree walker](http://lisperator.net/uglifyjs/walk) and
 ### ESTree / SpiderMonkey AST
 
 Terser has its own abstract syntax tree format; for
-[practical reasons](http://lisperator.net/blog/terser-why-not-switching-to-spidermonkey-ast/)
+[practical reasons](http://lisperator.net/blog/uglifyjs-why-not-switching-to-spidermonkey-ast/)
 we can't easily change to using the SpiderMonkey AST internally.  However,
 Terser now has a converter which can import a SpiderMonkey AST.
 

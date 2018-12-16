@@ -1,8 +1,6 @@
 "use strict"
 
-var semver = require("semver");
-
-if (semver.satisfies(process.version, ">=10")) {
+if (Number((/([0-9]+)\./.exec(process.version) || [])[1]) >= 10) {
     var Console = require("console").Console;
     global.console = new Console({
         stdout: process.stdout,

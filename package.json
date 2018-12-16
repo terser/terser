@@ -33,12 +33,13 @@
     "source-map-support": "~0.5.6"
   },
   "devDependencies": {
-    "acorn": "~5.7.1",
+    "acorn": "^6.0.4",
     "coveralls": "^3.0.2",
     "csv": "^5.0.0",
     "es6-promise": "^4.2.5",
     "escodegen": "^1.9.1",
     "eslint": "^4.19.1",
+    "eslump": "^2.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
     "mochallel": "^1.8.2",

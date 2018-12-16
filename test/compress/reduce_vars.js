@@ -2724,7 +2724,7 @@ issue_1814_2: {
         !function() {
             var b = a + 1;
             !function(a) {
-                console.log(a++, b);
+                console.log(b, a++);
             }(0);
         }();
     }
@@ -2732,11 +2732,11 @@ issue_1814_2: {
         const a = "32";
         !function() {
             !function(a) {
-                console.log(a++, "321");
+                console.log("321", a++);
             }(0);
         }();
     }
-    expect_stdout: "0 '321'"
+    expect_stdout: "321 0"
 }
 
 try_abort: {

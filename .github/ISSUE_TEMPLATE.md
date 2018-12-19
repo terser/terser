@@ -1,6 +1,6 @@
 <!--
 Consider supporting the project through Patreon if we fix your issue!
-https://www.patreon.com/fabiosantoscode
+https://www.patreon.com/terser_jscomp_maintainer
 -->
 
 **Bug report or Feature request?**

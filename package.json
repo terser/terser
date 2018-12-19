@@ -101,7 +101,7 @@
     }
   },
   "pre-commit": [
-    "lint",
+    "lint-fix",
     "test"
   ]
 }

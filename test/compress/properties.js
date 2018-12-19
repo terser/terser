@@ -144,11 +144,7 @@ mangle_properties: {
         a['run']({color: "blue", foo: "baz"});
     }
     expect: {
-        a["a"] = "bar";
-        a.b = "red";
-        x = {o: 10};
-        a.r(x.o, a.a);
-        a['r']({b: "blue", a: "baz"});
+        a["o"]="bar";a.color="red";x={l:10};a.u(x.l,a.o);a["u"]({color:"blue",o:"baz"});
     }
 }
 
@@ -954,7 +950,7 @@ methods_keep_quoted_false: {
         f2({ "Quoted": function(){} });
         f3({ "Quoted": ()=>{} });
     }
-    expect_exact: "class C{o(){}d(){}}f1({o(){},d(){},e:3});f2({o(){}});f3({o(){}});"
+    expect_exact: "class C{o(){}t(){}}f1({o(){},t(){},u:3});f2({o(){}});f3({o(){}});"
 }
 
 methods_keep_quoted_from_dead_code: {
@@ -2421,21 +2417,8 @@ dont_mangle_computed_property_2: {
         console.log(obj.null, obj.undefined, obj.Infinity, obj.NaN);
     }
     expect: {
-        const n = Symbol("foo"), o = {
-            [n]: "bar",
-            n: 1,
-            o: 2,
-            7: "seven",
-            0: "zero",
-            1: "one",
-            null: "Null",
-            undefined: "Undefined",
-            Infinity: "infinity",
-            NaN: "nan",
-            e: "Void"
-        };
-        console.log(o[n], o.n, o.o, o[7], o[0], o[1], o.null, o[void 0], o[1 / 0], o.NaN, o.e),
-        console.log(o.null, o.undefined, o.Infinity, o.NaN);
+        const n=Symbol("foo"),o={[n]:"bar",o:1,i:2,7:"seven",0:"zero",1:"one",null:"Null",undefined:"Undefined",Infinity:"infinity",NaN:"nan",l:"Void"};
+        console.log(o[n],o.o,o.i,o[7],o[0],o[1],o.null,o[void 0],o[1/0],o.NaN,o.l),console.log(o.null,o.undefined,o.Infinity,o.NaN);
     }
     expect_stdout: [
         "bar 1 2 seven zero one Null Undefined infinity nan Void",

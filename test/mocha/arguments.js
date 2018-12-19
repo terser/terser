@@ -1,6 +1,7 @@
 var assert = require("assert");
 var UglifyJS = require("../..");
 
+
 describe("arguments", function() {
     it("Should known that arguments in functions are local scoped", function() {
         var ast = UglifyJS.parse("var arguments; var f = function() {arguments.length}");

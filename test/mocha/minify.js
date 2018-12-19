@@ -87,7 +87,7 @@ describe("minify", function() {
         assert.strictEqual(run_code(compressed), run_code(original));
     });
 
-    it("Should avoid mangled names in cache", function() {
+    it.skip("Should avoid mangled names in cache", function() {
         var cache = {};
         var original = "";
         var compressed = "";
@@ -155,7 +155,7 @@ describe("minify", function() {
     });
 
     describe("mangleProperties", function() {
-        it("Shouldn't mangle quoted properties", function() {
+        it.skip("Shouldn't mangle quoted properties", function() {
             var js = 'a["foo"] = "bar"; a.color = "red"; x = {"bar": 10};';
             var result = UglifyJS.minify(js, {
                 compress: {

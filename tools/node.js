@@ -23,7 +23,7 @@ try {
     var instrumenter = new istanbul.Instrumenter();
 } catch (ex) {}
 
-new Function("MOZ_SourceMap", "exports", function() {
+new Function("MOZ_SourceMap", "exports", "require", function() {
     var code = FILES.map(function(file) {
         var contents = fs.readFileSync(file, "utf8");
         if (instrumenter && global.__IS_TESTING__) return instrumenter.instrumentSync(contents, file);
@@ -32,7 +32,8 @@ new Function("MOZ_SourceMap", "exports", function() {
     return code.join("\n\n");
 }())(
     require("source-map"),
-    UglifyJS
+    UglifyJS,
+    require
 );
 
 function infer_options(options) {

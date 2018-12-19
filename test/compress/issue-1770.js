@@ -67,39 +67,22 @@ numeric_literal: {
             0: 0,
             "-0": 1,
             42: 2,
-            "42": 3,
-            0x25: 4,
-            "0x25": 5,
-            1E42: 6,
-            "1E42": 7,
-            "1e+42": 8,
+            42: 3,
+            37: 4,
+            o: 5,
+            1e42: 6,
+            j: 7,
+            1e42: 8
         };
+
         console.log(obj[-0], obj[-""], obj["-0"]);
+
         console.log(obj[42], obj["42"]);
-        console.log(obj[0x25], obj["0x25"], obj[37], obj["37"]);
-        console.log(obj[1E42], obj["1E42"], obj["1e+42"]);
+
+        console.log(obj[37], obj["o"], obj[37], obj["37"]);
+
+        console.log(obj[1e42], obj["j"], obj["1e+42"]);
     }
-    expect_exact: [
-        'var obj = {',
-        '    0: 0,',
-        '    "-0": 1,',
-        '    42: 2,',
-        '    42: 3,',
-        '    37: 4,',
-        '    o: 5,',
-        '    1e42: 6,',
-        '    b: 7,',
-        '    1e42: 8',
-        '};',
-        '',
-        'console.log(obj[-0], obj[-""], obj["-0"]);',
-        '',
-        'console.log(obj[42], obj["42"]);',
-        '',
-        'console.log(obj[37], obj["o"], obj[37], obj["37"]);',
-        '',
-        'console.log(obj[1e42], obj["b"], obj["1e+42"]);',
-    ]
     expect_stdout: [
         "0 0 1",
         "3 3",

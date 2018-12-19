@@ -11,10 +11,7 @@ issue_1321_no_debug: {
         console.log(x.foo, x["a"]);
     }
     expect: {
-        var x = {};
-        x.x = 1;
-        x["a"] = 2 * x.x;
-        console.log(x.x, x["a"]);
+        var x={};x.o=1;x["a"]=2*x.o;console.log(x.o,x["a"]);
     }
     expect_stdout: true
 }
@@ -33,10 +30,7 @@ issue_1321_debug: {
         console.log(x.foo, x["_$foo$_"]);
     }
     expect: {
-        var x = {};
-        x.x = 1;
-        x["_$foo$_"] = 2 * x.x;
-        console.log(x.x, x["_$foo$_"]);
+        var x={};x.o=1;x["_$foo$_"]=2*x.o;console.log(x.o,x["_$foo$_"]);
     }
     expect_stdout: true
 }
@@ -55,9 +49,9 @@ issue_1321_with_quoted: {
     }
     expect: {
         var x = {};
-        x.x = 1;
-        x["o"] = 2 * x.x;
-        console.log(x.x, x["o"]);
+        x.o = 1;
+        x["a"] = 2 * x.o;
+        console.log(x.o, x["a"]);
     }
     expect_stdout: true
 }

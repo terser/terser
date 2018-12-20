@@ -1416,13 +1416,12 @@ join_object_assignments_1: {
     expect: {
         console.log(function() {
             var x = {
-                a: 1,
+                a: (1, /foo/),
                 c: (console.log("c"), "C"),
                 b: 2,
                 3: function() {
                     console.log(x);
                 },
-                a: /foo/,
             };
             x.bar = x;
             return x;
@@ -1667,8 +1666,7 @@ join_object_assignments_negative: {
     }
     expect: {
         var o = {
-            0: 0,
-            0: 1,
+            0: (0, 1),
             "-1": 2
         };
         console.log(o[0], o[-0], o[-1]);
@@ -1709,8 +1707,7 @@ join_object_assignments_NaN_2: {
     }
     expect: {
         var o = {
-            NaN: 1,
-            NaN: 2
+            NaN: (1, 2),
         };
         console.log(o.NaN, o.NaN);
     }
@@ -1826,10 +1823,8 @@ join_object_assignments_Infinity: {
     }
     expect: {
         var o = {
-            Infinity: 1,
-            Infinity: 2,
-            "-Infinity": 3,
-            "-Infinity": 4
+            Infinity: (1, 2),
+            "-Infinity": (3, 4)
         };
         console.log(o[1/0], o[1/0], o[-1/0], o[-1/0]);
     }
@@ -1901,9 +1896,8 @@ issue_2816_ecma6: {
     expect: {
         "use strict";
         var o = {
-            a: 1,
+            a: (1, 3),
             b: 2,
-            a: 3,
             c: 4
         };
         console.log(o.a, o.b, o.c);

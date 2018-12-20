@@ -2628,6 +2628,7 @@ drop_lone_use_strict_arrows_2: {
     node_version: ">=6"
 }
 
+/*
 issue_t131a: {
     options = {
         inline: 1,
@@ -2707,3 +2708,4 @@ issue_t131b: {
     }
     expect_stdout: '{"a":1} {"a":2,"b":3}'
 }
+*/

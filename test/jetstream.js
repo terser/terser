@@ -3,7 +3,9 @@
 
 "use strict";
 
-return;  // TODO investigate what's making this fail
+if (Number((/([0-9]+)\./.exec(process.version) || [])[1]) >= 8) {
+    return;  // TODO investigate what's making this fail
+}
 
 var site = "https://browserbench.org/JetStream";
 if (typeof phantom == "undefined") {

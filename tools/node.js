@@ -2,6 +2,7 @@ var fs = require("fs");
 
 var UglifyJS = exports;
 var FILES = UglifyJS.FILES = [
+    "./domprops.js",
     "../lib/utils.js",
     "../lib/ast.js",
     "../lib/parse.js",

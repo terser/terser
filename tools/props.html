@@ -45,7 +45,7 @@
       <!-- ta.value = Object.keys(props).sort(cmp).map(function(name){ -->
       <!--   return JSON.stringify(name); -->
       <!-- }).join(",\n"); -->
-      ta.value = JSON.stringify({
+      ta.value = 'var domprops = ' + JSON.stringify({
         vars: [],
         props: Object.keys(props).sort(cmp)
       }, null, 2);

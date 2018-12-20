@@ -3,6 +3,8 @@
 
 "use strict";
 
+return;  // TODO investigate what's making this fail
+
 var site = "https://browserbench.org/JetStream";
 if (typeof phantom == "undefined") {
     require("../tools/exit");

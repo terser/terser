@@ -245,7 +245,7 @@ function run_compress_tests() {
                 log("!!! Test matched expected result but cannot parse output\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n--REPARSE ERROR--\n{error}\n\n", {
                     input: input_formatted,
                     output: output,
-                    error: ex,
+                    error: ex.stack,
                 });
                 return false;
             }
@@ -483,7 +483,7 @@ function reminify(orig_options, input_code, input_formatted, expect_stdout) {
         if (result.error) {
             log("!!! failed input reminify\n---INPUT---\n{input}\n--ERROR---\n{error}\n\n", {
                 input: input_formatted,
-                error: result.error,
+                error: result.error.stack,
             });
             return false;
         } else {

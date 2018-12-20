@@ -1732,3 +1732,15 @@ issue_2968: {
     }
     expect_stdout: "PASS"
 }
+
+issue_192: {
+    options = {
+        unsafe: true
+    }
+    input: {
+        hasOwnProperty.call(a, b)
+    }
+    expect: {
+        hasOwnProperty.call(a, b)
+    }
+}

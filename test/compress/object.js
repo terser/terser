@@ -1013,3 +1013,16 @@ issue_2554_5: {
     expect_stdout: "PASS"
     node_version: ">=6"
 }
+
+dont_join_repeat_object_keys: {
+    options = {
+        join_vars: true
+    }
+    input: {
+        const obj = { foo: 1 }
+        obj.foo = 2
+    }
+    expect: {
+        const obj = { foo: (1, 2) }
+    }
+}

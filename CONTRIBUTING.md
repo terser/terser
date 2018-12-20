@@ -5,6 +5,10 @@ Contributing
 
 Every new feature and API change should be accompanied by a README addition.
 
+## Enabling dev mode
+
+Normally when you require terser or use the CLI, you get a compiled version. When developing terser, you want to use the files you're actually editing to make those tests pass. So, add to your .bashrc: `TERSER_NO_BUNDLE=1`.
+
 ## Testing
 
 All features and bugs should have tests that verify the fix. You can run all

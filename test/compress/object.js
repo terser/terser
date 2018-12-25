@@ -1026,3 +1026,15 @@ dont_join_repeat_object_keys: {
         const obj = { foo: (1, 2) }
     }
 }
+
+issue_206: {
+    options = {
+        computed_props: true
+    }
+    input: {
+        throw {["__proto__"]: 1}
+    }
+    expect: {
+        throw {["__proto__"]: 1}
+    }
+}

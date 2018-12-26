@@ -1,8 +1,9 @@
 #! /usr/bin/env node
+/* eslint-env node */
 
 var acorn = require("acorn");
 var generateRandomJS = require("eslump").generateRandomJS;
-var minify = require("..").minify;
+var minify = require("../dist/bundle.js").minify;
 
 var known_terser_errors = new RegExp([
   "Cannot negate a statement",
@@ -12,7 +13,7 @@ var known_terser_errors = new RegExp([
   "Octal escape sequences are not allowed in template strings",
   "Parameter .* was used already",
   "redeclared",
-  "t.argname.definition is not a function",
+  "argname.definition is not a function",
   "Unexpected token: template_substitution",
   "Unexpected yield identifier inside strict mode",
 ].join("|"));

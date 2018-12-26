@@ -4,7 +4,7 @@ try {
     require("source-map-support").install();
 } catch (err) {}
 
-var U = process.env.TERSER_NO_BUNDLE ? require("./node") : require("../dist/bundle");
+var U = require("../dist/bundle");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");

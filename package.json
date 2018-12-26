@@ -14,14 +14,13 @@
     "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)"
   ],
   "repository": "https://github.com/fabiosantoscode/terser.git",
-  "main": "dist/bundle.js",
+  "main": "dist/bundle.min.js",
   "types": "tools/terser.d.ts",
   "bin": {
     "terser": "bin/uglifyjs"
   },
   "files": [
     "bin",
-    "lib",
     "dist",
     "!dist/bundle.instrumented.js",
     "tools",
@@ -46,15 +45,16 @@
     "mochallel": "^1.8.6",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.2",
+    "rollup": "^1.0.1",
     "semver": "~5.5.1"
   },
   "scripts": {
-    "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.js > dist/bundle.instrumented.js && node test/run-tests.js",
+    "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepare": "cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs ../tools/domprops.js ../lib/utils.js ../lib/ast.js ../lib/parse.js ../lib/transform.js ../lib/scope.js ../lib/output.js ../lib/compress.js ../lib/sourcemap.js ../lib/mozilla-ast.js ../lib/propmangle.js ../lib/minify.js ../tools/exports.js -mc -d \"MOZ_SourceMap=require(\\'source-map\\')\" --source-map \"includeSources=true,url='bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b beautify=false,ascii_only --comments /license/ -o ../dist/bundle.js"
+    "prepare": "rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js"
   },
   "keywords": [
     "uglify",
@@ -76,6 +76,9 @@
     "await"
   ],
   "eslintConfig": {
+    "parserOptions": {
+      "sourceType": "module"
+    },
     "rules": {
       "brace-style": [
         "error",
@@ -90,6 +93,7 @@
         "avoid-escape"
       ],
       "no-debugger": "error",
+      "no-undef": "error",
       "semi": [
         "error",
         "always"

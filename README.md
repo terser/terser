@@ -367,6 +367,11 @@ like this:
 ```javascript
 var Terser = require("terser");
 ```
+Browser loading is also supported:
+```html
+<script src="node_modules/source-map/dist/source-map.min.js"></script>
+<script src="dist/bundle.min.js"></script>
+```
 
 There is a single high level function, **`minify(code, options)`**,
 which will perform all minification [phases](#minify-options) in a configurable

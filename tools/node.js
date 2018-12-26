@@ -1,41 +1,8 @@
 var fs = require("fs");
 
-var UglifyJS = exports;
-var FILES = UglifyJS.FILES = [
-    "./domprops.js",
-    "../lib/utils.js",
-    "../lib/ast.js",
-    "../lib/parse.js",
-    "../lib/transform.js",
-    "../lib/scope.js",
-    "../lib/output.js",
-    "../lib/compress.js",
-    "../lib/sourcemap.js",
-    "../lib/mozilla-ast.js",
-    "../lib/propmangle.js",
-    "../lib/minify.js",
-    "./exports.js",
-].map(function(file){
-    return require.resolve(file);
-});
-
-try {
-    var istanbul = require("istanbul");
-    var instrumenter = new istanbul.Instrumenter();
-} catch (ex) {}
-
-new Function("MOZ_SourceMap", "exports", "require", function() {
-    var code = FILES.map(function(file) {
-        var contents = fs.readFileSync(file, "utf8");
-        if (instrumenter && global.__IS_TESTING__) return instrumenter.instrumentSync(contents, file);
-        return contents;
-    });
-    return code.join("\n\n");
-}())(
-    require("source-map"),
-    UglifyJS,
-    require
-);
+var bundle_path = __dirname + "/../dist/bundle.js";
+var UglifyJS = require(bundle_path);
+module.exports = UglifyJS;
 
 function infer_options(options) {
     var result = UglifyJS.minify("", options);

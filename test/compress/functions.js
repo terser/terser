@@ -2628,7 +2628,6 @@ drop_lone_use_strict_arrows_2: {
     node_version: ">=6"
 }
 
-/*
 issue_t131a: {
     options = {
         inline: 1,
@@ -2662,7 +2661,6 @@ issue_t131a: {
                 a: 1
             }), JSON.stringify(function() {
                 var x = {
-                    a: 1,
                     a: 2,
                     b: 3
                 };
@@ -2701,11 +2699,9 @@ issue_t131b: {
         console.log(JSON.stringify({
             a: 1
         }), JSON.stringify({
-            a: 1,
             a: 2,
             b: 3
         }));
     }
     expect_stdout: '{"a":1} {"a":2,"b":3}'
 }
-*/

@@ -830,7 +830,6 @@ issue_2208_6: {
         console.log(42);
     }
     expect_stdout: "42"
-    node_version: ">=4"
 }
 
 issue_2208_7: {
@@ -852,7 +851,6 @@ issue_2208_7: {
         console.log(42);
     }
     expect_stdout: "42"
-    node_version: ">=4"
 }
 
 issue_2208_8: {
@@ -910,7 +908,6 @@ issue_2208_9: {
         }());
     }
     expect_stdout: "42"
-    node_version: ">=4"
 }
 
 methods_keep_quoted_true: {
@@ -1238,7 +1235,6 @@ accessor_1: {
         }.a);
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 accessor_2: {
@@ -1305,7 +1301,6 @@ computed_property: {
         "foo",
         "bar"
     ]
-    node_version: ">=4"
 }
 
 new_this: {
@@ -1903,7 +1898,6 @@ issue_2816_ecma6: {
         console.log(o.a, o.b, o.c);
     }
     expect_stdout: "3 2 4"
-    node_version: ">=4"
 }
 
 issue_2893_1: {

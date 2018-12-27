@@ -251,7 +251,6 @@ hoist_funs_strict: {
         "5 'function' 'function'",
         "6 'undefined' 'function'",
     ]
-    node_version: ">=4"
 }
 
 issue_203: {
@@ -1523,7 +1522,6 @@ issue_2647_2: {
         }());
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_2647_3: {
@@ -1549,7 +1547,6 @@ issue_2647_3: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 recursive_inline_1: {

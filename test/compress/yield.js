@@ -249,7 +249,6 @@ issue_2832: {
         "second",
         "2",
     ]
-    node_version: ">=4"
 }
 
 issue_t60: {

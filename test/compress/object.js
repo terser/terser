@@ -649,7 +649,6 @@ concise_method_to_prop_arrow: {
         "3",
         "4",
     ]
-    node_version: ">=4"
 }
 
 prop_func_to_async_concise_method: {
@@ -772,7 +771,6 @@ prop_arrow_with_this: {
         "undefined",
         "global",
     ]
-    node_version: ">=4"
 }
 
 prop_arrow_with_nested_this: {
@@ -810,7 +808,6 @@ prop_arrow_with_nested_this: {
         "global",
         "global",
     ]
-    node_version: ">=4"
 }
 
 issue_2554_1: {
@@ -851,7 +848,6 @@ issue_2554_1: {
         console.log(obj.g);
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_2554_2: {
@@ -937,7 +933,6 @@ issue_2554_3: {
         console.log(foo[3]);
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_2554_4: {

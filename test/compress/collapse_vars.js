@@ -2939,7 +2939,6 @@ issue_2203_3: {
         }.b());
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_2203_4: {
@@ -2970,7 +2969,6 @@ issue_2203_4: {
         }.b());
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 duplicate_argname: {

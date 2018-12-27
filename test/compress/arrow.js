@@ -232,7 +232,6 @@ async_identifiers: {
         "async 1",
         "await 2",
     ]
-    node_version: ">=4"
 }
 
 async_function_expression: {
@@ -323,7 +322,6 @@ issue_2105_1: {
         }).prop();
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_2105_2: {
@@ -534,7 +532,6 @@ issue_2084: {
         console.log(c);
     }
     expect_stdout: "0"
-    node_version: ">=4"
 }
 
 export_default_object_expression: {
@@ -567,7 +564,6 @@ concise_methods_with_computed_property2: {
     }
     expect_exact: 'var foo={[[1]]:v=>v};console.log(foo[[1]]("PASS"));'
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 async_object_literal: {
@@ -652,7 +648,6 @@ concise_method_with_super: {
         console.log(o.g());
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 issue_3092a: {

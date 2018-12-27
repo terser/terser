@@ -6,7 +6,7 @@
   "license": "BSD-2-Clause",
   "version": "3.13.1",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4.0.0"
   },
   "maintainers": [
     "Fábio Santos <fabiosantosart@gmail.com>",

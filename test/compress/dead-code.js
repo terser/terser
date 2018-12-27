@@ -100,7 +100,6 @@ dead_code_2_should_warn_strict: {
         f();
     }
     expect_stdout: true
-    node_version: ">=4"
     reminify: false // FIXME - block scoped function
 }
 
@@ -173,7 +172,6 @@ dead_code_constant_boolean_should_warn_more_strict: {
         bar();
     }
     expect_stdout: true
-    node_version: ">=4"
     reminify: false // FIXME - block scoped function
 }
 

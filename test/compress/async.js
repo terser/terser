@@ -243,7 +243,6 @@ async_shorthand_property: {
         "Async Await",
         "Async Await",
     ]
-    node_version: ">=4"
 }
 
 async_arrow: {

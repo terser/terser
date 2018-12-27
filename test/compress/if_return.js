@@ -382,7 +382,6 @@ issue_1317_strict: {
         }();
     }
     expect_stdout: "1"
-    node_version: ">=4"
 }
 
 if_var_return: {
@@ -488,5 +487,4 @@ issue_2747: {
         console.log(f(0), f(1), f(3));
     }
     expect_stdout: "null 5 4"
-    node_version: ">=4"
 }

@@ -42,7 +42,6 @@
     "eslump": "^2.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
-    "mochallel": "^1.8.2",
     "pre-commit": "^1.2.2",
     "semver": "~5.5.0"
   },

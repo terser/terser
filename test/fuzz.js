@@ -13,7 +13,6 @@ var known_terser_errors = new RegExp([
   "Parameter .* was used already",
   "redeclared",
   "t.argname.definition is not a function",
-  "Unexpected token: operator", // issue 199
   "Unexpected token: template_substitution",
   "Unexpected yield identifier inside strict mode",
 ].join("|"));

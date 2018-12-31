@@ -3,14 +3,15 @@ terser
 
 ![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.png)
 
+A JavaScript parser and mangler/compressor toolkit for ES6+.
+
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/terser_jscomp_maintainer"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out PATRONS.md for our first-tier patrons.
-=======
 
 Terser recommends you use RollupJS to bundle your modules, as that produces smaller code overall.
 
-[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser) [![Coverage Status](https://coveralls.io/repos/github/terser-js/terser/badge.svg?branch=master)](https://coveralls.io/github/terser-js/terser?branch=master)
+*Beautification* has been undocumented and is *being removed* from terser, we recommend you use [prettier](https://npmjs.com/package/prettier).
 
-A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
+[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser) [![Coverage Status](https://coveralls.io/repos/github/terser-js/terser/badge.svg?branch=master)](https://coveralls.io/github/terser-js/terser?branch=master)
 
 
 Why choose terser?
@@ -84,8 +85,6 @@ a double dash to prevent input files being used as option arguments:
                                 `keep_quoted`  Only mangle unquoted properties.
                                 `regex`  Only mangle matched property names.
                                 `reserved`  List of names that should not be mangled.
-    -b, --beautify [options]    Beautify output/specify output options:
-                                `beautify`  Enabled with `--beautify` by default.
                                 `preamble`  Preamble to prepend to the output. You
                                             can use this to insert a comment, for
                                             example for licensing information.
@@ -460,7 +459,6 @@ var options = {
         passes: 2
     },
     output: {
-        beautify: false,
         preamble: "/* minified */"
     }
 };
@@ -918,17 +916,11 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
 
 ## Output options
 
-The code generator tries to output shortest code possible by default.  In
-case you want beautified output, pass `--beautify` (`-b`).  Optionally you
+The code generator tries to output shortest code possible. Optionally you
 can pass additional arguments that control the code output:
 
 - `ascii_only` (default `false`) -- escape Unicode characters in strings and
   regexps (affects directives with non-ascii characters becoming invalid)
-
-- `beautify` (default `true`) -- whether to actually beautify the output.
-  Passing `-b` will set this to true, but you might need to pass `-b` even
-  when you want to generate minified code, in order to specify additional
-  arguments, so you can use `-b beautify=false` to override it.
 
 - `braces` (default `false`) -- always insert braces in `if`, `for`,
   `do`, `while` or `with` statements, even if their body is a single
@@ -940,8 +932,7 @@ can pass additional arguments that control the code output:
 
 - `ecma` (default `5`) -- set output printing mode. Set `ecma` to `6` or
   greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`.
-  The `ecma` option will only change the output in direct control of the
-  beautifier. Non-compatible features in the abstract syntax tree will still
+  Non-compatible features in the abstract syntax tree will still
   be output as is. For example: an `ecma` setting of `5` will **not** convert
   ES6+ code to ES5.
 
@@ -986,12 +977,6 @@ can pass additional arguments that control the code output:
 
 - `webkit` (default `false`) -- enable workarounds for WebKit bugs.
   PhantomJS users should set this option to `true`.
-
-- `width` (default `80`) -- only takes effect when beautification is on, this
-  specifies an (orientative) line width that the beautifier will try to
-  obey.  It refers to the width of the line text (excluding indentation).
-  It doesn't work very well currently, but it does make the code generated
-  by Terser more readable.
 
 - `wrap_iife` (default `false`) -- pass `true` to wrap immediately invoked
   function expressions. See

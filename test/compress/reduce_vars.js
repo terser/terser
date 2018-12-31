@@ -3158,7 +3158,6 @@ issue_2090_1: {
         }());
     }
     expect_stdout: "1"
-    node_version: ">=4"
 }
 
 issue_2090_2: {
@@ -3186,7 +3185,6 @@ issue_2090_2: {
         }());
     }
     expect_stdout: "1"
-    node_version: ">=4"
 }
 
 for_in_prop: {
@@ -3517,7 +3515,6 @@ array_forof_1: {
         "2",
         "3",
     ]
-    node_version: ">=0.12"
 }
 
 array_forof_2: {
@@ -3540,7 +3537,6 @@ array_forof_2: {
         console.log(a.length);
     }
     expect_stdout: "3"
-    node_version: ">=0.12"
 }
 
 const_expr_1: {
@@ -3915,7 +3911,6 @@ issue_2420_3: {
         "foo 1",
         "true true true",
     ]
-    node_version: ">=4"
 }
 
 issue_2423_1: {
@@ -5266,7 +5261,6 @@ escape_yield: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=4"
 }
 
 escape_await: {

@@ -13,8 +13,6 @@ function run(command, args, done) {
     });
 }
 
-if (semver.satisfies(process.version, "0.12")) return;
-if (semver.satisfies(process.version, "0.10")) return;
 if (semver.satisfies(process.version, "4")) return;
 if (semver.satisfies(process.version, "6")) return;
 

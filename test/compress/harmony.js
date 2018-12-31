@@ -23,7 +23,6 @@ typeof_arrow_functions: {
     }
     expect_exact: "var foo=\"function\";console.log(foo);"
     expect_stdout: "function"
-    node_version: ">=4"
 }
 
 classes: {
@@ -975,7 +974,6 @@ shorthand_keywords: {
     }
     expect_exact: "var foo=0,async=1,await=2,implements=3,package=4,private=5,protected=6,static=7,yield=8;console.log({foo,0:0,NaN:NaN,async,await,false:false,implements:implements,null:null,package:package,private:private,protected:protected,static:static,this:this,true:true,undefined:void 0,yield});"
     expect_stdout: true
-    node_version: ">=4"
 }
 
 array_literal_with_spread_1: {

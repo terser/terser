@@ -461,7 +461,6 @@ simple_string: {
         console.log([ 1 ][0], true, "world");
     }
     expect_stdout: "1 true 'world'"
-    node_version: ">=4"
 }
 
 semicolons: {
@@ -481,7 +480,6 @@ regex_1: {
     }
     expect_exact: 'console.log(`${/a/} ${6/2} ${/b/.test("b")} ${1?/c/:/d/}`);'
     expect_stdout: "/a/ 3 true /c/"
-    node_version: ">=4"
 }
 
 regex_2: {
@@ -496,7 +494,6 @@ regex_2: {
         console.log("/a/ 3 true /c/");
     }
     expect_stdout: "/a/ 3 true /c/"
-    node_version: ">=4"
 }
 
 sequence_1: {
@@ -505,7 +502,6 @@ sequence_1: {
     }
     expect_exact: 'console.log(`${1,2} ${/a/,/b/}`);'
     expect_stdout: "2 /b/"
-    node_version: ">=4"
 }
 
 sequence_2: {
@@ -520,7 +516,6 @@ sequence_2: {
         console.log("2 /b/");
     }
     expect_stdout: "2 /b/"
-    node_version: ">=4"
 }
 
 return_template_string_with_trailing_backslash: {

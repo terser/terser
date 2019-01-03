@@ -5338,7 +5338,7 @@ escape_expansion: {
         function baz() {
             return function(...x) {
                 return x[0];
-            }(...[ foo ]);
+            }(foo);
         }
         (function() {
             var thing = baz();

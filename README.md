@@ -237,7 +237,7 @@ to prevent the `require`, `exports` and `$` names from being changed.
 
 ### CLI mangling property names (`--mangle-props`)
 
-**Note:** THIS WILL PROBABLY BREAK YOUR CODE.  Mangling property names
+**Note:** THIS *MIGHT* BREAK YOUR CODE.  Mangling property names
 is a separate step, different from variable name mangling.  Pass
 `--mangle-props` to enable it.  It will mangle all properties in the
 input code with the exception of built in DOM properties and properties

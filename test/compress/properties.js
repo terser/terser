@@ -165,6 +165,7 @@ mangle_unquoted_properties: {
         keep_quoted_props: true,
     }
     input: {
+        var a = {};
         a.top = 1;
         function f1() {
             a["foo"] = "bar";
@@ -182,6 +183,7 @@ mangle_unquoted_properties: {
         }
     }
     expect: {
+        var a = {};
         a.a = 1;
         function f1() {
             a["foo"] = "bar";
@@ -207,10 +209,12 @@ mangle_debug: {
         },
     }
     input: {
+        var a = {};
         a.foo = "bar";
         x = { baz: "ban" };
     }
     expect: {
+        var a = {};
         a._$foo$_ = "bar";
         x = { _$baz$_: "ban" };
     }
@@ -223,10 +227,12 @@ mangle_debug_true: {
         },
     }
     input: {
+        var a = {};
         a.foo = "bar";
         x = { baz: "ban" };
     }
     expect: {
+        var a = {};
         a._$foo$_ = "bar";
         x = { _$baz$_: "ban" };
     }
@@ -239,10 +245,12 @@ mangle_debug_suffix: {
         },
     }
     input: {
+        var a = {};
         a.foo = "bar";
         x = { baz: "ban" };
     }
     expect: {
+        var a = {};
         a._$foo$XYZ_ = "bar";
         x = { _$baz$XYZ_: "ban" };
     }
@@ -267,6 +275,7 @@ mangle_debug_suffix_keep_quoted: {
         keep_quoted_props: true,
     }
     input: {
+        var a = {};
         a.top = 1;
         function f1() {
             a["foo"] = "bar";
@@ -284,6 +293,7 @@ mangle_debug_suffix_keep_quoted: {
         }
     }
     expect: {
+        var a = {};
         a._$top$XYZ_ = 1;
         function f1() {
             a["foo"] = "bar";
@@ -988,10 +998,12 @@ issue_2256: {
         },
     }
     input: {
+        var g = {};
         ({ "keep": 1 });
         g.keep = g.change;
     }
     expect: {
+        var g = {};
         g.keep = g.g;
     }
 }

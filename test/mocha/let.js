@@ -34,24 +34,4 @@ describe("let", function() {
             assert.notStrictEqual(result.indexOf("var " + name + "="), -1);
         });
     });
-    it("Should quote mangled properties that are reserved keywords", function() {
-        var s = '"rrrrrnnnnniiiiiaaaaa";';
-        for (var i = 0; i < 18000; i++) {
-            s += "v.b" + i + ";";
-        }
-        var result = UglifyJS.minify(s, {
-            compress: false,
-            ie8: true,
-            mangle: {
-                properties: true,
-            }
-        }).code;
-        [
-            "in",
-            "var",
-        ].forEach(function(name) {
-            assert.notStrictEqual(result.indexOf(name), -1);
-            assert.notStrictEqual(result.indexOf('v["' + name + '"]'), -1);
-        });
-    });
 });

@@ -142,7 +142,7 @@ spread_with_array_at_end: {
         var a = [1, 2, ...[4, 5, 6]];
     }
     expect: {
-        var a = [1, 2, ...[4, 5, 6]];
+        var a = [1, 2, 4, 5, 6];
     }
 }
 
@@ -152,7 +152,7 @@ spread_with_logical_expression_at_end: {
         var a = [1, 2, 3, ...[2+2]]
     }
     expect: {
-        var a = [1, 2, 3, ...[4]]
+        var a = [1, 2, 3, 4]
     }
 }
 
@@ -162,7 +162,7 @@ spread_with_logical_expression_at_middle: {
         var a = [1, 1, ...[1+1, 1+2, 2+3], 8]
     }
     expect: {
-        var a = [1, 1, ...[2, 3, 5], 8]
+        var a = [1, 1, 2, 3, 5, 8]
     }
 }
 

@@ -989,7 +989,7 @@ unsafe_apply_2: {
     expect_stdout: true
 }
 
-unsafe_apply_expansion: {
+unsafe_apply_expansion_1: {
     options = {
         unsafe: true,
     }
@@ -997,7 +997,23 @@ unsafe_apply_expansion: {
         console.log.apply(console, [1, ...[2, 3], 4]);
     }
     expect: {
-        console.log.call(console, 1, ...[2, 3], 4);
+        console.log.call(console, 1, 2, 3, 4);
+    }
+    expect_stdout: "1 2 3 4"
+    node_version: ">=6"
+}
+
+unsafe_apply_expansion_2: {
+    options = {
+        unsafe: true,
+    }
+    input: {
+        var values = [2, 3];
+        console.log.apply(console, [1, ...values, 4]);
+    }
+    expect: {
+        var values = [2, 3];
+        console.log.call(console, 1, ...values, 4);
     }
     expect_stdout: "1 2 3 4"
     node_version: ">=6"
@@ -1081,7 +1097,7 @@ unsafe_call_3: {
     expect_stdout: "3"
 }
 
-unsafe_call_expansion: {
+unsafe_call_expansion_1: {
     options = {
         unsafe: true,
     }
@@ -1094,7 +1110,28 @@ unsafe_call_expansion: {
         console,
         (function(...a) {
             console.log(...a);
-        })(1, ...[2, 3], 4);
+        })(1, 2, 3, 4);
+    }
+    expect_stdout: "1 2 3 4"
+    node_version: ">=6"
+}
+
+unsafe_call_expansion_2: {
+    options = {
+        unsafe: true,
+    }
+    input: {
+        var values = [2, 3];
+        (function(...a) {
+            console.log(...a);
+        }).call(console, 1, ...values, 4);
+    }
+    expect: {
+        var values = [2, 3];
+        console,
+        (function(...a) {
+            console.log(...a);
+        })(1, ...values, 4);
     }
     expect_stdout: "1 2 3 4"
     node_version: ">=6"

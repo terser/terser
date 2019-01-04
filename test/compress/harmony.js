@@ -727,7 +727,7 @@ object_rest_spread: {
         (function({ y: o, ...l }) { console.log(l); })({ x: 1, y: 2, z: 3 });
         (({ y: o, ...l }) =>      { console.log(l); })({ x: 4, y: 5, z: 6 });
 
-        const w = { a: 1, b: 2 }; console.log({ ...w, w: 0, ...{}, ...n, ...{ K: 9 } });
+        const w = { a: 1, b: 2 }; console.log({ ...w, w: 0, ...n, K: 9 });
     }
 }
 
@@ -755,7 +755,7 @@ object_spread_unsafe: {
         console.log(cloned, merged);
     }
     expect: {
-        var o = { x: 1, y: 2 }, l = { ...o }, x = { ...o, ...{ x: 3, z: 4 } };
+        var o = { x: 1, y: 2 }, l = { ...o }, x = { ...o, x: 3, z: 4 };
         console.log(l, x);
     }
 }
@@ -855,7 +855,7 @@ issue_2345: {
         console.log([...a].join("-"));
     }
     expect: {
-        console.log([...[3, 2, 1]].join("-"));
+        console.log("3-2-1");
         var a = [3, 2, 1];
         console.log([...a].join("-"));
     }
@@ -993,7 +993,7 @@ array_literal_with_spread_1: {
     node_version: ">=6"
 }
 
-array_literal_with_spread_2: {
+array_literal_with_spread_2a: {
     options = {
         properties: true,
         side_effects: true,
@@ -1008,13 +1008,13 @@ array_literal_with_spread_2: {
         console.log([10, ...[], 20, ...[30, 40], 50][5]);
     }
     expect: {
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ]["length"]);
+        console.log([ 10, 20, 30, 40, 50 ]["length"]);
         console.log(10);
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ][1]);
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ][2]);
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ][3]);
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ][4]);
-        console.log([ 10, ...[], 20, ...[ 30, 40 ], 50 ][5]);
+        console.log(20);
+        console.log(30);
+        console.log(40);
+        console.log(50);
+        console.log([ 10, 20, 30, 40, 50 ][5]);
     }
     expect_stdout: [
         "5",
@@ -1028,7 +1028,44 @@ array_literal_with_spread_2: {
     node_version: ">=6"
 }
 
-array_literal_with_spread_3: {
+array_literal_with_spread_2b: {
+    options = {
+        properties: true,
+        side_effects: true,
+    }
+    input: {
+        var x = [30, 40];
+        console.log([10, ...[], 20, ...x, 50]["length"]);
+        console.log([10, ...[], 20, ...x, 50][0]);
+        console.log([10, ...[], 20, ...x, 50][1]);
+        console.log([10, ...[], 20, ...x, 50][2]);
+        console.log([10, ...[], 20, ...x, 50][3]);
+        console.log([10, ...[], 20, ...x, 50][4]);
+        console.log([10, ...[], 20, ...x, 50][5]);
+    }
+    expect: {
+        var x = [30, 40];
+        console.log([ 10, 20, ...x, 50 ]["length"]);
+        console.log(10);
+        console.log(20);
+        console.log([ 10, 20, ...x, 50 ][2]);
+        console.log([ 10, 20, ...x, 50 ][3]);
+        console.log([ 10, 20, ...x, 50 ][4]);
+        console.log([ 10, 20, ...x, 50 ][5]);
+    }
+    expect_stdout: [
+        "5",
+        "10",
+        "20",
+        "30",
+        "40",
+        "50",
+        "undefined",
+    ]
+    node_version: ">=6"
+}
+
+array_literal_with_spread_3a: {
     options = {
         properties: true,
         side_effects: true,
@@ -1055,17 +1092,17 @@ array_literal_with_spread_3: {
         console.log(20);
         console.log([ 10, 20 ][2]);
 
-        console.log([...[], 10, 20][0]);
-        console.log([...[], 10, 20][1]);
-        console.log([...[], 10, 20][2]);
-
         console.log(10);
-        console.log([10, ...[], 20][1]);
-        console.log([10, ...[], 20][2]);
+        console.log(20);
+        console.log([10, 20][2]);
 
         console.log(10);
         console.log(20);
-        console.log([10, 20, ...[]][2]);
+        console.log([10, 20][2]);
+
+        console.log(10);
+        console.log(20);
+        console.log([10, 20][2]);
     }
     expect_stdout: [
         "10",
@@ -1084,7 +1121,65 @@ array_literal_with_spread_3: {
     node_version: ">=6"
 }
 
-array_literal_with_spread_4: {
+array_literal_with_spread_3b: {
+    options = {
+        properties: true,
+        side_effects: true,
+    }
+    input: {
+        var nothing = [];
+        console.log([10, 20][0]);
+        console.log([10, 20][1]);
+        console.log([10, 20][2]);
+
+        console.log([...nothing, 10, 20][0]);
+        console.log([...nothing, 10, 20][1]);
+        console.log([...nothing, 10, 20][2]);
+
+        console.log([10, ...nothing, 20][0]);
+        console.log([10, ...nothing, 20][1]);
+        console.log([10, ...nothing, 20][2]);
+
+        console.log([10, 20, ...nothing][0]);
+        console.log([10, 20, ...nothing][1]);
+        console.log([10, 20, ...nothing][2]);
+    }
+    expect: {
+        var nothing = [];
+        console.log(10);
+        console.log(20);
+        console.log([ 10, 20 ][2]);
+
+        console.log([...nothing, 10, 20][0]);
+        console.log([...nothing, 10, 20][1]);
+        console.log([...nothing, 10, 20][2]);
+
+        console.log(10);
+        console.log([10, ...nothing, 20][1]);
+        console.log([10, ...nothing, 20][2]);
+
+        console.log(10);
+        console.log(20);
+        console.log([10, 20, ...nothing][2]);
+    }
+    expect_stdout: [
+        "10",
+        "20",
+        "undefined",
+        "10",
+        "20",
+        "undefined",
+        "10",
+        "20",
+        "undefined",
+        "10",
+        "20",
+        "undefined",
+    ]
+    node_version: ">=6"
+}
+
+array_literal_with_spread_4a: {
     options = {
         properties: true,
         side_effects: true,
@@ -1121,17 +1216,88 @@ array_literal_with_spread_4: {
         console.log((t(1), t(2)));
         console.log([ t(1), t(2) ][2]);
 
-        console.log([ ...[], t(1), t(2) ][0]);
-        console.log([ ...[], t(1), t(2) ][1]);
-        console.log([ ...[], t(1), t(2) ][2]);
-
         console.log([ t(1), t(2) ][0]);
-        console.log([ t(1), ...[], t(2) ][1]);
-        console.log([ t(1), ...[], t(2) ][2]);
+        console.log((t(1), t(2)));
+        console.log([ t(1), t(2) ][2]);
 
         console.log([ t(1), t(2) ][0]);
         console.log((t(1), t(2)));
-        console.log([ t(1), t(2), ...[] ][2]);
+        console.log([ t(1), t(2) ][2]);
+
+        console.log([ t(1), t(2) ][0]);
+        console.log((t(1), t(2)));
+        console.log([ t(1), t(2) ][2]);
+    }
+    expect_stdout: [
+        "(1)", "(2)", "10",
+        "(1)", "(2)", "20",
+        "(1)", "(2)", "undefined",
+
+        "(1)", "(2)", "10",
+        "(1)", "(2)", "20",
+        "(1)", "(2)", "undefined",
+
+        "(1)", "(2)", "10",
+        "(1)", "(2)", "20",
+        "(1)", "(2)", "undefined",
+
+        "(1)", "(2)", "10",
+        "(1)", "(2)", "20",
+        "(1)", "(2)", "undefined",
+    ]
+    node_version: ">=6"
+}
+
+array_literal_with_spread_4b: {
+    options = {
+        properties: true,
+        side_effects: true,
+    }
+    input: {
+        var nothing = [];
+        function t(x) {
+            console.log("(" + x + ")");
+            return 10 * x;
+        }
+
+        console.log([t(1), t(2)][0]);
+        console.log([t(1), t(2)][1]);
+        console.log([t(1), t(2)][2]);
+
+        console.log([...nothing, t(1), t(2)][0]);
+        console.log([...nothing, t(1), t(2)][1]);
+        console.log([...nothing, t(1), t(2)][2]);
+
+        console.log([t(1), ...nothing, t(2)][0]);
+        console.log([t(1), ...nothing, t(2)][1]);
+        console.log([t(1), ...nothing, t(2)][2]);
+
+        console.log([t(1), t(2), ...nothing][0]);
+        console.log([t(1), t(2), ...nothing][1]);
+        console.log([t(1), t(2), ...nothing][2]);
+    }
+    expect: {
+        var nothing = [];
+        function t(x) {
+            console.log("(" + x + ")");
+            return 10 * x;
+        }
+
+        console.log([ t(1), t(2) ][0]);
+        console.log((t(1), t(2)));
+        console.log([ t(1), t(2) ][2]);
+
+        console.log([ ...nothing, t(1), t(2) ][0]);
+        console.log([ ...nothing, t(1), t(2) ][1]);
+        console.log([ ...nothing, t(1), t(2) ][2]);
+
+        console.log([ t(1), t(2) ][0]);
+        console.log([ t(1), ...nothing, t(2) ][1]);
+        console.log([ t(1), ...nothing, t(2) ][2]);
+
+        console.log([ t(1), t(2) ][0]);
+        console.log((t(1), t(2)));
+        console.log([ t(1), t(2), ...nothing ][2]);
     }
     expect_stdout: [
         "(1)", "(2)", "10",

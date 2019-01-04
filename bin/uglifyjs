@@ -312,7 +312,7 @@ function simple_glob(glob) {
     if (Array.isArray(glob)) {
         return [].concat.apply([], glob.map(simple_glob));
     }
-    if (glob && glob.match(/\*|\?/)) {
+    if (glob && glob.match(/[*?]/)) {
         var dir = path.dirname(glob);
         try {
             var entries = fs.readdirSync(dir);

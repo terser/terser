@@ -1037,7 +1037,6 @@ issue_2321: {
         "foo",
         "bar",
     ]
-    node_version: ">=6"
 }
 
 unsafe_methods_regex: {
@@ -1090,7 +1089,6 @@ unsafe_methods_regex: {
         "null",
         "undefined",
     ]
-    node_version: ">=6"
 }
 
 lhs_prop_1: {
@@ -2330,7 +2328,6 @@ issue_t64: {
         new obj.Derived();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 dont_mangle_computed_property_1: {
@@ -2385,7 +2382,6 @@ dont_mangle_computed_property_1: {
         "bar 1 2 seven zero one Null Undefined infinity nan Void",
         "Null Undefined infinity nan",
     ]
-    node_version: ">=6"
 }
 
 dont_mangle_computed_property_2: {
@@ -2424,5 +2420,4 @@ dont_mangle_computed_property_2: {
         "bar 1 2 seven zero one Null Undefined infinity nan Void",
         "Null Undefined infinity nan",
     ]
-    node_version: ">=6"
 }

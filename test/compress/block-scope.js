@@ -133,7 +133,6 @@ regression_block_scope_resolves: {
         }());
     }
     expect_stdout: "undefined undefined undefined undefined undefined undefined"
-    node_version: ">=6"
 }
 
 switch_block_scope_mangler: {
@@ -187,5 +186,4 @@ switch_block_scope_mangler: {
         "4",
         "6",
     ]
-    node_version: ">=6"
 }

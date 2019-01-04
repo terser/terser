@@ -114,7 +114,6 @@ issue_t120_3: {
         var i;
     }
     expect_stdout: "2"
-    node_version: ">=6"
 }
 
 issue_t120_4: {
@@ -134,7 +133,6 @@ issue_t120_4: {
         var i;
     }
     expect_stdout: "4"
-    node_version: ">=6"
 }
 
 issue_t120_5: {
@@ -154,7 +152,6 @@ issue_t120_5: {
         var i;
     }
     expect_stdout: "6"
-    node_version: ">=6"
 }
 
 pr_152_regression: {

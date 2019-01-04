@@ -38,7 +38,6 @@ same_variable_in_multiple_for_loop: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forOf: {
@@ -80,7 +79,6 @@ same_variable_in_multiple_forOf: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forIn: {
@@ -122,7 +120,6 @@ same_variable_in_multiple_forIn: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 different_variable_in_multiple_for_loop: {
@@ -165,7 +162,6 @@ different_variable_in_multiple_for_loop: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 different_variable_in_multiple_forOf: {
@@ -207,7 +203,6 @@ different_variable_in_multiple_forOf: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 different_variable_in_multiple_forIn: {
@@ -249,7 +244,6 @@ different_variable_in_multiple_forIn: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forOf_sequences_let: {
@@ -291,7 +285,6 @@ same_variable_in_multiple_forOf_sequences_let: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forOf_sequences_const: {
@@ -333,7 +326,6 @@ same_variable_in_multiple_forOf_sequences_const: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forIn_sequences_let: {
@@ -375,7 +367,6 @@ same_variable_in_multiple_forIn_sequences_let: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 same_variable_in_multiple_forIn_sequences_const: {
@@ -417,7 +408,6 @@ same_variable_in_multiple_forIn_sequences_const: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 more_variable_in_multiple_for: {
@@ -455,5 +445,4 @@ more_variable_in_multiple_for: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }

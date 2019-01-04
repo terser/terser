@@ -1345,7 +1345,6 @@ issue_1968: {
         console.log(f(1));
     }
     expect_stdout: "5"
-    node_version: ">=6"
 }
 
 issue_2063: {
@@ -1457,7 +1456,6 @@ issue_2136_1: {
         }();
     }
     expect_stdout: "[]"
-    node_version: ">=6"
 }
 
 issue_2136_2: {
@@ -1482,7 +1480,6 @@ issue_2136_2: {
         f([2,3][0]);
     }
     expect_stdout: "2"
-    node_version: ">=6"
 }
 
 issue_2136_3: {
@@ -1510,7 +1507,6 @@ issue_2136_3: {
         console.log(2);
     }
     expect_stdout: "2"
-    node_version: ">=6"
 }
 
 issue_2163: {
@@ -2613,7 +2609,6 @@ issue_t161_top_retain_13: {
         console.log(2, y, 4, 2 * y, 8, 4 * y, 2, g(), 4);
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4"
-    node_version: ">=6"
 }
 
 issue_t161_top_retain_14: {
@@ -2658,7 +2653,6 @@ issue_t161_top_retain_14: {
         }().num());
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4 2 3 4"
-    node_version: ">=6"
 }
 
 issue_t161_top_retain_15: {
@@ -2707,7 +2701,6 @@ issue_t161_top_retain_15: {
         }().num());
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4 2 3 4"
-    node_version: ">=6"
 }
 
 issue_t183: {

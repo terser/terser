@@ -8,18 +8,4 @@ eval_let_6: {
         console.log();
     }
     expect_stdout: ""
-    node_version: ">=6"
-}
-
-eval_let_4: {
-    input: {
-        eval("let a;");
-        console.log();
-    }
-    expect: {
-        eval("let a;");
-        console.log();
-    }
-    expect_stdout: SyntaxError("Block-scoped declarations (let, const, function, class) not yet supported outside strict mode")
-    node_version: "4"
 }

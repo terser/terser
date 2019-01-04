@@ -252,7 +252,6 @@ arguments_in_arrow_func_1: {
         "42 'bar' undefined 'bar' 42 false",
         "42 'bar' undefined 'bar' 42 false",
     ]
-    node_version: ">=6"
 }
 
 arguments_in_arrow_func_2: {
@@ -286,7 +285,6 @@ arguments_in_arrow_func_2: {
         "42 'bar' undefined 'bar' 42 false",
         "42 'bar' undefined 'bar' 42 false",
     ]
-    node_version: ">=6"
 }
 
 arguments_and_destructuring_1: {
@@ -305,7 +303,6 @@ arguments_and_destructuring_1: {
         }({ d: "Bar" });
     }
     expect_stdout: "foo Bar"
-    node_version: ">=6"
 }
 
 arguments_and_destructuring_2: {
@@ -324,7 +321,6 @@ arguments_and_destructuring_2: {
         }("baz", { d: "Bar" });
     }
     expect_stdout: "foo baz"
-    node_version: ">=6"
 }
 
 arguments_and_destructuring_3: {
@@ -343,7 +339,6 @@ arguments_and_destructuring_3: {
         }({ d: "Bar" }, "baz");
     }
     expect_stdout: "foo Bar"
-    node_version: ">=6"
 }
 
 duplicate_parameter_with_arguments: {

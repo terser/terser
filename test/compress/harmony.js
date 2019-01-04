@@ -621,7 +621,6 @@ issue_2028: {
         a.X().hello();
     }
     expect_stdout: "hello"
-    node_version: ">=6"
 }
 
 class_expression_statement: {
@@ -784,7 +783,6 @@ array_spread_of_sequence: {
         "[ 1 ]",
         "[ 1 ]",
     ]
-    node_version: ">=6"
 }
 
 object_spread_of_sequence: {
@@ -863,7 +861,6 @@ issue_2345: {
         "3-2-1",
         "3-2-1",
     ]
-    node_version: ">=6"
 }
 
 issue_2349: {
@@ -990,7 +987,6 @@ array_literal_with_spread_1: {
         console.log(f([ "PASS" ]));
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 array_literal_with_spread_2a: {
@@ -1025,7 +1021,6 @@ array_literal_with_spread_2a: {
         "50",
         "undefined",
     ]
-    node_version: ">=6"
 }
 
 array_literal_with_spread_2b: {
@@ -1062,7 +1057,6 @@ array_literal_with_spread_2b: {
         "50",
         "undefined",
     ]
-    node_version: ">=6"
 }
 
 array_literal_with_spread_3a: {
@@ -1118,7 +1112,6 @@ array_literal_with_spread_3a: {
         "20",
         "undefined",
     ]
-    node_version: ">=6"
 }
 
 array_literal_with_spread_3b: {
@@ -1176,7 +1169,6 @@ array_literal_with_spread_3b: {
         "20",
         "undefined",
     ]
-    node_version: ">=6"
 }
 
 array_literal_with_spread_4a: {
@@ -1245,7 +1237,6 @@ array_literal_with_spread_4a: {
         "(1)", "(2)", "20",
         "(1)", "(2)", "undefined",
     ]
-    node_version: ">=6"
 }
 
 array_literal_with_spread_4b: {
@@ -1316,7 +1307,6 @@ array_literal_with_spread_4b: {
         "(1)", "(2)", "20",
         "(1)", "(2)", "undefined",
     ]
-    node_version: ">=6"
 }
 
 object_literal_method_using_arguments: {
@@ -1338,7 +1328,6 @@ object_literal_method_using_arguments: {
         }).m("PASS"));
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 class_method_using_arguments: {
@@ -1360,7 +1349,6 @@ class_method_using_arguments: {
         }().m("PASS"));
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2676: {
@@ -1454,7 +1442,6 @@ issue_2794_1: {
         "20",
         "30",
     ]
-    node_version: ">=6"
 }
 
 issue_2794_2: {
@@ -1503,7 +1490,6 @@ issue_2794_2: {
         "20",
         "30",
     ]
-    node_version: ">=6"
 }
 
 issue_2794_3: {
@@ -1547,7 +1533,6 @@ issue_2794_3: {
         "20",
         "30",
     ]
-    node_version: ">=6"
 }
 
 issue_2794_4: {
@@ -1562,7 +1547,6 @@ issue_2794_4: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_2794_5: {
@@ -1583,7 +1567,6 @@ issue_2794_5: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_2794_6: {
@@ -1602,7 +1585,6 @@ issue_2794_6: {
         "4",
         "5",
     ]
-    node_version: ">=6"
 }
 
 inline_arrow_using_arguments: {
@@ -1633,7 +1615,6 @@ inline_arrow_using_arguments: {
         "3 2 1",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_2874_1: {
@@ -1675,7 +1656,6 @@ issue_2874_1: {
         "B1",
         "A0",
     ]
-    node_version: ">=6"
 }
 
 issue_2874_2: {
@@ -1722,7 +1702,6 @@ issue_2874_2: {
         "B1",
         "A0",
     ]
-    node_version: ">=6"
 }
 
 issue_2874_3: {
@@ -1764,7 +1743,6 @@ issue_2874_3: {
         "A1",
         "A2",
     ]
-    node_version: ">=6"
 }
 
 issue_3061: {
@@ -1788,7 +1766,6 @@ issue_3061: {
         }(Error)){}() instanceof Error);
     }
     expect_stdout: "true"
-    node_version: ">=6"
 }
 
 module_enables_strict_mode: {
@@ -1862,7 +1839,6 @@ issue_3028: {
         console.log(a([ 1, 2, 3 ]).join(" "));
     }
     expect_stdout: "3 1 2"
-    node_version: ">=6"
 }
 
 issue_t80: {
@@ -1888,5 +1864,4 @@ issue_t80: {
         console.log(JSON.stringify([foo(), foo(null), foo(5, 6)]));
     }
     expect_stdout: "[[],[null],5]"
-    node_version: ">=6"
 }

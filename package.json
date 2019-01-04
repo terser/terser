@@ -30,29 +30,30 @@
   "dependencies": {
     "commander": "~2.17.1",
     "source-map": "~0.6.1",
-    "source-map-support": "~0.5.6"
+    "source-map-support": "~0.5.9"
   },
   "devDependencies": {
     "acorn": "^6.0.4",
     "coveralls": "^3.0.2",
-    "csv": "^5.0.0",
+    "cross-env": "^5.2.0",
+    "csv": "^5.1.0",
     "es6-promise": "^4.2.5",
-    "escodegen": "^1.9.1",
+    "escodegen": "^1.11.0",
     "eslint": "^4.19.1",
     "eslump": "^2.0.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.0.0",
-    "mochallel": "^1.8.2",
+    "mocha": "^5.2.0",
     "pre-commit": "^1.2.2",
-    "semver": "~5.5.0"
+    "rimraf": "^2.6.2",
+    "semver": "~5.5.1"
   },
   "scripts": {
-    "test": "rm -f dist/* && npm run prepare && istanbul instrument dist/bundle.js > dist/bundle.instrumented.js && node test/run-tests.js",
+    "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.js > dist/bundle.instrumented.js && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepare": "cd dist && TERSER_NO_BUNDLE=1 ../bin/uglifyjs ../tools/domprops.js ../lib/utils.js ../lib/ast.js ../lib/parse.js ../lib/transform.js ../lib/scope.js ../lib/output.js ../lib/compress.js ../lib/sourcemap.js ../lib/mozilla-ast.js ../lib/propmangle.js ../lib/minify.js ../tools/exports.js -mc -d \"MOZ_SourceMap=require('source-map')\" --source-map \"includeSources=true,url='bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b beautify=false,ascii_only --comments /license/ -o ../dist/bundle.js"
+    "prepare": "cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs ../tools/domprops.js ../lib/utils.js ../lib/ast.js ../lib/parse.js ../lib/transform.js ../lib/scope.js ../lib/output.js ../lib/compress.js ../lib/sourcemap.js ../lib/mozilla-ast.js ../lib/propmangle.js ../lib/minify.js ../tools/exports.js -mc -d \"MOZ_SourceMap=require(\\'source-map\\')\" --source-map \"includeSources=true,url='bundle.js.map'\" -e \"exports:(typeof module != 'undefined' ? module.exports : Terser = {})\" -b beautify=false,ascii_only --comments /license/ -o ../dist/bundle.js"
   },
   "keywords": [
     "uglify",

@@ -2,10 +2,11 @@ var fs = require("fs");
 var path = require("path");
 
 // Instantiate a Mocha instance
-var mocha = new (process.env.TRAVIS ? require("mocha") : require("mochallel"))({
+var Mocha = require("mocha");
+var mocha = new Mocha({
     timeout: 5000
 });
-var testDir = __dirname + "/mocha/";
+var testDir = path.join(__dirname, "mocha");
 
 // Add each .js file to the Mocha instance
 fs.readdirSync(testDir).filter(function(file) {

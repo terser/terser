@@ -211,7 +211,6 @@ hoist_funs: {
         "5 'function' 'function'",
         "6 'function' 'function'",
     ]
-    node_version: ">=6"
 }
 
 hoist_funs_strict: {
@@ -1000,7 +999,6 @@ unsafe_apply_expansion_1: {
         console.log.call(console, 1, 2, 3, 4);
     }
     expect_stdout: "1 2 3 4"
-    node_version: ">=6"
 }
 
 unsafe_apply_expansion_2: {
@@ -1016,7 +1014,6 @@ unsafe_apply_expansion_2: {
         console.log.call(console, 1, ...values, 4);
     }
     expect_stdout: "1 2 3 4"
-    node_version: ">=6"
 }
 
 unsafe_call_1: {
@@ -1113,7 +1110,6 @@ unsafe_call_expansion_1: {
         })(1, 2, 3, 4);
     }
     expect_stdout: "1 2 3 4"
-    node_version: ">=6"
 }
 
 unsafe_call_expansion_2: {
@@ -1134,7 +1130,6 @@ unsafe_call_expansion_2: {
         })(1, ...values, 4);
     }
     expect_stdout: "1 2 3 4"
-    node_version: ">=6"
 }
 
 issue_2616: {
@@ -1532,7 +1527,6 @@ issue_2647_1: {
         "PASS",
         "PASS",
     ]
-    node_version: ">=6"
 }
 
 issue_2647_2: {
@@ -2628,7 +2622,6 @@ drop_lone_use_strict_arrows_1: {
             var f3 = () => {};
         };
     }
-    node_version: ">=6"
 }
 
 drop_lone_use_strict_arrows_2: {
@@ -2659,7 +2652,6 @@ drop_lone_use_strict_arrows_2: {
         let f1 = () => {};
         let f2 = () => {};
     }
-    node_version: ">=6"
 }
 
 issue_t131a: {

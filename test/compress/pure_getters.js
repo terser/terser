@@ -784,7 +784,6 @@ issue_2313_7: {
         new bar().d();
     }
     expect_stdout: "2 1"
-    node_version: ">=6"
 }
 
 issue_2678: {

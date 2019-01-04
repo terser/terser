@@ -423,7 +423,6 @@ hoist_class: {
         };
         console.log(o_p.name, true, run(o_p, 1), run(o_p, 2));
     }
-    node_version: ">=6"
     expect_stdout: "Foo true 10 20"
 }
 
@@ -461,7 +460,6 @@ hoist_class_with_new: {
         };
         console.log(o_p.name, true, new o_p(1).value, new o_p(2).value);
     }
-    node_version: ">=6"
     expect_stdout: "Foo true 10 20"
 }
 
@@ -878,7 +876,6 @@ toplevel_let: {
         console.log(a.b + a.c);
     }
     expect_stdout: "3"
-    node_version: ">=6"
 }
 
 toplevel_var: {

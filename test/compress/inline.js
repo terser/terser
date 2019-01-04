@@ -29,7 +29,6 @@ inline_within_extends_1: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 inline_within_extends_2: {
@@ -93,5 +92,4 @@ inline_within_extends_2: {
         }(1, "PASS", 3).second());
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }

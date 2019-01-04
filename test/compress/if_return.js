@@ -352,7 +352,6 @@ issue_1317: {
         }();
     }
     expect_stdout: "1"
-    node_version: ">=6"
 }
 
 issue_1317_strict: {

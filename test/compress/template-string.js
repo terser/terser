@@ -567,7 +567,6 @@ baz`;
         "bar undefined undefined ",
         "fin",
     ]
-    node_version: ">=6"
 }
 
 tagged_template_with_invalid_escape: {

@@ -26,7 +26,6 @@ valid_template_string_example: {
         console.log("foo 123 bar");
     }
     expect_stdout: "foo 123 bar"
-    node_version: ">=6"
 }
 
 invalid_template_string_example: {

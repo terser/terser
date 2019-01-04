@@ -59,7 +59,6 @@ dead_code_2_should_warn: {
         f();
     }
     expect_stdout: true
-    node_version: ">=6"
     reminify: false // FIXME - block scoped function
 }
 
@@ -135,7 +134,6 @@ dead_code_constant_boolean_should_warn_more: {
         bar();
     }
     expect_stdout: true
-    node_version: ">=6"
     reminify: false // FIXME - block scoped function
 }
 
@@ -613,7 +611,6 @@ issue_2383_2: {
         console.log(x, q, w, z);
     }
     expect_stdout: "undefined undefined undefined undefined"
-    node_version: ">=6"
 }
 
 issue_2383_3: {
@@ -636,7 +633,6 @@ issue_2383_3: {
         console.log(a, x, y, z, b);
     }
     expect_stdout: "undefined undefined 8 undefined 7"
-    node_version: ">=6"
 }
 
 collapse_vars_assignment: {

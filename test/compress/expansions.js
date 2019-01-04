@@ -67,5 +67,4 @@ avoid_spread_in_ternary: {
         "1 2",
         "3 4",
     ]
-    node_version: ">=6"
 }

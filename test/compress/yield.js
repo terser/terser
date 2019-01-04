@@ -276,5 +276,4 @@ issue_t60: {
         console.log(g.next().value, g.next().value);
     }
     expect_stdout: "1 2"
-    node_version: ">=6"
 }

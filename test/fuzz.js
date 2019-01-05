@@ -7,7 +7,6 @@ var minify = require("..").minify;
 var known_terser_errors = new RegExp([
   "Cannot negate a statement",
   "Cannot read property 'references' of undefined",
-  "Cannot read property 'type' of null",
   "Cannot read property 'value' of undefined",
   "Octal escape sequences are not allowed in template strings",
   "Parameter .* was used already",

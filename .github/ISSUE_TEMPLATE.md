@@ -11,7 +11,7 @@ https://www.patreon.com/terser_jscomp_maintainer
 
 **Complete CLI command or `minify()` options used**
 
-<!-- Note: if you used the API, you're expected to enable the source-map-support module. -->
+<!-- Note: if you used the API, you're expected to enable the source-map-support module and to add the TERSER_NO_BUNDLE=1 environment variable. -->
 
 **`terser` input**
 

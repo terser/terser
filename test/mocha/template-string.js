@@ -39,4 +39,9 @@ describe("Template string", function() {
             assert.strictEqual(uglify.parse(code).print_to_string(), "`a\\nb`;");
         });
     });
+    it("Should not throw on extraneous escape (#231)", function() {
+        assert.doesNotThrow(function() {
+            uglify.parse("`\\a`");
+        });
+    });
 });

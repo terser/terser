@@ -13,7 +13,6 @@ function run(command, args, done) {
     });
 }
 
-if (semver.satisfies(process.version, "4")) return;
 if (semver.satisfies(process.version, "6")) return;
 
 describe("test/benchmark.js", function() {

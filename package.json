@@ -54,7 +54,8 @@
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepare": "rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js"
+    "prepare": "rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js",
+    "postversion": "echo 'Remember to update the changelog!'"
   },
   "keywords": [
     "uglify",

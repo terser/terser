@@ -26,6 +26,22 @@ function get_map() {
     };
 }
 
+function get_sections_map() {
+    return {
+        "version": 3,
+        "file": "bundle-outer.js",
+        "sections": [
+            {
+                "offset": {
+                    "line": 0,
+                    "column": 0
+                },
+                "map": get_map()
+            }
+        ]
+    };
+}
+
 function prepare_map(sourceMap) {
     var code = [
         '"use strict";',
@@ -223,6 +239,11 @@ describe("sourcemaps", function() {
             var orig = get_map();
             var map = prepare_map(orig);
             assert.equal(map.sourceContentFor("index.js"), orig.sourcesContent[0]);
+        });
+        it("Should copy over original sourcesContent for section sourcemaps", function() {
+            var orig = get_sections_map();
+            var map = prepare_map(orig);
+            assert.equal(map.sourceContentFor("index.js"), orig.sections[0].map.sourcesContent[0]);
         });
         it("Should copy sourcesContent if sources are relative", function() {
             var relativeMap = get_map();

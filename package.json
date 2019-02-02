@@ -24,7 +24,10 @@
     "dist",
     "!dist/bundle.instrumented.js",
     "tools",
-    "LICENSE"
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "PATRONS.md"
   ],
   "dependencies": {
     "commander": "~2.17.1",

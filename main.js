@@ -38,3 +38,8 @@ export {
     tokenizer,
 } from "./lib/parse.js";
 export { to_ascii } from "./lib/minify.js";
+
+// Also re-export everything as default export to keep compatibility with existing CommonJS tooling.
+// See https://github.com/terser-js/terser/issues/251 for more info.
+import * as terser from './main';
+export default terser;

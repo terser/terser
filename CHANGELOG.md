@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.16.0
+
+ - No longer leaves names like Array or Object or window as a SimpleStatement (statement which is just a single expression).
+ - Add support for sections sourcemaps (IndexedSourceMapConsumer)
+ - Drops node.js v4 and starts using commonJS
+ - Is now built with rollup
+
 ## v3.15.0
 
  - Inlined spread syntax (`[...[1, 2, 3], 4, 5] => [1, 2, 3, 4, 5]`) in arrays and objects.

@@ -1457,8 +1457,6 @@ empty_object_destructuring_3: {
         const bar = "bar", {prop: C1, C2 = console.log("side effect"), C3} = Object;
     }
     expect: {
-        Object;
-        Object;
         const {C2: C2 = console.log("side effect")} = Object;
     }
     expect_stdout: "side effect"

@@ -1282,7 +1282,6 @@ issue_2994: {
         "2",
         "2",
     ]
-    node_version: ">=6"
 }
 
 hoist_decl: {

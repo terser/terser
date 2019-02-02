@@ -656,7 +656,6 @@ issue_t50_let: {
         console.log(-1, -10);
     }
     expect_stdout: "-1 -10"
-    node_version: ">=6"
 }
 
 issue_t50_const: {
@@ -699,5 +698,4 @@ issue_t50_const: {
         console.log(-1, -10);
     }
     expect_stdout: "-1 -10"
-    node_version: ">=6"
 }

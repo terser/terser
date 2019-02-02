@@ -3105,7 +3105,6 @@ method_1: {
         }().a(), a);
     }
     expect_stdout: "2 2"
-    node_version: ">=6"
 }
 
 method_2: {
@@ -3134,7 +3133,6 @@ method_2: {
         }().c();
     }
     expect_stdout: "1"
-    node_version: ">=6"
 }
 
 issue_2090_1: {
@@ -4946,7 +4944,6 @@ issue_2496: {
         }("FAIL").run();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2416: {
@@ -4964,7 +4961,6 @@ issue_2416: {
         console.log((class Foo {}).name);
     }
     expect_stdout: "Foo"
-    node_version: ">=6"
 }
 
 issue_2455: {
@@ -5349,7 +5345,6 @@ escape_expansion: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 inverted_var: {
@@ -5506,7 +5501,6 @@ issue_2669: {
         console.log(([ foo ] = [ "PASS" ]) && foo);
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2670: {
@@ -5528,7 +5522,6 @@ issue_2670: {
         console.log(value);
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 var_if: {
@@ -5862,7 +5855,6 @@ issue_2757_1: {
         console.log(u, void 0);
     }
     expect_stdout: "undefined undefined"
-    node_version: ">=6"
 }
 
 issue_2757_2: {
@@ -5896,7 +5888,6 @@ issue_2757_2: {
         "1",
         "2",
     ]
-    node_version: ">=6"
 }
 
 issue_2774: {
@@ -7095,7 +7086,6 @@ single_use_class_referenced_in_array: {
         })();
     }
     expect_stdout: "true 123"
-    node_version: ">=6"
 }
 
 single_use_class_referenced_in_object_literal: {
@@ -7119,5 +7109,4 @@ single_use_class_referenced_in_object_literal: {
         })();
     }
     expect_stdout: "true 123"
-    node_version: ">=6"
 }

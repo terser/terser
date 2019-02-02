@@ -98,29 +98,27 @@ describe("Unicode", function() {
         assert.strictEqual(ast.print_to_string(), 'console.log("\\udbff");');
     });
 
-    if (semver.satisfies(process.version, ">=4")) {
-        it("Should not unescape unpaired surrogates", function() {
-            this.timeout(20000);
-            var code = [];
-            for (var i = 0; i <= 0x20001; i++) {
-                code.push("\\u{" + i.toString(16) + "}");
-            }
-            code = '"' + code.join() + '"';
-            [true, false].forEach(function(ascii_only) {
-                [5, 6].forEach(function(ecma) {
-                    var result = uglify.minify(code, {
-                        compress: false,
-                        mangle: false,
-                        output: {
-                            ascii_only: ascii_only
-                        },
-                        ecma: ecma
-                    });
-                    if (result.error) throw result.error;
-                    if (ecma > 5) assert.ok(code.length > result.code.length);
-                    assert.strictEqual(eval(code), eval(result.code));
+    it("Should not unescape unpaired surrogates", function() {
+        this.timeout(20000);
+        var code = [];
+        for (var i = 0; i <= 0x20001; i++) {
+            code.push("\\u{" + i.toString(16) + "}");
+        }
+        code = '"' + code.join() + '"';
+        [true, false].forEach(function(ascii_only) {
+            [5, 6].forEach(function(ecma) {
+                var result = uglify.minify(code, {
+                    compress: false,
+                    mangle: false,
+                    output: {
+                        ascii_only: ascii_only
+                    },
+                    ecma: ecma
                 });
+                if (result.error) throw result.error;
+                if (ecma > 5) assert.ok(code.length > result.code.length);
+                assert.strictEqual(eval(code), eval(result.code));
             });
         });
-    }
+    });
 });

@@ -184,7 +184,6 @@ convert_computed_props_to_regular_ones: {
         "Infinity 10",
         "NaN 11",
     ]
-    node_version: ">=6"
 }
 
 computed_property_names_evaluated_1: {
@@ -600,7 +599,6 @@ prop_func_to_concise_method: {
         }).run();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 prop_arrow_to_concise_method: {
@@ -623,7 +621,6 @@ prop_arrow_to_concise_method: {
         }).run();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 concise_method_to_prop_arrow: {
@@ -892,7 +889,6 @@ issue_2554_2: {
         console.log(instance.g);
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2554_3: {
@@ -977,7 +973,6 @@ issue_2554_4: {
         console.log(bar[3]);
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2554_5: {
@@ -1006,7 +1001,6 @@ issue_2554_5: {
         }();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 dont_join_repeat_object_keys: {

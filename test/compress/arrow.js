@@ -167,7 +167,6 @@ arrow_unused: {
         fn(3);
     }
     expect_stdout: [ "0", "1", "2", "9" ]
-    node_version: ">=6"
 }
 
 arrow_unused_toplevel: {
@@ -200,7 +199,6 @@ arrow_unused_toplevel: {
         fn(3);
     }
     expect_stdout: [ "0", "1", "2", "9" ]
-    node_version: ">=6"
 }
 
 no_leading_parentheses: {
@@ -363,7 +361,6 @@ issue_2105_2: {
         }).prop();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_2136_2: {
@@ -390,7 +387,6 @@ issue_2136_2: {
         f([2,3][0]);
     }
     expect_stdout: "2"
-    node_version: ">=6"
 }
 
 issue_2136_3: {
@@ -420,7 +416,6 @@ issue_2136_3: {
         console.log(2);
     }
     expect_stdout: "2"
-    node_version: ">=6"
 }
 
 call_args: {
@@ -669,7 +664,6 @@ issue_3092a: {
         }.gen("pass").next().value);
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_3092b: {

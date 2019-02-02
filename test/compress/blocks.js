@@ -74,7 +74,6 @@ issue_1664: {
         console.log(a);
     }
     expect_stdout: "1"
-    node_version: ">=6"
     reminify: false // FIXME - block scoped function
 }
 
@@ -102,7 +101,6 @@ issue_1672_for: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 issue_1672_for_strict: {
@@ -131,7 +129,6 @@ issue_1672_for_strict: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 issue_1672_if: {
@@ -156,7 +153,6 @@ issue_1672_if: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 issue_1672_if_strict: {
@@ -185,7 +181,6 @@ issue_1672_if_strict: {
         }
     }
     expect_stdout: true
-    node_version: ">=6"
 }
 
 issue_2946_else_const: {

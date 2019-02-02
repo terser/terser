@@ -345,7 +345,6 @@ destructuring_decl_of_numeric_key: {
         console.log(x);
     }
     expect_stdout: "42"
-    node_version: ">=6"
 }
 
 destructuring_decl_of_computed_key: {
@@ -364,7 +363,6 @@ destructuring_decl_of_computed_key: {
         console.log(x);
     }
     expect_stdout: "42"
-    node_version: ">=6"
 }
 
 destructuring_assign_of_numeric_key: {
@@ -383,7 +381,6 @@ destructuring_assign_of_numeric_key: {
         console.log(x);
     }
     expect_stdout: "42"
-    node_version: ">=6"
 }
 
 destructuring_assign_of_computed_key: {
@@ -404,7 +401,6 @@ destructuring_assign_of_computed_key: {
         console.log(x);
     }
     expect_stdout: "42"
-    node_version: ">=6"
 }
 
 mangle_destructuring_decl: {
@@ -436,7 +432,6 @@ mangle_destructuring_decl: {
         "1 2 3 4 5 6",
         "undefined 7 8 9 undefined undefined",
     ]
-    node_version: ">=6"
 }
 
 mangle_destructuring_decl_collapse_vars: {
@@ -469,7 +464,6 @@ mangle_destructuring_decl_collapse_vars: {
         "1 2 3 4 5 6",
         "undefined 7 8 9 undefined undefined",
     ]
-    node_version: ">=6"
 }
 
 mangle_destructuring_assign_toplevel_true: {
@@ -510,7 +504,6 @@ mangle_destructuring_assign_toplevel_true: {
         "1 2 3 4 5 6",
         "undefined 7 8 9 undefined undefined",
     ]
-    node_version: ">=6"
 }
 
 mangle_destructuring_assign_toplevel_false: {
@@ -551,7 +544,6 @@ mangle_destructuring_assign_toplevel_false: {
         "1 2 3 4 5 6",
         "undefined 7 8 9 undefined undefined",
     ]
-    node_version: ">=6"
 }
 
 mangle_destructuring_decl_array: {
@@ -575,7 +567,6 @@ mangle_destructuring_decl_array: {
         console.log(o, l, a, c, e, g);
     }
     expect_stdout: "8 7 6 undefined 2 [ 3 ]"
-    node_version: ">=6"
 }
 
 anon_func_with_destructuring_args: {
@@ -601,7 +592,6 @@ anon_func_with_destructuring_args: {
         })({bar: 5}, [, 6]);
     }
     expect_stdout: "1 5 3 6"
-    node_version: ">=6"
 }
 
 arrow_func_with_destructuring_args: {
@@ -627,7 +617,6 @@ arrow_func_with_destructuring_args: {
         })({bar: 5}, [, 6]);
     }
     expect_stdout: "1 5 3 6"
-    node_version: ">=6"
 }
 
 issue_2044_ecma_5: {
@@ -691,7 +680,6 @@ issue_2140: {
         }();
     }
     expect_stdout: "42"
-    node_version: ">=6"
 }
 
 issue_3205_1: {
@@ -721,7 +709,6 @@ issue_3205_1: {
         f({ b: 2, c: 3 });
     }
     expect_stdout: "2 3"
-    node_version: ">=6"
 }
 
 issue_3205_2: {
@@ -749,7 +736,6 @@ issue_3205_2: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_3205_3: {
@@ -775,7 +761,6 @@ issue_3205_3: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_3205_4: {
@@ -803,7 +788,6 @@ issue_3205_4: {
         })();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 issue_3205_5: {
@@ -832,7 +816,6 @@ issue_3205_5: {
         }();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 unused_destructuring_decl_1: {
@@ -853,7 +836,6 @@ unused_destructuring_decl_1: {
         console.log(L, V);
     }
     expect_stdout: "2 3"
-    node_version: ">=6"
 }
 
 unused_destructuring_decl_2: {
@@ -875,7 +857,6 @@ unused_destructuring_decl_2: {
         console.log(c, e, z + 0);
     }
     expect_stdout: "7 8 3"
-    node_version: ">=6"
 }
 
 unused_destructuring_decl_3: {
@@ -897,7 +878,6 @@ unused_destructuring_decl_3: {
         console.log(c, e, z + 0);
     }
     expect_stdout: "7 8 3"
-    node_version: ">=6"
 }
 
 unused_destructuring_decl_4: {
@@ -919,7 +899,6 @@ unused_destructuring_decl_4: {
         console.log(c, e, z + 0);
     }
     expect_stdout: "7 8 3"
-    node_version: ">=6"
 }
 
 unused_destructuring_decl_5: {
@@ -942,7 +921,6 @@ unused_destructuring_decl_5: {
         console.log(c, e, z + 0);
     }
     expect_stdout: "7 8 3"
-    node_version: ">=6"
 }
 
 unused_destructuring_function_param: {
@@ -966,7 +944,6 @@ unused_destructuring_function_param: {
         "side effect",
         "1",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_arrow_param: {
@@ -990,7 +967,6 @@ unused_destructuring_arrow_param: {
         "side effect",
         "4",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_object_method_param: {
@@ -1016,7 +992,6 @@ unused_destructuring_object_method_param: {
         "side effect",
         "7",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_class_method_param: {
@@ -1042,7 +1017,6 @@ unused_destructuring_class_method_param: {
         "side effect",
         "7",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_getter_side_effect_1: {
@@ -1085,7 +1059,6 @@ unused_destructuring_getter_side_effect_1: {
         "side effect",
         "4",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_getter_side_effect_2: {
@@ -1157,7 +1130,6 @@ unused_destructuring_assign_1: {
         "2",
         "4",
     ]
-    node_version: ">=6"
 }
 
 unused_destructuring_assign_2: {
@@ -1204,7 +1176,6 @@ unused_destructuring_assign_2: {
         "side effect",
         "4",
     ]
-    node_version: ">=6"
 }
 
 export_unreferenced_declarations_1: {
@@ -1281,7 +1252,6 @@ unused_destructuring_declaration_complex_1: {
         console.log(x, z);
     }
     expect_stdout: "4 5"
-    node_version: ">=6"
 }
 
 unused_destructuring_declaration_complex_2: {
@@ -1299,7 +1269,6 @@ unused_destructuring_declaration_complex_2: {
         console.log(x, z);
     }
     expect_stdout: "4 5"
-    node_version: ">=6"
 }
 
 unused_destructuring_multipass: {
@@ -1324,7 +1293,6 @@ unused_destructuring_multipass: {
         console.log(y);
     }
     expect_stdout: "1"
-    node_version: ">=6"
 }
 
 issue_t111_1: {
@@ -1342,7 +1310,6 @@ issue_t111_1: {
         "1",
         "2",
     ]
-    node_version: ">=6"
 }
 
 issue_t111_2a: {
@@ -1363,7 +1330,6 @@ issue_t111_2a: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_t111_2b: {
@@ -1384,7 +1350,6 @@ issue_t111_2b: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_t111_2c: {
@@ -1405,7 +1370,6 @@ issue_t111_2c: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_t111_3: {
@@ -1425,7 +1389,6 @@ issue_t111_3: {
         "3",
         "4",
     ]
-    node_version: ">=6"
 }
 
 issue_t111_4: {
@@ -1442,7 +1405,6 @@ issue_t111_4: {
         p(`${length} ${x}`);
     }
     expect_stdout: "1 2"
-    node_version: ">=6"
 }
 
 empty_object_destructuring_1: {
@@ -1462,7 +1424,6 @@ empty_object_destructuring_1: {
         const {prop: C1, C2: C2 = console.log("side effect"), C3: C3} = Object;
     }
     expect_stdout: "side effect"
-    node_version: ">=6"
 }
 
 empty_object_destructuring_2: {
@@ -1482,7 +1443,6 @@ empty_object_destructuring_2: {
         const {prop: C1, C2: C2 = console.log("side effect"), C3: C3} = Object;
     }
     expect_stdout: "side effect"
-    node_version: ">=6"
 }
 
 empty_object_destructuring_3: {
@@ -1502,7 +1462,6 @@ empty_object_destructuring_3: {
         const {C2: C2 = console.log("side effect")} = Object;
     }
     expect_stdout: "side effect"
-    node_version: ">=6"
 }
 
 empty_object_destructuring_4: {
@@ -1521,7 +1480,6 @@ empty_object_destructuring_4: {
         const {C2: C2 = console.log("side effect")} = Object;
     }
     expect_stdout: "side effect"
-    node_version: ">=6"
 }
 
 empty_object_destructuring_misc: {
@@ -1549,7 +1507,6 @@ empty_object_destructuring_misc: {
         console.log(`${foo} ${prop} ${baz} ${JSON.stringify(out)}`);
     }
     expect_stdout: "1 8 5 [0,2,3,4]"
-    node_version: ">=6"
 }
 
 destructure_empty_array_1: {
@@ -1567,7 +1524,6 @@ destructure_empty_array_1: {
         console.log("not reached");
     }
     expect_stdout: true // TypeError: {} is not iterable
-    node_version: ">=6"
 }
 
 destructure_empty_array_2: {
@@ -1585,7 +1541,6 @@ destructure_empty_array_2: {
         console.log("not reached");
     }
     expect_stdout: true // TypeError: {} is not iterable
-    node_version: ">=6"
 }
 
 destructure_empty_array_3: {
@@ -1603,5 +1558,4 @@ destructure_empty_array_3: {
         console.log("not reached");
     }
     expect_stdout: true // TypeError: {} is not iterable
-    node_version: ">=6"
 }

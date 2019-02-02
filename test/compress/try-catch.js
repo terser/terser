@@ -46,7 +46,6 @@ broken_safari_catch_scope: {
         }().f();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 broken_safari_catch_scope_caveat: {
@@ -91,7 +90,6 @@ broken_safari_catch_scope_caveat: {
         }().f();
     }
     expect_stdout: "PASS"
-    node_version: ">=6"
 }
 
 parameterless_catch: {

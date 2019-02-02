@@ -693,7 +693,6 @@ issue_2740_6: {
         console.log(a, b);
     }
     expect_stdout: "9 0"
-    node_version: ">=6"
 }
 
 issue_2740_7: {
@@ -715,7 +714,6 @@ issue_2740_7: {
         console.log(a, b);
     }
     expect_stdout: "9 0"
-    node_version: ">=6"
 }
 
 issue_2740_8: {
@@ -737,7 +735,6 @@ issue_2740_8: {
         console.log(a, b);
     }
     expect_stdout: "9 0"
-    node_version: ">=6"
 }
 
 issue_2904: {

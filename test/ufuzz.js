@@ -8,7 +8,7 @@
 
 require("../tools/exit");
 
-var UglifyJS = require("..");
+var UglifyJS = require("../tools/node.js");
 var randomBytes = require("crypto").randomBytes;
 var sandbox = require("./sandbox");
 

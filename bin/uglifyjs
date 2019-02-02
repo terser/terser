@@ -10,15 +10,13 @@ var info = require("../package.json");
 var path = require("path");
 var program = require("commander");
 
-var bundle_path = __dirname + "/../dist/bundle.js";
-if (!process.env.TERSER_NO_BUNDLE && fs.existsSync(bundle_path)) {
-    var UglifyJS = require(bundle_path)
-    try {
-        require("source-map-support").install();
-    } catch (err) {}
-} else {
-    var UglifyJS = require("../tools/node.js");
-}
+var bundle_path = __dirname + (process.env.TERSER_NO_BUNDLE ?
+    "/../dist/bundle.js" :
+    "/../dist/bundle.min.js");
+var UglifyJS = require(bundle_path);
+try {
+    require("source-map-support").install();
+} catch (err) {}
 
 var skip_keys = [ "cname", "inlined", "parent_scope", "scope", "uses_eval", "uses_with" ];
 var files = {};

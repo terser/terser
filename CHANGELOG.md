@@ -2,7 +2,7 @@
 
 ## v3.16.1
 
- - Fixed issue where Terser being imported with `import` would cause it not to work due to the `__esModule` property.
+ - Fixed issue where Terser being imported with `import` would cause it not to work due to the `__esModule` property. (PR #254 was submitted, which was nice, but since it wasn't a pure commonJS approach I decided to go with my own solution)
 
 ## v3.16.0
 

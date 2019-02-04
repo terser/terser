@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.16.1
+
+ - Fixed issue where Terser being imported with `import` would cause it not to work due to the `__esModule` property.
+
 ## v3.16.0
 
  - No longer leaves names like Array or Object or window as a SimpleStatement (statement which is just a single expression).

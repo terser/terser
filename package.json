@@ -83,6 +83,12 @@
     "parserOptions": {
       "sourceType": "module"
     },
+    "globals": {
+      "describe": false,
+      "it": false,
+      "require": false,
+      "global": false
+    },
     "rules": {
       "brace-style": [
         "error",

@@ -8,6 +8,7 @@ export default {
         },
         name: "Terser",
         sourcemap: true,
+        esModule: false,
     },
     external: "source-map",
 };

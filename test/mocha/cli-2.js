@@ -159,4 +159,12 @@ describe("bin/uglifyjs (2)", function() {
             done();
         });
     });
-})
+    it("should read files list from config file", (done) => {
+        var command = uglifyjscmd + " --config-file test/input/config-file/cf.json";
+        exec(command, function(err, stdout, stderr) {
+            if (err) throw err;
+            assert.strictEqual(stdout, 'console.log("First"),console.log("Second");\n');
+            done();
+        });
+    });
+});

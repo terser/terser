@@ -160,8 +160,18 @@ if (program.verbose) {
 } else if (program.warn) {
     options.warnings = true;
 }
-if (program.args.length) {
-    simple_glob(program.args).forEach(function(name) {
+
+let filesList;
+if (options.files && options.files.length) {
+    filesList = options.files;
+
+    delete options.files;
+} else if (program.args.length) {
+    filesList = program.args;
+}
+
+if (filesList) {
+    simple_glob(filesList).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });
     run();

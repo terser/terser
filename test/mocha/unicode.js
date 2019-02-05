@@ -1,5 +1,4 @@
 var assert = require("assert");
-var semver = require("semver");
 var uglify = require("../node");
 
 describe("Unicode", function() {

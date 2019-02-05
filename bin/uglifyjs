@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // -*- js -*-
+/* eslint-env node */
 
 "use strict";
 
@@ -32,7 +33,7 @@ else if (process.argv.indexOf("options") >= 0) program.helpInformation = functio
     var text = [];
     var options = UglifyJS.default_options();
     for (var option in options) {
-        text.push("--" + (option == "output" ? "beautify" : option == "sourceMap" ? "source-map" : option) + " options:");
+        text.push("--" + (option === "output" ? "beautify" : option === "sourceMap" ? "source-map" : option) + " options:");
         text.push(format_object(options[option]));
         text.push("");
     }
@@ -307,7 +308,7 @@ function run() {
 }
 
 function fatal(message) {
-    if (message instanceof Error) message = message.stack.replace(/^\S*?Error:/, "ERROR:")
+    if (message instanceof Error) message = message.stack.replace(/^\S*?Error:/, "ERROR:");
     print_error(message);
     process.exit(1);
 }
@@ -400,7 +401,7 @@ function parse_js(flag) {
             }
         }
         return options;
-    }
+    };
 }
 
 function parse_source_map() {
@@ -413,7 +414,7 @@ function parse_source_map() {
             settings.content = read_file(settings.content, settings.content);
         }
         return settings;
-    }
+    };
 }
 
 function skip_key(key) {
@@ -452,13 +453,13 @@ function describe_ast() {
     var out = UglifyJS.OutputStream({ beautify: true });
     function doitem(ctor) {
         out.print("AST_" + ctor.TYPE);
-        var props = ctor.SELF_PROPS.filter(function(prop){
+        var props = ctor.SELF_PROPS.filter(function(prop) {
             return !/^\$/.test(prop);
         });
         if (props.length > 0) {
             out.space();
-            out.with_parens(function(){
-                props.forEach(function(prop, i){
+            out.with_parens(function() {
+                props.forEach(function(prop, i) {
                     if (i) out.space();
                     out.print(prop);
                 });
@@ -470,15 +471,15 @@ function describe_ast() {
         }
         if (ctor.SUBCLASSES.length > 0) {
             out.space();
-            out.with_block(function(){
-                ctor.SUBCLASSES.forEach(function(ctor, i){
+            out.with_block(function() {
+                ctor.SUBCLASSES.forEach(function(ctor, i) {
                     out.indent();
                     doitem(ctor);
                     out.newline();
                 });
             });
         }
-    };
+    }
     doitem(UglifyJS.AST_Node);
     return out + "\n";
 }

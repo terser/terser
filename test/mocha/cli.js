@@ -1,7 +1,6 @@
 var assert = require("assert");
 var exec = require("child_process").exec;
 var readFileSync = require("fs").readFileSync;
-var semver = require("semver");
 
 function read(path) {
     return readFileSync(path, "utf8");

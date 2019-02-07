@@ -187,3 +187,73 @@ switch_block_scope_mangler: {
         "6",
     ]
 }
+
+issue_241: {
+    input: {
+        var a = {};
+        (function (global) {
+            function fail(o) {
+                var result = {};
+
+                function inner() {
+                    return outer({
+                        one: o.one,
+                        two: o.two
+                    });
+                }
+
+                result.inner = function () {
+                    return inner();
+                };
+
+                return result;
+            }
+
+            function outer(o) {
+                var ret;
+
+                if (o) {
+                    ret = o.one;
+                } else {
+                    ret = o.two;
+                }
+
+                return ret;
+            }
+
+            global.fail = fail;
+        })(a);
+
+        var b = a.fail({});
+        b.inner();
+    }
+    expect: {
+        var a = {};
+
+        (function (global) {
+            function fail(o) {
+                var result = {};
+
+                function inner() {
+                    return outer({one: o.one, two: o.two});
+                }
+
+                result.inner = function () {
+                    return inner();
+                };
+                return result;
+            }
+
+            function outer(o) {
+                var ret;
+                if (o) ret = o.one; else ret = o.two;
+                return ret;
+            }
+
+            global.fail = fail;
+        })(a);
+
+        var b = a.fail({});
+        b.inner();
+    }
+}

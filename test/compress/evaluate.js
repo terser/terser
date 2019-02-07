@@ -1733,14 +1733,18 @@ issue_2968: {
     expect_stdout: "PASS"
 }
 
-issue_192: {
+global_hasOwnProperty: {
     options = {
         unsafe: true
     }
     input: {
         hasOwnProperty.call(a, b)
+        hasOwnProperty.call(a.b, b)
+        hasOwnProperty.call(a['b'], b)
     }
     expect: {
         hasOwnProperty.call(a, b)
+        hasOwnProperty.call(a.b, b)
+        hasOwnProperty.call(a['b'], b)
     }
 }

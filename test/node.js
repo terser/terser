@@ -1,1 +1,1 @@
-module.exports = require("../tools/node");
+module.exports = require("../dist/bundle");

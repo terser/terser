@@ -49,7 +49,7 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.2",
     "rollup": "^1.0.1",
-    "semver": "~5.5.1"
+    "semver": "~5.6.0"
   },
   "scripts": {
     "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",

@@ -413,7 +413,7 @@ function createStatements(n, recurmax, canThrow, canBreak, canContinue, cannotRe
 }
 
 function enableLoopControl(flag, defaultValue) {
-    return Array.isArray(flag) && flag.indexOf("") < 0 ? flag.concat("") : flag || defaultValue;
+    return Array.isArray(flag) && !flag.includes("") ? flag.concat("") : flag || defaultValue;
 }
 
 function createLabel(canBreak, canContinue) {
@@ -946,7 +946,7 @@ function createVarName(maybe, dontStore) {
         do {
             name = VAR_NAMES[rng(VAR_NAMES.length)];
             if (suffix) name += '_' + suffix;
-        } while (unique_vars.indexOf(name) >= 0);
+        } while (unique_vars.includes(name));
         if (suffix && !dontStore) VAR_NAMES.push(name);
         return name;
     }

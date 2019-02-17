@@ -98,7 +98,7 @@ describe("Yield", function() {
             return e instanceof UglifyJS.JS_Parse_Error && [
                 "Unexpected token: operator (=)",
                 "Yield cannot be used as identifier inside generators",
-            ].indexOf(e.message) >= 0;
+            ].includes(e.message);
         }
 
         function test(input) {

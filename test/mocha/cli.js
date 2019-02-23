@@ -120,26 +120,6 @@ describe("bin/uglifyjs", function() {
             done();
         });
     });
-    it("Should work with `--beautify`", function (done) {
-        var command = uglifyjscmd + ' test/input/issue-1482/input.js -b';
-
-        exec(command, function (err, stdout) {
-            if (err) throw err;
-
-            assert.strictEqual(stdout, read("test/input/issue-1482/default.js"));
-            done();
-        });
-    });
-    it("Should work with `--beautify braces`", function (done) {
-        var command = uglifyjscmd + ' test/input/issue-1482/input.js -b braces';
-
-        exec(command, function (err, stdout) {
-            if (err) throw err;
-
-            assert.strictEqual(stdout, read("test/input/issue-1482/braces.js"));
-            done();
-        });
-    });
     it("Should process inline source map", function(done) {
         var command = uglifyjscmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline";
 

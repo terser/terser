@@ -92,9 +92,6 @@ if ("ecma" in program) {
 }
 if (program.beautify) {
     options.output = typeof program.beautify == "object" ? program.beautify : {};
-    if (!("beautify" in options.output)) {
-        options.output.beautify = true;
-    }
 }
 if (program.comments) {
     if (typeof options.output != "object") options.output = {};

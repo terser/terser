@@ -239,7 +239,7 @@ to prevent the `require`, `exports` and `$` names from being changed.
 
 ### CLI mangling property names (`--mangle-props`)
 
-**Note:** THIS *MIGHT* BREAK YOUR CODE.  Mangling property names
+**Note:** THIS *WILL* BREAK YOUR CODE.  Mangling property names
 is a separate step, different from variable name mangling.  Pass
 `--mangle-props` to enable it.  It will mangle all properties in the
 input code with the exception of built in DOM properties and properties
@@ -500,8 +500,8 @@ if (result.error) throw result.error;
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to override `parse`,
-  `compress` and `output` options.
+- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to give it
+  to `parse`, `compress` and `output`.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
   in `result.warnings`. Use the value `"verbose"` for more detailed warnings.

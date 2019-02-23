@@ -189,9 +189,13 @@ switch_block_scope_mangler: {
 }
 
 issue_241: {
+    options = {
+        defaults: true,
+    }
     input: {
         var a = {};
-        (function (global) {
+
+        (function(global) {
             function fail(o) {
                 var result = {};
 
@@ -202,7 +206,7 @@ issue_241: {
                     });
                 }
 
-                result.inner = function () {
+                result.inner = function() {
                     return inner();
                 };
 
@@ -229,30 +233,16 @@ issue_241: {
     }
     expect: {
         var a = {};
-
-        (function (global) {
-            function fail(o) {
+        !function (global) {
+            a.fail = function (o) {
                 var result = {};
-
-                function inner() {
-                    return outer({one: o.one, two: o.two});
-                }
-
-                result.inner = function () {
-                    return inner();
-                };
-                return result;
-            }
-
-            function outer(o) {
-                var ret;
-                if (o) ret = o.one; else ret = o.two;
-                return ret;
-            }
-
-            global.fail = fail;
-        })(a);
-
+                return result.inner = function () {
+                    return function (o) {
+                        return o ? o.one : o.two;
+                    }({one: o.one, two: o.two});
+                }, result;
+            };
+        }();
         var b = a.fail({});
         b.inner();
     }

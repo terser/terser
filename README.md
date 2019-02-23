@@ -24,11 +24,6 @@ Why choose terser?
 **`terser`** is a fork of `uglify-es` that retains API and CLI compatibility
 with `uglify-es` and `uglify-js@3`.
 
-Shameless plug
---------------
-
-If you are start a project and want browser tests that are less expensive and faster than other similar services, check out [fasttest.io](http://fasttest.io/). It's free until the end of February.
-
 Install
 -------
 

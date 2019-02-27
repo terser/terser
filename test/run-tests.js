@@ -67,7 +67,7 @@ function find_test_files(dir) {
     if (process.argv.length > 2) {
         var x = process.argv.slice(2);
         files = files.filter(function(f){
-            return x.indexOf(f) >= 0;
+            return x.includes(f);
         });
     }
     return files;
@@ -406,7 +406,7 @@ function parse_test(file) {
                         "expect_stdout",
                         "node_version",
                         "reminify",
-                    ].indexOf(label.name) >= 0,
+                    ].includes(label.name),
                     tmpl("Unsupported label {name} [{line},{col}]", {
                         name: label.name,
                         line: label.start.line,

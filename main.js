@@ -17,7 +17,7 @@ export {
 } from "./lib/ast.js";
 export {
     defaults,
-    Dictionary,
+    map_from_object,
     push_uniq,
     string_template,
 } from "./lib/utils.js";

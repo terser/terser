@@ -253,6 +253,7 @@ function run() {
             result.ast.figure_out_scope({});
         }
         print(JSON.stringify(result.ast, function(key, value) {
+            if (value instanceof Map) return;
             if (value) switch (key) {
               case "thedef":
                 return symdef(value);
@@ -265,7 +266,6 @@ function run() {
             }
             if (skip_key(key)) return;
             if (value instanceof UglifyJS.AST_Token) return;
-            if (value instanceof UglifyJS.Dictionary) return;
             if (value instanceof UglifyJS.AST_Node) {
                 var result = {
                     _class: "AST_" + value.TYPE

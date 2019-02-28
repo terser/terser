@@ -83,6 +83,9 @@
     "parserOptions": {
       "sourceType": "module"
     },
+    "env": {
+      "es6": true
+    },
     "globals": {
       "describe": false,
       "it": false,

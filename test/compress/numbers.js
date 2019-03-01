@@ -202,3 +202,22 @@ unary_binary_parenthesis: {
     }
     expect_stdout: true
 }
+
+compress_numbers: {
+    input: {
+        const exp = 1000;
+        const Exp = 1000000000000;
+        const negativeExp = 0.00000001;
+        const huge = 1000000000001;
+        const big = 100000000001;
+        const fractional = 100.2300200;
+    }
+    expect: {
+        const exp = 1e3;
+        const Exp = 1e12;
+        const negativeExp = 1e-8;
+        const huge = 0xe8d4a51001;
+        const big = 100000000001;
+        const fractional = 100.23002;
+    }
+}

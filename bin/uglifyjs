@@ -28,8 +28,8 @@ var options = {
 program.version(info.name + " " + info.version);
 program.parseArgv = program.parse;
 program.parse = undefined;
-if (process.argv.indexOf("ast") >= 0) program.helpInformation = describe_ast;
-else if (process.argv.indexOf("options") >= 0) program.helpInformation = function() {
+if (process.argv.includes("ast")) program.helpInformation = describe_ast;
+else if (process.argv.includes("options")) program.helpInformation = function() {
     var text = [];
     var options = UglifyJS.default_options();
     for (var option in options) {
@@ -410,7 +410,6 @@ function parse_source_map() {
         var hasContent = options && "content" in options;
         var settings = parse(value, options);
         if (!hasContent && settings.content && settings.content != "inline") {
-            print_error("INFO: Using input source map: " + settings.content);
             settings.content = read_file(settings.content, settings.content);
         }
         return settings;
@@ -418,7 +417,7 @@ function parse_source_map() {
 }
 
 function skip_key(key) {
-    return skip_keys.indexOf(key) >= 0;
+    return skip_keys.includes(key);
 }
 
 function symdef(def) {

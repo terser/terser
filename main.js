@@ -22,7 +22,7 @@ export {
     string_template,
 } from "./lib/utils.js";
 export { base54 } from "./lib/scope.js";
-export { Compressor } from "./lib/compress.js";
+export { Compressor } from "./lib/compress/index.js";
 export { OutputStream } from "./lib/output.js";
 export { parse }  from "./lib/parse.js";
 export {

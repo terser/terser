@@ -1,3 +1,5 @@
+/// <reference lib="es2015" />
+
 import { RawSourceMap } from 'source-map';
 
 export type ECMA = 5 | 6 | 7 | 8 | 9;
@@ -178,6 +180,8 @@ export class TreeTransformer extends TreeWalker {
 }
 
 export function push_uniq<T>(array: T[], el: T): void;
+
+export function map_from_object<T>(obj: { [key: string]: T }): Map<string, T>;
 
 export function minify(files: string | string[] | { [file: string]: string } | AST_Node, options?: MinifyOptions): MinifyOutput;
 

@@ -161,7 +161,7 @@ describe("sourcemaps", function() {
                 });
                 assert.strictEqual(result.code, "var bar=function(){return function(bar){return bar}}();");
                 assert.strictEqual(warnings.length, 1);
-                assert.strictEqual(warnings[0], "inline source map not found");
+                assert.strictEqual(warnings[0], "inline source map not found: 0");
             } finally {
                 UglifyJS.AST_Node.warn_function = warn_function;
             }

@@ -229,24 +229,10 @@ describe("minify", function() {
                 });
                 assert.strictEqual(result.code, "var bar=function(){return function(bar){return bar}}();");
                 assert.strictEqual(warnings.length, 1);
-                assert.strictEqual(warnings[0], "inline source map not found");
+                assert.strictEqual(warnings[0], "inline source map not found: 0");
             } finally {
                 UglifyJS.AST_Node.warn_function = warn_function;
             }
-        });
-        it("Should fail with multiple input and inline source map", function() {
-            var result = UglifyJS.minify([
-                read("./test/input/issue-520/input.js"),
-                read("./test/input/issue-520/output.js")
-            ], {
-                sourceMap: {
-                    content: "inline",
-                    url: "inline"
-                }
-            });
-            var err = result.error;
-            assert.ok(err instanceof Error);
-            assert.strictEqual(err.stack.split(/\n/)[0], "Error: inline source map only works with singular input");
         });
     });
 

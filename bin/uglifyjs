@@ -6,6 +6,7 @@
 
 require("../tools/exit.js");
 
+var execSync = require("child_process").execSync;
 var fs = require("fs");
 var info = require("../package.json");
 var path = require("path");
@@ -135,7 +136,7 @@ if (program.output == "ast") {
 if (program.parse) {
     if (!program.parse.acorn && !program.parse.spidermonkey) {
         options.parse = program.parse;
-    } else if (program.sourceMap && program.sourceMap.content == "inline") {
+    } else if (content == "inline") {
         fatal("ERROR: inline source map only works with built-in parser");
     }
 }
@@ -196,6 +197,7 @@ function run() {
     UglifyJS.AST_Node.warn_function = function(msg) {
         print_error("WARN: " + msg);
     };
+    var content = program.sourceMap && program.sourceMap.content;
     if (program.timings) options.timings = true;
     try {
         if (program.parse) {
@@ -220,6 +222,59 @@ function run() {
         }
     } catch (ex) {
         fatal(ex);
+    }
+    if (content == "auto") {
+        var to_ascii = function(b64) {
+            return new Buffer(b64, "base64").toString();
+        };
+
+        var resolve_source_map_content = function(name, code) {
+            var sourceMappingURLMatch = /\n\/\/# sourceMappingURL=(.*)/.exec(code);
+            var sourceMappingURL = sourceMappingURLMatch ? sourceMappingURLMatch[1] : null;
+            
+            if (!sourceMappingURL) {
+                // infer
+                if (fs.existsSync(name + '.map')) {
+                    return read_file(name + '.map');
+                }
+                if (/\.js$/.test(name) && fs.existsSync(name.slice(0, -2) + 'map')) {
+                    return read_file(name.slice(0, -2) + 'map');
+                }
+                return;
+            }
+
+            if (sourceMappingURL.indexOf('data:application') == 0) {
+                var match = /data:application\/json(;.*?)?;base64,(.*)/.exec(sourceMappingURL);
+                return to_ascii(match[2]);
+            }
+
+            if (sourceMappingURL.indexOf('http') == 0) {
+                try {
+                    return execSync('curl -s ' + sourceMappingURL).toString();
+                } catch (ex) {
+                    fatal(ex);
+                }
+            }
+
+            return read_file(path.join(path.dirname(name), sourceMappingURL));
+        };
+
+        // read source map content locations given via CLI
+        // contents=file1.js*file1.js.map|file2.js*path/to/map.js.map|...
+        var contents = {};
+        if (options.sourceMap.contents) options.sourceMap.contents.replace(/([^|*]+)=([^|]+)/g, function(_, x, y) {
+            contents[x] = read_file(y, y);
+        });
+
+        // attempt to resolve the remaining
+        for (var name in files) if (!contents[name]) {
+            var content = resolve_source_map_content(name, files[name]);
+            if (content) {
+                contents[name] = content;
+            }
+        }
+
+        options.sourceMap.contents = contents;
     }
     var result = UglifyJS.minify(files, options);
     if (result.error) {

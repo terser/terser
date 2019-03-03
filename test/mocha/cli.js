@@ -207,7 +207,7 @@ describe("bin/uglifyjs", function() {
             uglifyjscmd,
             "test/input/issue-3219/file2.js",
             "test/input/issue-3219/file3.js",
-            "--source-map", "'content=auto,contents=test/input/issue-3219/file2.js*test/input/issue-3219/mapping2.js.map|test/input/issue-3219/file3.js*test/input/issue-3219/mapping3.js.map,includeSources=true,url=inline'",
+            "--source-map", "\"content=auto,contents=test/input/issue-3219/file2.js*test/input/issue-3219/mapping2.js.map|test/input/issue-3219/file3.js*test/input/issue-3219/mapping3.js.map,includeSources=true,url=inline\"",
         ].join(" ");
         exec(command, function(err, stdout, stderr) {
             if (err) throw err;

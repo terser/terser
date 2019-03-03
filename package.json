@@ -22,7 +22,6 @@
   "files": [
     "bin",
     "dist",
-    "!dist/bundle.instrumented.js",
     "tools",
     "LICENSE",
     "README.md",
@@ -30,20 +29,17 @@
     "PATRONS.md"
   ],
   "dependencies": {
-    "commander": "~2.17.1",
+    "commander": "^2.19.0",
     "source-map": "~0.6.1",
-    "source-map-support": "~0.5.9"
+    "source-map-support": "~0.5.10"
   },
   "devDependencies": {
     "acorn": "^6.0.4",
-    "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "csv": "^5.1.0",
-    "es6-promise": "^4.2.5",
     "escodegen": "^1.11.0",
     "eslint": "^4.19.1",
     "eslump": "^2.0.0",
-    "istanbul": "^0.4.5",
     "mocha": "^3.0.0",
     "mochallel": "^1.8.6",
     "pre-commit": "^1.2.2",
@@ -52,9 +48,7 @@
     "semver": "~5.6.0"
   },
   "scripts": {
-    "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",
-    "coverage": "istanbul cover test/run-tests.js",
-    "coveralls": "coveralls < coverage/lcov.info",
+    "test": "rimraf dist/* && npm run prepare && node test/run-tests.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "prepare": "rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js",

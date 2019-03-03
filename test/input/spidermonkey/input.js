@@ -14,7 +14,6 @@ export function fun() {}
 export * from "a.js";
 export {A} from "a.js";
 export {A1, B1} from "a.js";
-export {C};
 
 (a, [b], {c:foo = 3}, ...d) => null;
 () => {};

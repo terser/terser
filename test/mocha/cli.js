@@ -186,6 +186,7 @@ describe("bin/uglifyjs", function() {
         });
     });
     it("Should infer source maps in auto mode", function(done) {
+        this.timeout(30 * 1000);
         var command = [
             uglifyjscmd,
             "test/input/issue-3219/file.js",

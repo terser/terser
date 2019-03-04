@@ -175,7 +175,7 @@ if (filesList) {
     simple_glob(filesList).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });
-    run().catch(err => {
+    Promise.resolve(run()).catch(err => {
         console.error('err', err);
         process.exit(1);
     });
@@ -186,7 +186,7 @@ if (filesList) {
         chunks.push(chunk);
     }).on("end", function() {
         files = [ chunks.join("") ];
-        run().catch(err => {
+        Promise.resolve(run()).catch(err => {
             console.error('err', err);
             process.exit(1);
         });
@@ -198,7 +198,71 @@ function convert_ast(fn) {
     return UglifyJS.AST_Node.from_mozilla_ast(Object.keys(files).reduce(fn, null));
 }
 
-async function run() {
+function resolve_sourcemaps() {
+    var resolve_source_map_content = function(name, code) {
+        var sourceMappingURLMatch = /\n\/\/# sourceMappingURL=(.*)/.exec(code);
+        var sourceMappingURL = sourceMappingURLMatch ? sourceMappingURLMatch[1] : null;
+        
+        if (!sourceMappingURL) {
+            // infer
+            if (fs.existsSync(name + ".map")) {
+                return read_file(name + ".map");
+            }
+            if (/\.js$/.test(name) && fs.existsSync(name.slice(0, -2) + "map")) {
+                return read_file(name.slice(0, -2) + "map");
+            }
+            return;
+        }
+
+        if (sourceMappingURL.indexOf("data:application") == 0) {
+            var match = /data:application\/json(;.*?)?;base64,(.*)/.exec(sourceMappingURL);
+            return UglifyJS.to_ascii(match[2]);
+        }
+
+        if (sourceMappingURL.indexOf("http") == 0) {
+            return new Promise((resolve, reject) => {
+                const lib = sourceMappingURL.startsWith("https") ? require("https") : require("http");
+                var request = lib.get(sourceMappingURL, res =>  {
+                    var data = "";
+                    res.on("data", chunk => {
+                        data += chunk;
+                    });
+                    res.on("end", () => {
+                        resolve(data);
+                    });
+                });
+                request.on("error", e => {
+                    reject(e.message);
+                });
+            });
+        }
+
+        return read_file(path.join(path.dirname(name), sourceMappingURL));
+    };
+
+    // read source map content locations given via CLI
+    // contents=file1.js*file1.js.map|file2.js*path/to/map.js.map|...
+    var contents = {};
+    if (options.sourceMap.contents) options.sourceMap.contents.replace(/([^|*]+)=([^|]+)/g, function(_, x, y) {
+        contents[x] = read_file(y, y);
+    });
+
+    // attempt to resolve the remaining
+    // TODO: replace with async/await when node 6 support is dropped.
+    return Promise.all(
+        Object.keys(files).filter(name => !contents[name]).map(name => {
+            var contentRetVal = resolve_source_map_content(name, files[name]);
+            if (!contentRetVal || typeof contentRetVal.then !== 'function') {
+                contentRetVal = Promise.resolve(contentRetVal);
+            }
+            return contentRetVal.then(content => {
+                if (content) contents[name] = content;
+            })
+        })
+    ).then(_ => options.sourceMap.contents = contents);
+}
+
+function run() {
     UglifyJS.AST_Node.warn_function = function(msg) {
         print_error("WARN: " + msg);
     };
@@ -228,149 +292,99 @@ async function run() {
     } catch (ex) {
         fatal(ex);
     }
+    // TODO: replace with async/await when node 6 support is dropped.
+    var resolveSourcemapsPromise;
     if (content === "auto") {
-        var resolve_source_map_content = function(name, code) {
-            var sourceMappingURLMatch = /\n\/\/# sourceMappingURL=(.*)/.exec(code);
-            var sourceMappingURL = sourceMappingURLMatch ? sourceMappingURLMatch[1] : null;
-            
-            if (!sourceMappingURL) {
-                // infer
-                if (fs.existsSync(name + ".map")) {
-                    return read_file(name + ".map");
-                }
-                if (/\.js$/.test(name) && fs.existsSync(name.slice(0, -2) + "map")) {
-                    return read_file(name.slice(0, -2) + "map");
-                }
-                return;
-            }
-
-            if (sourceMappingURL.indexOf("data:application") == 0) {
-                var match = /data:application\/json(;.*?)?;base64,(.*)/.exec(sourceMappingURL);
-                return UglifyJS.to_ascii(match[2]);
-            }
-
-            if (sourceMappingURL.indexOf("http") == 0) {
-                return new Promise((resolve, reject) => {
-                    const lib = sourceMappingURL.startsWith("https") ? require("https") : require("http");
-                    var request = lib.get(sourceMappingURL, res =>  {
-                        var data = "";
-                        res.on("data", chunk => {
-                            data += chunk;
-                        });
-                        res.on("end", () => {
-                            resolve(data);
-                        });
-                    });
-                    request.on("error", e => {
-                        reject(e.message);
-                    });
-                });
-            }
-
-            return read_file(path.join(path.dirname(name), sourceMappingURL));
-        };
-
-        // read source map content locations given via CLI
-        // contents=file1.js*file1.js.map|file2.js*path/to/map.js.map|...
-        var contents = {};
-        if (options.sourceMap.contents) options.sourceMap.contents.replace(/([^|*]+)=([^|]+)/g, function(_, x, y) {
-            contents[x] = read_file(y, y);
-        });
-
-        // attempt to resolve the remaining
-        for (var name in files) if (!contents[name]) {
-            var content = await resolve_source_map_content(name, files[name]);
-            if (content) {
-                contents[name] = content;
-            }
-        }
-
-        options.sourceMap.contents = contents;
-    }
-    var result = UglifyJS.minify(files, options);
-    if (result.error) {
-        var ex = result.error;
-        if (ex.name == "SyntaxError") {
-            print_error("Parse error at " + ex.filename + ":" + ex.line + "," + ex.col);
-            var col = ex.col;
-            var lines = files[ex.filename].split(/\r?\n/);
-            var line = lines[ex.line - 1];
-            if (!line && !col) {
-                line = lines[ex.line - 2];
-                col = line.length;
-            }
-            if (line) {
-                var limit = 70;
-                if (col > limit) {
-                    line = line.slice(col - limit);
-                    col = limit;
-                }
-                print_error(line.slice(0, 80));
-                print_error(line.slice(0, col).replace(/\S/g, " ") + "^");
-            }
-        }
-        if (ex.defs) {
-            print_error("Supported options:");
-            print_error(format_object(ex.defs));
-        }
-        fatal(ex);
-    } else if (program.output == "ast") {
-        if (!options.compress && !options.mangle) {
-            result.ast.figure_out_scope({});
-        }
-        print(JSON.stringify(result.ast, function(key, value) {
-            if (value) switch (key) {
-              case "thedef":
-                return symdef(value);
-              case "enclosed":
-                return value.length ? value.map(symdef) : undefined;
-              case "variables":
-              case "functions":
-              case "globals":
-                return value.size() ? value.map(symdef) : undefined;
-            }
-            if (skip_key(key)) return;
-            if (value instanceof UglifyJS.AST_Token) return;
-            if (value instanceof UglifyJS.Dictionary) return;
-            if (value instanceof UglifyJS.AST_Node) {
-                var result = {
-                    _class: "AST_" + value.TYPE
-                };
-                if (value.block_scope) {
-                    result.variables = value.block_scope.variables;
-                    result.functions = value.block_scope.functions;
-                    result.enclosed = value.block_scope.enclosed;
-                }
-                value.CTOR.PROPS.forEach(function(prop) {
-                    result[prop] = value[prop];
-                });
-                return result;
-            }
-            return value;
-        }, 2));
-    } else if (program.output == "spidermonkey") {
-        print(JSON.stringify(UglifyJS.minify(result.code, {
-            compress: false,
-            mangle: false,
-            output: {
-                ast: true,
-                code: false
-            }
-        }).ast.to_mozilla_ast(), null, 2));
-    } else if (program.output) {
-        fs.writeFileSync(program.output, result.code);
-        if (result.map) {
-            fs.writeFileSync(program.output + ".map", result.map);
-        }
+        resolveSourcemapsPromise = resolve_sourcemaps();
     } else {
-        print(result.code);
+        resolveSourcemapsPromise = Promise.resolve();
     }
-    if (program.nameCache) {
-        fs.writeFileSync(program.nameCache, JSON.stringify(options.nameCache));
-    }
-    if (result.timings) for (var phase in result.timings) {
-        print_error("- " + phase + ": " + result.timings[phase].toFixed(3) + "s");
-    }
+    return resolveSourcemapsPromise.then(() => {
+        var result = UglifyJS.minify(files, options);
+        if (result.error) {
+            var ex = result.error;
+            if (ex.name == "SyntaxError") {
+                print_error("Parse error at " + ex.filename + ":" + ex.line + "," + ex.col);
+                var col = ex.col;
+                var lines = files[ex.filename].split(/\r?\n/);
+                var line = lines[ex.line - 1];
+                if (!line && !col) {
+                    line = lines[ex.line - 2];
+                    col = line.length;
+                }
+                if (line) {
+                    var limit = 70;
+                    if (col > limit) {
+                        line = line.slice(col - limit);
+                        col = limit;
+                    }
+                    print_error(line.slice(0, 80));
+                    print_error(line.slice(0, col).replace(/\S/g, " ") + "^");
+                }
+            }
+            if (ex.defs) {
+                print_error("Supported options:");
+                print_error(format_object(ex.defs));
+            }
+            fatal(ex);
+        } else if (program.output == "ast") {
+            if (!options.compress && !options.mangle) {
+                result.ast.figure_out_scope({});
+            }
+            print(JSON.stringify(result.ast, function(key, value) {
+                if (value) switch (key) {
+                  case "thedef":
+                    return symdef(value);
+                  case "enclosed":
+                    return value.length ? value.map(symdef) : undefined;
+                  case "variables":
+                  case "functions":
+                  case "globals":
+                    return value.size() ? value.map(symdef) : undefined;
+                }
+                if (skip_key(key)) return;
+                if (value instanceof UglifyJS.AST_Token) return;
+                if (value instanceof UglifyJS.Dictionary) return;
+                if (value instanceof UglifyJS.AST_Node) {
+                    var result = {
+                        _class: "AST_" + value.TYPE
+                    };
+                    if (value.block_scope) {
+                        result.variables = value.block_scope.variables;
+                        result.functions = value.block_scope.functions;
+                        result.enclosed = value.block_scope.enclosed;
+                    }
+                    value.CTOR.PROPS.forEach(function(prop) {
+                        result[prop] = value[prop];
+                    });
+                    return result;
+                }
+                return value;
+            }, 2));
+        } else if (program.output == "spidermonkey") {
+            print(JSON.stringify(UglifyJS.minify(result.code, {
+                compress: false,
+                mangle: false,
+                output: {
+                    ast: true,
+                    code: false
+                }
+            }).ast.to_mozilla_ast(), null, 2));
+        } else if (program.output) {
+            fs.writeFileSync(program.output, result.code);
+            if (result.map) {
+                fs.writeFileSync(program.output + ".map", result.map);
+            }
+        } else {
+            print(result.code);
+        }
+        if (program.nameCache) {
+            fs.writeFileSync(program.nameCache, JSON.stringify(options.nameCache));
+        }
+        if (result.timings) for (var phase in result.timings) {
+            print_error("- " + phase + ": " + result.timings[phase].toFixed(3) + "s");
+        }
+    });
 }
 
 function fatal(message) {

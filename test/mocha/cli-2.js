@@ -66,6 +66,7 @@ describe("bin/uglifyjs (2)", function() {
     it("Should print supported options on invalid option syntax", function(done) {
         var command = uglifyjscmd + " test/input/comments/filter.js -b ascii-only";
         exec(command, function (err, stdout, stderr) {
+            console.log(err, '|', stdout, '|', stderr);
             assert.ok(err);
             assert.strictEqual(stdout, "");
             assert.ok(/^Supported options:\n[\s\S]*?\nERROR: `ascii-only` is not a supported option/.test(stderr), stderr);

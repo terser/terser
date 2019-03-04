@@ -4,9 +4,8 @@
 
 "use strict";
 
-require("../tools/exit.js");
+// require("../tools/exit.js");
 
-var execSync = require("child_process").execSync;
 var fs = require("fs");
 var info = require("../package.json");
 var path = require("path");
@@ -176,7 +175,10 @@ if (filesList) {
     simple_glob(filesList).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });
-    run();
+    run().catch(err => {
+        console.error('err', err);
+        process.exit(1);
+    });
 } else {
     var chunks = [];
     process.stdin.setEncoding("utf8");
@@ -184,7 +186,10 @@ if (filesList) {
         chunks.push(chunk);
     }).on("end", function() {
         files = [ chunks.join("") ];
-        run();
+        run().catch(err => {
+            console.error('err', err);
+            process.exit(1);
+        });
     });
     process.stdin.resume();
 }
@@ -193,7 +198,7 @@ function convert_ast(fn) {
     return UglifyJS.AST_Node.from_mozilla_ast(Object.keys(files).reduce(fn, null));
 }
 
-function run() {
+async function run() {
     UglifyJS.AST_Node.warn_function = function(msg) {
         print_error("WARN: " + msg);
     };
@@ -245,11 +250,21 @@ function run() {
             }
 
             if (sourceMappingURL.indexOf("http") == 0) {
-                try {
-                    return execSync("curl -s " + sourceMappingURL).toString();
-                } catch (ex) {
-                    fatal(ex);
-                }
+                return new Promise((resolve, reject) => {
+                    const lib = sourceMappingURL.startsWith("https") ? require("https") : require("http");
+                    var request = lib.get(sourceMappingURL, res =>  {
+                        var data = "";
+                        res.on("data", chunk => {
+                            data += chunk;
+                        });
+                        res.on("end", () => {
+                            resolve(data);
+                        });
+                    });
+                    request.on("error", e => {
+                        reject(e.message);
+                    });
+                });
             }
 
             return read_file(path.join(path.dirname(name), sourceMappingURL));
@@ -264,7 +279,7 @@ function run() {
 
         // attempt to resolve the remaining
         for (var name in files) if (!contents[name]) {
-            var content = resolve_source_map_content(name, files[name]);
+            var content = await resolve_source_map_content(name, files[name]);
             if (content) {
                 contents[name] = content;
             }

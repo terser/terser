@@ -9,9 +9,7 @@
     "node": ">=6.0.0"
   },
   "maintainers": [
-    "Fábio Santos <fabiosantosart@gmail.com>",
-    "Alex Lam <alexlamsl@gmail.com>",
-    "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)"
+    "Fábio Santos <fabiosantosart@gmail.com>"
   ],
   "repository": "https://github.com/fabiosantoscode/terser.git",
   "main": "dist/bundle.min.js",
@@ -49,8 +47,6 @@
   },
   "scripts": {
     "test": "npm run prepare --silent && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",
-    "coverage": "istanbul cover test/run-tests.js",
-    "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "prepare": "rimraf dist/* && rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js",

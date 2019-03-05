@@ -239,11 +239,28 @@ to prevent the `require`, `exports` and `$` names from being changed.
 
 ### CLI mangling property names (`--mangle-props`)
 
-**Note:** THIS *WILL* BREAK YOUR CODE.  Mangling property names
-is a separate step, different from variable name mangling.  Pass
-`--mangle-props` to enable it.  It will mangle all properties in the
+**Note:** THIS **WILL** BREAK YOUR CODE. A good rule of thumb is not to use this unless you know exactly what you're doing and how this works and read this section until the end.
+
+Mangling property names is a separate step, different from variable name mangling.  Pass
+`--mangle-props` to enable it. The least dangerous
+way to use this is to use the `regex` option like so:
+
+```
+terser example.js -c -m --mangle-props regex=/_$/
+```
+
+This will mangle all properties that start with an 
+underscore. So you can use it to mangle internal methods.
+
+By default, it will mangle all properties in the
 input code with the exception of built in DOM properties and properties
-in core JavaScript classes.  For example:
+in core JavaScript classes, which is what will break your code if you don't:
+
+1. Control all the code you're mangling
+2. Avoid using a module bundler, as they usually will call Terser on each file individually, making it impossible to pass mangled objects between modules.
+3. Avoid calling functions like `defineProperty` or `hasOwnProperty`, because they refer to object properties using strings and will break your code if you don't know what you are doing.
+
+An example:
 
 ```javascript
 // example.js
@@ -258,21 +275,21 @@ x.bar_ = 2;
 x["baz_"] = 3;
 console.log(x.calc());
 ```
-Mangle all properties (except for JavaScript `builtins`):
+Mangle all properties (except for JavaScript `builtins`) (**very** unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props
 ```
 ```javascript
 var x={o:0,_:1,l:function(){return this._+this.o}};x.t=2,x.o=3,console.log(x.l());
 ```
-Mangle all properties except for `reserved` properties:
+Mangle all properties except for `reserved` properties (still very unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props reserved=[foo_,bar_]
 ```
 ```javascript
 var x={o:0,foo_:1,_:function(){return this.foo_+this.o}};x.bar_=2,x.o=3,console.log(x._());
 ```
-Mangle all properties matching a `regex`:
+Mangle all properties matching a `regex` (not as unsafe but still unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props regex=/_$/
 ```

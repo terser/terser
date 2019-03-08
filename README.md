@@ -84,7 +84,10 @@ a double dash to prevent input files being used as option arguments:
                                 `debug`  Add debug prefix and suffix.
                                 `domprops`  Mangle property names that overlaps
                                             with DOM properties.
-                                `keep_quoted`  Only mangle unquoted properties.
+                                `keep_quoted`  Only mangle unquoted properties, quoted
+                                               properties are automatically reserved.
+                                               `strict` disables quoted properties
+                                               being automatically reserved.
                                 `regex`  Only mangle matched property names.
                                 `reserved`  List of names that should not be mangled.
                                 `preamble`  Preamble to prepend to the output. You
@@ -914,6 +917,10 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
   Pass an empty string `""` to enable, or a non-empty string to set the debug suffix.
 
 - `keep_quoted` (default: `false`) -— Only mangle unquoted property names.
+  - `true` -- Quoted property names are automatically reserved and any unquoted
+    property names will not be mangled.
+  - `"strict"` -- Advanced, all unquoted property names are mangled unless
+    explicitly reserved.
 
 - `regex` (default: `null`) -— Pass a RegExp literal to only mangle property
   names matching the regular expression.

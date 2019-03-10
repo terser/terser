@@ -1,22 +1,19 @@
-var fs = require("fs");
+import { minify } from "../lib/minify";
 
-var bundle_path = __dirname + "/../dist/bundle.js";
-var UglifyJS = require(bundle_path);
-module.exports = UglifyJS;
+export function default_options() {
+    const defs = {};
 
-function infer_options(options) {
-    var result = UglifyJS.minify("", options);
-    return result.error && result.error.defs;
-}
+    Object.keys(infer_options({ 0: 0 })).forEach((component) => {
+        const options = infer_options({
+            [component]: {0: 0}
+        });
 
-UglifyJS.default_options = function() {
-    var defs = {};
-    Object.keys(infer_options({ 0: 0 })).forEach(function(component) {
-        var options = {};
-        options[component] = { 0: 0 };
-        if (options = infer_options(options)) {
-            defs[component] = options;
-        }
+        if (options) defs[component] = options;
     });
     return defs;
-};
+}
+
+function infer_options(options) {
+    var result = minify("", options);
+    return result.error && result.error.defs;
+}

@@ -29,6 +29,7 @@ export {
     mangle_properties,
     reserve_quoted_keys,
 } from "./lib/propmangle.js";
+export { default_options } from "./tools/node";
 import "./lib/mozilla-ast.js";
 
 // TESTS

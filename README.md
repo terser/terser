@@ -521,8 +521,8 @@ if (result.error) throw result.error;
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to give it
-  to `parse`, `compress` and `output`.
+- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to override `parse`,
+  `compress` and `output` options.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
   in `result.warnings`. Use the value `"verbose"` for more detailed warnings.

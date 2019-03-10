@@ -9,7 +9,7 @@ function assertCodeWithInlineMapEquals(actual, expected) {
     const [expectedCode, expectedSourceMapData] = expected.split('//# sourceMappingURL=', 2);
     const actualSourceMap = decodeMap(actualSourceMapData);
     const expectedSourceMap = decodeMap(expectedSourceMapData);
-    assert.strictEqual({code: actualCode, map: actualSourceMap}, {code: expectedCode, map: expectedSourceMap});
+    assert.deepStrictEqual({code: actualCode, map: actualSourceMap}, {code: expectedCode, map: expectedSourceMap});
 }
 
 module.exports.assertCodeWithInlineMapEquals = assertCodeWithInlineMapEquals;

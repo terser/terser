@@ -15,12 +15,14 @@ export interface CompressOptions {
     booleans?: boolean;
     collapse_vars?: boolean;
     comparisons?: boolean;
+    computed_props?: boolean;
     conditionals?: boolean;
     dead_code?: boolean;
     defaults?: boolean;
     directives?: boolean;
     drop_console?: boolean;
     drop_debugger?: boolean;
+    ecma?: ECMA;
     evaluate?: boolean;
     expression?: boolean;
     global_defs?: object;
@@ -35,6 +37,7 @@ export interface CompressOptions {
     keep_fnames?: boolean | RegExp;
     keep_infinity?: boolean;
     loops?: boolean;
+    module?: boolean;
     negate_iife?: boolean;
     passes?: number;
     properties?: boolean;

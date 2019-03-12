@@ -23,6 +23,7 @@ export {
 } from "./lib/utils.js";
 export { base54 } from "./lib/scope.js";
 export { Compressor } from "./lib/compress/index.js";
+export { to_ascii } from "./lib/minify.js";
 export { OutputStream } from "./lib/output.js";
 export { parse }  from "./lib/parse.js";
 export {
@@ -31,11 +32,3 @@ export {
 } from "./lib/propmangle.js";
 export { default_options } from "./tools/node";
 import "./lib/mozilla-ast.js";
-
-// TESTS
-export * from "./lib/ast.js";
-export {
-    JS_Parse_Error,
-    tokenizer,
-} from "./lib/parse.js";
-export { to_ascii } from "./lib/minify.js";

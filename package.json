@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "acorn": "^6.0.4",
-    "cross-env": "^5.2.0",
     "csv": "^5.1.0",
     "escodegen": "^1.11.0",
     "eslint": "^4.19.1",
@@ -46,10 +45,12 @@
     "semver": "~5.6.0"
   },
   "scripts": {
-    "test": "npm run prepare --silent && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",
+    "test": "npm run build -- --silent --input=main.tests.js && npm run minify && node test/run-tests.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "prepare": "rimraf dist/* && rollup -c && cd dist && cross-env TERSER_NO_BUNDLE=1 ../bin/uglifyjs bundle.js -mc --source-map 'content=bundle.js.map,includeSources=true,url=bundle.min.js.map' -o bundle.min.js",
+    "build": "rimraf dist/* && rollup -c",
+    "minify": "cd dist && node ../bin/uglifyjsnobundle bundle.js -mc --source-map content=bundle.js.map,includeSources=true -o bundle.min.js",
+    "prepare": "npm run build && npm run minify",
     "postversion": "echo 'Remember to update the changelog!'"
   },
   "keywords": [

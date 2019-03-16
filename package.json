@@ -52,7 +52,7 @@
     "semver": "~5.6.0"
   },
   "scripts": {
-    "test": "rimraf dist/* && npm run prepare && istanbul instrument dist/bundle.min.js > dist/bundle.instrumented.js && node test/run-tests.js",
+    "test": "rimraf dist/* && npm run prepare && node test/run-tests.js",
     "coverage": "istanbul cover test/run-tests.js",
     "coveralls": "coveralls < coverage/lcov.info",
     "lint": "eslint lib",

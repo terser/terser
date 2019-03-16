@@ -1,3 +1,5 @@
+/// <reference lib="es2015" />
+
 import { RawSourceMap } from 'source-map';
 
 export type ECMA = 5 | 6 | 7 | 8 | 9;
@@ -182,20 +184,7 @@ export class TreeTransformer extends TreeWalker {
 
 export function push_uniq<T>(array: T[], el: T): void;
 
-type DictEachCallback = (val: any, key: string) => any;
-
-export class Dictionary {
-    static fromObject(obj: object): Dictionary;
-    add(key: string, val: any): this;
-    clone(): Dictionary;
-    del(key: string): this;
-    each(fn: DictEachCallback): void;
-    get(key: string): any;
-    has(key: string): boolean;
-    map(fn: DictEachCallback): any[];
-    set(key: string, val: any): this;
-    size(): number;
-}
+export function map_from_object<T>(obj: { [key: string]: T }): Map<string, T>;
 
 export function minify(files: string | string[] | { [file: string]: string } | AST_Node, options?: MinifyOptions): MinifyOutput;
 

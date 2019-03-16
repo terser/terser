@@ -261,11 +261,11 @@ function run() {
               case "variables":
               case "functions":
               case "globals":
-                return value.size() ? value.map(symdef) : undefined;
+                return value.size ? collect_from_map(value, symdef) : undefined;
             }
             if (skip_key(key)) return;
             if (value instanceof UglifyJS.AST_Token) return;
-            if (value instanceof UglifyJS.Dictionary) return;
+            if (value instanceof Map) return;
             if (value instanceof UglifyJS.AST_Node) {
                 var result = {
                     _class: "AST_" + value.TYPE
@@ -424,6 +424,14 @@ function symdef(def) {
     var ret = (1e6 + def.id) + " " + def.name;
     if (def.mangled_name) ret += " " + def.mangled_name;
     return ret;
+}
+
+function collect_from_map(map, callback) {
+    var result = [];
+    map.forEach(function (def) {
+        result.push(callback(def));
+    });
+    return result;
 }
 
 function format_object(obj) {

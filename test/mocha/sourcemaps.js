@@ -1,6 +1,7 @@
 var assert = require("assert");
 var readFileSync = require("fs").readFileSync;
 var SourceMapConsumer = require("source-map").SourceMapConsumer;
+var {assertCodeWithInlineMapEquals} = require('./utils');
 var UglifyJS = require("../..");
 
 function read(path) {
@@ -144,7 +145,7 @@ describe("sourcemaps", function() {
                 }
             });
             if (result.error) throw result.error;
-            assert.strictEqual(result.code + "\n", readFileSync("test/input/issue-520/output.js", "utf8"));
+            assertCodeWithInlineMapEquals(result.code + "\n", readFileSync("test/input/issue-520/output.js", "utf8"));
         });
         it("Should warn for missing inline source map", function() {
             var warn_function = UglifyJS.AST_Node.warn_function;
@@ -177,14 +178,14 @@ describe("sourcemaps", function() {
             });
             if (result.error) throw result.error;
             var code = result.code;
-            assert.strictEqual(code, "var a=function(n){return n};\n" +
+            assertCodeWithInlineMapEquals(code, "var a=function(n){return n};\n" +
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
         it("Should not append source map to output js when sourceMapInline is not enabled", function() {
             var result = UglifyJS.minify('var a = function(foo) { return foo; };');
             if (result.error) throw result.error;
             var code = result.code;
-            assert.strictEqual(code, "var a=function(n){return n};");
+            assertCodeWithInlineMapEquals(code, "var a=function(n){return n};");
         });
         it("Should work with max_line_len", function() {
             var result = UglifyJS.minify(read("./test/input/issue-505/input.js"), {
@@ -199,7 +200,7 @@ describe("sourcemaps", function() {
                 }
             });
             if (result.error) throw result.error;
-            assert.strictEqual(result.code, read("./test/input/issue-505/output.js"));
+            assertCodeWithInlineMapEquals(result.code, read("./test/input/issue-505/output.js"));
         });
         it("Should work with unicode characters", function() {
             var code = [

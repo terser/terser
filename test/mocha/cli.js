@@ -186,6 +186,24 @@ describe("bin/uglifyjs", function() {
             done();
         });
     });
+    it("Should fail with acorn and inline source map", function(done) {
+        var command = uglifyjscmd + " test/input/issue-520/input.js --source-map content=inline,url=inline -p acorn";
+
+        exec(command, function (err, stdout, stderr) {
+            assert.ok(err);
+            assert.strictEqual(stderr, "ERROR: inline source map only works with built-in parser\n");
+            done();
+        });
+    });
+    it("Should fail with SpiderMonkey and inline source map", function(done) {
+        var command = uglifyjscmd + " test/input/issue-520/input.js --source-map content=inline,url=inline -p spidermonkey";
+
+        exec(command, function (err, stdout, stderr) {
+            assert.ok(err);
+            assert.strictEqual(stderr, "ERROR: inline source map only works with built-in parser\n");
+            done();
+        });
+    });
     it("Should infer source maps in auto mode", function(done) {
         this.timeout(30 * 1000);
         var command = [

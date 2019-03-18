@@ -5,15 +5,17 @@ terser
 
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 
-*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/terser_ecmacomp_maintainer"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out PATRONS.md for our first-tier patrons.
+*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out PATRONS.md for our first-tier patrons.
 
 Terser recommends you use RollupJS to bundle your modules, as that produces smaller code overall.
 
 *Beautification* has been undocumented and is *being removed* from terser, we recommend you use [prettier](https://npmjs.com/package/prettier).
 
-[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser) [![Coverage Status](https://coveralls.io/repos/github/terser-js/terser/badge.svg?branch=master)](https://coveralls.io/github/terser-js/terser?branch=master)
+[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser)
 
 Find the changelog in [CHANGELOG.md](https://github.com/terser-js/terser/blob/master/CHANGELOG.md)
+
+A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
 
 Why choose terser?
@@ -84,9 +86,13 @@ a double dash to prevent input files being used as option arguments:
                                 `debug`  Add debug prefix and suffix.
                                 `domprops`  Mangle property names that overlaps
                                             with DOM properties.
-                                `keep_quoted`  Only mangle unquoted properties.
+                                `keep_quoted`  Only mangle unquoted properties, quoted
+                                               properties are automatically reserved.
+                                               `strict` disables quoted properties
+                                               being automatically reserved.
                                 `regex`  Only mangle matched property names.
                                 `reserved`  List of names that should not be mangled.
+    -b, --beautify [options]     Specify output options:
                                 `preamble`  Preamble to prepend to the output. You
                                             can use this to insert a comment, for
                                             example for licensing information.
@@ -252,11 +258,28 @@ to prevent the `require`, `exports` and `$` names from being changed.
 
 ### CLI mangling property names (`--mangle-props`)
 
-**Note:** THIS *MIGHT* BREAK YOUR CODE.  Mangling property names
-is a separate step, different from variable name mangling.  Pass
-`--mangle-props` to enable it.  It will mangle all properties in the
+**Note:** THIS **WILL** BREAK YOUR CODE. A good rule of thumb is not to use this unless you know exactly what you're doing and how this works and read this section until the end.
+
+Mangling property names is a separate step, different from variable name mangling.  Pass
+`--mangle-props` to enable it. The least dangerous
+way to use this is to use the `regex` option like so:
+
+```
+terser example.js -c -m --mangle-props regex=/_$/
+```
+
+This will mangle all properties that start with an 
+underscore. So you can use it to mangle internal methods.
+
+By default, it will mangle all properties in the
 input code with the exception of built in DOM properties and properties
-in core JavaScript classes.  For example:
+in core JavaScript classes, which is what will break your code if you don't:
+
+1. Control all the code you're mangling
+2. Avoid using a module bundler, as they usually will call Terser on each file individually, making it impossible to pass mangled objects between modules.
+3. Avoid calling functions like `defineProperty` or `hasOwnProperty`, because they refer to object properties using strings and will break your code if you don't know what you are doing.
+
+An example:
 
 ```javascript
 // example.js
@@ -271,21 +294,21 @@ x.bar_ = 2;
 x["baz_"] = 3;
 console.log(x.calc());
 ```
-Mangle all properties (except for JavaScript `builtins`):
+Mangle all properties (except for JavaScript `builtins`) (**very** unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props
 ```
 ```javascript
 var x={o:0,_:1,l:function(){return this._+this.o}};x.t=2,x.o=3,console.log(x.l());
 ```
-Mangle all properties except for `reserved` properties:
+Mangle all properties except for `reserved` properties (still very unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props reserved=[foo_,bar_]
 ```
 ```javascript
 var x={o:0,foo_:1,_:function(){return this.foo_+this.o}};x.bar_=2,x.o=3,console.log(x._());
 ```
-Mangle all properties matching a `regex`:
+Mangle all properties matching a `regex` (not as unsafe but still unsafe):
 ```bash
 $ terser example.js -c -m --mangle-props regex=/_$/
 ```
@@ -479,6 +502,7 @@ var options = {
         passes: 2
     },
     output: {
+        beautify: false,
         preamble: "/* minified */"
     }
 };
@@ -927,6 +951,10 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
   Pass an empty string `""` to enable, or a non-empty string to set the debug suffix.
 
 - `keep_quoted` (default: `false`) -— Only mangle unquoted property names.
+  - `true` -- Quoted property names are automatically reserved and any unquoted
+    property names will not be mangled.
+  - `"strict"` -- Advanced, all unquoted property names are mangled unless
+    explicitly reserved.
 
 - `regex` (default: `null`) -— Pass a RegExp literal to only mangle property
   names matching the regular expression.
@@ -936,11 +964,17 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
 
 ## Output options
 
-The code generator tries to output shortest code possible. Optionally you
+The code generator tries to output shortest code possible by default.  In
+case you want beautified output, pass `--beautify` (`-b`).  Optionally you
 can pass additional arguments that control the code output:
 
 - `ascii_only` (default `false`) -- escape Unicode characters in strings and
   regexps (affects directives with non-ascii characters becoming invalid)
+
+- `beautify` (default `true`) -- whether to actually beautify the output.
+  Passing `-b` will set this to true, but you might need to pass `-b` even
+  when you want to generate minified code, in order to specify additional
+  arguments, so you can use `-b beautify=false` to override it.
 
 - `braces` (default `false`) -- always insert braces in `if`, `for`,
   `do`, `while` or `with` statements, even if their body is a single
@@ -952,7 +986,8 @@ can pass additional arguments that control the code output:
 
 - `ecma` (default `5`) -- set output printing mode. Set `ecma` to `6` or
   greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`.
-  Non-compatible features in the abstract syntax tree will still
+  The `ecma` option will only change the output in direct control of the
+  beautifier. Non-compatible features in the abstract syntax tree will still
   be output as is. For example: an `ecma` setting of `5` will **not** convert
   ES6+ code to ES5.
 

@@ -1,6 +1,7 @@
 var assert = require("assert");
 var exec = require("child_process").exec;
 var readFileSync = require("fs").readFileSync;
+var {assertCodeWithInlineMapEquals} = require('./utils');
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -45,7 +46,7 @@ describe("bin/uglifyjs", function() {
         exec(command, function (err, stdout) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, "var bar=function(){function foo(bar){return bar}return foo}();\n" +
+            assertCodeWithInlineMapEquals(stdout, "var bar=function(){function foo(bar){return bar}return foo}();\n" +
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QvaW5wdXQvaXNzdWUtMTMyMy9zYW1wbGUuanMiXSwibmFtZXMiOlsiYmFyIiwiZm9vIl0sIm1hcHBpbmdzIjoiQUFBQSxJQUFJQSxJQUFNLFdBQ04sU0FBU0MsSUFBS0QsS0FDVixPQUFPQSxJQUdYLE9BQU9DLElBTEQifQ==\n");
             done();
         });
@@ -146,7 +147,7 @@ describe("bin/uglifyjs", function() {
         exec(command, function (err, stdout) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, read("test/input/issue-520/output.js"));
+            assertCodeWithInlineMapEquals(stdout, read("test/input/issue-520/output.js"));
             done();
         });
     });
@@ -156,7 +157,7 @@ describe("bin/uglifyjs", function() {
         exec(command, function (err, stdout, stderr) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, [
+            assertCodeWithInlineMapEquals(stdout, [
                 "var bar=function(){function foo(bar){return bar}return foo}();",
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QvaW5wdXQvaXNzdWUtMTMyMy9zYW1wbGUuanMiXSwibmFtZXMiOlsiYmFyIiwiZm9vIl0sIm1hcHBpbmdzIjoiQUFBQSxJQUFJQSxJQUFNLFdBQ04sU0FBU0MsSUFBS0QsS0FDVixPQUFPQSxJQUdYLE9BQU9DLElBTEQiLCJzb3VyY2VzQ29udGVudCI6WyJ2YXIgYmFyID0gKGZ1bmN0aW9uICgpIHtcbiAgICBmdW5jdGlvbiBmb28gKGJhcikge1xuICAgICAgICByZXR1cm4gYmFyO1xuICAgIH1cblxuICAgIHJldHVybiBmb287XG59KSgpOyJdfQ==",
                 "",

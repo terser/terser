@@ -4,7 +4,7 @@ try {
     require("source-map-support").install();
 } catch (err) {}
 
-var U = require("../dist/bundle");
+var U = require("../dist/bundle.js");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");
@@ -202,7 +202,9 @@ function run_compress_tests() {
                 var quoted_props = test.mangle.properties.reserved;
                 if (!Array.isArray(quoted_props)) quoted_props = [];
                 test.mangle.properties.reserved = quoted_props;
-                U.reserve_quoted_keys(input, quoted_props);
+                if (test.mangle.properties.keep_quoted !== "strict") {
+                    U.reserve_quoted_keys(input, quoted_props);
+                }
             }
             if (test.rename) {
                 input.figure_out_scope(test.mangle);
@@ -217,9 +219,9 @@ function run_compress_tests() {
                 (function(cache) {
                     if (!cache) return;
                     if (!("props" in cache)) {
-                        cache.props = new U.Dictionary();
-                    } else if (!(cache.props instanceof U.Dictionary)) {
-                        cache.props = U.Dictionary.fromObject(cache.props);
+                        cache.props = new Map();
+                    } else if (!(cache.props instanceof Map)) {
+                        cache.props = U.map_from_object(cache.props);
                     }
                 })(test.mangle.cache);
                 output.mangle_names(test.mangle);

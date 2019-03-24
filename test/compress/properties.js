@@ -2421,3 +2421,34 @@ dont_mangle_computed_property_2: {
         "Null Undefined infinity nan",
     ]
 }
+
+mangle_properties_which_matches_pattern: {
+    options = {
+        defaults: true
+    }
+    mangle = {
+        properties: {
+            regex: '^_'
+        }
+    }
+    input: {
+        var acd = {
+            get asd() {
+                return this._asd;
+            },
+            _asd: true
+        };
+
+        console.log(acd)
+    }
+    expect: {
+        var acd = {
+            get asd() {
+                return this.s
+            },
+            s: !0
+        };
+
+        console.log(acd);
+    }
+}

@@ -931,22 +931,21 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
 
 ### Mangle properties options
 
-- `builtins` (default: `false`) -- Use `true` to allow the mangling of builtin
+- `builtins` (default: `false`) — Use `true` to allow the mangling of builtin
   DOM properties. Not recommended to override this setting.
 
-- `debug` (default: `false`) -— Mangle names with the original name still present.
+- `debug` (default: `false`) — Mangle names with the original name still present.
   Pass an empty string `""` to enable, or a non-empty string to set the debug suffix.
 
-- `keep_quoted` (default: `false`) -— Only mangle unquoted property names.
+- `keep_quoted` (default: `false`) — Only mangle unquoted property names.
   - `true` -- Quoted property names are automatically reserved and any unquoted
     property names will not be mangled.
   - `"strict"` -- Advanced, all unquoted property names are mangled unless
     explicitly reserved.
 
-- `regex` (default: `null`) -— Pass a RegExp literal to only mangle property
-  names matching the regular expression.
+- `regex` (default: `null`) — Pass a [RegExp literal or pattern string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) to only mangle property matching the regular expression.
 
-- `reserved` (default: `[]`) -- Do not mangle property names listed in the
+- `reserved` (default: `[]`) — Do not mangle property names listed in the
   `reserved` array.
 
 ## Output options

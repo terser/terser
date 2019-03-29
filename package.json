@@ -27,22 +27,22 @@
     "PATRONS.md"
   ],
   "dependencies": {
-    "commander": "^2.19.0",
+    "commander": "^2.20.0",
     "source-map": "~0.6.1",
-    "source-map-support": "~0.5.10"
+    "source-map-support": "~0.5.12"
   },
   "devDependencies": {
-    "acorn": "^6.0.4",
-    "csv": "^5.1.0",
-    "escodegen": "^1.11.0",
+    "acorn": "^6.1.1",
+    "csv": "^5.1.1",
+    "escodegen": "^1.11.1",
     "eslint": "^4.19.1",
     "eslump": "^2.0.0",
     "mocha": "^5.2.0",
     "mochallel": "^2.0.0",
     "pre-commit": "^1.2.2",
-    "rimraf": "^2.6.2",
-    "rollup": "^1.0.1",
-    "semver": "~5.6.0"
+    "rimraf": "^2.6.3",
+    "rollup": "^1.13.1",
+    "semver": "^5.7.0"
   },
   "scripts": {
     "test": "npm run build -- --silent --input=main.tests.js && npm run minify && node test/run-tests.js",

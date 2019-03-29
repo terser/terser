@@ -20,7 +20,6 @@ export {
     push_uniq,
     string_template,
 } from "./lib/utils.js";
-export { base54 } from "./lib/scope.js";
 export { Compressor } from "./lib/compress/index.js";
 export { to_ascii } from "./lib/minify.js";
 export { OutputStream } from "./lib/output.js";

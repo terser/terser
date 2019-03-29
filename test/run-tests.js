@@ -214,7 +214,6 @@ function run_compress_tests() {
             var output = cmp.compress(input);
             output.figure_out_scope(test.mangle);
             if (test.mangle) {
-                U.base54.reset();
                 output.compute_char_frequency(test.mangle);
                 (function(cache) {
                     if (!cache) return;

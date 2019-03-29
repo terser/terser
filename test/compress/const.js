@@ -25,7 +25,7 @@ issue_1191: {
     }
     expect: {
         function foo(rot) {
-            (rot < -5 || rot > 5) && bar();
+            (-5 > rot || rot > 5) && bar();
             baz();
         }
     }

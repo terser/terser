@@ -519,12 +519,11 @@ issue_2084: {
     }
     expect: {
         var c = 0;
-        ((c) => {
+        (c => {
             c = 1 + c,
             c = 1 + (c = 0),
             0 !== 23..toString() && (c = 1 + c);
-        })(-1),
-        console.log(c);
+        })(-1), console.log(c);
     }
     expect_stdout: "0"
 }

@@ -233,16 +233,14 @@ issue_241: {
     }
     expect: {
         var a = {};
-        !function (global) {
-            a.fail = function (o) {
-                var result = {};
-                return result.inner = function () {
-                    return function (o) {
-                        return o ? o.one : o.two;
-                    }({one: o.one, two: o.two});
-                }, result;
-            };
-        }();
+        a.fail = function (o) {
+            var result = {};
+            return result.inner = function () {
+                return function (o) {
+                    return o ? o.one : o.two;
+                }({one: o.one, two: o.two});
+            }, result;
+        };
         var b = a.fail({});
         b.inner();
     }
@@ -271,11 +269,8 @@ issue_334: {
         }
     }
     expect: {
-        !function (A) {
-            !function (A) {
-                A.x || console.log(A);
-            }("Hello World!");
-        }();
+        var A;
+        (A="Hello World!").x || console.log(A);
     }
     expect_stdout: "Hello World!";
 }

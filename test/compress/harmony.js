@@ -1642,14 +1642,12 @@ issue_2874_1: {
         })();
     }
     expect: {
-        (function() {
-            (function() {
-                let letters = [ "A", "B", "C" ];
-                return [ 2, 1, 0 ].map(key => (function(value) {
-                    return () => console.log(value);
-                })(letters[key] + key));
-            })().map(fn => fn());
-        })();
+        (function () {
+            let letters = ["A", "B", "C"];
+            return [2, 1, 0].map(key => (function (value) {
+                return () => console.log(value);
+            })(letters[key] + key));
+        })().map(fn => fn());
     }
     expect_stdout: [
         "C2",

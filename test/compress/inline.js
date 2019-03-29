@@ -20,13 +20,11 @@ inline_within_extends_1: {
         })();
     }
     expect: {
-        (function() {
-            console.log(new class extends(function(foo_base) {
-                return class extends foo_base {};
-            }(function(bar_base) {
-                return class extends bar_base {};
-            }(Array))){}().concat([ "PASS" ])[0]);
-        })();
+        console.log((new class extends(function(foo_base) {
+            return class extends foo_base {};
+        }(function(bar_base) {
+            return class extends bar_base {};
+        }(Array))){}).concat([ "PASS" ])[0]);
     }
     expect_stdout: "PASS"
 }
@@ -92,4 +90,39 @@ inline_within_extends_2: {
         }(1, "PASS", 3).second());
     }
     expect_stdout: "PASS"
+}
+
+issue_308: {
+    options = {
+        defaults: true,
+        passes: 4,
+        toplevel: true
+    }
+    input: {
+        exports.withStyles = withStyles;
+
+        function _inherits(superClass) {
+            if (typeof superClass !== "function") {
+                throw new TypeError("Super expression must be a function, not " + typeof superClass);
+            }
+            Object.create(superClass);
+        }
+
+        function withStyles() {
+            var a = EXTERNAL();
+            return function(_a) {
+                _inherits(_a);
+                function d() {}
+            }(a);
+        }
+    }
+    expect: {
+        exports.withStyles = function () {
+            !function (superClass) {
+                if ("function" != typeof superClass)
+                    throw new TypeError("Super expression must be a function, not " + typeof superClass);
+                Object.create(superClass);
+            }(EXTERNAL());
+        };
+    }
 }

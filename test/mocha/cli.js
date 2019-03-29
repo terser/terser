@@ -1,10 +1,11 @@
 var assert = require("assert");
 var exec = require("child_process").exec;
-var readFileSync = require("fs").readFileSync;
-var {assertCodeWithInlineMapEquals} = require('./utils');
+var execSync = require("child_process").execSync;
+var fs = require("fs");
+var {assertCodeWithInlineMapEquals} = require("./utils");
 
 function read(path) {
-    return readFileSync(path, "utf8");
+    return fs.readFileSync(path, "utf8");
 }
 
 describe("bin/uglifyjs", function() {
@@ -60,6 +61,35 @@ describe("bin/uglifyjs", function() {
             assert.strictEqual(stdout, "var bar=function(){function foo(bar){return bar}return foo}();\n");
             done();
         });
+    });
+    it("Should not load source map before finish reading from STDIN", function(done) {
+        var mapFile = "tmp/input.js.map";
+        try {
+            fs.mkdirSync("./tmp");
+        } catch (e) {
+            if (e.code != "EEXIST") throw e;
+        }
+        try {
+            fs.unlinkSync(mapFile);
+        } catch (e) {
+            if (e.code != "ENOENT") throw e;
+        }
+        var command = [
+            uglifyjscmd,
+            "--source-map", "content=" + mapFile,
+            "--source-map", "url=inline"
+        ].join(" ");
+
+        var child = exec(command, function(err, stdout) {
+            if (err) throw err;
+
+            assert.strictEqual(stdout, read("test/input/source-maps/expect.js"));
+            done();
+        });
+        setTimeout(function() {
+            fs.writeFileSync(mapFile, read("test/input/source-maps/input.js.map"));
+            child.stdin.end(read("test/input/source-maps/input.js"));
+        }, 1000);
     });
     it("Should work with --keep-fnames (mangle only)", function (done) {
         var command = uglifyjscmd + ' test/input/issue-1431/sample.js --keep-fnames -m';

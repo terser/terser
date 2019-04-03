@@ -308,3 +308,27 @@ invalid_for_in_var: {
         col: 13
     })
 }
+
+big_int_decimal: {
+    input: `
+        .23n
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid or unexpected token",
+        line: 2,
+        col: 8
+    })
+}
+
+big_int_scientific_format: {
+    input: `
+        1e3n
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid or unexpected token",
+        line: 2,
+        col: 8
+    })
+}

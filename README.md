@@ -252,7 +252,7 @@ Mangling property names is a separate step, different from variable name manglin
 way to use this is to use the `regex` option like so:
 
 ```
-terser example.js -c -m --mangle-props regex=/_$/
+terser example.js -c -m --mangle-props regex=/^_/
 ```
 
 This will mangle all properties that start with an 
@@ -297,7 +297,7 @@ var x={o:0,foo_:1,_:function(){return this.foo_+this.o}};x.bar_=2,x.o=3,console.
 ```
 Mangle all properties matching a `regex` (not as unsafe but still unsafe):
 ```bash
-$ terser example.js -c -m --mangle-props regex=/_$/
+$ terser example.js -c -m --mangle-props regex=/^_/
 ```
 ```javascript
 var x={o:0,_:1,calc:function(){return this._+this.o}};x.l=2,x.o=3,console.log(x.calc());
@@ -305,7 +305,7 @@ var x={o:0,_:1,calc:function(){return this._+this.o}};x.l=2,x.o=3,console.log(x.
 
 Combining mangle properties options:
 ```bash
-$ terser example.js -c -m --mangle-props regex=/_$/,reserved=[bar_]
+$ terser example.js -c -m --mangle-props regex=/^_/,reserved=[bar_]
 ```
 ```javascript
 var x={o:0,_:1,calc:function(){return this._+this.o}};x.bar_=2,x.o=3,console.log(x.calc());

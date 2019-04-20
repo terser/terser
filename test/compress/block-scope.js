@@ -247,3 +247,35 @@ issue_241: {
         b.inner();
     }
 }
+
+issue_334: {
+    options = {
+        defaults: true,
+        toplevel: true
+    };
+    input: {
+        (function (A) {
+            (function () {
+                doPrint();
+            })();
+
+            function doPrint() {
+                print(A);
+            }
+        }("Hello World!"));
+
+        function print(A) {
+            if (!A.x) {
+                console.log(A);
+            }
+        }
+    }
+    expect: {
+        !function (A) {
+            !function (A) {
+                A.x || console.log(A);
+            }("Hello World!");
+        }();
+    }
+    expect_stdout: "Hello World!";
+}

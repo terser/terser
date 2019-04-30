@@ -22,6 +22,7 @@ var known_acorn_errors = new RegExp([
   "Comma is not permitted after the rest element",
   "Duplicate export",
   "Expecting Unicode escape sequence",
+  "Export '.*' is not defined",
   "Identifier '.*' has already been declared",
   "Invalid regular expression: .* Unmatched",
   "Invalid regular expression: .* Unterminated group",

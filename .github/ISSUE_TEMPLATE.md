@@ -7,7 +7,7 @@ https://www.patreon.com/fabiosantoscode
 
 <!-- Note: sub-optimal but correct code is NOT a bug. -->
 
-**Version (complete output of `terser -V`)**
+**Version (complete output of `terser -V` or specific git commit)**
 
 **Complete CLI command or `minify()` options used**
 

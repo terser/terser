@@ -11,12 +11,12 @@ describe("Arrow functions", function() {
         var test = function(code) {
             return function() {
                 uglify.parse(code);
-            }
-        }
+            };
+        };
         var error = function(e) {
             return e instanceof uglify.JS_Parse_Error &&
                 e.message === "Unexpected token: expand (...)";
-        }
+        };
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error);
@@ -29,12 +29,12 @@ describe("Arrow functions", function() {
         var test = function(code) {
             return function() {
                 uglify.parse(code);
-            }
-        }
+            };
+        };
         var error = function(e) {
             return e instanceof uglify.JS_Parse_Error &&
                 e.message === "Unexpected token: punc (,)";
-        }
+        };
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error);
@@ -50,12 +50,12 @@ describe("Arrow functions", function() {
         var test = function(code) {
             return function() {
                 uglify.parse(code);
-            }
-        }
+            };
+        };
         var error = function(e) {
             return e instanceof uglify.JS_Parse_Error &&
                 e.message === "Unexpected newline before arrow (=>)";
-        }
+        };
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error);
@@ -248,7 +248,7 @@ describe("Arrow functions", function() {
         assert(ast.body[0].definitions[0].value.argnames[0].names[1].value instanceof uglify.AST_Destructuring);
 
         // Check content of nested destructuring
-        var content = ast.body[0].definitions[0].value.argnames[0].names[1].value
+        var content = ast.body[0].definitions[0].value.argnames[0].names[1].value;
         assert.strictEqual(content.is_array, false);
         assert.strictEqual(content.names.length, 1);
         assert(content.names[0] instanceof uglify.AST_ObjectKeyVal);
@@ -280,7 +280,7 @@ describe("Arrow functions", function() {
         assert(ast.body[0].definitions[0].value.argnames[0].names[0].value instanceof uglify.AST_Destructuring);
 
         // Check content of nested destructuring
-        content = ast.body[0].definitions[0].value.argnames[0].names[0].value
+        content = ast.body[0].definitions[0].value.argnames[0].names[0].value;
         assert.strictEqual(content.is_array, false);
         assert.strictEqual(content.names.length, 1);
         assert(content.names[0] instanceof uglify.AST_ObjectKeyVal);
@@ -396,4 +396,16 @@ describe("Arrow functions", function() {
         );
     });
 
+    it("Should handle return of arrow function assignment", function() {
+        function minify(code) {
+            return uglify.minify(code, {
+                mangle:false
+            }).code;
+        }
+
+        assert.strictEqual(
+          minify("export function foo(x) { bar = () => x; return 2};"),
+            "export function foo(x){return bar=()=>x,2}"
+        );
+    });
 });

@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.0.0
+
+ - **breaking change**: The `variables` property of all scopes has become a standard JavaScript `Map` as opposed to the old bespoke `Dictionary` object.
+ - Typescript definitions were fixed
+ - `terser --help` was fixed
+ - The public interface was cleaned up
+ - Fixed optimisation of `Array` and `new Array`
+ - Added the `keep_quoted=strict` mode to mangle_props, which behaves more like Google Closure Compiler by mangling all unquoted property names, instead of reserving quoted property names automatically.
+ - Fixed parent functions' parameters being shadowed in some cases
+ - Allowed Terser to run in a situation where there are custom functions attached to Object.prototype
+ - And more bug fixes, optimisations and internal changes
+
 ## v3.17.0
 
  - More DOM properties added to --mangle-properties's DOM property list

@@ -1,6 +1,5 @@
 var assert = require("assert");
 var fs = require("fs");
-var exec = require("child_process").exec;
 var acorn = require("acorn");
 var escodegen = require("escodegen");
 var UglifyJS = require("../..");
@@ -115,6 +114,17 @@ describe("spidermonkey export/import sanity test", function() {
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             uglify_ast.print_to_string()
+        );
+    });
+
+    it("should correctly minify AST from from_moz_ast with function param default destructing", () => {
+        const code = "function run(x = 2){}";
+        const acornAst = acorn.parse(code, { locations: true });
+        const terserAst = UglifyJS.AST_Node.from_mozilla_ast(acornAst);
+        const result = UglifyJS.minify(terserAst);
+        assert.strictEqual(
+            result.code,
+            "function run(x=2){}"
         );
     });
 

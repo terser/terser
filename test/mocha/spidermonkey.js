@@ -1,9 +1,8 @@
 var assert = require("assert");
 var fs = require("fs");
-var exec = require("child_process").exec;
 var acorn = require("acorn");
 var escodegen = require("escodegen");
-var UglifyJS = require("../..");
+var terser = require("../..");
 
 describe("spidermonkey export/import sanity test", function() {
     it("Should judge between directives and strings correctly on import", function() {
@@ -73,10 +72,10 @@ describe("spidermonkey export/import sanity test", function() {
         var counter_directives;
         var counter_strings;
 
-        var checkWalker = new UglifyJS.TreeWalker(function(node, descend) {
-            if (node instanceof UglifyJS.AST_String) {
+        var checkWalker = new terser.TreeWalker(function(node, descend) {
+            if (node instanceof terser.AST_String) {
                 counter_strings++;
-            } else if (node instanceof UglifyJS.AST_Directive) {
+            } else if (node instanceof terser.AST_Directive) {
                 counter_directives++;
             }
         });
@@ -85,9 +84,9 @@ describe("spidermonkey export/import sanity test", function() {
             counter_directives = 0;
             counter_strings = 0;
 
-            var ast = UglifyJS.parse(tests[i].input);
+            var ast = terser.parse(tests[i].input);
             var moz_ast = ast.to_mozilla_ast();
-            var from_moz_ast = UglifyJS.AST_Node.from_mozilla_ast(moz_ast);
+            var from_moz_ast = terser.AST_Node.from_mozilla_ast(moz_ast);
 
             from_moz_ast.walk(checkWalker);
 
@@ -98,9 +97,9 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should output and parse ES6 code correctly", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var uglify_ast = UglifyJS.parse(code);
+        var uglify_ast = terser.parse(code);
         var moz_ast = uglify_ast.to_mozilla_ast();
-        var from_moz_ast = UglifyJS.AST_Node.from_mozilla_ast(moz_ast);
+        var from_moz_ast = terser.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             uglify_ast.print_to_string()
@@ -109,18 +108,29 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should be capable of importing from acorn", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var uglify_ast = UglifyJS.parse(code);
-        var moz_ast = acorn.parse(code, {sourceType: 'module', ecmaVersion: 9});
-        var from_moz_ast = UglifyJS.AST_Node.from_mozilla_ast(moz_ast);
+        var uglify_ast = terser.parse(code);
+        var moz_ast = acorn.parse(code, {sourceType: "module", ecmaVersion: 9});
+        var from_moz_ast = terser.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             uglify_ast.print_to_string()
         );
     });
 
+    it("should correctly minify from_moz_ast when acorn AST with function param default destructing given", () => {
+        const code = "function run({x} = {x: 2}, a){ console.log(x,a); }";
+
+        const acornAst = acorn.parse(code, { locations: true });
+        const terserAst = terser.AST_Node.from_mozilla_ast(acornAst);
+
+        const result = terser.minify(terserAst, { warnings: true });
+
+        assert.strictEqual(result.code, "function run({x:x}={x:2},n){console.log(x,n)}");
+    });
+
     it("should produce an AST compatible with escodegen", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var uglify_ast = UglifyJS.parse(code);
+        var uglify_ast = terser.parse(code);
         var moz_ast = uglify_ast.to_mozilla_ast();
         var generated = escodegen.generate(moz_ast)
             .replace(/\[object Object\].\[object Object\]/g, "new.target");  // escodegen issue
@@ -129,7 +139,7 @@ describe("spidermonkey export/import sanity test", function() {
             ecmaVersion: 9
         });
         assert.strictEqual(
-            UglifyJS.AST_Node.from_mozilla_ast(parsed).print_to_string(),
+            terser.AST_Node.from_mozilla_ast(parsed).print_to_string(),
             uglify_ast.print_to_string()
         );
     });

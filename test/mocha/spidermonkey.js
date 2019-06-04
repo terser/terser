@@ -117,7 +117,7 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
-    it("should correctly minify AST from from_moz_ast with function param default destructing", () => {
+    it("should correctly minify AST from from_moz_ast with default function parameter", () => {
         const code = "function run(x = 2){}";
         const acornAst = acorn.parse(code, { locations: true });
         const terserAst = UglifyJS.AST_Node.from_mozilla_ast(acornAst);

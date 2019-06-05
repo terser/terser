@@ -181,35 +181,35 @@ hoist_funs: {
         hoist_funs: true,
     }
     input: {
-        console.log(1, typeof f, typeof g);
-        if (console.log(2, typeof f, typeof g))
-            console.log(3, typeof f, typeof g);
+        console.log(typeof f, typeof g, 1);
+        if (console.log(typeof f, typeof g, 2))
+            console.log(typeof f, typeof g, 3);
         else {
-            console.log(4, typeof f, typeof g);
+            console.log(typeof f, typeof g, 4);
             function f() {}
-            console.log(5, typeof f, typeof g);
+            console.log(typeof f, typeof g, 5);
         }
         function g() {}
-        console.log(6, typeof f, typeof g);
+        console.log(typeof f, typeof g, 6);
     }
     expect: {
         function g() {}
-        console.log(1, typeof f, typeof g);
-        if (console.log(2, typeof f, typeof g))
-            console.log(3, typeof f, typeof g);
+        console.log(typeof f, typeof g, 1);
+        if (console.log(typeof f, typeof g, 2))
+            console.log(typeof f, typeof g, 3);
         else {
-            console.log(4, typeof f, typeof g);
+            console.log(typeof f, typeof g, 4);
             function f() {}
-            console.log(5, typeof f, typeof g);
+            console.log(typeof f, typeof g, 5);
         }
-        console.log(6, typeof f, typeof g);
+        console.log(typeof f, typeof g, 6);
     }
     expect_stdout: [
-        "1 'undefined' 'function'",
-        "2 'undefined' 'function'",
-        "4 'function' 'function'",
-        "5 'function' 'function'",
-        "6 'function' 'function'",
+        "undefined function 1",
+        "undefined function 2",
+        "function function 4",
+        "function function 5",
+        "function function 6",
     ]
 }
 
@@ -219,36 +219,36 @@ hoist_funs_strict: {
     }
     input: {
         "use strict";
-        console.log(1, typeof f, typeof g);
-        if (console.log(2, typeof f, typeof g))
-            console.log(3, typeof f, typeof g);
+        console.log(typeof f, typeof g, 1);
+        if (console.log(typeof f, typeof g, 2))
+            console.log(typeof f, typeof g, 3);
         else {
-            console.log(4, typeof f, typeof g);
+            console.log(typeof f, typeof g, 4);
             function f() {}
-            console.log(5, typeof f, typeof g);
+            console.log(typeof f, typeof g, 5);
         }
         function g() {}
-        console.log(6, typeof f, typeof g);
+        console.log(typeof f, typeof g, 6);
     }
     expect: {
         "use strict";
         function g() {}
-        console.log(1, typeof f, typeof g);
-        if (console.log(2, typeof f, typeof g))
-            console.log(3, typeof f, typeof g);
+        console.log(typeof f, typeof g, 1);
+        if (console.log(typeof f, typeof g, 2))
+            console.log(typeof f, typeof g, 3);
         else {
-            console.log(4, typeof f, typeof g);
+            console.log(typeof f, typeof g, 4);
             function f() {}
-            console.log(5, typeof f, typeof g);
+            console.log(typeof f, typeof g, 5);
         }
-        console.log(6, typeof f, typeof g);
+        console.log(typeof f, typeof g, 6);
     }
     expect_stdout: [
-        "1 'undefined' 'function'",
-        "2 'undefined' 'function'",
-        "4 'function' 'function'",
-        "5 'function' 'function'",
-        "6 'undefined' 'function'",
+        "undefined function 1",
+        "undefined function 2",
+        "function function 4",
+        "function function 5",
+        "undefined function 6",
     ]
 }
 

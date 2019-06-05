@@ -455,12 +455,12 @@ simple_string: {
         properties: true,
     }
     input: {
-        console.log({[`foo`]: 1}[`foo`], `hi` == "hi", `world`);
+        console.log( `world`, {[`foo`]: 1}[`foo`], `hi` == "hi");
     }
     expect: {
-        console.log([ 1 ][0], true, "world");
+        console.log("world", [ 1 ][0], true);
     }
-    expect_stdout: "1 true 'world'"
+    expect_stdout: "world 1 true"
 }
 
 semicolons: {

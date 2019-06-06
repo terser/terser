@@ -1619,6 +1619,7 @@ issue_2657: {
         inline: true,
         reduce_vars: true,
         sequences: true,
+        passes: 2,
         unused: true,
     }
     input: {
@@ -2650,6 +2651,7 @@ issue_t131a: {
         join_vars: true,
         reduce_vars: true,
         side_effects: true,
+        passes: 2,
         unused: true,
     }
     input: {
@@ -2672,17 +2674,16 @@ issue_t131a: {
         })();
     }
     expect: {
-        (function() {
-            console.log(JSON.stringify({
-                a: 1
-            }), JSON.stringify(function() {
-                var x = {
-                    a: 2,
-                    b: 3
-                };
-                return x;
-            }()));
-        })();
+        console.log(JSON.stringify({
+            a: 1
+        }), JSON.stringify(function () {
+            var x = {
+                a: 2,
+                b: 3
+            };
+            return x;
+        }()));
+
     }
     expect_stdout: '{"a":1} {"a":2,"b":3}'
 }

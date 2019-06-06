@@ -7080,3 +7080,96 @@ issue_369: {
     }
     expect_stdout: "Value after override"
 }
+
+variables_collision_in_immediately_invoked_func: {
+    options = {
+        defaults: true
+    }
+    input: {
+        (function(callback) {
+            callback();
+        })(function() {
+            window.used = function() {
+                var A = window.foo,
+                    B = window.bar,
+                    C = window.foobar;
+
+                return (function(A, c) {
+                    if (-1 === c) return A;
+                    return $(A, c);
+                })(B, C);
+            }.call(this);
+        });
+    }
+    expect: {
+        !function () {
+            window.used = function () {
+                window.foo;
+                var B = window.bar, C = window.foobar;
+                return -1 === C ? B : $(B, C);
+            }.call(this);
+        }();
+    }
+}
+
+issue_308: {
+    options = {
+        defaults: true
+    };
+    input: {
+        exports.withStyles = withStyles;
+
+        function _inherits(superClass) {
+            if (typeof superClass !== "function") {
+                throw new TypeError("Super expression must be a function, not " + typeof superClass);
+            }
+            Object.create(superClass);
+        }
+
+        function withStyles() {
+            var a = EXTERNAL();
+            return function(_a){
+                _inherits(_a);
+                function d() {}
+            }(a);
+        }
+    }
+    expect: {
+        function _inherits(superClass) {
+            if ("function" != typeof superClass)
+                throw new TypeError("Super expression must be a function, not " + typeof superClass);
+            Object.create(superClass);
+        }
+
+        function withStyles() {
+            _inherits(EXTERNAL());
+        }
+
+        exports.withStyles = withStyles;
+    }
+}
+
+issue_294: {
+    options = {
+        defaults: true
+    };
+    input: {
+        module.exports = (function(constructor) {
+            return constructor();
+        })(function() {
+            return function(input) {
+                var keyToMap = input.key;
+                return {
+                    mappedKey: (function(value) {
+                        return value || "CONDITIONAL_DEFAULT_VALUE";
+                    })(keyToMap)
+                };
+            };
+        });
+    }
+    expect: {
+        module.exports = function (input) {
+            return {mappedKey: input.key || "CONDITIONAL_DEFAULT_VALUE"};
+        };
+    }
+}

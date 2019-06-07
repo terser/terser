@@ -230,27 +230,27 @@ arguments_in_arrow_func_1: {
     }
     input: {
         (function(a, b) {
-            console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+            console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
         })("bar", 42, false);
         (function(a, b) {
             (() => {
-                console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+                console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
             })(10, 20, 30, 40);
         })("bar", 42, false);
     }
     expect: {
         (function(a, b, argument_2, argument_3) {
-            console.log(b, a, argument_3, a, b, argument_2);
+            console.log(a, a, b, argument_3, b, argument_2);
         })("bar", 42, false);
         (function(a, b) {
             (() => {
-                console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+                console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
             })(10, 20, 30, 40);
         })("bar", 42, false);
     }
     expect_stdout: [
-        "42 'bar' undefined 'bar' 42 false",
-        "42 'bar' undefined 'bar' 42 false",
+        "bar bar 42 undefined 42 false",
+        "bar bar 42 undefined 42 false",
     ]
 }
 
@@ -263,27 +263,27 @@ arguments_in_arrow_func_2: {
     }
     input: {
         (function(a, b) {
-            console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+            console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
         })("bar", 42, false);
         (function(a, b) {
             (() => {
-                console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+                console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
             })(10, 20, 30, 40);
         })("bar", 42, false);
     }
     expect: {
         (function(a, b) {
-            console.log(b, a, arguments[3], a, b, arguments[2]);
+            console.log(a, a, b, arguments[3], b, arguments[2]);
         })("bar", 42, false);
         (function(a, b) {
             (() => {
-                console.log(arguments[1], arguments[0], arguments[3], a, b, arguments[2]);
+                console.log(arguments[0], a, arguments[1], arguments[3], b, arguments[2]);
             })(10, 20, 30, 40);
         })("bar", 42, false);
     }
     expect_stdout: [
-        "42 'bar' undefined 'bar' 42 false",
-        "42 'bar' undefined 'bar' 42 false",
+        "bar bar 42 undefined 42 false",
+        "bar bar 42 undefined 42 false",
     ]
 }
 

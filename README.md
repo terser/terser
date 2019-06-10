@@ -757,7 +757,7 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
 
 - `keep_fnames` (default: `false`) -- Pass `true` to prevent the
   compressor from discarding function names. Pass a regular expression to only keep
-  class names matching that regex. Useful for code relying on `Function.prototype.name`.
+  function names matching that regex. Useful for code relying on `Function.prototype.name`.
   See also: the `keep_fnames` [mangle option](#mangle).
 
 - `keep_infinity` (default: `false`) -- Pass `true` to prevent `Infinity` from

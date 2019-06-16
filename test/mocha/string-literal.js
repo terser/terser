@@ -6,9 +6,7 @@ describe("String literals", function() {
         var inputs = [
             "'\n'",
             "'\r'",
-            '"\r\n"',
-            "'\u2028'",
-            '"\u2029"'
+            '"\r\n"'
         ];
 
         var test = function(input) {

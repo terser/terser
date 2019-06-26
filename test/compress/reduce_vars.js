@@ -1625,53 +1625,6 @@ double_reference: {
     }
 }
 
-iife_arguments_1: {
-    options = {
-        reduce_funcs: true,
-        reduce_vars: true,
-        unused: true,
-    }
-    input: {
-        (function(x) {
-            console.log(x() === arguments[0]);
-        })(function f() {
-            return f;
-        });
-    }
-    expect: {
-        (function(x) {
-            console.log(x() === arguments[0]);
-        })(function f() {
-            return f;
-        });
-    }
-    expect_stdout: true
-}
-
-iife_arguments_2: {
-    options = {
-        reduce_funcs: true,
-        reduce_vars: true,
-        unused: true,
-    }
-    input: {
-        (function() {
-            var x = function f() {
-                return f;
-            };
-            console.log(x() === arguments[0]);
-        })();
-    }
-    expect: {
-        (function() {
-            console.log(function f() {
-                return f;
-            }() === arguments[0]);
-        })();
-    }
-    expect_stdout: true
-}
-
 iife_eval_1: {
     options = {
         reduce_funcs: true,
@@ -7109,4 +7062,21 @@ single_use_class_referenced_in_object_literal: {
         })();
     }
     expect_stdout: "true 123"
+}
+
+issue_369: {
+    options = {
+        reduce_vars: true
+    }
+    input: {
+        var printTest = function (ret) {
+            function ret() {
+                console.log("Value after override");
+            }
+            return ret;
+        }("Value before override");
+
+        printTest();
+    }
+    expect_stdout: "Value after override"
 }

@@ -221,7 +221,13 @@ function run_compress_tests() {
                     if (!("props" in cache)) {
                         cache.props = new Map();
                     } else if (!(cache.props instanceof Map)) {
-                        cache.props = U.map_from_object(cache.props);
+                        const props = new Map();
+                        for (const key in cache.props) {
+                            if (HOP(cache.props, key) && key.charAt(0) === '$') {
+                                props.set(key.substr(1), cache.props[key]);
+                            }
+                        }
+                        cache.props = props;
                     }
                 })(test.mangle.cache);
                 output.mangle_names(test.mangle);

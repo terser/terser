@@ -1,5 +1,18 @@
 # Changelog
 
+## v4.0.1
+
+ - Collisions between the arguments of inlined functions and names in the outer scope are now being avoided while inlining
+ - Unmapped segments are now preserved when compressing a file which has source maps
+ - Default values of functions are now correctly converted from Mozilla AST to Terser AST
+ - JSON ⊂ ECMAScript spec (if you don't know what this is you don't need to)
+ - Export AST_* classes to library users
+ - Fixed issue with `collapse_vars` when functions are created with the same name as a variable which already exists
+ - Added `MutationObserverInit` (Object with options for initialising a mutation observer) properties to the DOM property list
+ - Custom `Error` subclasses are now internally used instead of old-school Error inheritance hacks.
+ - Documentation fixes
+ - Performance optimizations
+
 ## v4.0.0
 
  - **breaking change**: The `variables` property of all scopes has become a standard JavaScript `Map` as opposed to the old bespoke `Dictionary` object.

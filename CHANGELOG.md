@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.2
+
+(Hotfix release. Reverts unmapped segments PR [#342](https://github.com/terser-js/terser/pull/342), which will be put back on Terser when the upstream issue is resolved)
+
 ## v4.0.1
 
  - Collisions between the arguments of inlined functions and names in the outer scope are now being avoided while inlining

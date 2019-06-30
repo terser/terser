@@ -1,6 +1,7 @@
 var Uglify = require('../../');
 var assert = require("assert");
 var SourceMapConsumer = require("source-map").SourceMapConsumer;
+var SourceMapGenerator = require("source-map").SourceMapGenerator;
 
 describe("input sourcemaps", function() {
     var transpilemap, map;
@@ -62,5 +63,48 @@ describe("input sourcemaps", function() {
         map.allGeneratedPositionsFor({source: "index.js", line: 1, column: 1}).forEach(function(pos) {
             assert.ok(pos.line <= 2, msg);
         })
+    });
+
+    it("Should preserve unmapped segments in output source map", function() {
+        var generator = new SourceMapGenerator();
+
+        generator.addMapping({
+            source: "source.ts",
+            generated: {line: 1, column: 0},
+            original: {line: 1, column: 0},
+        });
+
+        generator.addMapping({
+            source: null,
+            original: null,
+            generated: {line: 1, column: 38}
+        });
+
+        generator.addMapping({
+            source: "source.ts",
+            generated: {line: 1, column: 51},
+            original: {line: 2, column: 0},
+        });
+
+        // Everything except the "say('hello');" part is mapped to "source.ts". The "say"
+        // function call is not mapped to any original source location. e.g. this can
+        // happen when a code transformer inserts generated code in between existing code.
+        var inputFile = "function say(msg) {console.log(msg)};say('hello');process.exit(1);";
+        var result = Uglify.minify(inputFile, {
+            sourceMap: {
+                content: JSON.parse(generator.toString())
+            }
+        });
+
+        var transformedMap = new SourceMapConsumer(result.map);
+        var hasMappedSource = true;
+
+        for (let i = 0; i < result.code.length; i++) {
+            var info = transformedMap.originalPositionFor({line: 1, column: i});
+            hasMappedSource = hasMappedSource && !!info.source;
+        }
+
+        assert.equal(hasMappedSource, false, "Expected transformed source map to preserve the " +
+            "mapping without original source location");
     });
 });

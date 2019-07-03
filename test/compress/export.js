@@ -855,3 +855,69 @@ name_cache_import_star_as_name_from_module: {
         export { _$FS$_ as fs, e as stuff };
     }
 }
+
+issue_333: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        function shortOut() {
+            return function() {};
+        }
+
+        var setToString = shortOut();
+
+        var _setToString = setToString;
+
+        export function baseRest() {
+            return _setToString();
+        }
+
+        export { _setToString };
+    }
+    expect: {
+        function shortOut() {
+            return function () {};
+        }
+
+        var setToString = shortOut();
+        var _setToString = setToString;
+
+        export function baseRest() {
+            return _setToString();
+        }
+
+        export { _setToString };
+    }
+}
+
+issue_333_toplevel: {
+    options = {
+        defaults: true,
+        toplevel: true,
+    }
+    input: {
+        function shortOut() {
+            return function() {};
+        }
+
+        var setToString = shortOut();
+
+        var _setToString = setToString;
+
+        export function baseRest() {
+            return _setToString();
+        }
+
+        export { _setToString };
+    }
+    expect: {
+        var _setToString = function () {};
+
+        export function baseRest() {
+            return _setToString();
+        }
+
+        export { _setToString };
+    }
+}

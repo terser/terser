@@ -126,7 +126,7 @@ export {
     defaults,
     push_uniq,
     string_template,
-} from "./lib/utils.js";
+} from "./lib/utils/index.js";
 export { base54 } from "./lib/scope.js";
 export { Compressor } from "./lib/compress/index.js";
 export { to_ascii } from "./lib/minify.js";

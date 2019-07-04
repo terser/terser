@@ -5,7 +5,7 @@ export * from "./main";
 export * from "./lib/ast.js";
 export {
     map_from_object,
-} from "./lib/utils.js";
+} from "./lib/utils/index.js";
 export {
     JS_Parse_Error,
     tokenizer,

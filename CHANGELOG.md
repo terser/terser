@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.1.0
+
+ - Internal functions were replaced by `Object.assign`, `Array.prototype.some`, `Array.prototype.find` and `Array.prototype.every`.
+ - A serious issue where some ESM-native code was broken was fixed.
+ - Performance improvements were made.
+ - Support for BigInt was added.
+ - Inline efficiency was improved. Functions are now being inlined more proactively instead of being inlined only after another Compressor pass.
+
 ## v4.0.2
 
 (Hotfix release. Reverts unmapped segments PR [#342](https://github.com/terser-js/terser/pull/342), which will be put back on Terser when the upstream issue is resolved)

@@ -330,12 +330,11 @@ issue_2084: {
     }
     expect: {
         var c = 0;
-        !function(c) {
+        !function (c) {
             c = 1 + c,
-            c = 1 + (c = 0),
+                c = 1 + (c = 0),
             0 !== 23..toString() && (c = 1 + c);
-        }(-1),
-        console.log(c);
+        }(-1), console.log(c);
     }
     expect_stdout: "0"
 }
@@ -1155,11 +1154,9 @@ issue_2616: {
     }
     expect: {
         var c = "FAIL";
-        (function() {
-            !function(NaN) {
-                (true << NaN) - 0/0 || (c = "PASS");
-            }([]);
-        })();
+        !function (NaN) {
+            (true << NaN) - 0 / 0 || (c = "PASS");
+        }([]);
         console.log(c);
     }
     expect_stdout: "PASS"
@@ -1190,14 +1187,11 @@ issue_2620_1: {
     }
     expect: {
         var c = "FAIL";
-        (function() {
-            (function(a) {
-                if (function(a) {
-                    a && a();
-                }(), a) c = "PASS";
-            })(1);
-        })(),
-        console.log(c);
+        !function (a) {
+            if (function (a) {
+                a && a();
+            }(), a) c = "PASS";
+        }(1), console.log(c);
     }
     expect_stdout: "PASS"
 }
@@ -1264,18 +1258,16 @@ issue_2620_3: {
     }
     expect: {
         var c = "FAIL";
-        (function() {
-            (function(a, NaN) {
-                (function() {
-                    switch (a) {
-                      case a:
+        !function (a, NaN) {
+            (function () {
+                switch (a) {
+                    case a:
                         break;
-                      case c = "PASS", NaN:
+                    case c = "PASS", NaN:
                         break;
-                    }
-                })();
-            })(NaN);
-        })();
+                }
+            })();
+        }(NaN);
         console.log(c);
     }
     expect_stdout: "PASS"
@@ -1573,9 +1565,7 @@ issue_2647_3: {
         }());
     }
     expect: {
-        (function() {
-            console.log("pass".toUpperCase());
-        })();
+        void console.log("pass".toUpperCase());
     }
     expect_stdout: "PASS"
 }

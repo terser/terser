@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.0.1
+
+ - Fixed a bug where toplevel scopes were being mixed up with lambda scopes
+
 ## v4.1.0
 
  - Internal functions were replaced by `Object.assign`, `Array.prototype.some`, `Array.prototype.find` and `Array.prototype.every`.

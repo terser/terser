@@ -1,6 +1,11 @@
 # Changelog
 
-## v4.0.1
+
+## v4.1.2
+
+ - The hotfix was hotfixed
+
+## v4.1.1
 
  - Fixed a bug where toplevel scopes were being mixed up with lambda scopes
 

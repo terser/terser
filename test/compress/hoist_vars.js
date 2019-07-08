@@ -109,3 +109,16 @@ issue_2295: {
         }
     }
 }
+
+regression_toplevel_args: {
+    options = {
+        hoist_vars: true
+    }
+    input: {
+        var Foo;
+        var Bar;
+    }
+    expect: {
+        var Foo, Bar;
+    }
+}

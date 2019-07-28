@@ -13,7 +13,7 @@ describe("Try", function() {
             }
         }
         var error = function (e) {
-            return e instanceof uglify.JS_Parse_Error;
+            return e instanceof uglify._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);

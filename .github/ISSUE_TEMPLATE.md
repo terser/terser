@@ -11,7 +11,7 @@ https://www.patreon.com/fabiosantoscode
 
 **Complete CLI command or `minify()` options used**
 
-<!-- Note: if you used the API, you're expected to enable the source-map-support module and to add the TERSER_NO_BUNDLE=1 environment variable. -->
+<!-- Note: if you used the node API directly, you're expected to enable the source-map-support module such that your stack traces make sense. -->
 
 **`terser` input**
 

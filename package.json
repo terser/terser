@@ -42,15 +42,19 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.3",
     "rollup": "^1.13.1",
+    "rollup-plugin-terser": "^5.1.1",
     "semver": "^5.7.0"
   },
   "scripts": {
-    "test": "npm run build -- --silent --input=main.tests.js && npm run minify && node test/run-tests.js",
+    "test": "npm run build -- --configTest && node test/run-tests.js",
+    "test:precommit": "npm run build && node test/run-tests.js",
+    "test:mocha": "npm run build -- --configTest && node test/mocha.js",
+    "test:compress": "npm run build -- --configTest && node test/compress.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "build": "rimraf dist/* && rollup -c",
+    "build": "rimraf dist/* && rollup --config --silent",
     "minify": "cd dist && node ../bin/uglifyjsnobundle bundle.js -mc --source-map content=bundle.js.map,includeSources=true -o bundle.min.js",
-    "prepare": "npm run build && npm run minify",
+    "prepare": "npm run build",
     "postversion": "echo 'Remember to update the changelog!'"
   },
   "keywords": [
@@ -83,7 +87,8 @@
       "describe": false,
       "it": false,
       "require": false,
-      "global": false
+      "global": false,
+      "process": false
     },
     "rules": {
       "brace-style": [
@@ -115,6 +120,6 @@
   },
   "pre-commit": [
     "lint-fix",
-    "test"
+    "test:precommit"
   ]
 }

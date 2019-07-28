@@ -3,7 +3,7 @@ var UglifyJS = require("../node");
 
 describe("Directives", function() {
     it("Should allow tokenizer to store directives state", function() {
-        var tokenizer = UglifyJS.tokenizer("", "foo.js");
+        var tokenizer = UglifyJS._tokenizer("", "foo.js");
         // Stack level 0
         assert.strictEqual(tokenizer.has_directive("use strict"), false);
         assert.strictEqual(tokenizer.has_directive("use asm"), false);
@@ -125,13 +125,13 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             // Fail parser deliberately to get state at failure
-            var tokenizer = UglifyJS.tokenizer(tests[i].input + "]", "foo.js");
+            var tokenizer = UglifyJS._tokenizer(tests[i].input + "]", "foo.js");
 
             try {
                 var parser = UglifyJS.parse(tokenizer);
                 throw new Error("Expected parser to fail");
             } catch (e) {
-                assert.strictEqual(e instanceof UglifyJS.JS_Parse_Error, true);
+                assert.strictEqual(e instanceof UglifyJS._JS_Parse_Error, true);
                 assert.strictEqual(e.message, "Unexpected token: punc (])");
             }
 
@@ -228,11 +228,11 @@ describe("Directives", function() {
                 [ "use\nstrict", "use \nstrict", "use asm" ]
             ],
         ].forEach(function(test) {
-            var tokenizer = UglifyJS.tokenizer(test[0] + "]", "foo.js");
+            var tokenizer = UglifyJS._tokenizer(test[0] + "]", "foo.js");
             assert.throws(function() {
                 UglifyJS.parse(tokenizer);
             }, function(e) {
-                return e instanceof UglifyJS.JS_Parse_Error
+                return e instanceof UglifyJS._JS_Parse_Error
                     && e.message === "Unexpected token: punc (])"
             }, test[0]);
             test[1].forEach(function(directive) {

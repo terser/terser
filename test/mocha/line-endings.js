@@ -48,7 +48,7 @@ describe("line-endings", function() {
             }
         }
         var fail = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error
+            return e instanceof UglifyJS._JS_Parse_Error
                 && e.message === "Unexpected line terminator";
         }
         for (var i = 0; i < inputs.length; i++) {

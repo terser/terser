@@ -20,7 +20,7 @@ describe("Unicode", function() {
         }
 
         var fail = function(e) {
-            return e instanceof uglify.JS_Parse_Error
+            return e instanceof uglify._JS_Parse_Error
                 && e.message === "First identifier char is an invalid identifier char";
         }
 
@@ -43,7 +43,7 @@ describe("Unicode", function() {
         }
 
         var fail = function(e) {
-            return e instanceof uglify.JS_Parse_Error
+            return e instanceof uglify._JS_Parse_Error
                 && e.message === "Invalid escaped identifier char";
         }
 
@@ -68,7 +68,7 @@ describe("Unicode", function() {
         }
 
         var fail = function(e) {
-            return e instanceof uglify.JS_Parse_Error
+            return e instanceof uglify._JS_Parse_Error
                 && e.message === "Escaped characters are not allowed in keywords";
         }
 

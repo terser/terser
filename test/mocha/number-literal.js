@@ -14,7 +14,7 @@ describe("Number literals", function () {
             }
         }
         var error = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error
+            return e instanceof UglifyJS._JS_Parse_Error
                 && e.message === "Legacy octal literals are not allowed in strict mode";
         };
         for (var i = 0; i < inputs.length; i++) {

@@ -16,7 +16,7 @@ describe("String literals", function() {
         };
 
         var error = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error
+            return e instanceof UglifyJS._JS_Parse_Error
                 && e.message === "Unterminated string constant";
         };
 
@@ -46,7 +46,7 @@ describe("String literals", function() {
         };
 
         var error = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error
+            return e instanceof UglifyJS._JS_Parse_Error
                 && e.message === "Legacy octal escape sequences are not allowed in strict mode";
         }
 

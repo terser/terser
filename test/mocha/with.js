@@ -8,7 +8,7 @@ describe("With", function() {
             UglifyJS.parse(code);
         }
         var error = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error
+            return e instanceof UglifyJS._JS_Parse_Error
                 && e.message === "Strict mode may not include a with statement";
         }
         assert.throws(test, error);

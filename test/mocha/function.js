@@ -176,7 +176,7 @@ describe("Function", function() {
             }
         }
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 /^Unexpected token: /.test(e.message);
         }
 
@@ -195,7 +195,7 @@ describe("Function", function() {
             }
         }
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error;
+            return e instanceof uglify._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -212,7 +212,7 @@ describe("Function", function() {
             assert.throws(function() {
                 uglify.parse(code, { ecma: 6 });
             }, function(e) {
-                return e instanceof uglify.JS_Parse_Error;
+                return e instanceof uglify._JS_Parse_Error;
             }, code);
         });
     });
@@ -232,7 +232,7 @@ describe("Function", function() {
             }
         }
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error;
+            return e instanceof uglify._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -249,7 +249,7 @@ describe("Function", function() {
             }
         }
         var error = function (e) {
-            return e instanceof uglify.JS_Parse_Error;
+            return e instanceof uglify._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -278,7 +278,7 @@ describe("Function", function() {
             }
         }
         var error = function (e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 /^Parameter [a-zA-Z]+ was used already$/.test(e.message);
         }
         for (var i = 0; i < tests.length; i++) {

@@ -70,7 +70,7 @@ describe("Getters and setters", function() {
 
         var fail = function(data) {
             return function (e) {
-                return e instanceof UglifyJS.JS_Parse_Error &&
+                return e instanceof UglifyJS._JS_Parse_Error &&
                     /^Unexpected token: /.test(e.message);
             };
         };

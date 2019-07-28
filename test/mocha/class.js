@@ -15,7 +15,7 @@ describe("Class", function() {
             }
         }
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 /^Unexpected token: /.test(e.message);
         }
 

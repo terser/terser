@@ -17,7 +17,7 @@ describe("Object", function() {
             Uglify.parse(code);
         }
         var expect = function(e) {
-            return e instanceof Uglify.JS_Parse_Error;
+            return e instanceof Uglify._JS_Parse_Error;
         }
         assert.throws(parse, expect);
     });
@@ -28,7 +28,7 @@ describe("Object", function() {
             console.log(Uglify.parse(code).body[0].body[0]);
         }
         var expect = function(e) {
-            return e instanceof Uglify.JS_Parse_Error;
+            return e instanceof Uglify._JS_Parse_Error;
         }
         assert.throws(parse, expect);
     });
@@ -110,7 +110,7 @@ describe("Object", function() {
 
         var fail = function(data) {
             return function (e) {
-                return e instanceof Uglify.JS_Parse_Error && (
+                return e instanceof Uglify._JS_Parse_Error && (
                     e.message === "Unexpected token: operator (" + data.operator + ")" ||
                     (e.message === "Unterminated regular expression" && data.operator[0] === "/") ||
                     (e.message === "Unexpected token: punc (()" && data.operator === "*")

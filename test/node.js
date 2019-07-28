@@ -1,1 +1,1 @@
-module.exports = require("../dist/bundle");
+module.exports = require("..");

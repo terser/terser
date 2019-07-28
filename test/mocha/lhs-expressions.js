@@ -240,7 +240,7 @@ describe("Left-hand side expressions", function () {
                 }
             }
             var check = function(e) {
-                return e instanceof uglify.JS_Parse_Error &&
+                return e instanceof uglify._JS_Parse_Error &&
                     e.message === expected;
             }
 

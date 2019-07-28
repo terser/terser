@@ -14,7 +14,7 @@ describe("Arrow functions", function() {
             };
         };
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 e.message === "Unexpected token: expand (...)";
         };
 
@@ -32,7 +32,7 @@ describe("Arrow functions", function() {
             };
         };
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 e.message === "Unexpected token: punc (,)";
         };
 
@@ -53,7 +53,7 @@ describe("Arrow functions", function() {
             };
         };
         var error = function(e) {
-            return e instanceof uglify.JS_Parse_Error &&
+            return e instanceof uglify._JS_Parse_Error &&
                 e.message === "Unexpected newline before arrow (=>)";
         };
 
@@ -73,7 +73,7 @@ describe("Arrow functions", function() {
             assert.throws(function() {
                 uglify.parse(code);
             }, function(e) {
-                return e instanceof uglify.JS_Parse_Error && /^Unexpected /.test(e.message);
+                return e instanceof uglify._JS_Parse_Error && /^Unexpected /.test(e.message);
             }, code);
         });
     });

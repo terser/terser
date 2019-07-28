@@ -14,7 +14,7 @@ describe("Yield", function() {
             UglifyJS.parse(js);
         }
         var expect = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error &&
+            return e instanceof UglifyJS._JS_Parse_Error &&
                 e.message === "Unexpected token: punc (;)";
         }
         assert.throws(test, expect);
@@ -26,7 +26,7 @@ describe("Yield", function() {
             UglifyJS.parse(js);
         }
         var expect = function(e) {
-            return e instanceof UglifyJS.JS_Parse_Error &&
+            return e instanceof UglifyJS._JS_Parse_Error &&
                 e.message === "Unexpected token: operator (*)";
         }
         assert.throws(test, expect);
@@ -70,7 +70,7 @@ describe("Yield", function() {
 
     it("Should not allow yield to be used as symbol, identifier or shorthand property outside generators in strict mode", function() {
         function fail(e) {
-            return e instanceof UglifyJS.JS_Parse_Error &&
+            return e instanceof UglifyJS._JS_Parse_Error &&
                 /^Unexpected yield identifier (?:as parameter )?inside strict mode/.test(e.message);
         }
 
@@ -95,7 +95,7 @@ describe("Yield", function() {
 
     it("Should not allow yield to be used as symbol, identifier or shorthand property inside generators", function() {
         function fail(e) {
-            return e instanceof UglifyJS.JS_Parse_Error && [
+            return e instanceof UglifyJS._JS_Parse_Error && [
                 "Unexpected token: operator (=)",
                 "Yield cannot be used as identifier inside generators",
             ].includes(e.message);

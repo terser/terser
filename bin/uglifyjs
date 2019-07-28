@@ -11,10 +11,7 @@ var info = require("../package.json");
 var path = require("path");
 var program = require("commander");
 
-var bundle_path = __dirname + (process.env.TERSER_NO_BUNDLE ?
-    "/../dist/bundle.js" :
-    "/../dist/bundle.min.js");
-var UglifyJS = require(bundle_path);
+var UglifyJS = require("..");
 try {
     require("source-map-support").install();
 } catch (err) {}

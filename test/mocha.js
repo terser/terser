@@ -1,8 +1,15 @@
+#!/usr/bin/env node
+/* globals module, __dirname, console */
+
+try {
+    require("source-map-support").install();
+} catch (err) {}
+
 var fs = require("fs");
 var path = require("path");
 
 // Instantiate a Mocha instance
-var Mocha = process.env.TRAVIS ? require("mocha") : require("mochallel");
+var Mocha = process.env.CI ? require("mocha") : require("mochallel");
 var mocha = new Mocha({
     timeout: 5000
 });

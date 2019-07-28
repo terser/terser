@@ -3,7 +3,7 @@
 
 var acorn = require("acorn");
 var generateRandomJS = require("eslump").generateRandomJS;
-var minify = require("../dist/bundle.js").minify;
+var minify = require("..").minify;
 
 var known_terser_errors = new RegExp([
   "Cannot negate a statement",

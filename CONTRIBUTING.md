@@ -185,14 +185,17 @@ available at [http://contributor-covenant.org/version/1/4][version]
 
 Every new feature and API change should be accompanied by a README addition.
 
-## Enabling dev mode
-
-Normally when you require terser or use the CLI, you get a compiled version. When developing terser, you want to use the files you're actually editing to make those tests pass. So, add to your .bashrc: `TERSER_NO_BUNDLE=1`.
-
 ## Testing
 
 All features and bugs should have tests that verify the fix. You can run all
 tests using `npm test`.
+
+There are two kinds of tests:
+
+ * compress tests, located in `test/compress` and run with `npm run test:compress`, optionally with a test file name argument.
+ * mocha-based tests, located in `test/mocha` and run with `npm run test:mocha`
+
+To run both of these tests at once, use `npm test`.
 
 The most common type of test are tests that verify input and output of the
 Uglify transforms. These tests exist in `test/compress`. New tests can be added

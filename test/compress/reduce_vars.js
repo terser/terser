@@ -1478,13 +1478,10 @@ defun_redefine: {
     }
     expect:  {
         function f() {
-            function g() {
-                return 1;
-            }
-            g = function() {
+            (function () {
                 return 3;
-            };
-            return g() + 2;
+            });
+            return 3 + 2;
         }
     }
 }
@@ -1536,11 +1533,15 @@ func_modified: {
     }
     expect: {
         function f(a) {
-            function b() { return 2; }
-            function c() { return 3; }
+            function b() {
+                return 2;
+            }
+
             b.inject = [];
-            c = function() { return 4; };
-            return 1 + 2 + c();
+            (function () {
+                return 4;
+            });
+            return 1 + 2 + 4;
         }
     }
 }
@@ -5544,9 +5545,7 @@ defun_var_1: {
         console.log(typeof a, typeof b);
     }
     expect: {
-        var a = 42;
-        function a() {}
-        console.log(typeof a, "function");
+        console.log("number", "function");
     }
     expect_stdout: "number function"
 }
@@ -5566,9 +5565,7 @@ defun_var_2: {
         console.log(typeof a, typeof b);
     }
     expect: {
-        function a() {}
-        var a = 42;
-        console.log(typeof a, "function");
+        console.log("number", "function");
     }
     expect_stdout: "number function"
 }

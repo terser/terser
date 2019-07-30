@@ -260,6 +260,34 @@ describe("comments", function() {
         ].join("\n"));
     });
 
+    it("Should not duplicate a same comment", function() {
+        var result = UglifyJS.minify([
+            "var foo = {};",
+            "// this is a comment line",
+            "(foo.bar = {}).test = 123;"
+        ].join("\n"), {
+            output: { comments: true }
+        });
+        if (result.error) throw result.error;
+        assert.strictEqual(result.code, [
+            "var foo={};",
+            "// this is a comment line",
+            "(foo.bar={}).test=123;"
+        ].join("\n"));
+        result = UglifyJS.minify([
+            "var foo = {};",
+            "/* this is a block line */",
+            "(foo.bar = {}).test = 123;"
+        ].join("\n"), {
+            output: { comments: true }
+        });
+        if (result.error) throw result.error;
+        assert.strictEqual(result.code, [
+            "var foo={};",
+            "/* this is a block line */(foo.bar={}).test=123;"
+        ].join("\n"));
+    });
+
     describe("comment before constant", function() {
         var js = 'function f() { /*c1*/ var /*c2*/ foo = /*c3*/ false; return foo; }';
 

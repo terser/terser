@@ -261,31 +261,27 @@ describe("comments", function() {
     });
 
     it("Should not duplicate a same comment", function() {
-        var result = UglifyJS.minify([
-            "var foo = {};",
-            "// this is a comment line",
-            "(foo.bar = {}).test = 123;"
-        ].join("\n"), {
+        var result = UglifyJS.minify(
+`var foo = {};
+// this is a comment line
+(foo.bar = {}).test = 123;`, {
             output: { comments: true }
         });
         if (result.error) throw result.error;
-        assert.strictEqual(result.code, [
-            "var foo={};",
-            "// this is a comment line",
-            "(foo.bar={}).test=123;"
-        ].join("\n"));
-        result = UglifyJS.minify([
-            "var foo = {};",
-            "/* this is a block line */",
-            "(foo.bar = {}).test = 123;"
-        ].join("\n"), {
+        assert.strictEqual(result.code,
+`var foo={};
+// this is a comment line
+(foo.bar={}).test=123;`);
+        result = UglifyJS.minify(
+`var foo = {};
+/* this is a block line */
+(foo.bar = {}).test = 123;`, {
             output: { comments: true }
         });
         if (result.error) throw result.error;
-        assert.strictEqual(result.code, [
-            "var foo={};",
-            "/* this is a block line */(foo.bar={}).test=123;"
-        ].join("\n"));
+        assert.strictEqual(result.code, 
+`var foo={};
+/* this is a block line */(foo.bar={}).test=123;`);
     });
 
     describe("comment before constant", function() {

@@ -1,7 +1,7 @@
 {
   "name": "terser",
   "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+",
-  "homepage": "https://github.com/fabiosantoscode/terser",
+  "homepage": "https://github.com/terser-js/terser",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
   "version": "4.1.2",
@@ -53,7 +53,6 @@
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "build": "rimraf dist/* && rollup --config --silent",
-    "minify": "cd dist && node ../bin/uglifyjsnobundle bundle.js -mc --source-map content=bundle.js.map,includeSources=true -o bundle.min.js",
     "prepare": "npm run build",
     "postversion": "echo 'Remember to update the changelog!'"
   },

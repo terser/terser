@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.1.3
+
+ - Several issues with the `reduce_vars` option were fixed.
+ - Starting this version, we only have a dist/bundle.min.js
 
 ## v4.1.2
 

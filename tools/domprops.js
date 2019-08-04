@@ -2161,6 +2161,7 @@ export var domprops = [
     "atob",
     "attachEvent",
     "attachShader",
+    "attachShadow",
     "attachments",
     "attack",
     "attrChange",

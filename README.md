@@ -1,7 +1,7 @@
 terser
 ======
 
-![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.png)
+![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.svg)
 
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.1.4
+
+ - Fixed a crash when inlining a function into somewhere else when it has interdependent, non-removable variables.
+
 ## v4.1.3
 
  - Several issues with the `reduce_vars` option were fixed.

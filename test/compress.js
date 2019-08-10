@@ -14,6 +14,7 @@ var sandbox = require("./sandbox");
 var tests_dir = __dirname;
 var failed_files = {};
 var minify_options = require("./ufuzz.json").map(JSON.stringify);
+var NO_REMINIFY = !!process.env.TEST_NO_REMINIFY
 
 module.exports = run_compress_tests;
 if (module.parent === null) {
@@ -266,7 +267,7 @@ function run_compress_tests() {
             }
             if (test.expect_stdout
                 && (!test.node_version || semver.satisfies(process.version, test.node_version))) {
-                var stdout = sandbox.run_code(input_code);
+                var stdout = sandbox.run_code(input_code, test.prepend_code);
                 if (test.expect_stdout === true) {
                     test.expect_stdout = stdout;
                 }
@@ -280,7 +281,7 @@ function run_compress_tests() {
                     });
                     return false;
                 }
-                stdout = sandbox.run_code(output);
+                stdout = sandbox.run_code(output, test.prepend_code);
                 if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
                     log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
                         input: input_formatted,
@@ -292,7 +293,7 @@ function run_compress_tests() {
                     });
                     return false;
                 }
-                if (test.reminify && !reminify(test.options, input_code, input_formatted, test.expect_stdout)) {
+                if (test.reminify && !reminify(test, input_code, input_formatted)) {
                     return false;
                 }
             }
@@ -400,6 +401,7 @@ function parse_test(file) {
                 assert.ok(
                     [
                         "input",
+                        "prepend_code",
                         "expect",
                         "expect_error",
                         "expect_exact",
@@ -440,6 +442,8 @@ function parse_test(file) {
                     } else {
                         test[label.name] = read_string(stat) + "\n";
                     }
+                } else if (label.name === "prepend_code") {
+                    test[label.name] = read_string(stat);
                 } else {
                     test[label.name] = stat;
                 }
@@ -465,7 +469,9 @@ function evaluate(code) {
 
 // Try to reminify original input with standard options
 // to see if it matches expect_stdout.
-function reminify(orig_options, input_code, input_formatted, expect_stdout) {
+function reminify(test, input_code, input_formatted) {
+    if (NO_REMINIFY) return true;
+    const { options: orig_options, expect_stdout } = test;
     for (var i = 0; i < minify_options.length; i++) {
         var options = JSON.parse(minify_options[i]);
         options.keep_fnames = orig_options.keep_fnames;
@@ -488,7 +494,7 @@ function reminify(orig_options, input_code, input_formatted, expect_stdout) {
             });
             return false;
         } else {
-            var stdout = sandbox.run_code(result.code);
+            var stdout = sandbox.run_code(result.code, test.prepend_code);
             if (typeof expect_stdout != "string" && typeof stdout != "string" && expect_stdout.name == stdout.name) {
                 stdout = expect_stdout;
             }

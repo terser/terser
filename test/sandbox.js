@@ -28,7 +28,7 @@ var FUNC_TOSTRING = [
     "    var id = 100000;",
     "    return function() {",
     "        var n = this.name;",
-    '        if (!/^F[0-9]{6}N$/.test(n)) {',
+    "        if (!/^F[0-9]{6}N$/.test(n)) {",
     '            n = "F" + ++id + "N";',
 ].concat(Object.getOwnPropertyDescriptor(Function.prototype, "name").configurable ? [
     '            Object.defineProperty(this, "name", {',
@@ -42,7 +42,7 @@ var FUNC_TOSTRING = [
     "    }",
     "}();",
 ]).join("\n");
-exports.run_code = function(code) {
+exports.run_code = function(code, prepend_code = '') {
     var stdout = "";
     var original_write = process.stdout.write;
     process.stdout.write = function(chunk) {
@@ -52,7 +52,7 @@ exports.run_code = function(code) {
         vm.runInNewContext([
             FUNC_TOSTRING,
             "!function() {",
-            code,
+            prepend_code + code,
             "}();",
         ].join("\n"), {
             console: {

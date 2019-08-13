@@ -3,6 +3,10 @@ terser
 
 ![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.png)
 
+  [![NPM Version][npm-image]][npm-url]
+  [![NPM Downloads][downloads-image]][downloads-url]
+  [![Linux Build][travis-image]][travis-url]
+
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser-js/terser/blob/master/PATRONS.md) for our first-tier patrons.
@@ -11,12 +15,16 @@ Terser recommends you use RollupJS to bundle your modules, as that produces smal
 
 *Beautification* has been undocumented and is *being removed* from terser, we recommend you use [prettier](https://npmjs.com/package/prettier).
 
-[![Build Status](https://travis-ci.org/terser-js/terser.svg?branch=master)](https://travis-ci.org/terser-js/terser)
-
 Find the changelog in [CHANGELOG.md](https://github.com/terser-js/terser/blob/master/CHANGELOG.md)
 
 A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
 
+[npm-image]: https://img.shields.io/npm/v/terser.svg
+[npm-url]: https://npmjs.org/package/terser
+[downloads-image]: https://img.shields.io/npm/dm/terser.svg
+[downloads-url]: https://npmjs.org/package/terser
+[travis-image]: https://img.shields.io/travis/terser-js/terser/master.svg
+[travis-url]: https://travis-ci.org/terser-js/terser
 
 Why choose terser?
 ------------------

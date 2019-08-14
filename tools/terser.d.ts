@@ -96,7 +96,7 @@ export interface OutputOptions {
     ascii_only?: boolean;
     beautify?: boolean;
     braces?: boolean;
-    comments?: boolean | 'all' | 'some' | RegExp;
+    comments?: boolean | 'all' | 'some' | RegExp | Function;
     ecma?: ECMA;
     indent_level?: number;
     indent_start?: boolean;

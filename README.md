@@ -1,7 +1,7 @@
 terser
 ======
 
-![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.svg)
+![Terser](https://raw.githubusercontent.com/terser-js/terser/master/logo.svg?sanitize=true)
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]
@@ -47,7 +47,7 @@ From NPM for use as a command line app:
 From NPM for programmatic use:
 
     npm install terser
-    
+
 # Command line usage
 
     terser [input files] [options]
@@ -263,7 +263,7 @@ way to use this is to use the `regex` option like so:
 terser example.js -c -m --mangle-props regex=/_$/
 ```
 
-This will mangle all properties that start with an 
+This will mangle all properties that start with an
 underscore. So you can use it to mangle internal methods.
 
 By default, it will mangle all properties in the

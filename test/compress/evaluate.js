@@ -1748,3 +1748,39 @@ global_hasOwnProperty: {
         hasOwnProperty.call(a['b'], b)
     }
 }
+
+issue_399: {
+    options = {
+        unsafe: true,
+        evaluate: true,
+        unsafe_regexp: true
+    }
+    input: {
+        console.log(RegExp("\\\nfo\n[\n]o\\bbb"));
+        console.log(RegExp("\n"));
+        console.log(RegExp("\\n"));
+        console.log(RegExp("\\\n"));
+        console.log(RegExp("\\\\n"));
+        console.log(RegExp("\\\\\n"));
+        console.log(RegExp("\\\\\\n"));
+        console.log(RegExp("\\\\\\\n"));
+        console.log(RegExp("\r"));
+        console.log(RegExp("\u2028"));
+        console.log(RegExp("\u2029"));
+        console.log(RegExp("\n\r\u2028\u2029"));
+    }
+    expect: {
+        console.log(/\nfo\n[\n]o\bbb/);
+        console.log(/\n/);
+        console.log(/\n/);
+        console.log(/\n/);
+        console.log(/\\n/);
+        console.log(/\\\n/);
+        console.log(/\\\n/);
+        console.log(/\\\n/);
+        console.log(/\r/);
+        console.log(/\u2028/);
+        console.log(/\u2029/);
+        console.log(/\n\r\u2028\u2029/);
+    }
+}

@@ -2452,3 +2452,37 @@ mangle_properties_which_matches_pattern: {
         console.log(acd);
     }
 }
+
+skip_undeclared_properties_by_default: {
+    mangle = {
+        cache: {
+            props: { '$Bar': 'a' }
+        },
+        properties: {},
+        toplevel: true
+    }
+    input: {
+        var Foo = { foo: function() { return Bar.bar() } };
+    }
+    expect: {
+        var r={o:function(){return a.bar()}};
+    }
+}
+
+mangle_undeclared_properties: {
+    mangle = {
+        cache: {
+            props: { '$Bar': 'a' }
+        },
+        properties: {
+            undeclared: true
+        },
+        toplevel: true
+    }
+    input: {
+        var Foo = { foo: function() { return Bar.bar() } };
+    }
+    expect: {
+        var r={o:function(){return a.t()}};
+    }
+}

@@ -956,6 +956,11 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
 - `reserved` (default: `[]`) — Do not mangle property names listed in the
   `reserved` array.
 
+- `undeclared` (default: `false`) - Mangle those names when they are accessed
+  as properties of known top level variables but their declarations are never
+  found in input code. May be useful when only minifying parts of a project.
+  See [#397](https://github.com/terser-js/terser/issues/397) for more details.
+
 ## Output options
 
 The code generator tries to output shortest code possible by default.  In

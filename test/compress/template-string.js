@@ -810,3 +810,72 @@ tagged_template_valid_strict_legacy_octal: {
     expect_stdout: "\\u\\x\\567"
     node_version: ">=10"
 }
+
+tagged_template_function_inline_1: {
+    options =  {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        var tpl = () => {};
+
+        tpl`test`;
+    }
+    expect_exact: "(()=>{})`test`;"
+}
+
+tagged_template_function_inline_2: {
+    options =  {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        var tpl = function(){};
+
+        tpl`test`;
+    }
+    expect_exact: "(function(){})`test`;"
+}
+
+tagged_template_function_inline_3: {
+    options =  {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        function tpl(){};
+
+        tpl`test`;
+    }
+    expect_exact: "(function(){})`test`;"
+}
+
+tagged_template_function_inline_4: {
+    options =  {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        const t = {
+            pl: function () {}
+        }
+
+        t.pl`test`;
+    }
+    expect_exact: "(function(){})`test`;"
+}
+
+tagged_template_function_inline_5: {
+    options =  {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        const t = {
+            pl() {}
+        }
+
+        t.pl`test`;
+    }
+    expect_exact: "({pl(){}}.pl)`test`;"
+}

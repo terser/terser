@@ -14,7 +14,7 @@ var sandbox = require("./sandbox");
 var tests_dir = __dirname;
 var failed_files = {};
 var minify_options = require("./ufuzz.json").map(JSON.stringify);
-var NO_REMINIFY = !!process.env.TEST_NO_REMINIFY
+var NO_REMINIFY = !!process.env.TEST_NO_REMINIFY;
 
 module.exports = run_compress_tests;
 if (module.parent === null) {

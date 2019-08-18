@@ -294,7 +294,7 @@ function run() {
         }).ast.to_mozilla_ast(), null, 2));
     } else if (program.output) {
         fs.writeFileSync(program.output, result.code);
-        if (result.map) {
+        if (options.sourceMap.url !== "inline" && result.map) {
             fs.writeFileSync(program.output + ".map", result.map);
         }
     } else {

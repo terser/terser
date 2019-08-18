@@ -126,3 +126,107 @@ issue_308: {
         };
     }
 }
+
+default_assign_primitive: {
+    options = {
+        inline: true,
+        reduce_funcs: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = 'primitive';
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect: {
+        const fn = (arg = 'primitive') => arg;
+
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
+}
+
+default_assign_function: {
+    options = {
+        inline: true,
+        reduce_funcs: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = function () {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect: {
+        const defaultArg = function () {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
+}
+
+default_assign_lambda: {
+    options = {
+        inline: true,
+        reduce_funcs: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = () => {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect: {
+        const defaultArg = () => {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
+}
+
+default_assign_object: {
+    options = {
+        inline: true,
+        reduce_funcs: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect: {
+        const defaultArg = {};
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
+}
+
+default_assign_array: {
+    options = {
+        inline: true,
+        reduce_funcs: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = [];
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect: {
+        const defaultArg = [];
+        const fn = (arg = defaultArg) => arg;
+
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
+}

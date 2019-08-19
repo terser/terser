@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.2.0
+
+ - When the source map URL is `inline`, don't write it to a file.
+ - Fixed output parens when a lambda literal is the tag on a tagged template string.
+ - The `mangle.properties.undeclared` option was added. This enables the property mangler to mangle properties of variables which can be found in the name cache, but whose properties are not known to this Terser run.
+ - The v8 bug where the toString and source representations of regexes like `RegExp("\\\n")` includes an actual newline is now fixed.
+ - Now we're guaranteed to not have duplicate comments in the output
+ - Domprops updates
+
 ## v4.1.4
 
  - Fixed a crash when inlining a function into somewhere else when it has interdependent, non-removable variables.

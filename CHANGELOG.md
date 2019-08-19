@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.1.5
+
+ - Added a new output parameter, `wrap_func_args`, which wraps function arguments in parenthesis to speed up parsing in some browsers.
+
 ## v4.1.4
 
  - Fixed a crash when inlining a function into somewhere else when it has interdependent, non-removable variables.

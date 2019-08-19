@@ -1,0 +1,8 @@
+{
+    "globals": {
+        "options": true,
+        "console": false,
+        "window": false,
+        "global": false
+    }
+}

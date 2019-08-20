@@ -49,12 +49,7 @@ exports.run_code = function(code, prepend_code = '') {
         stdout += chunk;
     };
     try {
-        vm.runInNewContext([
-            FUNC_TOSTRING,
-            "!function() {",
-            prepend_code + code,
-            "}();",
-        ].join("\n"), {
+        const global = {
             console: {
                 log: function(msg) {
                     if (arguments.length == 1 && typeof msg == "string") {
@@ -65,7 +60,14 @@ exports.run_code = function(code, prepend_code = '') {
                     }));
                 }
             }
-        }, { timeout: 5000 });
+        };
+        global.global = global;
+        vm.runInNewContext([
+            FUNC_TOSTRING,
+            "!function() {",
+            prepend_code + code,
+            "}();",
+        ].join("\n"), global, { timeout: 5000 });
         return stdout;
     } catch (ex) {
         return ex;

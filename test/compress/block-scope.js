@@ -228,22 +228,10 @@ issue_241: {
             global.fail = fail;
         })(a);
 
-        var b = a.fail({});
-        b.inner();
+        var b = a.fail({one:"PASS"});
+        console.log(b.inner());
     }
-    expect: {
-        var a = {};
-        a.fail = function (o) {
-            var result = {};
-            return result.inner = function () {
-                return function (o) {
-                    return o ? o.one : o.two;
-                }({one: o.one, two: o.two});
-            }, result;
-        };
-        var b = a.fail({});
-        b.inner();
-    }
+    expect_stdout: "PASS"
 }
 
 issue_334: {

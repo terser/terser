@@ -5797,16 +5797,51 @@ issue_2437_1: {
         unused: true,
     }
     input: {
+        function XMLHttpRequest() {
+            this.onreadystatechange = 'PASS'
+        }
+        global.xhrDesc = {}
         function foo() {
             return bar();
         }
         function bar() {
             if (xhrDesc) {
                 var req = new XMLHttpRequest();
-                var result = !!req.onreadystatechange;
+                var result = req.onreadystatechange;
                 Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {});
                 return result;
-            } else {
+            }
+        }
+        console.log(foo());
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2437_2: {
+    options = {
+        collapse_vars: true,
+        conditionals: true,
+        inline: true,
+        join_vars: true,
+        passes: 2,
+        reduce_funcs: true,
+        reduce_vars: true,
+        side_effects: true,
+        sequences: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        function XMLHttpRequest() {
+            this.onreadystatechange = 'PASS'
+        }
+        global.SYMBOL_FAKE_ONREADYSTATECHANGE_1 = Symbol()
+        global.xhrDesc = null
+        function foo() {
+            return bar();
+        }
+        function bar() {
+            if (!xhrDesc) {
                 var req = new XMLHttpRequest();
                 var detectFunc = function () {};
                 req.onreadystatechange = detectFunc;
@@ -5817,19 +5852,7 @@ issue_2437_1: {
         }
         console.log(foo());
     }
-    expect: {
-        console.log(function() {
-            if (xhrDesc) {
-                var result = !!(req = new XMLHttpRequest).onreadystatechange;
-                return Object.defineProperty(XMLHttpRequest.prototype, "onreadystatechange", xhrDesc || {}),
-                    result;
-            }
-            var req = new XMLHttpRequest, detectFunc = function() {};
-            return req.onreadystatechange = detectFunc,
-                result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc, req.onreadystatechange = null,
-                result;
-        }());
-    }
+    expect_stdout: "false"
 }
 
 issue_2974: {

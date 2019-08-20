@@ -2067,6 +2067,23 @@ chained_3: {
     expect_stdout: "2"
 }
 
+function_argument_modified_by_function_statement: {
+    options = {
+        unused: true,
+        collapse_vars: true,
+    }
+    input: {
+        var printTest = function(ret) {
+            function ret() {
+                console.log("PASS");
+            }
+            return ret;
+        }("FAIL");
+        printTest();
+    }
+    expect_stdout: "PASS"
+}
+
 issue_2768: {
     options = {
         inline: true,

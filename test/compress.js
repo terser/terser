@@ -228,7 +228,7 @@ function run_compress_tests() {
             if (test.expect_stdout && typeof expect == "undefined") {
                 // Do not verify generated `output` against `expect` or `expect_exact`.
                 // Rely on the pending `expect_stdout` check below.
-            } else if (expect != output) {
+            } else if (expect != output && !process.env.TEST_NO_COMPARE) {
                 log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED---\n{expected}\n\n", {
                     input: input_formatted,
                     output: output,

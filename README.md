@@ -530,7 +530,7 @@ if (result.error) throw result.error;
 ## Minify options
 
 - `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to override `parse`,
-  `compress` and `output` options.
+  `compress` and `output`'s `ecma` options.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
   in `result.warnings`. Use the value `"verbose"` for more detailed warnings.
@@ -802,11 +802,7 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
   Specify `"strict"` to treat `foo.bar` as side-effect-free only when
   `foo` is certain to not throw, i.e. not `null` or `undefined`.
 
-- `reduce_funcs` (default: `true`) -- Allows single-use functions to be
-  inlined as function expressions when permissible allowing further
-  optimization.  Enabled by default.  Option depends on `reduce_vars`
-  being enabled.  Some code runs faster in the Chrome V8 engine if this
-  option is disabled.  Does not negatively impact other major browsers.
+- `reduce_funcs` (legacy option, safely ignored for backwards compatibility).
 
 - `reduce_vars` (default: `true`) -- Improve optimization on variables assigned with and
   used as constant values.

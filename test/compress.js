@@ -304,6 +304,7 @@ function run_compress_tests() {
             if (!test_case(tests[i])) {
                 failures++;
                 failed_files[file] = 1;
+                if (process.env.TEST_FAIL_FAST) break;
             }
         }
     }

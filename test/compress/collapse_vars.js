@@ -3783,6 +3783,80 @@ issue_2437: {
     }
 }
 
+issue_2437_1: {
+    options = {
+        collapse_vars: true,
+        conditionals: true,
+        inline: true,
+        join_vars: true,
+        passes: 2,
+        reduce_funcs: true,
+        reduce_vars: true,
+        side_effects: true,
+        sequences: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        function XMLHttpRequest() {
+            this.onreadystatechange = 'PASS'
+        }
+        global.xhrDesc = {}
+        function foo() {
+            return bar();
+        }
+        function bar() {
+            if (xhrDesc) {
+                var req = new XMLHttpRequest();
+                var result = req.onreadystatechange;
+                Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {});
+                return result;
+            }
+        }
+        console.log(foo());
+    }
+    expect_stdout: "PASS"
+}
+
+issue_2437_2: {
+    options = {
+        collapse_vars: true,
+        conditionals: true,
+        inline: true,
+        join_vars: true,
+        passes: 2,
+        reduce_funcs: true,
+        reduce_vars: true,
+        side_effects: true,
+        sequences: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        function XMLHttpRequest() {
+            this.onreadystatechange = 'PASS'
+        }
+        global.SYMBOL_FAKE_ONREADYSTATECHANGE_1 = Symbol()
+        global.xhrDesc = null
+        function foo() {
+            return bar();
+        }
+        function bar() {
+            if (!xhrDesc) {
+                var req = new XMLHttpRequest();
+                var detectFunc = function () {};
+                req.onreadystatechange = detectFunc;
+                var result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc;
+                req.onreadystatechange = null;
+                return result;
+            }
+        }
+        console.log(foo());
+    }
+    expect_stdout: "false"
+}
+
+
 issue_2453: {
     options = {
         collapse_vars: true,
@@ -5780,79 +5854,6 @@ collapse_rhs_undefined: {
         console.log(a === b, b === c, c === a);
     }
     expect_stdout: "true true true"
-}
-
-issue_2437_1: {
-    options = {
-        collapse_vars: true,
-        conditionals: true,
-        inline: true,
-        join_vars: true,
-        passes: 2,
-        reduce_funcs: true,
-        reduce_vars: true,
-        side_effects: true,
-        sequences: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        function XMLHttpRequest() {
-            this.onreadystatechange = 'PASS'
-        }
-        global.xhrDesc = {}
-        function foo() {
-            return bar();
-        }
-        function bar() {
-            if (xhrDesc) {
-                var req = new XMLHttpRequest();
-                var result = req.onreadystatechange;
-                Object.defineProperty(XMLHttpRequest.prototype, 'onreadystatechange', xhrDesc || {});
-                return result;
-            }
-        }
-        console.log(foo());
-    }
-    expect_stdout: "PASS"
-}
-
-issue_2437_2: {
-    options = {
-        collapse_vars: true,
-        conditionals: true,
-        inline: true,
-        join_vars: true,
-        passes: 2,
-        reduce_funcs: true,
-        reduce_vars: true,
-        side_effects: true,
-        sequences: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        function XMLHttpRequest() {
-            this.onreadystatechange = 'PASS'
-        }
-        global.SYMBOL_FAKE_ONREADYSTATECHANGE_1 = Symbol()
-        global.xhrDesc = null
-        function foo() {
-            return bar();
-        }
-        function bar() {
-            if (!xhrDesc) {
-                var req = new XMLHttpRequest();
-                var detectFunc = function () {};
-                req.onreadystatechange = detectFunc;
-                var result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc;
-                req.onreadystatechange = null;
-                return result;
-            }
-        }
-        console.log(foo());
-    }
-    expect_stdout: "false"
 }
 
 issue_2974: {

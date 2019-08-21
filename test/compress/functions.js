@@ -1537,12 +1537,9 @@ issue_2647_2: {
         }());
     }
     expect: {
-        (function() {
-            function foo(x) {
-                return x.toUpperCase();
-            }
-            console.log((() => foo("pass"))());
-        }());
+        void console.log((() => function (x) {
+            return x.toUpperCase();
+        }("pass"))());
     }
     expect_stdout: "PASS"
 }
@@ -2054,7 +2051,6 @@ issue_2842: {
     options = {
         side_effects: true,
         reduce_vars: true,
-        reduce_funcs: true,
         unused: true,
     }
     input: {

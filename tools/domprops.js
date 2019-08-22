@@ -4507,6 +4507,7 @@ export var domprops = [
     "preferredStylesheetSet",
     "prefix",
     "preload",
+    "prepend",
     "preserveAlpha",
     "preserveAspectRatio",
     "preserveAspectRatioString",

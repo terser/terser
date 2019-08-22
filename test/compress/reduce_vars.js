@@ -4565,41 +4565,6 @@ perf_1: {
     expect_stdout: "348150"
 }
 
-perf_2: {
-    options = {
-        reduce_funcs: false,
-        reduce_vars: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        function foo(x, y, z) {
-            return x < y ? x * y + z : x * z - y;
-        }
-        function indirect_foo(x, y, z) {
-            return foo(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i) {
-            sum += indirect_foo(i, i + 1, 3 * i);
-        }
-        console.log(sum);
-    }
-    expect: {
-        function foo(x, y, z) {
-            return x < y ? x * y + z : x * z - y;
-        }
-        function indirect_foo(x, y, z) {
-            return foo(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect_stdout: "348150"
-}
-
 perf_3: {
     options = {
         reduce_funcs: true,
@@ -4624,40 +4589,6 @@ perf_3: {
             return function(x, y, z) {
                 return x < y ? x * y + z : x * z - y;
             }(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect_stdout: "348150"
-}
-
-perf_4: {
-    options = {
-        reduce_funcs: false,
-        reduce_vars: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        var foo = function(x, y, z) {
-            return x < y ? x * y + z : x * z - y;
-        }
-        var indirect_foo = function(x, y, z) {
-            return foo(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect: {
-        var foo = function(x, y, z) {
-            return x < y ? x * y + z : x * z - y;
-        }
-        var indirect_foo = function(x, y, z) {
-            return foo(x, y, z);
         }
         var sum = 0;
         for (var i = 0; i < 100; ++i)
@@ -4702,77 +4633,9 @@ perf_5: {
     expect_stdout: "348150"
 }
 
-perf_6: {
-    options = {
-        passes: 10,
-        reduce_funcs: false,
-        reduce_vars: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        function indirect_foo(x, y, z) {
-            function foo(x, y, z) {
-                return x < y ? x * y + z : x * z - y;
-            }
-            return foo(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i) {
-            sum += indirect_foo(i, i + 1, 3 * i);
-        }
-        console.log(sum);
-    }
-    expect: {
-        function indirect_foo(x, y, z) {
-            return function(x, y, z) {
-                return x < y ? x * y + z : x * z - y;
-            }(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect_stdout: "348150"
-}
-
 perf_7: {
     options = {
         reduce_funcs: true,
-        reduce_vars: true,
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        var indirect_foo = function(x, y, z) {
-            var foo = function(x, y, z) {
-                return x < y ? x * y + z : x * z - y;
-            }
-            return foo(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect: {
-        var indirect_foo = function(x, y, z) {
-            return function(x, y, z) {
-                return x < y ? x * y + z : x * z - y;
-            }(x, y, z);
-        }
-        var sum = 0;
-        for (var i = 0; i < 100; ++i)
-            sum += indirect_foo(i, i + 1, 3 * i);
-        console.log(sum);
-    }
-    expect_stdout: "348150"
-}
-
-perf_8: {
-    options = {
-        reduce_funcs: false,
         reduce_vars: true,
         toplevel: true,
         unused: true,
@@ -4974,6 +4837,8 @@ escape_conditional: {
     expect_stdout: "PASS"
 }
 
+/*
+https://github.com/terser-js/terser/issues/431
 escape_sequence: {
     options = {
         reduce_funcs: true,
@@ -5011,6 +4876,7 @@ escape_sequence: {
     }
     expect_stdout: "PASS"
 }
+*/
 
 escape_throw: {
     options = {

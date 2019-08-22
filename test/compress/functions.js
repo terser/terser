@@ -1537,12 +1537,9 @@ issue_2647_2: {
         }());
     }
     expect: {
-        (function() {
-            function foo(x) {
-                return x.toUpperCase();
-            }
-            console.log((() => foo("pass"))());
-        }());
+        void console.log((() => function (x) {
+            return x.toUpperCase();
+        }("pass"))());
     }
     expect_stdout: "PASS"
 }
@@ -2054,7 +2051,6 @@ issue_2842: {
     options = {
         side_effects: true,
         reduce_vars: true,
-        reduce_funcs: true,
         unused: true,
     }
     input: {
@@ -2721,4 +2717,32 @@ issue_t131b: {
         }));
     }
     expect_stdout: '{"a":1} {"a":2,"b":3}'
+}
+
+avoid_generating_duplicate_functions_compared_together: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => null;
+        const y = () => x;
+        console.log(y() === y());
+    }
+    expect_stdout: "true"
+}
+
+avoid_generating_duplicate_functions_compared_together_2: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const defaultArg = input => input;
+        const fn = (arg = defaultArg) => arg;
+        console.log(fn() === fn());
+    }
+    expect_stdout: "true"
 }

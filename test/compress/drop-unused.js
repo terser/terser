@@ -1639,7 +1639,6 @@ issue_2288: {
 issue_2516_1: {
     options = {
         collapse_vars: true,
-        reduce_funcs: true,
         reduce_vars: true,
         unused: true,
     }
@@ -1662,12 +1661,12 @@ issue_2516_1: {
     }
     expect: {
         function foo() {
+            function bar(x) {
+                var value = (4 - 1) * (x || never_called());
+                console.log(6 == value ? "PASS" : value);
+            }
             Baz = function(x) {
-                (function(x) {
-                    var trouble = x || never_called();
-                    var value = (4 - 1) * trouble;
-                    console.log(6 == value ? "PASS" : value);
-                }).call(null, x);
+                bar.call(null, x);
             };
         }
         var Baz;
@@ -1703,11 +1702,12 @@ issue_2516_2: {
     }
     expect: {
         function foo() {
+            function bar (x) {
+                var value = (4 - 1) * (x || never_called());
+                console.log(6 == value ? "PASS" : value);
+            }
             Baz = function(x) {
-                (function(x) {
-                    var value = (4 - 1) * (x || never_called());
-                    console.log(6 == value ? "PASS" : value);
-                }).call(null, x);
+                bar.call(null, x);
             };
         }
         var Baz;

@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.2.1
+
+ - Minor refactors
+ - Fixed a bug similar to #369 in collapse_vars
+ - Functions can no longer be inlined into a place where they're going to be compared with themselves.
+ - reduce_funcs option is now legacy, as using reduce_vars without reduce_funcs caused some weird corner cases. As a result, it is now implied in reduce_vars and can't be turned off without turning off reduce_vars.
+ - Bug which would cause a random stack overflow has now been fixed.
+
 ## v4.2.0
 
  - When the source map URL is `inline`, don't write it to a file.

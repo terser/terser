@@ -7036,3 +7036,64 @@ issue_294: {
         };
     }
 }
+
+issue_432_1: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        global.leak = () => null
+
+        const selectServer = () => {
+          selectServers();
+        }
+
+        function selectServers() {
+          const retrySelection = () => {
+            var descriptionChangedHandler = () => {
+              selectServers();
+            };
+          };
+
+          retrySelection();
+        }
+
+        leak(() => Topology)
+
+        console.log('PASS')
+    }
+
+    expect_stdout: "PASS"
+}
+
+issue_432_2: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        global.leak = fn => null
+
+        const selectServer = () => {
+          selectServers();
+        }
+
+        function selectServers() {
+          function retrySelection() {
+            var descriptionChangedHandler = () => {
+              selectServers();
+            };
+            leak(descriptionChangedHandler)
+          };
+
+          retrySelection();
+        }
+
+        leak(() => Topology)
+
+        console.log("PASS")
+    }
+
+    expect_stdout: "PASS"
+}

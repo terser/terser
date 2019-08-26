@@ -1039,7 +1039,7 @@ can pass additional arguments that control the code output:
 
 - `wrap_func_args` (default `false`) -- pass `true` to wrap function expressions
   that are passed as arguments. See
-  [OptimizeJS]https://github.com/nolanlawson/optimize-js) for more details.
+  [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 
 # Miscellaneous
 

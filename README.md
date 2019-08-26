@@ -14,7 +14,7 @@ Terser recommends you use RollupJS to bundle your modules, as that produces smal
 
 Find the changelog in [CHANGELOG.md](https://github.com/terser-js/terser/blob/master/CHANGELOG.md)
 
-A JavaScript parser, mangler/compressor and beautifier toolkit for ES6+.
+
 
 [npm-image]: https://img.shields.io/npm/v/terser.svg
 [npm-url]: https://npmjs.org/package/terser

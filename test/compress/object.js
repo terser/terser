@@ -215,6 +215,22 @@ computed_property_names_evaluated_2: {
     expect_exact: 'var foo=something();var obj={[foo](){return"blah"}};'
 }
 
+computed_property_names_side_effects: {
+    options = {
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const foo = {
+            [console.log("PASS")]: 42
+        };
+    }
+    expect: {
+        console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}
+
 shorthand_properties: {
     mangle = true;
     input: {

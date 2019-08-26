@@ -14,7 +14,6 @@ var sandbox = require("./sandbox");
 var tests_dir = __dirname;
 var failed_files = {};
 var minify_options = require("./ufuzz.json").map(JSON.stringify);
-var NO_REMINIFY = !!process.env.TEST_NO_REMINIFY;
 
 module.exports = run_compress_tests;
 if (module.parent === null) {
@@ -304,13 +303,16 @@ function run_compress_tests() {
             if (!test_case(tests[i])) {
                 failures++;
                 failed_files[file] = 1;
-                if (process.env.TEST_FAIL_FAST) break;
+                if (process.env.TEST_FAIL_FAST) return false;
             }
         }
+        return true;
     }
-    files.forEach(function(file) {
-        test_file(file);
-    });
+    for (const file of files) {
+        if (!test_file(file)) {
+            break;
+        }
+    }
     if (failures) {
         console.error("\n!!! Failed " + failures + " test cases.");
         console.error("!!! " + Object.keys(failed_files).join(", "));
@@ -471,7 +473,7 @@ function evaluate(code) {
 // Try to reminify original input with standard options
 // to see if it matches expect_stdout.
 function reminify(test, input_code, input_formatted) {
-    if (NO_REMINIFY) return true;
+    if (process.env.TEST_NO_REMINIFY) return true;
     const { options: orig_options, expect_stdout } = test;
     for (var i = 0; i < minify_options.length; i++) {
         var options = JSON.parse(minify_options[i]);
@@ -494,7 +496,7 @@ function reminify(test, input_code, input_formatted) {
                 error: result.error.stack,
             });
             return false;
-        } else {
+        } else if (!process.env.TEST_NO_SANDBOX) {
             var stdout = sandbox.run_code(result.code, test.prepend_code);
             if (typeof expect_stdout != "string" && typeof stdout != "string" && expect_stdout.name == stdout.name) {
                 stdout = expect_stdout;

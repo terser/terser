@@ -111,6 +111,7 @@ a double dash to prevent input files being used as option arguments:
                                 `wrap_iife`  Wrap IIFEs in parenthesis. Note: you may
                                              want to disable `negate_iife` under
                                              compressor options.
+                                `wrap_func_args`  Wrap function arguments in parenthesis.
     -o, --output <file>         Output file path (default STDOUT). Specify `ast` or
                                 `spidermonkey` to write Terser or SpiderMonkey AST
                                 as JSON to STDOUT respectively.
@@ -1028,6 +1029,10 @@ can pass additional arguments that control the code output:
 - `wrap_iife` (default `false`) -- pass `true` to wrap immediately invoked
   function expressions. See
   [#640](https://github.com/mishoo/UglifyJS2/issues/640) for more details.
+
+- `wrap_func_args` (default `false`) -- pass `true` to wrap function expressions
+  that are passed as arguments. See
+  [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 
 # Miscellaneous
 

@@ -1030,8 +1030,8 @@ can pass additional arguments that control the code output:
   function expressions. See
   [#640](https://github.com/mishoo/UglifyJS2/issues/640) for more details.
 
-- `wrap_func_args` (default `false`) -- pass `true` to wrap function expressions
-  that are passed as arguments. See
+- `wrap_func_args` (default `true`) -- pass `false` if you do not want to wrap
+  function expressions that are passed as arguments, in parenthesis. See
   [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 
 # Miscellaneous

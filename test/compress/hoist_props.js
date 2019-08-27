@@ -1086,3 +1086,15 @@ issue_3071_3: {
     }
     expect_stdout: "2"
 }
+
+does_not_hoist_objects_with_computed_props: {
+    options = {
+        hoist_props: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        const x = { [console.log("PASS")]: 123 }
+    }
+    expect_stdout: "PASS"
+}

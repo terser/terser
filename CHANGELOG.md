@@ -44,7 +44,7 @@
 
 ## v4.0.2
 
-(Hotfix release. Reverts unmapped segments PR [#342](https://github.com/terser-js/terser/pull/342), which will be put back on Terser when the upstream issue is resolved)
+(Hotfix release. Reverts unmapped segments PR [#342](https://github.com/terser/terser/pull/342), which will be put back on Terser when the upstream issue is resolved)
 
 ## v4.0.1
 

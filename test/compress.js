@@ -265,7 +265,9 @@ function run_compress_tests() {
                 }
             }
             if (test.expect_stdout
-                && (!test.node_version || semver.satisfies(process.version, test.node_version))) {
+                && (!test.node_version || semver.satisfies(process.version, test.node_version))
+                && !process.env.TEST_NO_SANDBOX
+            ) {
                 var stdout = sandbox.run_code(input_code, test.prepend_code);
                 if (test.expect_stdout === true) {
                     test.expect_stdout = stdout;

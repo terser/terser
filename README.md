@@ -1,4 +1,4 @@
-<h1><img src="https://raw.githubusercontent.com/terser-js/terser/master/logo.svg?sanitize=true" alt="Terser" width="450" height="190"></h1>
+<h1><img src="https://raw.githubusercontent.com/terser/terser/master/logo.svg?sanitize=true" alt="Terser" width="450" height="190"></h1>
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]
@@ -6,13 +6,13 @@
 
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 
-*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser-js/terser/blob/master/PATRONS.md) for our first-tier patrons.
+*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
 
 Terser recommends you use RollupJS to bundle your modules, as that produces smaller code overall.
 
 *Beautification* has been undocumented and is *being removed* from terser, we recommend you use [prettier](https://npmjs.com/package/prettier).
 
-Find the changelog in [CHANGELOG.md](https://github.com/terser-js/terser/blob/master/CHANGELOG.md)
+Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/master/CHANGELOG.md)
 
 
 
@@ -20,8 +20,8 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser-js/terser/blob/ma
 [npm-url]: https://npmjs.org/package/terser
 [downloads-image]: https://img.shields.io/npm/dm/terser.svg
 [downloads-url]: https://npmjs.org/package/terser
-[travis-image]: https://img.shields.io/travis/terser-js/terser/master.svg
-[travis-url]: https://travis-ci.org/terser-js/terser
+[travis-image]: https://img.shields.io/travis/terser/terser/master.svg
+[travis-url]: https://travis-ci.org/terser/terser
 
 Why choose terser?
 ------------------
@@ -953,7 +953,7 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
 - `undeclared` (default: `false`) - Mangle those names when they are accessed
   as properties of known top level variables but their declarations are never
   found in input code. May be useful when only minifying parts of a project.
-  See [#397](https://github.com/terser-js/terser/issues/397) for more details.
+  See [#397](https://github.com/terser/terser/issues/397) for more details.
 
 ## Output options
 
@@ -1315,7 +1315,7 @@ In the terser CLI we use [source-map-support](https://npmjs.com/source-map-suppo
 
 # README.md Patrons:
 
-*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser-js/terser/blob/master/PATRONS.md) for our first-tier patrons.
+*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
 
 These are the second-tier patrons. Great thanks for your support!
 

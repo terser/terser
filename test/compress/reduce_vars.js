@@ -4838,7 +4838,7 @@ escape_conditional: {
 }
 
 /*
-https://github.com/terser-js/terser/issues/431
+https://github.com/terser/terser/issues/431
 escape_sequence: {
     options = {
         reduce_funcs: true,

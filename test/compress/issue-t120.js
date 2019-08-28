@@ -155,7 +155,7 @@ issue_t120_5: {
 }
 
 pr_152_regression: {
-    reminify: false // TODO: remove when https://github.com/terser-js/terser/issues/156 fixed
+    reminify: false // TODO: remove when https://github.com/terser/terser/issues/156 fixed
     options = {
         collapse_vars: true,
         evaluate: true,

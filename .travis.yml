@@ -8,7 +8,7 @@ node_js:
   - 10
   - 12
 env:
-  - UGLIFYJS_TEST_ALL=1
+  - TERSER_TEST_ALL=1
 matrix:
   fast_finish: true
 cache:

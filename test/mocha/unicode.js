@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Unicode", function() {
     it("Should throw error if escaped first identifier char is not part of ID_start", function() {
@@ -15,12 +15,12 @@ describe("Unicode", function() {
 
         var exec = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         }
 
         var fail = function(e) {
-            return e instanceof uglify._JS_Parse_Error
+            return e instanceof terser._JS_Parse_Error
                 && e.message === "First identifier char is an invalid identifier char";
         }
 
@@ -38,12 +38,12 @@ describe("Unicode", function() {
 
         var exec = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         }
 
         var fail = function(e) {
-            return e instanceof uglify._JS_Parse_Error
+            return e instanceof terser._JS_Parse_Error
                 && e.message === "Invalid escaped identifier char";
         }
 
@@ -63,12 +63,12 @@ describe("Unicode", function() {
 
         var exec = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         }
 
         var fail = function(e) {
-            return e instanceof uglify._JS_Parse_Error
+            return e instanceof terser._JS_Parse_Error
                 && e.message === "Escaped characters are not allowed in keywords";
         }
 
@@ -84,16 +84,16 @@ describe("Unicode", function() {
         ];
 
         for (var i = 0; i < tests.length; i++) {
-            assert.strictEqual(uglify.minify(tests[i][0], {
+            assert.strictEqual(terser.minify(tests[i][0], {
                 output: { ascii_only: true, ecma: 6 }
             }).code, tests[i][1]);
         }
     });
 
     it("Should parse raw characters correctly", function() {
-        var ast = uglify.parse('console.log("\\udbff");');
+        var ast = terser.parse('console.log("\\udbff");');
         assert.strictEqual(ast.print_to_string(), 'console.log("\\udbff");');
-        ast = uglify.parse(ast.print_to_string());
+        ast = terser.parse(ast.print_to_string());
         assert.strictEqual(ast.print_to_string(), 'console.log("\\udbff");');
     });
 
@@ -106,7 +106,7 @@ describe("Unicode", function() {
         code = '"' + code.join() + '"';
         [true, false].forEach(function(ascii_only) {
             [5, 6].forEach(function(ecma) {
-                var result = uglify.minify(code, {
+                var result = terser.minify(code, {
                     compress: false,
                     mangle: false,
                     output: {

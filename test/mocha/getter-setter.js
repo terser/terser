@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../node");
+var Terser = require("../node");
 
 describe("Getters and setters", function() {
     it("Should not accept operator symbols as getter/setter name", function() {
@@ -64,13 +64,13 @@ describe("Getters and setters", function() {
 
         var testCase = function(data) {
             return function() {
-                UglifyJS.parse(data.code);
+                Terser.parse(data.code);
             };
         };
 
         var fail = function(data) {
             return function (e) {
-                return e instanceof UglifyJS._JS_Parse_Error &&
+                return e instanceof Terser._JS_Parse_Error &&
                     /^Unexpected token: /.test(e.message);
             };
         };

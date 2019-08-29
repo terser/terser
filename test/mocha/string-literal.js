@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../node");
+var Terser = require("../node");
 
 describe("String literals", function() {
     it("Should throw syntax error if a string literal contains a newline", function() {
@@ -11,12 +11,12 @@ describe("String literals", function() {
 
         var test = function(input) {
             return function() {
-                var ast = UglifyJS.parse(input);
+                var ast = Terser.parse(input);
             };
         };
 
         var error = function(e) {
-            return e instanceof UglifyJS._JS_Parse_Error
+            return e instanceof Terser._JS_Parse_Error
                 && e.message === "Unterminated string constant";
         };
 
@@ -26,7 +26,7 @@ describe("String literals", function() {
     });
 
     it("Should not throw syntax error if a string has a line continuation", function() {
-        var output = UglifyJS.parse('var a = "a\\\nb";').print_to_string();
+        var output = Terser.parse('var a = "a\\\nb";').print_to_string();
         assert.equal(output, 'var a="ab";');
     });
 
@@ -41,12 +41,12 @@ describe("String literals", function() {
 
         var test = function(input) {
             return function() {
-                var output = UglifyJS.parse(input);
+                var output = Terser.parse(input);
             }
         };
 
         var error = function(e) {
-            return e instanceof UglifyJS._JS_Parse_Error
+            return e instanceof Terser._JS_Parse_Error
                 && e.message === "Legacy octal escape sequences are not allowed in strict mode";
         }
 
@@ -67,14 +67,14 @@ describe("String literals", function() {
         ];
 
         for (var test in tests) {
-            var output = UglifyJS.parse(tests[test][0]).print_to_string();
+            var output = Terser.parse(tests[test][0]).print_to_string();
             assert.equal(output, tests[test][1]);
         }
     });
 
     it("Should not throw error when digit is 8 or 9", function() {
-        assert.equal(UglifyJS.parse('"use strict";"\\08"').print_to_string(), '"use strict";"\\x008";');
-        assert.equal(UglifyJS.parse('"use strict";"\\09"').print_to_string(), '"use strict";"\\x009";');
+        assert.equal(Terser.parse('"use strict";"\\08"').print_to_string(), '"use strict";"\\x008";');
+        assert.equal(Terser.parse('"use strict";"\\09"').print_to_string(), '"use strict";"\\x009";');
     });
 
     it("Should not unescape unpaired surrogates", function() {
@@ -92,7 +92,7 @@ describe("String literals", function() {
             code.push("\\u" + i.toString(16));
         }
         code = '"' + code.join() + '"';
-        var normal = UglifyJS.minify(code, {
+        var normal = Terser.minify(code, {
             compress: false,
             mangle: false,
             output: {
@@ -102,7 +102,7 @@ describe("String literals", function() {
         if (normal.error) throw normal.error;
         assert.ok(code.length > normal.code.length);
         assert.strictEqual(eval(code), eval(normal.code));
-        var ascii = UglifyJS.minify(code, {
+        var ascii = Terser.minify(code, {
             compress: false,
             mangle: false,
             output: {

@@ -59,11 +59,11 @@ urls.forEach(function(url) {
     };
     fetch(url, function(err, res) {
         if (err) throw err;
-        var uglifyjs = fork("bin/uglifyjs", args, { silent: true });
+        var terser = fork("bin/terser", args, { silent: true });
         res.on("data", function(data) {
             results[url].input += data.length;
-        }).pipe(uglifyjs.stdin);
-        uglifyjs.stdout.on("data", function(data) {
+        }).pipe(terser.stdin);
+        terser.stdout.on("data", function(data) {
             results[url].output += data.length;
         }).pipe(zlib.createGzip({
             level: zlib.Z_BEST_COMPRESSION
@@ -73,11 +73,11 @@ urls.forEach(function(url) {
             results[url].sha1 = data.toString("hex");
             done();
         });
-        uglifyjs.stderr.setEncoding("utf8");
-        uglifyjs.stderr.on("data", function(data) {
+        terser.stderr.setEncoding("utf8");
+        terser.stderr.on("data", function(data) {
             results[url].log += data;
         });
-        uglifyjs.on("exit", function(code) {
+        terser.on("exit", function(code) {
             results[url].code = code;
             done();
         });

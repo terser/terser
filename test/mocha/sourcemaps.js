@@ -2,14 +2,14 @@ var assert = require("assert");
 var readFileSync = require("fs").readFileSync;
 var SourceMapConsumer = require("source-map").SourceMapConsumer;
 var {assertCodeWithInlineMapEquals} = require('./utils');
-var UglifyJS = require("../..");
+var Terser = require("../..");
 
 function read(path) {
     return readFileSync(path, "utf8");
 }
 
 function source_map(code) {
-    return JSON.parse(UglifyJS.minify(code, {
+    return JSON.parse(Terser.minify(code, {
         compress: false,
         mangle: false,
         sourceMap: true,
@@ -54,7 +54,7 @@ function prepare_map(sourceMap) {
         "",
         "//# sourceMappingURL=bundle.js.map",
     ].join("\n");
-    var result = UglifyJS.minify(code, {
+    var result = Terser.minify(code, {
         sourceMap: {
             content: sourceMap,
             includeSources: true,
@@ -84,7 +84,7 @@ describe("sourcemaps", function() {
         assert.deepEqual(map.names, [ "enabled", "x" ]);
     });
     it("Should mark array/object literals", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             "var obj = {};",
             "obj.wat([]);",
         ].join("\n"), {
@@ -96,7 +96,7 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["wat"],"mappings":"CAAU,IACNA,IAAI"}');
     });
     it("Should mark class literals", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             "class bar {};",
             "var obj = class {};",
             "obj.wat(bar);",
@@ -110,7 +110,7 @@ describe("sourcemaps", function() {
     });
     it("Should give correct sourceRoot", function() {
         var code = "console.log(42);";
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             sourceMap: {
                 root: "//foo.bar/",
             },
@@ -133,7 +133,7 @@ describe("sourcemaps", function() {
 
     describe("inSourceMap", function() {
         it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", function() {
-            var result = UglifyJS.minify(read("./test/input/issue-1236/simple.js"), {
+            var result = Terser.minify(read("./test/input/issue-1236/simple.js"), {
                 sourceMap: {
                     content: read("./test/input/issue-1236/simple.js.map"),
                     filename: "simple.min.js",
@@ -147,7 +147,7 @@ describe("sourcemaps", function() {
             assert.equal(map.sourcesContent[0], 'let foo = x => "foo " + x;\nconsole.log(foo("bar"));');
         });
         it("Should process inline source map", function() {
-            var result = UglifyJS.minify(read("./test/input/issue-520/input.js"), {
+            var result = Terser.minify(read("./test/input/issue-520/input.js"), {
                 compress: { toplevel: true },
                 sourceMap: {
                     content: "inline",
@@ -159,13 +159,13 @@ describe("sourcemaps", function() {
             assertCodeWithInlineMapEquals(result.code + "\n", readFileSync("test/input/issue-520/output.js", "utf8"));
         });
         it("Should warn for missing inline source map", function() {
-            var warn_function = UglifyJS.AST_Node.warn_function;
+            var warn_function = Terser.AST_Node.warn_function;
             var warnings = [];
-            UglifyJS.AST_Node.warn_function = function(txt) {
+            Terser.AST_Node.warn_function = function(txt) {
                 warnings.push(txt);
             };
             try {
-                var result = UglifyJS.minify(read("./test/input/issue-1323/sample.js"), {
+                var result = Terser.minify(read("./test/input/issue-1323/sample.js"), {
                     mangle: false,
                     sourceMap: {
                         content: "inline"
@@ -175,14 +175,14 @@ describe("sourcemaps", function() {
                 assert.strictEqual(warnings.length, 1);
                 assert.strictEqual(warnings[0], "inline source map not found");
             } finally {
-                UglifyJS.AST_Node.warn_function = warn_function;
+                Terser.AST_Node.warn_function = warn_function;
             }
         });
     });
 
     describe("sourceMapInline", function() {
         it("Should append source map to output js when sourceMapInline is enabled", function() {
-            var result = UglifyJS.minify('var a = function(foo) { return foo; };', {
+            var result = Terser.minify('var a = function(foo) { return foo; };', {
                 sourceMap: {
                     url: "inline"
                 }
@@ -193,13 +193,13 @@ describe("sourcemaps", function() {
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
         it("Should not append source map to output js when sourceMapInline is not enabled", function() {
-            var result = UglifyJS.minify('var a = function(foo) { return foo; };');
+            var result = Terser.minify('var a = function(foo) { return foo; };');
             if (result.error) throw result.error;
             var code = result.code;
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};");
         });
         it("Should work with max_line_len", function() {
-            var result = UglifyJS.minify(read("./test/input/issue-505/input.js"), {
+            var result = Terser.minify(read("./test/input/issue-505/input.js"), {
                 compress: {
                     directives: false,
                 },
@@ -218,7 +218,7 @@ describe("sourcemaps", function() {
                 "var tëst = '→unicøde←';",
                 "alert(tëst);",
             ].join("\n");
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 sourceMap: {
                     includeSources: true,
                     url: "inline",
@@ -229,10 +229,10 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             var encoded = result.code.slice(result.code.lastIndexOf(",") + 1);
-            map = JSON.parse(UglifyJS.to_ascii(encoded).toString());
+            map = JSON.parse(Terser.to_ascii(encoded).toString());
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
-            result = UglifyJS.minify(result.code, {
+            result = Terser.minify(result.code, {
                 sourceMap: {
                     content: "inline",
                     includeSources: true,

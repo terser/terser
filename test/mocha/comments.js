@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../node");
+var Terser = require("../node");
 
 describe("comments", function() {
     it("Should recognize eol of single line comments", function() {
@@ -12,7 +12,7 @@ describe("comments", function() {
         ];
 
         var fail = function(e) {
-            return e instanceof UglifyJS._JS_Parse_Error
+            return e instanceof Terser._JS_Parse_Error
                 && e.message === "Unexpected token: operator (>)"
                 && e.line === 2
                 && e.col === 0;
@@ -20,7 +20,7 @@ describe("comments", function() {
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(function() {
-                UglifyJS.parse(tests[i]);
+                Terser.parse(tests[i]);
             }, fail, tests[i]);
         }
     });
@@ -35,7 +35,7 @@ describe("comments", function() {
         ];
 
         var fail = function(e) {
-            return e instanceof UglifyJS._JS_Parse_Error
+            return e instanceof Terser._JS_Parse_Error
                 && e.message === "Unexpected token: operator (>)"
                 && e.line === 5
                 && e.col === 0;
@@ -43,13 +43,13 @@ describe("comments", function() {
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(function() {
-                UglifyJS.parse(tests[i]);
+                Terser.parse(tests[i]);
             }, fail, tests[i]);
         }
     });
 
     it("Should handle comment within return correctly", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             "function unequal(x, y) {",
             "    return (",
             "        // Either one",
@@ -76,7 +76,7 @@ describe("comments", function() {
     });
 
     it("Should handle comment folded into return correctly", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             "function f() {",
             "    /* boo */ x();",
             "    return y();",
@@ -99,13 +99,13 @@ describe("comments", function() {
 
     it("Should not drop comments after first OutputStream", function() {
         var code = "/* boo */\nx();";
-        var ast = UglifyJS.parse(code);
-        var out1 = UglifyJS.OutputStream({
+        var ast = Terser.parse(code);
+        var out1 = Terser.OutputStream({
             beautify: true,
             comments: "all",
         });
         ast.print(out1);
-        var out2 = UglifyJS.OutputStream({
+        var out2 = Terser.OutputStream({
             beautify: true,
             comments: "all",
         });
@@ -127,7 +127,7 @@ describe("comments", function() {
             "}",
             "// comments right before EOF are lost as well",
         ].join("\n");
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             compress: false,
             mangle: false,
             output: {
@@ -147,7 +147,7 @@ describe("comments", function() {
             "switch (a) {/* foo */}",
             "if (a) {/* foo */} else {/* bar */}",
         ].join("\n\n");
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             compress: false,
             mangle: false,
             output: {
@@ -199,7 +199,7 @@ describe("comments", function() {
             ].join("\n"),
             "/* foo */ /* bar */ x();",
         ].forEach(function(code) {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 mangle: false,
                 output: {
@@ -217,7 +217,7 @@ describe("comments", function() {
             "function f(){",
             "/* foo */bar()}",
         ].join("\n");
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             compress: false,
             mangle: false,
             output: {
@@ -229,7 +229,7 @@ describe("comments", function() {
     });
 
     it("Should preserve comments around IIFE", function() {
-        var result = UglifyJS.minify("/*a*/(/*b*/function(){/*c*/}/*d*/)/*e*/();", {
+        var result = Terser.minify("/*a*/(/*b*/function(){/*c*/}/*d*/)/*e*/();", {
             compress: false,
             mangle: false,
             output: {
@@ -241,7 +241,7 @@ describe("comments", function() {
     });
 
     it("Should output line comments after statements", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             "x()//foo",
             "{y()//bar",
             "}",
@@ -264,7 +264,7 @@ describe("comments", function() {
         var js = 'function f() { /*c1*/ var /*c2*/ foo = /*c3*/ false; return foo; }';
 
         it("Should test comment before constant is retained and output after mangle.", function() {
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 compress: { collapse_vars: false, reduce_vars: false },
                 output: { comments: true },
             });
@@ -272,7 +272,7 @@ describe("comments", function() {
         });
 
         it("Should test code works when comments disabled.", function() {
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 compress: { collapse_vars: false, reduce_vars: false },
                 output: { comments: false },
             });
@@ -282,22 +282,22 @@ describe("comments", function() {
 
     describe("comment filters", function() {
         it("Should be able to filter comments by passing regexp", function() {
-            var ast = UglifyJS.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
+            var ast = Terser.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
             assert.strictEqual(ast.print_to_string({comments: /^!/}), "/*!test1*/\n//!test3\n//!test6\n//!test8\n");
         });
 
         it("Should be able to filter comments with the 'all' option", function() {
-            var ast = UglifyJS.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
+            var ast = Terser.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
             assert.strictEqual(ast.print_to_string({comments: "all"}), "/*!test1*/\n/*test2*/\n//!test3\n//test4\n//test5\n//!test6\n//test7\n//!test8\n");
         });
 
         it("Should be able to filter commments with the 'some' option", function() {
-            var ast = UglifyJS.parse("// foo\n/*@preserve*/\n// bar\n/*@license*/\n//@license with the wrong comment type\n/*@cc_on something*/");
+            var ast = Terser.parse("// foo\n/*@preserve*/\n// bar\n/*@license*/\n//@license with the wrong comment type\n/*@cc_on something*/");
             assert.strictEqual(ast.print_to_string({comments: "some"}), "/*@preserve*/\n/*@license*/\n/*@cc_on something*/");
         });
 
         it("Should be able to filter comments by passing a function", function() {
-            var ast = UglifyJS.parse("/*TEST 123*/\n//An other comment\n//8 chars.");
+            var ast = Terser.parse("/*TEST 123*/\n//An other comment\n//8 chars.");
             var f = function(node, comment) {
                 return comment.value.length === 8;
             };
@@ -306,12 +306,12 @@ describe("comments", function() {
         });
 
         it("Should be able to filter comments by passing regex in string format", function() {
-            var ast = UglifyJS.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
+            var ast = Terser.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
             assert.strictEqual(ast.print_to_string({comments: "/^!/"}), "/*!test1*/\n//!test3\n//!test6\n//!test8\n");
         });
 
         it("Should be able to get the comment and comment type when using a function", function() {
-            var ast = UglifyJS.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
+            var ast = Terser.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
             var f = function(node, comment) {
                 return comment.type == "comment1" || comment.type == "comment3";
             };
@@ -320,14 +320,14 @@ describe("comments", function() {
         });
 
         it("Should be able to filter comments by passing a boolean", function() {
-            var ast = UglifyJS.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
+            var ast = Terser.parse("/*!test1*/\n/*test2*/\n//!test3\n//test4\n<!--test5\n<!--!test6\n-->test7\n-->!test8");
 
             assert.strictEqual(ast.print_to_string({comments: true}), "/*!test1*/\n/*test2*/\n//!test3\n//test4\n//test5\n//!test6\n//test7\n//!test8\n");
             assert.strictEqual(ast.print_to_string({comments: false}), "");
         });
 
         it("Should never be able to filter comment5 (shebangs)", function() {
-            var ast = UglifyJS.parse("#!Random comment\n//test1\n/*test2*/");
+            var ast = Terser.parse("#!Random comment\n//test1\n/*test2*/");
             var f = function(node, comment) {
                 assert.strictEqual(comment.type === "comment5", false);
 
@@ -338,7 +338,7 @@ describe("comments", function() {
         });
 
         it("Should never be able to filter comment5 when using 'some' as filter", function() {
-            var ast = UglifyJS.parse("#!foo\n//foo\n/*@preserve*/\n/* please hide me */");
+            var ast = Terser.parse("#!foo\n//foo\n/*@preserve*/\n/* please hide me */");
             assert.strictEqual(ast.print_to_string({comments: "some"}), "#!foo\n/*@preserve*/");
         });
 
@@ -347,20 +347,20 @@ describe("comments", function() {
                 comments: /ok/
             };
 
-            assert.strictEqual(UglifyJS.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
-            assert.strictEqual(UglifyJS.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
-            assert.strictEqual(UglifyJS.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
+            assert.strictEqual(Terser.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
+            assert.strictEqual(Terser.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
+            assert.strictEqual(Terser.parse("/* ok */ function a(){}").print_to_string(options), "/* ok */function a(){}");
         });
 
         it("Should handle shebang and preamble correctly", function() {
-            var code = UglifyJS.minify("#!/usr/bin/node\nvar x = 10;", {
+            var code = Terser.minify("#!/usr/bin/node\nvar x = 10;", {
                 output: { preamble: "/* Build */" }
             }).code;
             assert.strictEqual(code, "#!/usr/bin/node\n/* Build */\nvar x=10;");
         });
 
         it("Should handle preamble without shebang correctly", function() {
-            var code = UglifyJS.minify("var x = 10;", {
+            var code = Terser.minify("var x = 10;", {
                 output: { preamble: "/* Build */" }
             }).code;
             assert.strictEqual(code, "/* Build */\nvar x=10;");
@@ -373,7 +373,7 @@ describe("comments", function() {
             for (var i = 1; i <= 5000; ++i) js += "// " + i + "\n";
             for (; i <= 10000; ++i) js += "/* " + i + " */ /**/";
             js += "x; }";
-            var result = UglifyJS.minify(js, { mangle: false });
+            var result = Terser.minify(js, { mangle: false });
             assert.strictEqual(result.code, "function lots_of_comments(x){return 7-x}");
         });
     });

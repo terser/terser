@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Class", function() {
     it("Should not accept spread on non-last parameters in methods", function() {
@@ -11,11 +11,11 @@ describe("Class", function() {
         ];
         var test = function(code) {
             return function() {
-                uglify.parse(code);
+                terser.parse(code);
             }
         }
         var error = function(e) {
-            return e instanceof uglify._JS_Parse_Error &&
+            return e instanceof terser._JS_Parse_Error &&
                 /^Unexpected token: /.test(e.message);
         }
 
@@ -49,7 +49,7 @@ describe("Class", function() {
         ];
 
         for (var i = 0; i < tests.length; i++) {
-            var ast = uglify.parse(tests[i].code);
+            var ast = terser.parse(tests[i].code);
             assert.strictEqual(ast.body[0].properties[0].start.value, tests[i].token_value_start);
             assert.strictEqual(ast.body[0].properties[0].end.value, tests[i].token_value_end);
         }

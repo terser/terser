@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Template string", function() {
     it("Should not accept invalid sequences", function() {
@@ -17,12 +17,12 @@ describe("Template string", function() {
 
         var exec = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         };
 
         var fail = function(e) {
-            return e instanceof uglify._JS_Parse_Error
+            return e instanceof terser._JS_Parse_Error
                 && /^Unexpected token: /.test(e.message);
         };
 
@@ -36,12 +36,12 @@ describe("Template string", function() {
             "`a\nb`",
             "`a\r\nb`",
         ].forEach(function(code) {
-            assert.strictEqual(uglify.parse(code).print_to_string(), "`a\\nb`;");
+            assert.strictEqual(terser.parse(code).print_to_string(), "`a\\nb`;");
         });
     });
     it("Should not throw on extraneous escape (#231)", function() {
         assert.doesNotThrow(function() {
-            uglify.parse("`\\a`");
+            terser.parse("`\\a`");
         });
     });
 });

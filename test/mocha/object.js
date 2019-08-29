@@ -1,10 +1,10 @@
-var Uglify = require("../node");
+var Terser = require("../node");
 var assert = require("assert");
 
 describe("Object", function() {
     it("Should allow objects to have a methodDefinition as property", function() {
         var code = "var a = {test() {return true;}}";
-        assert.equal(Uglify.minify(code, {
+        assert.equal(Terser.minify(code, {
             compress: {
                 arrows: false
             }
@@ -14,10 +14,10 @@ describe("Object", function() {
     it("Should not allow objects to use static keywords like in classes", function() {
         var code = "{static test() {}}";
         var parse = function() {
-            Uglify.parse(code);
+            Terser.parse(code);
         }
         var expect = function(e) {
-            return e instanceof Uglify._JS_Parse_Error;
+            return e instanceof Terser._JS_Parse_Error;
         }
         assert.throws(parse, expect);
     });
@@ -25,10 +25,10 @@ describe("Object", function() {
     it("Should not allow objects to have static computed properties like in classes", function() {
         var code = "var foo = {static [123](){}}";
         var parse = function() {
-            console.log(Uglify.parse(code).body[0].body[0]);
+            console.log(Terser.parse(code).body[0].body[0]);
         }
         var expect = function(e) {
-            return e instanceof Uglify._JS_Parse_Error;
+            return e instanceof Terser._JS_Parse_Error;
         }
         assert.throws(parse, expect);
     });
@@ -104,13 +104,13 @@ describe("Object", function() {
 
         var testCase = function(data) {
             return function() {
-                Uglify.parse(data.code);
+                Terser.parse(data.code);
             };
         };
 
         var fail = function(data) {
             return function (e) {
-                return e instanceof Uglify._JS_Parse_Error && (
+                return e instanceof Terser._JS_Parse_Error && (
                     e.message === "Unexpected token: operator (" + data.operator + ")" ||
                     (e.message === "Unterminated regular expression" && data.operator[0] === "/") ||
                     (e.message === "Unexpected token: punc (()" && data.operator === "*")
@@ -129,7 +129,7 @@ describe("Object", function() {
         }
     });
     it("Should be able to use shorthand properties", function() {
-        var ast = Uglify.parse("var foo = 123\nvar obj = {foo: foo}");
+        var ast = Terser.parse("var foo = 123\nvar obj = {foo: foo}");
         assert.strictEqual(ast.print_to_string({ecma: 6}), "var foo=123;var obj={foo};");
     })
 });

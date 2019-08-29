@@ -2,13 +2,13 @@
 // derived from https://github.com/qfox/uglyfuzzer by Peter van der Zee
 "use strict";
 
-// check both CLI and file modes of nodejs (!). See #1695 for details. and the various settings of uglify.
-// bin/uglifyjs s.js -c && bin/uglifyjs s.js -c passes=3 && bin/uglifyjs s.js -c passes=3 -m
-// cat s.js | node && node s.js && bin/uglifyjs s.js -c | node && bin/uglifyjs s.js -c passes=3 | node && bin/uglifyjs s.js -c passes=3 -m | node
+// check both CLI and file modes of nodejs (!). See #1695 for details. and the various settings of terser.
+// bin/terser s.js -c && bin/terser s.js -c passes=3 && bin/terser s.js -c passes=3 -m
+// cat s.js | node && node s.js && bin/terser s.js -c | node && bin/terser s.js -c passes=3 | node && bin/terser s.js -c passes=3 -m | node
 
 require("../tools/exit");
 
-var UglifyJS = require("..");
+var Terser = require("..");
 var randomBytes = require("crypto").randomBytes;
 var sandbox = require("./sandbox");
 
@@ -98,7 +98,7 @@ for (var i = 2; i < process.argv.length; ++i) {
       case '--help':
       case '-h':
       case '-?':
-        println('** UglifyJS fuzzer help **');
+        println('** Terser fuzzer help **');
         println('Valid options (optional):');
         println('<number>: generate this many cases (if used must be first arg)');
         println('-v: print every generated test case');
@@ -114,7 +114,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         println('--only-stmt <statement names>: a comma delimited white list of statements that may be generated');
         println('--without-stmt <statement names>: a comma delimited black list of statements never to generate');
         println('List of accepted statement names: ' + Object.keys(STMT_ARG_TO_ID));
-        println('** UglifyJS fuzzer exiting **');
+        println('** Terser fuzzer exiting **');
         return 0;
       default:
         // first arg may be a number.
@@ -718,7 +718,7 @@ function _createExpression(recurmax, noComma, stmtDepth, canThrow) {
             return '--/* ignore */b';
           case 4:
             // only groups that wrap a single variable return a "Reference", so this is still valid.
-            // may just be a parser edge case that is invisible to uglify...
+            // may just be a parser edge case that is invisible to terser...
             return '--(b)';
           case 5:
             // classic 0.3-0.1 case; 1-0.1-0.1-0.1 is not 0.7 :)
@@ -970,7 +970,7 @@ function errorln(msg) {
 }
 
 function try_beautify(code, result, printfn) {
-    var beautified = UglifyJS.minify(code, {
+    var beautified = Terser.minify(code, {
         compress: false,
         mangle: false,
         output: {
@@ -990,7 +990,7 @@ function try_beautify(code, result, printfn) {
     printfn(code);
 }
 
-var default_options = UglifyJS.default_options();
+var default_options = Terser.default_options();
 
 function log_suspects(minify_options, component) {
     var options = component in minify_options ? minify_options[component] : true;
@@ -1004,7 +1004,7 @@ function log_suspects(minify_options, component) {
             var o = JSON.parse(JSON.stringify(options));
             o[name] = flip;
             m[component] = o;
-            var result = UglifyJS.minify(original_code, m);
+            var result = Terser.minify(original_code, m);
             if (result.error) {
                 errorln("Error testing options." + component + "." + name);
                 errorln(result.error.stack);
@@ -1026,7 +1026,7 @@ function log_suspects(minify_options, component) {
 function log_rename(options) {
     var m = JSON.parse(JSON.stringify(options));
     m.rename = false;
-    var result = UglifyJS.minify(original_code, m);
+    var result = Terser.minify(original_code, m);
     if (result.error) {
         errorln("Error testing options.rename");
         errorln(result.error.stack);
@@ -1049,18 +1049,18 @@ function log(options) {
     errorln();
     errorln();
     errorln("//-------------------------------------------------------------");
-    if (typeof uglify_code == "string") {
+    if (typeof terser_code == "string") {
         errorln("// uglified code");
-        try_beautify(uglify_code, uglify_result, errorln);
+        try_beautify(terser_code, terser_result, errorln);
         errorln();
         errorln();
         errorln("original result:");
         errorln(typeof original_result == "string" ? original_result : original_result.stack);
         errorln("uglified result:");
-        errorln(typeof uglify_result == "string" ? uglify_result : uglify_result.stack);
+        errorln(typeof terser_result == "string" ? terser_result : terser_result.stack);
     } else {
-        errorln("// !!! uglify failed !!!");
-        errorln(uglify_code.stack);
+        errorln("// !!! terser failed !!!");
+        errorln(terser_code.stack);
         if (typeof original_result != "string") {
             errorln();
             errorln();
@@ -1072,7 +1072,7 @@ function log(options) {
     options = JSON.parse(options);
     errorln(JSON.stringify(options, null, 2));
     errorln();
-    if (!ok && typeof uglify_code == "string") {
+    if (!ok && typeof terser_code == "string") {
         Object.keys(default_options).forEach(log_suspects.bind(null, options));
         log_rename(options);
         errorln("!!!!!! Failed... round " + round);
@@ -1085,22 +1085,22 @@ var fallback_options = [ JSON.stringify({
 }) ];
 var minify_options = require("./ufuzz.json").map(JSON.stringify);
 var original_code, original_result;
-var uglify_code, uglify_result, ok;
+var terser_code, terser_result, ok;
 for (var round = 1; round <= num_iterations; round++) {
     process.stdout.write(round + " of " + num_iterations + "\r");
 
     original_code = createTopLevelCode();
     original_result = sandbox.run_code(original_code);
     (typeof original_result != "string" ? fallback_options : minify_options).forEach(function(options) {
-        uglify_code = UglifyJS.minify(original_code, JSON.parse(options));
-        if (!uglify_code.error) {
-            uglify_code = uglify_code.code;
-            uglify_result = sandbox.run_code(uglify_code);
-            ok = sandbox.same_stdout(original_result, uglify_result);
+        terser_code = Terser.minify(original_code, JSON.parse(options));
+        if (!terser_code.error) {
+            terser_code = terser_code.code;
+            terser_result = sandbox.run_code(terser_code);
+            ok = sandbox.same_stdout(original_result, terser_result);
         } else {
-            uglify_code = uglify_code.error;
+            terser_code = terser_code.error;
             if (typeof original_result != "string") {
-                ok = uglify_code.name == original_result.name;
+                ok = terser_code.name == original_result.name;
             }
         }
         if (verbose || (verbose_interval && !(round % INTERVAL_COUNT)) || !ok) log(options);

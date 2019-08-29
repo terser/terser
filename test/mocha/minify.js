@@ -1,7 +1,7 @@
 var assert = require("assert");
 var readFileSync = require("fs").readFileSync;
 var run_code = require("../sandbox").run_code;
-var UglifyJS = require("../../");
+var Terser = require("../../");
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -10,14 +10,14 @@ function read(path) {
 describe("minify", function() {
     it("Should test basic sanity of minify with default options", function() {
         var js = 'function foo(bar) { if (bar) return 3; else return 7; var u = not_called(); }';
-        var result = UglifyJS.minify(js);
+        var result = Terser.minify(js);
         assert.strictEqual(result.code, 'function foo(n){return n?3:7}');
     });
 
     it("Should skip inherited keys from `files`", function() {
         var files = Object.create({ skip: this });
         files[0] = "alert(1 + 1)";
-        var result = UglifyJS.minify(files);
+        var result = Terser.minify(files);
         assert.strictEqual(result.code, "alert(2);");
     });
 
@@ -32,7 +32,7 @@ describe("minify", function() {
             "qux.js",
         ].forEach(function(file) {
             var code = read("test/input/issue-1242/" + file);
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 mangle: {
                     cache: cache,
                     toplevel: true
@@ -65,7 +65,7 @@ describe("minify", function() {
             "qux.js",
         ].forEach(function(file) {
             var code = read("test/input/issue-1242/" + file);
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 mangle: {
                     toplevel: true
                 },
@@ -96,7 +96,7 @@ describe("minify", function() {
             '"xxyyy";var j={t:2,u:3},k=4;',
             'console.log(i.s,j.t,j.u,k);',
         ].forEach(function(code) {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 mangle: {
                     properties: true,
@@ -117,16 +117,16 @@ describe("minify", function() {
     });
 
     it("Should not parse invalid use of reserved words", function() {
-        assert.strictEqual(UglifyJS.minify("function enum(){}").error, undefined);
-        assert.strictEqual(UglifyJS.minify("function static(){}").error, undefined);
-        assert.strictEqual(UglifyJS.minify("function super(){}").error.message, "Unexpected token: name (super)");
-        assert.strictEqual(UglifyJS.minify("function this(){}").error.message, "Unexpected token: name (this)");
+        assert.strictEqual(Terser.minify("function enum(){}").error, undefined);
+        assert.strictEqual(Terser.minify("function static(){}").error, undefined);
+        assert.strictEqual(Terser.minify("function super(){}").error.message, "Unexpected token: name (super)");
+        assert.strictEqual(Terser.minify("function this(){}").error.message, "Unexpected token: name (this)");
     });
 
     describe("keep_quoted_props", function() {
         it("Should preserve quotes in object literals", function() {
             var js = 'var foo = {"x": 1, y: 2, \'z\': 3};';
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 output: {
                     keep_quoted_props: true
                 }});
@@ -135,7 +135,7 @@ describe("minify", function() {
 
         it("Should preserve quote styles when quote_style is 3", function() {
             var js = 'var foo = {"x": 1, y: 2, \'z\': 3};';
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 output: {
                     keep_quoted_props: true,
                     quote_style: 3
@@ -145,7 +145,7 @@ describe("minify", function() {
 
         it("Should not preserve quotes in object literals when disabled", function() {
             var js = 'var foo = {"x": 1, y: 2, \'z\': 3};';
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 output: {
                     keep_quoted_props: false,
                     quote_style: 3
@@ -157,7 +157,7 @@ describe("minify", function() {
     describe("mangleProperties", function() {
         it.skip("Shouldn't mangle quoted properties", function() {
             var js = 'a["foo"] = "bar"; a.color = "red"; x = {"bar": 10};';
-            var result = UglifyJS.minify(js, {
+            var result = Terser.minify(js, {
                 compress: {
                     properties: false
                 },
@@ -175,7 +175,7 @@ describe("minify", function() {
                     'a["foo"]="bar",a.a="red",x={"bar":10};');
         });
         it.skip("Should not mangle quoted property within dead code", function() {
-            var result = UglifyJS.minify('var g = {}; ({ "keep": 1 }); g.keep = g.change;', {
+            var result = Terser.minify('var g = {}; ({ "keep": 1 }); g.keep = g.change;', {
                 mangle: {
                     properties: {
                         keep_quoted: true
@@ -189,7 +189,7 @@ describe("minify", function() {
 
     describe("inSourceMap", function() {
         it("Should read the given string filename correctly when sourceMapIncludeSources is enabled (#1236)", function() {
-            var result = UglifyJS.minify(read("./test/input/issue-1236/simple.js"), {
+            var result = Terser.minify(read("./test/input/issue-1236/simple.js"), {
                 sourceMap: {
                     content: read("./test/input/issue-1236/simple.js.map"),
                     filename: "simple.min.js",
@@ -205,7 +205,7 @@ describe("minify", function() {
                 'let foo = x => "foo " + x;\nconsole.log(foo("bar"));');
         });
         it("Should process inline source map", function() {
-            var code = UglifyJS.minify(read("./test/input/issue-520/input.js"), {
+            var code = Terser.minify(read("./test/input/issue-520/input.js"), {
                 compress: { toplevel: true },
                 sourceMap: {
                     content: "inline",
@@ -215,13 +215,13 @@ describe("minify", function() {
             assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));
         });
         it("Should warn for missing inline source map", function() {
-            var warn_function = UglifyJS.AST_Node.warn_function;
+            var warn_function = Terser.AST_Node.warn_function;
             var warnings = [];
-            UglifyJS.AST_Node.warn_function = function(txt) {
+            Terser.AST_Node.warn_function = function(txt) {
                 warnings.push(txt);
             };
             try {
-                var result = UglifyJS.minify(read("./test/input/issue-1323/sample.js"), {
+                var result = Terser.minify(read("./test/input/issue-1323/sample.js"), {
                     mangle: false,
                     sourceMap: {
                         content: "inline"
@@ -231,11 +231,11 @@ describe("minify", function() {
                 assert.strictEqual(warnings.length, 1);
                 assert.strictEqual(warnings[0], "inline source map not found");
             } finally {
-                UglifyJS.AST_Node.warn_function = warn_function;
+                Terser.AST_Node.warn_function = warn_function;
             }
         });
         it("Should fail with multiple input and inline source map", function() {
-            var result = UglifyJS.minify([
+            var result = Terser.minify([
                 read("./test/input/issue-520/input.js"),
                 read("./test/input/issue-520/output.js")
             ], {
@@ -252,7 +252,7 @@ describe("minify", function() {
 
     describe("sourceMapInline", function() {
         it("should append source map to output js when sourceMapInline is enabled", function() {
-            var result = UglifyJS.minify('var a = function(foo) { return foo; };', {
+            var result = Terser.minify('var a = function(foo) { return foo; };', {
                 sourceMap: {
                     url: "inline"
                 }
@@ -262,12 +262,12 @@ describe("minify", function() {
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
         it("should not append source map to output js when sourceMapInline is not enabled", function() {
-            var result = UglifyJS.minify('var a = function(foo) { return foo; };');
+            var result = Terser.minify('var a = function(foo) { return foo; };');
             var code = result.code;
             assert.strictEqual(code, "var a=function(n){return n};");
         });
         it("should work with max_line_len", function() {
-            var result = UglifyJS.minify(read("./test/input/issue-505/input.js"), {
+            var result = Terser.minify(read("./test/input/issue-505/input.js"), {
                 compress: {
                     directives: false
                 },
@@ -285,7 +285,7 @@ describe("minify", function() {
 
     describe("#__PURE__", function() {
         it("Should drop #__PURE__ hint after use", function() {
-            var result = UglifyJS.minify('//@__PURE__ comment1 #__PURE__ comment2\n foo(), bar();', {
+            var result = Terser.minify('//@__PURE__ comment1 #__PURE__ comment2\n foo(), bar();', {
                 output: {
                     comments: "all",
                     beautify: false,
@@ -295,7 +295,7 @@ describe("minify", function() {
             assert.strictEqual(code, "//  comment1   comment2\nbar();");
         });
         it("Should drop #__PURE__ hint if function is retained", function() {
-            var result = UglifyJS.minify("var a = /*#__PURE__*/(function(){ foo(); })();", {
+            var result = Terser.minify("var a = /*#__PURE__*/(function(){ foo(); })();", {
                 output: {
                     comments: "all",
                     beautify: false,
@@ -308,7 +308,7 @@ describe("minify", function() {
 
     describe("JS_Parse_Error", function() {
         it("Should return syntax error", function() {
-            var result = UglifyJS.minify("function f(a{}");
+            var result = Terser.minify("function f(a{}");
             var err = result.error;
             assert.ok(err instanceof Error);
             assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: Unexpected token punc «{», expected punc «,»");
@@ -317,7 +317,7 @@ describe("minify", function() {
             assert.strictEqual(err.col, 12);
         });
         it("Should reject duplicated label name", function() {
-            var result = UglifyJS.minify("L:{L:{}}");
+            var result = Terser.minify("L:{L:{}}");
             var err = result.error;
             assert.ok(err instanceof Error);
             assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: Label L defined twice");
@@ -329,7 +329,7 @@ describe("minify", function() {
 
     describe("global_defs", function() {
         it("Should throw for non-trivial expressions", function() {
-            var result = UglifyJS.minify("alert(42);", {
+            var result = Terser.minify("alert(42);", {
                 compress: {
                     global_defs: {
                         "@alert": "debugger"
@@ -343,7 +343,7 @@ describe("minify", function() {
         it("Should skip inherited properties", function() {
             var foo = Object.create({ skip: this });
             foo.bar = 42;
-            var result = UglifyJS.minify("alert(FOO);", {
+            var result = Terser.minify("alert(FOO);", {
                 compress: {
                     global_defs: {
                         FOO: foo
@@ -370,13 +370,13 @@ describe("minify", function() {
             "const[a]=[1];var[a]=[2];",
         ].forEach(function(code) {
             it(code, function() {
-                var result = UglifyJS.minify(code, {
+                var result = Terser.minify(code, {
                     compress: false,
                     mangle: false
                 });
                 assert.strictEqual(result.error, undefined);
                 assert.strictEqual(result.code, code);
-                result = UglifyJS.minify(code);
+                result = Terser.minify(code);
                 var err = result.error;
                 assert.ok(err instanceof Error);
                 assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: a redeclared");
@@ -393,7 +393,7 @@ describe("minify", function() {
                 "}",
                 "f();",
             ].join("\n");
-            var ast = UglifyJS.minify(code, {
+            var ast = Terser.minify(code, {
                 compress: false,
                 mangle: false,
                 output: {
@@ -406,7 +406,7 @@ describe("minify", function() {
             assert.strictEqual(ast.body[0].body.length, 2);
             assert.strictEqual(ast.body[0].body[0].TYPE, "SimpleStatement");
             var stat = ast.body[0].body[0];
-            UglifyJS.minify(ast, {
+            Terser.minify(ast, {
                 compress: {
                     sequences: false
                 },
@@ -422,7 +422,7 @@ describe("minify", function() {
         it("Should be repeatable", function() {
             var code = "!function(x){return x(x)}(y);";
             for (var i = 0; i < 2; i++) {
-                assert.strictEqual(UglifyJS.minify(code, {
+                assert.strictEqual(Terser.minify(code, {
                     compress: {
                         toplevel: true,
                     },
@@ -439,7 +439,7 @@ describe("minify", function() {
                 defaults: false,
             }
         };
-        assert.strictEqual(UglifyJS.minify(code, options).code, 'if(true)console.log(1+2);');
+        assert.strictEqual(Terser.minify(code, options).code, 'if(true)console.log(1+2);');
     });
 
     it("should work with compress defaults disabled and evaluate enabled", function() {
@@ -450,12 +450,12 @@ describe("minify", function() {
                 evaluate: true,
             }
         };
-        assert.strictEqual(UglifyJS.minify(code, options).code, 'if(true)console.log(3);');
+        assert.strictEqual(Terser.minify(code, options).code, 'if(true)console.log(3);');
     });
 
     describe("AST_RegExp", function() {
         it("should preserve raw_source", function() {
-            var result = UglifyJS.minify("console.log(/\\/rx\\//ig);", {
+            var result = Terser.minify("console.log(/\\/rx\\//ig);", {
                 output: {
                     ast: true,
                     code: true,
@@ -471,7 +471,7 @@ describe("minify", function() {
     describe("enclose", function() {
         var code = read("test/input/enclose/input.js");
         it("Should work with true", function() {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 enclose: true,
                 mangle: false,
@@ -480,7 +480,7 @@ describe("minify", function() {
             assert.strictEqual(result.code, '(function(){function enclose(){console.log("test enclose")}enclose()})();');
         });
         it("Should work with arg", function() {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 enclose: 'undefined',
                 mangle: false,
@@ -489,7 +489,7 @@ describe("minify", function() {
             assert.strictEqual(result.code, '(function(undefined){function enclose(){console.log("test enclose")}enclose()})();');
         });
         it("Should work with arg:value", function() {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 enclose: 'window,undefined:window',
                 mangle: false,
@@ -498,7 +498,7 @@ describe("minify", function() {
             assert.strictEqual(result.code, '(function(window,undefined){function enclose(){console.log("test enclose")}enclose()})(window);');
         });
         it("Should work alongside wrap", function() {
-            var result = UglifyJS.minify(code, {
+            var result = Terser.minify(code, {
                 compress: false,
                 enclose: 'window,undefined:window',
                 mangle: false,
@@ -529,7 +529,7 @@ describe("minify", function() {
             ].forEach(function(entry) {
                 var code = entry[0];
                 var expected_error = entry[1];
-                var result = UglifyJS.minify(code);
+                var result = Terser.minify(code);
                 assert.strictEqual(result.error && result.error.message, expected_error, JSON.stringify(entry));
             });
         });

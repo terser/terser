@@ -1,9 +1,9 @@
 var assert = require("assert");
-var UglifyJS = require("../node");
+var Terser = require("../node");
 
 describe("Directives", function() {
     it("Should allow tokenizer to store directives state", function() {
-        var tokenizer = UglifyJS._tokenizer("", "foo.js");
+        var tokenizer = Terser._tokenizer("", "foo.js");
         // Stack level 0
         assert.strictEqual(tokenizer.has_directive("use strict"), false);
         assert.strictEqual(tokenizer.has_directive("use asm"), false);
@@ -125,13 +125,13 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             // Fail parser deliberately to get state at failure
-            var tokenizer = UglifyJS._tokenizer(tests[i].input + "]", "foo.js");
+            var tokenizer = Terser._tokenizer(tests[i].input + "]", "foo.js");
 
             try {
-                var parser = UglifyJS.parse(tokenizer);
+                var parser = Terser.parse(tokenizer);
                 throw new Error("Expected parser to fail");
             } catch (e) {
-                assert.strictEqual(e instanceof UglifyJS._JS_Parse_Error, true);
+                assert.strictEqual(e instanceof Terser._JS_Parse_Error, true);
                 assert.strictEqual(e.message, "Unexpected token: punc (])");
             }
 
@@ -228,11 +228,11 @@ describe("Directives", function() {
                 [ "use\nstrict", "use \nstrict", "use asm" ]
             ],
         ].forEach(function(test) {
-            var tokenizer = UglifyJS._tokenizer(test[0] + "]", "foo.js");
+            var tokenizer = Terser._tokenizer(test[0] + "]", "foo.js");
             assert.throws(function() {
-                UglifyJS.parse(tokenizer);
+                Terser.parse(tokenizer);
             }, function(e) {
-                return e instanceof UglifyJS._JS_Parse_Error
+                return e instanceof Terser._JS_Parse_Error
                     && e.message === "Unexpected token: punc (])"
             }, test[0]);
             test[1].forEach(function(directive) {
@@ -254,14 +254,14 @@ describe("Directives", function() {
             [ "'tests';\n\n", true ],
             [ "\n\n\"use strict\";\n\n", true ],
         ].forEach(function(test) {
-            var out = UglifyJS.OutputStream();
+            var out = Terser.OutputStream();
             out.print(test[0]);
             out.print_string("", null, true);
             assert.strictEqual(out.get() === test[0] + ';""', test[1], test[0]);
         });
     });
     it("Should only print 2 semicolons spread over 2 lines in beautify mode", function() {
-        var result = UglifyJS.minify([
+        var result = Terser.minify([
             '"use strict";',
             "'use strict';",
             '"use strict";',
@@ -304,7 +304,7 @@ describe("Directives", function() {
                 'if(1){"use strict"}else{"use strict"}'
             ]
         ].forEach(function(test) {
-            var result = UglifyJS.minify(test[0], {
+            var result = Terser.minify(test[0], {
                 compress: false,
                 mangle: false
             });
@@ -313,7 +313,7 @@ describe("Directives", function() {
         });
     });
     it("Should add double semicolon when relying on automatic semicolon insertion", function() {
-        var result = UglifyJS.minify('"use strict";"use\\x20strict";', {
+        var result = Terser.minify('"use strict";"use\\x20strict";', {
             compress: false,
             output: {
                 semicolons: false
@@ -421,7 +421,7 @@ describe("Directives", function() {
                 "'\"use strict\"';",
             ],
         ].forEach(function(test) {
-            var result = UglifyJS.minify(test[0], {
+            var result = Terser.minify(test[0], {
                 compress: false,
                 output: {
                     quote_style: test[1]
@@ -464,7 +464,7 @@ describe("Directives", function() {
                 'function f(){}'
             ],
         ].forEach(function(test) {
-            var result = UglifyJS.minify(test[0]);
+            var result = Terser.minify(test[0]);
             if (result.error) throw result.error;
             assert.strictEqual(result.code, test[1], test[0]);
         });
@@ -485,8 +485,8 @@ describe("Directives", function() {
 
         var i = 0;
         var checked;
-        var checkWalker = new UglifyJS.TreeWalker(function(node, descend) {
-            if (node instanceof UglifyJS.AST_Symbol && node.name === "_check_") {
+        var checkWalker = new Terser.TreeWalker(function(node, descend) {
+            if (node instanceof Terser.AST_Symbol && node.name === "_check_") {
                 checked = true;
                 for (var j = 0; j < tests[i].directives.length; j++) {
                     assert.ok(checkWalker.has_directive(tests[i].directives[j]),
@@ -502,7 +502,7 @@ describe("Directives", function() {
         for (; i < tests.length; i++) {
             // Do tests - iterate the ast in each test - check only when _check_ occurs - fail when no _check_ has been found
             checked = false;
-            var ast = UglifyJS.parse(tests[i].input);
+            var ast = Terser.parse(tests[i].input);
             ast.walk(checkWalker);
             if (!checked) {
                 throw "No _check_ symbol found in " + tests[i].input;

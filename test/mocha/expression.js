@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Expression", function() {
     it("Should not allow the first exponentiation operator to be prefixed with an unary operator", function() {
@@ -15,13 +15,13 @@ describe("Expression", function() {
         ];
 
         var fail = function(e) {
-            return e instanceof uglify._JS_Parse_Error &&
+            return e instanceof terser._JS_Parse_Error &&
                 /^Unexpected token: operator \((?:[!+~-]|void|typeof|delete)\)/.test(e.message);
         }
 
         var exec = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         }
 

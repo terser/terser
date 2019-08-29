@@ -15,7 +15,7 @@
   "main": "dist/bundle.min.js",
   "types": "tools/terser.d.ts",
   "bin": {
-    "terser": "bin/uglifyjs"
+    "terser": "bin/terser"
   },
   "files": [
     "bin",

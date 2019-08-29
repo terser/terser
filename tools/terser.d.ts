@@ -145,7 +145,7 @@ export interface MinifyOutput {
     ast?: AST_Node;
     code?: string;
     error?: Error;
-    map?: string;
+    map?: RawSourceMap | string;
     warnings?: string[];
 }
 

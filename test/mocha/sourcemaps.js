@@ -119,6 +119,17 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.code, code);
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI","sourceRoot":"//foo.bar/"}');
     });
+    it("Should return source map as object when asObject is given", function() {
+        var code = "console.log(42);";
+        var result = UglifyJS.minify(code, {
+            sourceMap: {
+                asObject: true,
+            },
+        });
+        if (result.error) throw result.error;
+        assert.strictEqual(result.code, code);
+        assert.deepStrictEqual(result.map, {"version":3,"sources":["0"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI"});
+    });
 
     describe("inSourceMap", function() {
         it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", function() {
@@ -232,6 +243,18 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.names.length, 2);
             assert.strictEqual(map.names[0], "tëst");
             assert.strictEqual(map.names[1], "alert");
+        });
+        it("Should append source map to file when asObject is present", function() {
+            var result = UglifyJS.minify('var a = function(foo) { return foo; };', {
+                sourceMap: {
+                    url: "inline",
+                    asObject: true
+                }
+            });
+            if (result.error) throw result.error;
+            var code = result.code;
+            assertCodeWithInlineMapEquals(code, "var a=function(n){return n};\n" +
+                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
     });
 

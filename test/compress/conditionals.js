@@ -72,7 +72,7 @@ ifs_3_should_warn: {
     expect: {
         var x, y;
         var qq; bar();          // 1
-        var jj; foo();          // 2
+        foo(); var jj;          // 2
     }
 }
 

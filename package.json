@@ -32,18 +32,18 @@
     "source-map-support": "~0.5.12"
   },
   "devDependencies": {
-    "acorn": "^6.1.1",
-    "csv": "^5.1.1",
-    "escodegen": "^1.11.1",
-    "eslint": "^4.19.1",
+    "acorn": "^7.0.0",
+    "csv": "^5.1.2",
+    "escodegen": "^1.12.0",
+    "eslint": "^6.3.0",
     "eslump": "^2.0.0",
     "mocha": "^5.2.0",
     "mochallel": "^2.0.0",
     "pre-commit": "^1.2.2",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.13.1",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.20.3",
     "rollup-plugin-terser": "^5.1.1",
-    "semver": "^5.7.0"
+    "semver": "^6.3.0"
   },
   "scripts": {
     "test": "npm run build -- --configTest && node test/run-tests.js",

@@ -13,21 +13,6 @@ basic_syntax_error: {
     })
 }
 
-valid_template_string_example: {
-    options = {
-        evaluate: true,
-    }
-    input: `
-        // notice that template quote characters and
-        // template expressions need to be escaped
-        console.log(\`foo \${100 + 23} bar\`);
-    `
-    expect: {
-        console.log("foo 123 bar");
-    }
-    expect_stdout: "foo 123 bar"
-}
-
 invalid_template_string_example: {
     input: `
         console.log(\`foo \${100 + 23}

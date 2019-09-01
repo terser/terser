@@ -1,8 +1,12 @@
 {
     "globals": {
         "options": true,
+        "beautify": true,
         "console": false,
         "window": false,
         "global": false
+    },
+    "rules": {
+        "semi": "off"
     }
 }

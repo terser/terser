@@ -1,4 +1,4 @@
-<h1><img src="https://raw.githubusercontent.com/terser/terser/master/logo.svg?sanitize=true" alt="Terser" width="450" height="190"></h1>
+<h1><img src="https://terser.org/img/terser-banner-logo.png" alt="Terser" width="400"></h1>
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]

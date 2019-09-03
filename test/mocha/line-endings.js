@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../node");
+var Terser = require("../node");
 
 describe("line-endings", function() {
     var options = {
@@ -14,19 +14,19 @@ describe("line-endings", function() {
 
     it("Should parse LF line endings", function() {
         var js = '/*!one\n2\n3*///comment\nfunction f(x) {\n if (x)\n//comment\n  return 3;\n}\n';
-        var result = UglifyJS.minify(js, options);
+        var result = Terser.minify(js, options);
         assert.strictEqual(result.code, expected_code);
     });
 
     it("Should parse CR/LF line endings", function() {
         var js = '/*!one\r\n2\r\n3*///comment\r\nfunction f(x) {\r\n if (x)\r\n//comment\r\n  return 3;\r\n}\r\n';
-        var result = UglifyJS.minify(js, options);
+        var result = Terser.minify(js, options);
         assert.strictEqual(result.code, expected_code);
     });
 
     it("Should parse CR line endings", function() {
         var js = '/*!one\r2\r3*///comment\rfunction f(x) {\r if (x)\r//comment\r  return 3;\r}\r';
-        var result = UglifyJS.minify(js, options);
+        var result = Terser.minify(js, options);
         assert.strictEqual(result.code, expected_code);
     });
 
@@ -44,11 +44,11 @@ describe("line-endings", function() {
         ]
         var test = function(input) {
             return function() {
-                UglifyJS.parse(input);
+                Terser.parse(input);
             }
         }
         var fail = function(e) {
-            return e instanceof UglifyJS._JS_Parse_Error
+            return e instanceof Terser._JS_Parse_Error
                 && e.message === "Unexpected line terminator";
         }
         for (var i = 0; i < inputs.length; i++) {

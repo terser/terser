@@ -13,7 +13,7 @@ if (process.argv[2] == "run") {
 } else if (process.argv.length > 2) {
     var token = process.argv[2];
     var branch = process.argv[3] || "v" + require("../package.json").version;
-    var repository = encodeURIComponent(process.argv[4] || "mishoo/UglifyJS2");
+    var repository = encodeURIComponent(process.argv[4] || "terser-js/terser");
     var concurrency = process.argv[5] || 1;
     (function request() {
         setTimeout(request, (period + wait) / concurrency);

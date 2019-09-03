@@ -1,10 +1,10 @@
 var assert = require("assert");
-var UglifyJS = require("../..");
+var Terser = require("../..");
 
 describe("screw-ie8", function () {
     it("Should be able to minify() with undefined as catch parameter in a try...catch statement", function () {
         assert.strictEqual(
-            UglifyJS.minify([
+            Terser.minify([
                 "function a(b){",
                 "    try {",
                 "        throw 'Stuff';",

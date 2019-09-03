@@ -43,18 +43,18 @@ if (typeof phantom == "undefined") {
                 });
                 if (/\.js$/.test(url)) {
                     var stderr = "";
-                    var uglifyjs = child_process.fork("bin/uglifyjs", args, {
+                    var terser = child_process.fork("bin/terser", args, {
                         silent: true
                     }).on("exit", function(code) {
-                        console.log("uglifyjs", url.slice(site.length + 1), args.join(" "));
+                        console.log("terser", url.slice(site.length + 1), args.join(" "));
                         console.log(stderr);
-                        if (code) throw new Error("uglifyjs failed with code " + code);
+                        if (code) throw new Error("terser failed with code " + code);
                     });
-                    uglifyjs.stderr.on("data", function(data) {
+                    terser.stderr.on("data", function(data) {
                         stderr += data;
                     }).setEncoding("utf8");
-                    uglifyjs.stdout.pipe(response);
-                    res.pipe(uglifyjs.stdin);
+                    terser.stdout.pipe(response);
+                    res.pipe(terser.stdin);
                 } else {
                     res.pipe(response);
                 }

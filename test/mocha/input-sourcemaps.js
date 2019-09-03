@@ -1,4 +1,4 @@
-var Uglify = require('../../');
+var Terser = require('../../');
 var assert = require("assert");
 var SourceMapConsumer = require("source-map").SourceMapConsumer;
 
@@ -24,7 +24,7 @@ describe("input sourcemaps", function() {
 
         transpilemap = sourceMap || getMap();
 
-        var result = Uglify.minify(transpiled, {
+        var result = Terser.minify(transpiled, {
             sourceMap: {
                 content: transpilemap
             }

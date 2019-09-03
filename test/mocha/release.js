@@ -2,7 +2,7 @@ var assert = require("assert");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
 
-if (!process.env.UGLIFYJS_TEST_ALL) return;
+if (!process.env.TERSER_TEST_ALL) return;
 
 function run(command, args, done) {
     spawn(command, args, {

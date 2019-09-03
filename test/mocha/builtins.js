@@ -1,4 +1,4 @@
-var UglifyJS = require("../../");
+var Terser = require("../../");
 var assert = require("assert");
 
 describe("builtins", function() {
@@ -7,7 +7,7 @@ describe("builtins", function() {
             "    return [Object,Array,Function,Number,String,Boolean,Error,Math,Date,RegExp,Symbol,Map,Promise,Proxy,Reflect,Set,WeakMap,WeakSet,Float32Array,something];\n" +
             "};";
 
-        var result = UglifyJS.minify(test, {parse: {bare_returns: true}}).code;
+        var result = Terser.minify(test, {parse: {bare_returns: true}}).code;
 
         assert.strictEqual(result.indexOf("something"), -1);
 

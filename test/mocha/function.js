@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Function", function() {
     it ("Should parse binding patterns correctly", function() {
@@ -11,10 +11,10 @@ describe("Function", function() {
         }
 
         // Destructurings as arguments
-        var destr_fun1 = uglify.parse('(function ({a, b}) {})').body[0].body;
-        var destr_fun2 = uglify.parse('(function ([a, [b]]) {})').body[0].body;
-        var destr_fun3 = uglify.parse('({a, b}) => null').body[0].body;
-        var destr_fun4 = uglify.parse('([a, [b]]) => null').body[0].body;
+        var destr_fun1 = terser.parse('(function ({a, b}) {})').body[0].body;
+        var destr_fun2 = terser.parse('(function ([a, [b]]) {})').body[0].body;
+        var destr_fun3 = terser.parse('({a, b}) => null').body[0].body;
+        var destr_fun4 = terser.parse('([a, [b]]) => null').body[0].body;
 
         assert.equal(destr_fun1.argnames.length, 1);
         assert.equal(destr_fun2.argnames.length, 1);
@@ -26,12 +26,12 @@ describe("Function", function() {
         var destruct3 = destr_fun3.argnames[0];
         var destruct4 = destr_fun4.argnames[0];
 
-        assert(destruct1 instanceof uglify.AST_Destructuring);
-        assert(destruct2 instanceof uglify.AST_Destructuring);
-        assert(destruct3 instanceof uglify.AST_Destructuring);
-        assert(destruct4 instanceof uglify.AST_Destructuring);
-        assert(destruct2.names[1] instanceof uglify.AST_Destructuring);
-        assert(destruct4.names[1] instanceof uglify.AST_Destructuring);
+        assert(destruct1 instanceof terser.AST_Destructuring);
+        assert(destruct2 instanceof terser.AST_Destructuring);
+        assert(destruct3 instanceof terser.AST_Destructuring);
+        assert(destruct4 instanceof terser.AST_Destructuring);
+        assert(destruct2.names[1] instanceof terser.AST_Destructuring);
+        assert(destruct4.names[1] instanceof terser.AST_Destructuring);
 
         assert.equal(destruct1.start.value, '{');
         assert.equal(destruct1.end.value, '}');
@@ -129,34 +129,34 @@ describe("Function", function() {
         // Aren't argument destructurings
 
         assert.throws(function () {
-            uglify.parse('(function ( { a, [ b ] } ) { })')
+            terser.parse('(function ( { a, [ b ] } ) { })')
         });
 
         assert.throws(function () {
-            uglify.parse('(function (1) { })');
+            terser.parse('(function (1) { })');
         }, /Invalid function parameter/);
 
         assert.throws(function () {
-            uglify.parse('(function (this) { })');
+            terser.parse('(function (this) { })');
         });
 
         assert.throws(function () {
-            uglify.parse('(function ([1]) { })');
+            terser.parse('(function ([1]) { })');
         }, /Invalid function parameter/);
 
         assert.throws(function () {
-            uglify.parse('(function [a] { })');
+            terser.parse('(function [a] { })');
         });
 
         // generators
-        var generators_def = uglify.parse('function* fn() {}').body[0];
+        var generators_def = terser.parse('function* fn() {}').body[0];
         assert.equal(generators_def.is_generator, true);
 
         assert.throws(function () {
-            uglify.parse('function* (){ }');
+            terser.parse('function* (){ }');
         });
 
-        var generators_yield_def = uglify.parse('function* fn() {\nyield remote();\}').body[0].body[0];
+        var generators_yield_def = terser.parse('function* fn() {\nyield remote();\}').body[0].body[0];
         assert.strictEqual(generators_yield_def.body.is_star, false);
     });
     it("Should not accept spread on non-last parameters", function() {
@@ -172,11 +172,11 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function() {
-                uglify.parse(code);
+                terser.parse(code);
             }
         }
         var error = function(e) {
-            return e instanceof uglify._JS_Parse_Error &&
+            return e instanceof terser._JS_Parse_Error &&
                 /^Unexpected token: /.test(e.message);
         }
 
@@ -191,11 +191,11 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function() {
-                uglify.parse(code, { ecma: 5 });
+                terser.parse(code, { ecma: 5 });
             }
         }
         var error = function(e) {
-            return e instanceof uglify._JS_Parse_Error;
+            return e instanceof terser._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -208,11 +208,11 @@ describe("Function", function() {
             "console.log(...[1, 2], );",
             "!function(a, b, ){ console.log(a + b); }(3, 4, );",
         ].forEach(function(code) {
-            uglify.parse(code, { ecma: 8 });
+            terser.parse(code, { ecma: 8 });
             assert.throws(function() {
-                uglify.parse(code, { ecma: 6 });
+                terser.parse(code, { ecma: 6 });
             }, function(e) {
-                return e instanceof uglify._JS_Parse_Error;
+                return e instanceof terser._JS_Parse_Error;
             }, code);
         });
     });
@@ -228,11 +228,11 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function() {
-                uglify.parse(code, { ecma: 8 });
+                terser.parse(code, { ecma: 8 });
             }
         }
         var error = function(e) {
-            return e instanceof uglify._JS_Parse_Error;
+            return e instanceof terser._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -245,11 +245,11 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function () {
-                uglify.parse(code);
+                terser.parse(code);
             }
         }
         var error = function (e) {
-            return e instanceof uglify._JS_Parse_Error;
+            return e instanceof terser._JS_Parse_Error;
         }
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
@@ -274,11 +274,11 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function () {
-                uglify.parse(code);
+                terser.parse(code);
             }
         }
         var error = function (e) {
-            return e instanceof uglify._JS_Parse_Error &&
+            return e instanceof terser._JS_Parse_Error &&
                 /^Parameter [a-zA-Z]+ was used already$/.test(e.message);
         }
         for (var i = 0; i < tests.length; i++) {

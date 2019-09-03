@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../..");
+var Terser = require("../..");
 
 describe("parentheses", function() {
     it("Should add trailing parentheses for new expressions with zero arguments in beautify mode", function() {
@@ -33,7 +33,7 @@ describe("parentheses", function() {
         ];
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(
-                UglifyJS.minify(tests[i], {
+                Terser.minify(tests[i], {
                     output: {beautify: true},
                     compress: false,
                     mangle: false
@@ -74,7 +74,7 @@ describe("parentheses", function() {
         ];
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(
-                UglifyJS.minify(tests[i], {
+                Terser.minify(tests[i], {
                     output: {beautify: false},
                     compress: false,
                     mangle: false
@@ -93,7 +93,7 @@ describe("parentheses", function() {
             code = code.concat(code);
         }
         code = code.join("");
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             compress: false,
             mangle: false,
         });

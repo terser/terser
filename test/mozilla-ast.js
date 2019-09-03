@@ -1,12 +1,12 @@
-// Testing UglifyJS <-> SpiderMonkey AST conversion
+// Testing Terser <-> SpiderMonkey AST conversion
 "use strict";
 
 var acorn = require("acorn");
 var ufuzz = require("./ufuzz");
-var UglifyJS = require("..");
+var Terser = require("..");
 
 function try_beautify(code) {
-    var beautified = UglifyJS.minify(code, {
+    var beautified = Terser.minify(code, {
         compress: false,
         mangle: false,
         output: {
@@ -25,7 +25,7 @@ function try_beautify(code) {
 }
 
 function test(original, estree, description) {
-    var transformed = UglifyJS.minify(UglifyJS.AST_Node.from_mozilla_ast(estree), {
+    var transformed = Terser.minify(Terser.AST_Node.from_mozilla_ast(estree), {
         compress: false,
         mangle: false
     });
@@ -52,7 +52,7 @@ var num_iterations = ufuzz.num_iterations;
 for (var round = 1; round <= num_iterations; round++) {
     process.stdout.write(round + " of " + num_iterations + "\r");
     var code = ufuzz.createTopLevelCode();
-    var uglified = UglifyJS.minify(code, {
+    var uglified = Terser.minify(code, {
         compress: false,
         mangle: false,
         output: {

@@ -2,10 +2,10 @@ var assert = require("assert");
 var exec = require("child_process").exec;
 var path = require("path");
 
-describe("bin/uglifyjs with input file globs", function() {
-    var uglifyjscmd = '"' + process.argv[0] + '" bin/uglifyjs';
-    it("bin/uglifyjs with one input file extension glob.", function(done) {
-        var command = uglifyjscmd + ' "test/input/issue-1242/foo.*" -cm';
+describe("bin/terser with input file globs", function() {
+    var tersercmd = '"' + process.argv[0] + '" bin/terser';
+    it("bin/terser with one input file extension glob.", function(done) {
+        var command = tersercmd + ' "test/input/issue-1242/foo.*" -cm';
 
         exec(command, function(err, stdout) {
             if (err) throw err;
@@ -14,8 +14,8 @@ describe("bin/uglifyjs with input file globs", function() {
             done();
         });
     });
-    it("bin/uglifyjs with one input file name glob.", function(done) {
-        var command = uglifyjscmd + ' "test/input/issue-1242/b*.es5" -cm';
+    it("bin/terser with one input file name glob.", function(done) {
+        var command = tersercmd + ' "test/input/issue-1242/b*.es5" -cm';
 
         exec(command, function(err, stdout) {
             if (err) throw err;
@@ -24,8 +24,8 @@ describe("bin/uglifyjs with input file globs", function() {
             done();
         });
     });
-    it("bin/uglifyjs with multiple input file globs.", function(done) {
-        var command = uglifyjscmd + ' "test/input/issue-1242/???.es5" "test/input/issue-1242/*.js" -mc toplevel,passes=3';
+    it("bin/terser with multiple input file globs.", function(done) {
+        var command = tersercmd + ' "test/input/issue-1242/???.es5" "test/input/issue-1242/*.js" -mc toplevel,passes=3';
 
         exec(command, function(err, stdout) {
             if (err) throw err;
@@ -35,7 +35,7 @@ describe("bin/uglifyjs with input file globs", function() {
         });
     });
     it("Should throw with non-matching glob string", function(done) {
-        var command = uglifyjscmd + ' "test/input/issue-1242/blah.*"';
+        var command = tersercmd + ' "test/input/issue-1242/blah.*"';
 
         exec(command, function(err, stdout, stderr) {
             assert.ok(err);
@@ -44,7 +44,7 @@ describe("bin/uglifyjs with input file globs", function() {
         });
     });
     it('"?" in glob string should not match "/"', function(done) {
-        var command = uglifyjscmd + ' "test/input?issue-1242/foo.*"';
+        var command = tersercmd + ' "test/input?issue-1242/foo.*"';
 
         exec(command, function(err, stdout, stderr) {
             assert.ok(err);
@@ -53,7 +53,7 @@ describe("bin/uglifyjs with input file globs", function() {
         });
     });
     it("Should handle special characters in glob string", function(done) {
-        var command = uglifyjscmd + ' "test/input/issue-1632/^{*}[???](*)+$.??" -cm';
+        var command = tersercmd + ' "test/input/issue-1632/^{*}[???](*)+$.??" -cm';
 
         exec(command, function(err, stdout) {
             if (err) throw err;
@@ -64,7 +64,7 @@ describe("bin/uglifyjs with input file globs", function() {
     });
     it("Should handle array of glob strings - matching and otherwise", function(done) {
         var dir = "test/input/issue-1242";
-        var command = uglifyjscmd + ' "' + [
+        var command = tersercmd + ' "' + [
             path.join(dir, "b*.es5"),
             path.join(dir, "z*.es5"),
             path.join(dir, "*.js")

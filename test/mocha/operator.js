@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../..");
+var Terser = require("../..");
 
 describe("operator", function() {
     it("Should handle mixing of ++/+/--/- correctly", function() {
@@ -16,11 +16,11 @@ describe("operator", function() {
                         [ "++b", "--b", "b", "b--", "b++" ].forEach(function(b) {
                             var exp = [p, a, o, q, b].join(" ");
                             var orig = evaluate(exp);
-                            var uglify = evaluate(UglifyJS.parse(exp).print_to_string());
-                            assert.strictEqual(orig.a, uglify.a);
-                            assert.strictEqual(orig.b, uglify.b);
-                            assert.strictEqual(orig.c, uglify.c);
-                            var beautify = evaluate(UglifyJS.parse(exp).print_to_string({
+                            var terser = evaluate(Terser.parse(exp).print_to_string());
+                            assert.strictEqual(orig.a, terser.a);
+                            assert.strictEqual(orig.b, terser.b);
+                            assert.strictEqual(orig.c, terser.c);
+                            var beautify = evaluate(Terser.parse(exp).print_to_string({
                                 beautify: true
                             }));
                             assert.strictEqual(orig.a, beautify.a);
@@ -485,7 +485,7 @@ describe("operator", function() {
             [ "- a++ - - b--", "-a++- -b--" ],
             [ "- a++ - - b++", "-a++- -b++" ],
         ].forEach(function(exp) {
-            assert.strictEqual(UglifyJS.parse(exp[0]).print_to_string(), exp[1] + ";");
+            assert.strictEqual(Terser.parse(exp[0]).print_to_string(), exp[1] + ";");
         });
     });
 });

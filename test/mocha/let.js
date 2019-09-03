@@ -1,5 +1,5 @@
 var assert = require("assert");
-var UglifyJS = require("../..");
+var Terser = require("../..");
 
 describe("let", function() {
     this.timeout(60000);
@@ -10,7 +10,7 @@ describe("let", function() {
             s += "var v" + i + "=0;";
         }
         s += '}';
-        var result = UglifyJS.minify(s, {
+        var result = Terser.minify(s, {
             compress: false
         }).code;
 

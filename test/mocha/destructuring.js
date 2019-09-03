@@ -1,5 +1,5 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("Destructuring", function() {
     it("Should generate similar trees for destructuring in left hand side expressions, definitions, functions and arrow functions", function() {
@@ -34,7 +34,7 @@ describe("Destructuring", function() {
         var types = [
             {
                 name: "lhs",
-                symbolType: uglify.AST_SymbolRef,
+                symbolType: terser.AST_SymbolRef,
                 tree: function (ast) {
                     return ast.body[0].body.left;
                 },
@@ -44,7 +44,7 @@ describe("Destructuring", function() {
             },
             {
                 name: "var",
-                symbolType: uglify.AST_SymbolVar,
+                symbolType: terser.AST_SymbolVar,
                 tree: function (ast) {
                     return ast.body[0].definitions[0].name;
                 },
@@ -54,7 +54,7 @@ describe("Destructuring", function() {
             },
             {
                 name: "function",
-                symbolType: uglify.AST_SymbolFunarg,
+                symbolType: terser.AST_SymbolFunarg,
                 tree: function (ast) {
                     return ast.body[0].argnames[0];
                 },
@@ -64,7 +64,7 @@ describe("Destructuring", function() {
             },
             {
                 name: "arrow",
-                symbolType: uglify.AST_SymbolFunarg,
+                symbolType: terser.AST_SymbolFunarg,
                 tree: function (ast) {
                     return ast.body[0].definitions[0].value.argnames[0];
                 },
@@ -75,20 +75,20 @@ describe("Destructuring", function() {
         ];
 
         var walker = function(type, ref, code, result) {
-            var w = new uglify.TreeWalker(function(node) {
-                if (w.parent() instanceof uglify.AST_DefaultAssign &&
+            var w = new terser.TreeWalker(function(node) {
+                if (w.parent() instanceof terser.AST_DefaultAssign &&
                     w.parent().right === node
                 ) {
                     return true; // Don't check the content of the default assignment
 
-                } else if (node instanceof uglify.AST_Symbol) {
+                } else if (node instanceof terser.AST_Symbol) {
                     assert(node instanceof type.symbolType,
                         node.TYPE + " while " + type.symbolType.TYPE + " expected at pos " +
                         node.start.pos + " in `" + code + "`  (" + ref + ")"
                     );
 
                     result.push([
-                        new uglify.AST_Symbol({
+                        new terser.AST_Symbol({
                             start: node.start,
                             name: node.name,
                             end: node.end
@@ -115,7 +115,7 @@ describe("Destructuring", function() {
             for (var j = 0; j < types.length; j++) {
                 var code = types[j].generate(patterns[i])
                 var ast = types[j].tree(
-                    uglify.parse(code)
+                    terser.parse(code)
                 );
                 results.push([]);
                 ast.walk(walker(

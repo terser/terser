@@ -1,14 +1,14 @@
 var assert = require("assert");
-var uglify = require("../node");
+var terser = require("../node");
 
 describe("EOF", function() {
     it("Should test code for at least throwing syntax error when incomplete", function() {
         var error = function(e) {
-            return e instanceof uglify._JS_Parse_Error;
+            return e instanceof terser._JS_Parse_Error;
         }
         var parse = function(test) {
             return function() {
-                uglify.parse(test);
+                terser.parse(test);
             }
         }
         // Chops off 1 char at a time until limit or start of string is reached

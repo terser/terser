@@ -1,7 +1,7 @@
 var assert = require("assert");
 var readFileSync = require("fs").readFileSync;
 var SourceMapConsumer = require("source-map").SourceMapConsumer;
-var {assertCodeWithInlineMapEquals} = require('./utils');
+var {assertCodeWithInlineMapEquals} = require("./utils");
 var Terser = require("../..");
 
 function read(path) {
@@ -121,7 +121,7 @@ describe("sourcemaps", function() {
     });
     it("Should return source map as object when asObject is given", function() {
         var code = "console.log(42);";
-        var result = UglifyJS.minify(code, {
+        var result = Terser.minify(code, {
             sourceMap: {
                 asObject: true,
             },
@@ -182,7 +182,7 @@ describe("sourcemaps", function() {
 
     describe("sourceMapInline", function() {
         it("Should append source map to output js when sourceMapInline is enabled", function() {
-            var result = Terser.minify('var a = function(foo) { return foo; };', {
+            var result = Terser.minify("var a = function(foo) { return foo; };", {
                 sourceMap: {
                     url: "inline"
                 }
@@ -193,7 +193,7 @@ describe("sourcemaps", function() {
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
         it("Should not append source map to output js when sourceMapInline is not enabled", function() {
-            var result = Terser.minify('var a = function(foo) { return foo; };');
+            var result = Terser.minify("var a = function(foo) { return foo; };");
             if (result.error) throw result.error;
             var code = result.code;
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};");
@@ -245,7 +245,7 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.names[1], "alert");
         });
         it("Should append source map to file when asObject is present", function() {
-            var result = UglifyJS.minify('var a = function(foo) { return foo; };', {
+            var result = Terser.minify("var a = function(foo) { return foo; };", {
                 sourceMap: {
                     url: "inline",
                     asObject: true
@@ -271,7 +271,7 @@ describe("sourcemaps", function() {
         });
         it("Should copy sourcesContent if sources are relative", function() {
             var relativeMap = get_map();
-            relativeMap.sources = ['./index.js'];
+            relativeMap.sources = ["./index.js"];
             var map = prepare_map(relativeMap);
             assert.notEqual(map.sourcesContent, null);
             assert.equal(map.sourcesContent.length, 1);

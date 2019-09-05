@@ -6967,9 +6967,7 @@ variables_collision_in_immediately_invoked_func: {
     expect: {
         !function () {
             window.used = function () {
-                window.foo;
-                var B = window.bar, C = window.foobar;
-                return -1 === C ? B : $(B, C);
+                return window.foo,function(A,c){return-1===c?A:$(A,c)}(window.bar,window.foobar)
             }.call(this);
         }();
     }
@@ -6977,14 +6975,15 @@ variables_collision_in_immediately_invoked_func: {
 
 issue_308: {
     options = {
-        defaults: true
+        defaults: true,
+        passes: 2
     };
     input: {
         exports.withStyles = withStyles;
 
         function _inherits(superClass) {
             if (typeof superClass !== "function") {
-                throw new TypeError("Super expression must be a function, not " + typeof superClass);
+                throw new TypeError();
             }
             Object.create(superClass);
         }
@@ -7000,7 +6999,7 @@ issue_308: {
     expect: {
         function _inherits(superClass) {
             if ("function" != typeof superClass)
-                throw new TypeError("Super expression must be a function, not " + typeof superClass);
+                throw new TypeError();
             Object.create(superClass);
         }
 
@@ -7014,7 +7013,8 @@ issue_308: {
 
 issue_294: {
     options = {
-        defaults: true
+        defaults: true,
+        passes: 2
     };
     input: {
         module.exports = (function(constructor) {
@@ -7032,7 +7032,8 @@ issue_294: {
     }
     expect: {
         module.exports = function (input) {
-            return {mappedKey: input.key || "CONDITIONAL_DEFAULT_VALUE"};
+            var value;
+            return {mappedKey: (value = input.key, value || "CONDITIONAL_DEFAULT_VALUE")};
         };
     }
 }

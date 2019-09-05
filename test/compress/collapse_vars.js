@@ -5955,3 +5955,22 @@ replace_all_var_scope: {
     }
     expect_stdout: "100 109"
 }
+
+issue_348: {
+    options = {
+        collapse_vars: true,
+        unused: true
+    }
+    input: {
+        console.log(function x(EEE) {
+          return function (tee) {
+            if (tee) {
+              const EEE = tee;
+              if (EEE)
+                return EEE;
+            }
+          }(EEE);
+        }('PASS'))
+    }
+    expect_stdout: 'PASS'
+}

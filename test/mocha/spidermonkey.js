@@ -1,7 +1,7 @@
 var assert = require("assert");
 var fs = require("fs");
 var acorn = require("acorn");
-var escodegen = require("escodegen");
+var astring = require("astring");
 var Terser = require("../..");
 
 describe("spidermonkey export/import sanity test", function() {
@@ -128,12 +128,11 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
-    it("should produce an AST compatible with escodegen", function() {
+    it("should produce an AST compatible with astring", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = Terser.parse(code);
         var moz_ast = terser_ast.to_mozilla_ast();
-        var generated = escodegen.generate(moz_ast)
-            .replace(/\[object Object\].\[object Object\]/g, "new.target");  // escodegen issue
+        var generated = astring.generate(moz_ast);
         var parsed = acorn.parse(generated, {
             sourceType: "module",
             ecmaVersion: 9

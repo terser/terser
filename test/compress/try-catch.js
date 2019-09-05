@@ -104,3 +104,19 @@ parameterless_catch: {
     expect_stdout: "PASS"
     node_version: ">=10"
 }
+
+parent_scope_of_catch_block_is_not_the_try_block: {
+    mangle = {}
+    input: {
+        function test(foo, bar) {
+            try {
+                const bar = {};
+                throw 'PASS'
+            } catch (error) {
+                return bar(error);
+            }
+        }
+        console.log(test(null, x => x));
+    }
+    expect_stdout: "PASS"
+}

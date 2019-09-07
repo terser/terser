@@ -1,6 +1,8 @@
 {
     "globals": {
         "options": true,
+        "mangle": true,
+        "rename": true,
         "beautify": true,
         "console": false,
         "window": false,

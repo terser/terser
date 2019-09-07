@@ -666,6 +666,8 @@ var result = Terser.minify({"compiled.js": "compiled code"}, {
 
 If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.url`.
 
+If you happen to need the source map as a raw object, set `sourceMap.asObject` to `true`.
+
 ## Parse options
 
 - `bare_returns` (default `false`) -- support top level `return` statements

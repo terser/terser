@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.3.0
+
+ - Do not drop computed object keys with side effects
+ - Functions passed to other functions in calls are now wrapped in parentheses by default, which speeds up loading most modules
+ - Objects with computed properties are now less likely to be hoisted
+ - Speed and memory efficiency optimizations
+ - Fixed scoping issues with `try` and `switch`
+
 ## v4.2.1
 
  - Minor refactors

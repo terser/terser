@@ -1501,18 +1501,6 @@ issue_2647_1: {
             console.log(n);
         })("PASS", {});
     }
-    expect: {
-        console.log("PASS");
-        (function(n, o = "PASS") {
-            console.log(o);
-        })();
-        (function(o = "PASS") {
-            console.log(o);
-        })();
-        (function(n, {o = "FAIL"}) {
-            console.log("PASS");
-        })(0, {});
-    }
     expect_stdout: [
         "PASS",
         "PASS",

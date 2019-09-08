@@ -7098,3 +7098,12 @@ issue_432_2: {
 
     expect_stdout: "PASS"
 }
+
+issue_379: {
+    input: {
+        global.a = ((...args) => ((a1, a2) => a1.foo === a2.foo))(...args)
+    }
+    expect: {
+        global.a = ((...args) => ((a1, a2) => a1.foo === a2.foo))(...args)
+    }
+}

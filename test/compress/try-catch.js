@@ -120,3 +120,17 @@ parent_scope_of_catch_block_is_not_the_try_block: {
     }
     expect_stdout: "PASS"
 }
+
+issue_452: {
+    options = {
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        try {
+            const arr = ['PASS'];
+            for (const x of arr) { console.log(x) }
+        } catch(e) { }
+    }
+    expect_stdout: 'PASS'
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.3.1
+
+ - Fixed an issue from 4.3.0 where any block scope within a for loop erroneously had its parent set to the function scopee
+ - Fixed an issue where compressing IIFEs with argument expansions would result in some parameters becoming undefined
+ - addEventListener options argument's properties are now part of the DOM properties list.
+
 ## v4.3.0
 
  - Do not drop computed object keys with side effects

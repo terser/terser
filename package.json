@@ -34,7 +34,6 @@
   "devDependencies": {
     "acorn": "^7.0.0",
     "astring": "^1.4.1",
-    "csv": "^5.1.2",
     "eslint": "^6.3.0",
     "eslump": "^2.0.0",
     "mocha": "^5.2.0",

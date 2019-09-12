@@ -103,7 +103,7 @@ export interface OutputOptions {
     inline_script?: boolean;
     ie8?: boolean;
     keep_quoted_props?: boolean;
-    max_line_len?: boolean;
+    max_line_len?: false | number;
     preamble?: string;
     quote_keys?: boolean;
     quote_style?: OutputQuoteStyle;

@@ -879,3 +879,12 @@ tagged_template_function_inline_5: {
     }
     expect_exact: "({pl(){}}.pl)`test`;"
 }
+
+allow_null_character: {
+    output = { ascii_only: true }
+    input: {
+        `\0`;
+        `\0${x}`;
+    }
+    expect_exact: "`\\0`;`\\0${x}`;"
+}

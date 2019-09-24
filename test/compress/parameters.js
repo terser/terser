@@ -184,3 +184,10 @@ accept_duplicated_parameters_in_non_strict_without_spread_or_default_assignment:
         function b({c: test, c: test}){}
     }
 }
+
+accept_destructuring_async_word_with_default: {
+    input: {
+        console.log((({ async = "PASS" }) => async)({}))
+    }
+    expect_stdout: "PASS"
+}

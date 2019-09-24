@@ -3,8 +3,8 @@ var Terser = require("../..");
 
 describe("tokens", function() {
     it("Should give correct positions for accessors", function() {
-        // location               0         1         2         3         4
-        //                        01234567890123456789012345678901234567890123456789
+        // location             0         1         2         3         4
+        //                      01234567890123456789012345678901234567890123456789
         var ast = Terser.parse("var obj = { get latest() { return undefined; } }");
         // test all AST_ObjectProperty tokens are set as expected
         var found = false;

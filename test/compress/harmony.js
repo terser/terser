@@ -163,6 +163,26 @@ classes_with_expression_as_expand: {
     expect_exact: "class D extends(calls++,C){}"
 }
 
+classes_with_extend_side_effects: {
+    options = {
+        toplevel: true
+    }
+    input: {
+        var x = "FAIL";
+        class A extends (x = "PASS", Object) {}
+        const log_return_obj = msg => {
+            console.log(msg)
+            return Object
+        }
+        class B extends log_return_obj("PASS") {}
+        console.log(x); // PASS
+    }
+    expect_stdout: [
+        "PASS",
+        "PASS"
+    ]
+}
+
 new_target: {
     input: {
         new.target;

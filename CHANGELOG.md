@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.3.2
+
+ - Typescript typing fix
+ - Ensure that functions can't be inlined, by reduce_vars, into places where they're accessing variables with the same name, but from somewhere else.
+
 ## v4.3.1
 
  - Fixed an issue from 4.3.0 where any block scope within a for loop erroneously had its parent set to the function scopee

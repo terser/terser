@@ -7107,3 +7107,22 @@ issue_379: {
         global.a = ((...args) => ((a1, a2) => a1.foo === a2.foo))(...args)
     }
 }
+
+issue_443: {
+    options = {
+        unused: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        const one_name = "PASS";
+        var get_one = () => {
+            if (one_name) return one_name;
+        }
+        {
+            let one_name = get_one();
+            console.log(one_name)
+        }
+    }
+    expect_stdout: "PASS"
+}

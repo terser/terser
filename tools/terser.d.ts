@@ -99,11 +99,11 @@ export interface OutputOptions {
     comments?: boolean | 'all' | 'some' | RegExp | Function;
     ecma?: ECMA;
     indent_level?: number;
-    indent_start?: boolean;
+    indent_start?: number;
     inline_script?: boolean;
     ie8?: boolean;
     keep_quoted_props?: boolean;
-    max_line_len?: false | number;
+    max_line_len?: number | false;
     preamble?: string;
     quote_keys?: boolean;
     quote_style?: OutputQuoteStyle;

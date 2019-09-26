@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.3.3
+
+ - Fixed a problem where parsing template strings would mix up octal notation and a slash followed by a zero representing a null character.
+ - Started accepting the name `async` in destructuring arguments with default value.
+ - Now Terser takes into account side effects inside class `extends` clauses.
+ - Added parens whenever there's a comment between a return statement and the returned value, to prevent issues with ASI.
+ - Stopped using raw RegExp objects, since the spec is going to continue to evolve. This ensures Terser is able to process new, unknown RegExp flags and features. This is a breaking change in the AST node AST_RegExp.
+
 ## v4.3.2
 
  - Typescript typing fix

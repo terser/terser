@@ -5616,4 +5616,4 @@ export var domprops = [
     "zoom",
     "zoomAndPan",
     "zoomRectScreen"
-]
+];

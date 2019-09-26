@@ -1,6 +1,6 @@
 <!--
-Consider supporting the project through Patreon if we fix your issue!
-https://www.patreon.com/fabiosantoscode
+Consider supporting the project!
+https://opencollective.com/terser
 -->
 
 **Bug report or Feature request?**

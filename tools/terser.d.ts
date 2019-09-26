@@ -282,17 +282,14 @@ declare class AST_Accessor extends AST_Lambda {
 
 declare class AST_Function extends AST_Lambda {
     constructor(props?: object);
-    inlined: boolean;
 }
 
 declare class AST_Arrow extends AST_Lambda {
     constructor(props?: object);
-    inlined: boolean;
 }
 
 declare class AST_Defun extends AST_Lambda {
     constructor(props?: object);
-    inlined: boolean;
 }
 
 declare class AST_Class extends AST_Scope {
@@ -300,7 +297,6 @@ declare class AST_Class extends AST_Scope {
     name: AST_SymbolClass | AST_SymbolDefClass | null;
     extends: AST_Node | null;
     properties: AST_ObjectProperty[];
-    inlined: boolean;
 }
 
 declare class AST_DefClass extends AST_Class {

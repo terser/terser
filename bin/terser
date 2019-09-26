@@ -16,7 +16,7 @@ try {
     require("source-map-support").install();
 } catch (err) {}
 
-var skip_keys = [ "cname", "inlined", "parent_scope", "scope", "uses_eval", "uses_with" ];
+const skip_keys = new Set([ "cname", "parent_scope", "scope", "uses_eval", "uses_with" ]);
 var files = {};
 var options = {
     compress: false,
@@ -264,7 +264,7 @@ function run() {
               case "globals":
                 return value.size ? collect_from_map(value, symdef) : undefined;
             }
-            if (skip_key(key)) return;
+            if (skip_keys.has(key)) return;
             if (value instanceof Terser.AST_Token) return;
             if (value instanceof Map) return;
             if (value instanceof Terser.AST_Node) {
@@ -395,10 +395,6 @@ function parse_js(flag) {
         }
         return options;
     };
-}
-
-function skip_key(key) {
-    return skip_keys.includes(key);
 }
 
 function symdef(def) {

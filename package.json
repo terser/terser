@@ -11,7 +11,7 @@
   "maintainers": [
     "Fábio Santos <fabiosantosart@gmail.com>"
   ],
-  "repository": "https://github.com/fabiosantoscode/terser.git",
+  "repository": "https://github.com/terser/terser",
   "main": "dist/bundle.min.js",
   "types": "tools/terser.d.ts",
   "bin": {

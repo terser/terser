@@ -729,7 +729,10 @@ declare class AST_Number extends AST_Constant {
 
 declare class AST_RegExp extends AST_Constant {
     constructor(props?: object);
-    value: RegExp;
+    value: {
+        source: string,
+        flags: string
+    };
 }
 
 declare class AST_Atom extends AST_Constant {

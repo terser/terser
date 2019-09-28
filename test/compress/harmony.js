@@ -165,7 +165,8 @@ classes_with_expression_as_expand: {
 
 classes_with_extend_side_effects: {
     options = {
-        toplevel: true
+        toplevel: true,
+        unused: true,
     }
     input: {
         var x = "FAIL";
@@ -177,10 +178,34 @@ classes_with_extend_side_effects: {
         class B extends log_return_obj("PASS") {}
         console.log(x); // PASS
     }
+    expect: {
+        var x = "FAIL";
+        x = "PASS", Object;
+        const log_return_obj = msg => {
+            console.log(msg)
+            return Object
+        }
+        log_return_obj("PASS");
+        console.log(x)
+    }
     expect_stdout: [
         "PASS",
         "PASS"
     ]
+}
+
+classes_without_extend_side_effects: {
+    options = {
+        toplevel: true,
+        unused: true,
+        passes: 2,
+    }
+    input: {
+        class Base {}
+        class Sub extends Base {}
+    }
+    expect: {
+    }
 }
 
 new_target: {

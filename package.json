@@ -46,9 +46,8 @@
   },
   "scripts": {
     "test": "npm run build -- --configTest && node test/run-tests.js",
-    "test:precommit": "npm run build && node test/run-tests.js",
-    "test:mocha": "npm run build -- --configTest && node test/mocha.js",
     "test:compress": "npm run build -- --configTest && node test/compress.js",
+    "test:mocha": "npm run build -- --configTest && node test/mocha.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "build": "rimraf dist/* && rollup --config --silent",
@@ -118,6 +117,6 @@
   },
   "pre-commit": [
     "lint-fix",
-    "test:precommit"
+    "test"
   ]
 }

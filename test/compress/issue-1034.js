@@ -96,8 +96,8 @@ non_hoisted_function_after_return_2a: {
         "WARN: Dropping unused variable b [test/compress/issue-1034.js:7,20]",
         "WARN: Dropping unused variable c [test/compress/issue-1034.js:9,16]",
         "WARN: Dropping unused function nope [test/compress/issue-1034.js:11,21]",
-        "WARN: pass 0: last_count: Infinity, count: 23",
-        "WARN: pass 1: last_count: 23, count: 18",
+        "WARN: pass 0: last_count: Infinity, count: 22",
+        "WARN: pass 1: last_count: 22, count: 18",
     ]
 }
 
@@ -255,8 +255,8 @@ non_hoisted_function_after_return_2a_strict: {
         "WARN: Dropping unused variable b [test/compress/issue-1034.js:8,20]",
         "WARN: Dropping unused variable c [test/compress/issue-1034.js:10,16]",
         "WARN: Dropping unused function nope [test/compress/issue-1034.js:12,21]",
-        "WARN: pass 0: last_count: Infinity, count: 34",
-        "WARN: pass 1: last_count: 34, count: 29",
+        "WARN: pass 0: last_count: Infinity, count: 33",
+        "WARN: pass 1: last_count: 33, count: 29",
     ]
 }
 

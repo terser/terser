@@ -1437,11 +1437,9 @@ issue_2630_4: {
     }
     expect: {
         var x = 3, a = 1, b = 2;
-        (function() {
-            (function() {
-                while (--x >= 0 && void (a++, b += a));
-            })();
-        })();
+        !function() {
+            while (--x >= 0 && void (a++, b += a));
+        }();
         console.log(a);
     }
     expect_stdout: "2"
@@ -2660,13 +2658,10 @@ issue_t131a: {
     expect: {
         console.log(JSON.stringify({
             a: 1
-        }), JSON.stringify(function () {
-            var x = {
-                a: 2,
-                b: 3
-            };
-            return x;
-        }()));
+        }), JSON.stringify({
+            a: 2,
+            b: 3
+        }));
 
     }
     expect_stdout: '{"a":1} {"a":2,"b":3}'

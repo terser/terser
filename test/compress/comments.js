@@ -17,3 +17,22 @@ print_every_comment_only_once: {
         "/* this is a block line */(foo2.bar={}).test=123;",
     ]
 }
+
+preserve_comments_by_default: {
+    beautify = {
+        comments: "some"
+    }
+    input: {
+        var foo = {};
+        /* @license */
+        /**! foo */
+        /*! foo */
+        /* lost */
+    }
+    expect_exact: [
+        "var foo={};",
+        "/* @license */",
+        "/**! foo */",
+        "/*! foo */",
+    ]
+}

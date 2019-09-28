@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.3.4
+
+ - Fixed a regression where the output size was increased when unused classes were referred to in the extends clause of a class.
+ - Small typescript typings fixes.
+ - Comments with `@preserve`, `@license`, `@cc_on` as well as comments starting with `/*!` and `/**!` are now preserved by default.
+
 ## v4.3.3
 
  - Fixed a problem where parsing template strings would mix up octal notation and a slash followed by a zero representing a null character.

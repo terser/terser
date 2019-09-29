@@ -3,21 +3,23 @@ var terser = require("../..");
 
 describe("tokens", function() {
     it("Should give correct line in the face of DOS line endings \\r\\n", () => {
-        const end_at_line_2 = (code, line) => {
+        const end_at_line_2 = (code) => {
             const ast = terser.parse(code);
             let found;
             ast.walk(new terser.TreeWalker(node => {
                 if (node.name === "end") {
-                    assert.equal(node.start.line, line);
+                    assert.equal(node.start.line, 2);
                     found = true;
                 }
             }));
             assert(found);
         };
-        end_at_line_2("`A\nB`;end", 2);
-        end_at_line_2("`A\r\nB`;end", 2);
-        end_at_line_2("`A\\\nB`;end", 2);
-        end_at_line_2("`A\\\r\nB`;end", 2);
+        end_at_line_2("`A\nB`;end");
+        end_at_line_2("`A\r\nB`;end");
+        end_at_line_2("`A\\\nB`;end");
+        end_at_line_2("`A\\\r\nB`;end");
+        end_at_line_2("'A\\\nB';end");
+        end_at_line_2("'A\\\r\nB';end");
     });
 
     it("Should give correct positions for accessors", function() {

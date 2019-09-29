@@ -204,8 +204,24 @@ classes_without_extend_side_effects: {
         class Base {}
         class Sub extends Base {}
     }
-    expect: {
+    expect: { }
+}
+
+classes_extending_classes_out_of_pure_iifes: {
+    options = {
+        toplevel: true,
+        unused: true,
     }
+    input: {
+        let Base = /*@__PURE__*/ (() => {
+            class A {}
+            A.sub = Sub
+            return A;
+        })();
+
+        class Sub extends Base { }
+    }
+    expect: { }
 }
 
 new_target: {

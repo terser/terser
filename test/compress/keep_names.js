@@ -38,6 +38,21 @@ keep_fnames: {
     }
 }
 
+keep_var_fnames: {
+    mangle = {
+        keep_fnames: true,
+        toplevel: true,
+    }
+    input: {
+        const foo = function () { return "barfoo" }
+        const bar = () => "foobar"
+    }
+    expect: {
+        const foo = function () { return "barfoo" }
+        const bar = () => "foobar"
+    }
+}
+
 drop_classnames: {
     mangle = {
         keep_classnames : false,

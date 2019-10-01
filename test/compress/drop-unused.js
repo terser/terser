@@ -2103,7 +2103,7 @@ issue_2768: {
     }
     expect: {
         var a = "FAIL";
-        var c = (d = a, 0, void (d && (a = "PASS")));
+        var c = (d = a, void (d && (a = "PASS")));
         var d;
         console.log(a, typeof c);
     }

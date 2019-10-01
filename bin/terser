@@ -16,7 +16,7 @@ try {
     require("source-map-support").install();
 } catch (err) {}
 
-const skip_keys = new Set([ "cname", "parent_scope", "scope", "uses_eval", "uses_with" ]);
+const skip_keys = new Set([ "cname", "parent_scope", "scope", "uses_eval", "uses_with", "_var_name_cache" ]);
 var files = {};
 var options = {
     compress: false,

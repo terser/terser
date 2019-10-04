@@ -2,6 +2,10 @@
 
 ## v4.3.5
 
+(crash hotfix)
+
+## v4.3.5
+
  - Fixed an issue with DOS line endings strings separated by `\` and a new line.
  - Improved fix for the output size regression related to unused references within the extends section of a class.
  - Variable names of anonymous functions (eg: `const x = () => { ... }` or `var func = function () {...}`) are now preserved when keep_fnames is true.

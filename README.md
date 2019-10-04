@@ -289,32 +289,32 @@ console.log(x.calc());
 ```
 Mangle all properties (except for JavaScript `builtins`) (**very** unsafe):
 ```bash
-$ terser example.js -c -m --mangle-props
+$ terser example.js -c passes=2 -m --mangle-props
 ```
 ```javascript
-var x={o:0,_:1,l:function(){return this._+this.o}};x.t=2,x.o=3,console.log(x.l());
+var x={o:3,t:1,i:function(){return this.t+this.o},s:2};console.log(x.i());
 ```
 Mangle all properties except for `reserved` properties (still very unsafe):
 ```bash
-$ terser example.js -c -m --mangle-props reserved=[foo_,bar_]
+$ terser example.js -c passes=2 -m --mangle-props reserved=[foo_,bar_]
 ```
 ```javascript
-var x={o:0,foo_:1,_:function(){return this.foo_+this.o}};x.bar_=2,x.o=3,console.log(x._());
+var x={o:3,foo_:1,t:function(){return this.foo_+this.o},bar_:2};console.log(x.t());
 ```
 Mangle all properties matching a `regex` (not as unsafe but still unsafe):
 ```bash
-$ terser example.js -c -m --mangle-props regex=/_$/
+$ terser example.js -c passes=2 -m --mangle-props regex=/_$/
 ```
 ```javascript
-var x={o:0,_:1,calc:function(){return this._+this.o}};x.l=2,x.o=3,console.log(x.calc());
+var x={o:3,t:1,calc:function(){return this.t+this.o},i:2};console.log(x.calc());
 ```
 
 Combining mangle properties options:
 ```bash
-$ terser example.js -c -m --mangle-props regex=/_$/,reserved=[bar_]
+$ terser example.js -c passes=2 -m --mangle-props regex=/_$/,reserved=[bar_]
 ```
 ```javascript
-var x={o:0,_:1,calc:function(){return this._+this.o}};x.bar_=2,x.o=3,console.log(x.calc());
+var x={o:3,t:1,calc:function(){return this.t+this.o},bar_:2};console.log(x.calc());
 ```
 
 In order for this to be of any use, we avoid mangling standard JS names by

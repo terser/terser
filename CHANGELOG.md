@@ -1,6 +1,11 @@
 # Changelog
 
-## v4.3.5
+## v4.3.7
+
+ - Parsing of regex options in the CLI (which broke in v4.3.5) was fixed.
+ - typescript definition updates
+
+## v4.3.6
 
 (crash hotfix)
 

@@ -820,7 +820,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   case a value of `20` or less is recommended.
 
 - `side_effects` (default: `true`) -- Pass `false` to disable potentially dropping
-  functions marked as "pure".  A function call is marked as "pure" if a comment
+  function calls marked as "pure".  A function call is marked as "pure" if a comment
   annotation `/*@__PURE__*/` or `/*#__PURE__*/` immediately precedes the call. For
   example: `/*@__PURE__*/foo();`
 

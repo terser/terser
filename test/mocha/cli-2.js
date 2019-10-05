@@ -167,4 +167,12 @@ describe("bin/terser (2)", function() {
             done();
         });
     });
+    it("should parse regex options correctly", (done) => {
+        var command = tersercmd + " --toplevel -m keep_fnames=/1$/ --mangle-props regex=/^_/ test/input/issue-483/input.js";
+        exec(command, function(err, stdout, stderr) {
+            if (err) throw err;
+            assert.strictEqual(stdout, "function func1(n){n.u=false}function n(n){n.nonPrivateProperty=true}\n");
+            done();
+        });
+    });
 });

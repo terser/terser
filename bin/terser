@@ -368,6 +368,9 @@ function parse_js(flag) {
                         options[name] = value;
                     } else if (value instanceof Terser.AST_Array) {
                         options[name] = value.elements.map(to_string);
+                    } else if (value instanceof Terser.AST_RegExp) {
+                        value = value.value;
+                        options[name] = new RegExp(value.source, value.flags);
                     } else {
                         options[name] = to_string(value);
                     }

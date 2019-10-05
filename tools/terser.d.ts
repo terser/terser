@@ -15,6 +15,7 @@ export interface CompressOptions {
     arguments?: boolean;
     arrows?: boolean;
     booleans?: boolean;
+    booleans_as_integers?: boolean;
     collapse_vars?: boolean;
     comparisons?: boolean;
     computed_props?: boolean;
@@ -31,6 +32,7 @@ export interface CompressOptions {
     hoist_funs?: boolean;
     hoist_props?: boolean;
     hoist_vars?: boolean;
+    ie8?: boolean;
     if_return?: boolean;
     inline?: boolean | InlineFunctions;
     join_vars?: boolean;
@@ -52,6 +54,7 @@ export interface CompressOptions {
     switches?: boolean;
     toplevel?: boolean;
     top_retain?: null | string | string[] | RegExp;
+    toplevel?: boolean;
     typeofs?: boolean;
     unsafe?: boolean;
     unsafe_arrows?: boolean;

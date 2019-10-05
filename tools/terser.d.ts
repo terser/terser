@@ -14,8 +14,8 @@ export interface ParseOptions {
 export interface CompressOptions {
     arguments?: boolean;
     arrows?: boolean;
-    booleans?: boolean;
     booleans_as_integers?: boolean;
+    booleans?: boolean;
     collapse_vars?: boolean;
     comparisons?: boolean;
     computed_props?: boolean;
@@ -54,10 +54,9 @@ export interface CompressOptions {
     switches?: boolean;
     toplevel?: boolean;
     top_retain?: null | string | string[] | RegExp;
-    toplevel?: boolean;
     typeofs?: boolean;
-    unsafe?: boolean;
     unsafe_arrows?: boolean;
+    unsafe?: boolean;
     unsafe_comps?: boolean;
     unsafe_Function?: boolean;
     unsafe_math?: boolean;
@@ -101,10 +100,10 @@ export interface OutputOptions {
     braces?: boolean;
     comments?: boolean | 'all' | 'some' | RegExp | Function;
     ecma?: ECMA;
+    ie8?: boolean;
     indent_level?: number;
     indent_start?: number;
     inline_script?: boolean;
-    ie8?: boolean;
     keep_quoted_props?: boolean;
     max_line_len?: number | false;
     preamble?: string;

@@ -261,7 +261,7 @@ way to use this is to use the `regex` option like so:
 terser example.js -c -m --mangle-props regex=/_$/
 ```
 
-This will mangle all properties that start with an
+This will mangle all properties that end with an
 underscore. So you can use it to mangle internal methods.
 
 By default, it will mangle all properties in the

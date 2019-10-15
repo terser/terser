@@ -1,5 +1,8 @@
 # Changelog
 
+## v4.3.9
+ - Fixed issue with mangle's `keep_fnames` option, introduced when adding code to keep variable names of anonymous functions
+
 ## v4.3.8
 
  - Typescript typings fix

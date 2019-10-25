@@ -999,6 +999,9 @@ can pass additional arguments that control the code output:
 - `inline_script` (default `true`) -- escape HTML comments and the slash in
   occurrences of `</script>` in strings
 
+- `keep_numbers` (default `false`) -- keep number literals as it was in original code
+ (disables optimizations like converting `1000000` into `1e6`)
+
 - `keep_quoted_props` (default `false`) -- when turned on, prevents stripping
   quotes from property names in object literals.
 

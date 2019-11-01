@@ -89,6 +89,7 @@ export interface MangleOptions {
 export interface ManglePropertiesOptions {
     builtins?: boolean;
     debug?: boolean;
+    domprops?: boolean;
     keep_quoted?: boolean;
     regex?: RegExp | string;
     reserved?: string[];

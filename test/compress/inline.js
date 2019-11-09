@@ -126,3 +126,33 @@ issue_308: {
         };
     }
 }
+
+inline_into_scope_conflict: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        global.leak = x => x
+        global.modInQuestion = () => console.log("PASS")
+
+        var mod = global.modInQuestion
+
+        const c = function c() {
+            mod()
+        }
+
+        const b = function b() {
+            for (;;) { c(); break }
+        }
+
+        ;(function () {
+            var mod = leak(mod);
+            b();
+        })()
+    }
+
+    expect_stdout: "PASS"
+}

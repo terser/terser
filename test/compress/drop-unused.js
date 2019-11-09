@@ -2745,3 +2745,15 @@ issue_t183: {
     }
     expect_stdout: "PASS"
 }
+
+unused_seq_elements: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        var a = 0, b = 0;
+        console.log("just-make-sure-it-is-compilable") && (a++, b++);
+    }
+    expect_stdout: "just-make-sure-it-is-compilable"
+}

@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.3.10
+
+ - Fixed syntax error when repeated semicolons were encountered in classes
+ - Fixed invalid output caused by the creation of empty sequences internally
+ - Scopes are now updated when scopes are inlined into them
+
 ## v4.3.9
  - Fixed issue with mangle's `keep_fnames` option, introduced when adding code to keep variable names of anonymous functions
 

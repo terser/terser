@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.4.0
+
+ - Added `/*#__INLINE__*/` and `/*#__NOINLINE__*/` annotations for calls. If a call has one of these, it either forces or forbids inlining.
+
 ## v4.3.11
 
  - Fixed a problem where `window` was considered safe to access, even though there are situations where it isn't (Node.js, workers...)

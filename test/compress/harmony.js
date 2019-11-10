@@ -180,7 +180,7 @@ classes_with_extend_side_effects: {
     }
     expect: {
         var x = "FAIL";
-        x = "PASS", Object;
+        x = "PASS";
         const log_return_obj = msg => {
             console.log(msg)
             return Object

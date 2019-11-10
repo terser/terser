@@ -156,3 +156,66 @@ inline_into_scope_conflict: {
 
     expect_stdout: "PASS"
 }
+
+noinline_annotation: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        toplevel: true
+    }
+    input: {
+        function no_inline() {
+            return 123;
+        }
+
+        /*#__NOINLINE__*/no_inline();
+        /*#__NOINLINE__*/no_inline();
+    }
+    expect: {
+        function no_inline() {
+            return 123;
+        }
+        no_inline();
+        no_inline();
+    }
+}
+
+noinline_annotation_2: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        toplevel: true
+    }
+    input: {
+        /*#__NOINLINE__*/
+        (() => {
+            external()
+        })()
+    }
+    expect: {
+        (() => {
+            external()
+        })()
+    }
+}
+
+inline_annotation: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        function inline() {
+            return external();
+        }
+
+        /*#__INLINE__*/inline();
+        /*#__INLINE__*/inline();
+    }
+    expect: {
+        external();
+        external();
+    }
+}

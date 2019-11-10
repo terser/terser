@@ -1165,6 +1165,22 @@ collapse_vars_unary: {
     }
 }
 
+collapse_vars_unary_2: {
+    options = {
+        collapse_vars: true
+    }
+    input: {
+        global.leak = n => console.log(n);
+        global.num = 4;
+
+        let counter = -1;
+        for (const i in [0,1,2,3,4,5]) {
+            counter++, i == num && leak(counter);
+        }
+    }
+    expect_stdout: "4"
+}
+
 collapse_vars_try: {
     options = {
         booleans: true,

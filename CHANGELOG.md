@@ -1,5 +1,12 @@
 # Changelog
 
+## v4.3.11
+
+ - Fixed a problem where `window` was considered safe to access, even though there are situations where it isn't (Node.js, workers...)
+ - Fixed an error where `++` and `--` were considered side-effect free
+ - `Number(x)` now needs both `unsafe` and and `unsafe_math` to be compressed into `+x` because `x` might be a `BigInt`
+ - `keep_fnames` now correctly supports regexes when the function is in a variable declaration
+
 ## v4.3.10
 
  - Fixed syntax error when repeated semicolons were encountered in classes

@@ -1192,6 +1192,30 @@ var result = Terser.minify(ast, {
 // result.code contains the minified code in string form.
 ```
 
+
+### Annotations
+
+Annotations in Terser are a way to tell it to treat a certain function call differently. The following annotations are available:
+
+ * `/*@__INLINE__*/` - forces a function to be inlined somewhere.
+ * `/*@__NOINLINE__*/` - Makes sure the called function is not inlined into the call site.
+ * `/*@__PURE__*/` - Marks a function call as pure. That means, it can safely be dropped.
+
+You can use either a `@` sign at the start, or a `#`.
+
+Here are some examples on how to use them:
+
+```javascript
+/*@__INLINE__*/
+function_always_inlined_here()
+
+/*#__NOINLINE__*/
+function_cant_be_inlined_into_here()
+
+const x = /*#__PURE__*/i_am_dropped_if_x_is_not_used()
+```
+
+
 ### Working with Terser AST
 
 Traversal and transformation of the native AST can be performed through

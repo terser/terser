@@ -221,3 +221,28 @@ compress_numbers: {
         const fractional = 100.23002;
     }
 }
+
+no_number_function_transform_without_unsafe_math: {
+    options = {
+        unsafe: true
+    }
+    input: {
+        Number(1234);
+    }
+    expect: {
+        Number(1234);
+    }
+}
+
+number_function_transform_with_unsafe_math: {
+    options = {
+        unsafe: true,
+        unsafe_math: true
+    }
+    input: {
+        Number(1234);
+    }
+    expect: {
+        +1234;
+    }
+}

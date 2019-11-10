@@ -320,7 +320,7 @@ var x={o:3,t:1,calc:function(){return this.t+this.o},bar_:2};console.log(x.calc(
 In order for this to be of any use, we avoid mangling standard JS names by
 default (`--mangle-props builtins` to override).
 
-A default exclusion file is provided in `tools/domprops.json` which should
+A default exclusion file is provided in `tools/domprops.js` which should
 cover most standard JS and DOM properties defined in various browsers.  Pass
 `--mangle-props domprops` to disable this feature.
 

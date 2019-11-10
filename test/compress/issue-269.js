@@ -1,6 +1,7 @@
 issue_269_1: {
     options = {
         unsafe: true,
+        unsafe_math: true,
     }
     input: {
         f(

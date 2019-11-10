@@ -15,7 +15,7 @@ window_access_is_impure: {
 
 globals_whose_access_is_pure: {
     options = {
-        defaults: true
+        defaults: true,
     }
     input: {
         try {

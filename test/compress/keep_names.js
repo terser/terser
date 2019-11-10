@@ -119,13 +119,25 @@ keep_some_fnames_reduce: {
             array.map(bar);
             function barElement() {}
             array.map(barElement);
+            var aElement = () => {};
+            array.map(aElement);
+            array.map(aElement);
+            var bElement = function () {};
+            array.map(bElement);
+            array.map(bElement);
         }
     }
     expect: {
         function foo() {
-            var n = [];
-            n.map(function() {});
-            n.map(function barElement() {});
+            var a = [];
+            a.map(function() {});
+            a.map(function barElement() {});
+            var aElement = () => {};
+            a.map(aElement);
+            a.map(aElement);
+            var bElement = function () {};
+            a.map(bElement);
+            a.map(bElement);
         }
     }
 }

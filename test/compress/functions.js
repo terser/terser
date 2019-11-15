@@ -409,11 +409,7 @@ inner_ref: {
         }(2));
     }
     expect: {
-        console.log(function(a) {
-            return a;
-        }(1), function(a) {
-            return a;
-        }());
+        console.log(1, void 0);
     }
     expect_stdout: "1 undefined"
 }
@@ -2107,8 +2103,7 @@ duplicate_arg_var: {
         }("PASS"));
     }
     expect: {
-        console.log((b = "PASS", b));
-        var b;
+        console.log("PASS");
     }
     expect_stdout: "PASS"
 }

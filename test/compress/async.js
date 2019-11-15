@@ -165,9 +165,8 @@ async_inline: {
         !async function(){await 3}();
         !async function(x){await console.log(4)}();
 
-        function echo(x){return x}
-        echo(async function(){return await 1}());
-        echo(async function(x){await console.log(2)}());
+        !async function(){await 1}();
+        !async function(x){await console.log(2)}();
 
         console.log("top");
 

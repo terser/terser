@@ -1429,6 +1429,7 @@ defun_inline_3: {
 
 defun_call: {
     options = {
+        evaluate: true,
         inline: true,
         reduce_funcs: true,
         reduce_vars: true,
@@ -1447,10 +1448,7 @@ defun_call: {
     }
     expect: {
         function f() {
-            return 4 + h(1) - h(4);
-            function h(a) {
-                return a;
-            }
+            return 1;
         }
     }
 }

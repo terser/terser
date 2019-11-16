@@ -404,7 +404,7 @@ inner_ref: {
             }();
         }(1), function(a) {
             return function(a) {
-                return typeof a;
+                return a === undefined;
             }();
         }(2));
     }
@@ -412,10 +412,10 @@ inner_ref: {
         console.log(function (a) {
             return a + 1;
         }(1), function (a) {
-            return typeof a;
+            return void 0 === a;
         }());
     }
-    expect_stdout: "2 'undefined'"
+    expect_stdout: "2 true"
 }
 
 issue_2107: {

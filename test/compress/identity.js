@@ -58,12 +58,13 @@ inline_identity_extra_params: {
     }
     input: {
         const id = x => x;
-        console.log(id(1, 2), id(3, 4));
+        console.log(id(1, console.log(2)), id(3, 4));
     }
     expect: {
-        console.log(1, 3);
+        const id = x => x;
+        console.log(id(1, console.log(2)), 3);
     }
-    expect_stdout: "1 3"
+    expect_stdout: ["2", "1 3"]
 }
 
 inline_identity_higher_order: {
@@ -76,11 +77,30 @@ inline_identity_higher_order: {
     input: {
         const id = x => x;
         const inc = x => x + 1;
-        console.log(id(inc)(1), id(inc)(2));
+        console.log(id(inc(1)), id(inc)(2));
     }
     expect: {
         const inc = x => x + 1;
         console.log(inc(1), inc(2));
+    }
+    expect_stdout: "2 3"
+}
+
+inline_identity_inline_function: {
+    options = {
+        evaluate: true,
+        inline: true,
+        passes: 2,
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const id = x => x;
+        console.log(id(x => x + 1)(1), id((x => x + 1)(2)));
+    }
+    expect: {
+        console.log(2, 3);
     }
     expect_stdout: "2 3"
 }
@@ -96,7 +116,7 @@ inline_identity_duplicate_arg_var: {
         const id = x => {
             return x;
             var x;
-        }
+        };
         console.log(id(1), id(2));
     }
     expect: {
@@ -113,7 +133,7 @@ inline_identity_inner_ref: {
         toplevel: true
     }
     input: {
-        const id = a => (function () { return a })();
+        const id = a => (function() { return a; })();
         const undef = a => (a => a)();
         console.log(id(1), id(2), undef(3), undef(4));
     }

@@ -151,9 +151,9 @@ async_inline: {
         (async function(){ return await 3; })();
         (async function(x){ await console.log(x); })(4);
 
-        function echo(x) { return x; }
-        echo( async function(){ return await 1; }() );
-        echo( async function(x){ await console.log(x); }(2) );
+        function invoke(x, y) { return x(y); }
+        invoke( async function(){ return await 1; } );
+        invoke( async function(x){ await console.log(x); }, 2);
 
         function top() { console.log("top"); }
         top();
@@ -165,8 +165,9 @@ async_inline: {
         !async function(){await 3}();
         !async function(x){await console.log(4)}();
 
-        !async function(){await 1}();
-        !async function(x){await console.log(2)}();
+        function invoke(x, y){return x(y)}
+        invoke(async function(){return await 1});
+        invoke(async function(x){await console.log(x)}, 2);
 
         console.log("top");
 

@@ -356,7 +356,7 @@ describe("minify", function() {
                 result = Terser.minify(code);
                 var err = result.error;
                 assert.ok(err instanceof Error);
-                assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: a redeclared");
+                assert.strictEqual(err.stack.split(/\n/)[0], `SyntaxError: "a" is redeclared`);
             });
         });
     });

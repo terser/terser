@@ -400,22 +400,22 @@ inner_ref: {
     input: {
         console.log(function(a) {
             return function() {
-                return a;
+                return a + 1;
             }();
         }(1), function(a) {
             return function(a) {
-                return a;
+                return a === undefined;
             }();
         }(2));
     }
     expect: {
-        console.log(function(a) {
-            return a;
-        }(1), function(a) {
-            return a;
+        console.log(function (a) {
+            return a + 1;
+        }(1), function (a) {
+            return void 0 === a;
         }());
     }
-    expect_stdout: "1 undefined"
+    expect_stdout: "2 true"
 }
 
 issue_2107: {
@@ -2102,15 +2102,15 @@ duplicate_arg_var: {
     }
     input: {
         console.log(function(b) {
-            return b;
+            return b + "ING";
             var b;
         }("PASS"));
     }
     expect: {
-        console.log((b = "PASS", b));
+        console.log((b = "PASS", b + "ING"));
         var b;
     }
-    expect_stdout: "PASS"
+    expect_stdout: "PASSING"
 }
 
 issue_2737_1: {

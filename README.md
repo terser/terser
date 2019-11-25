@@ -121,6 +121,7 @@ a double dash to prevent input files being used as option arguments:
                                 "@preserve". You can optionally pass one of the
                                 following arguments to this flag:
                                 - "all" to keep all comments
+                                - `false` to omit comments in the output
                                 - a valid JS RegExp like `/foo/` or `/^!/` to
                                 keep only matching comments.
                                 Note that currently not *all* comments can be
@@ -975,8 +976,9 @@ can pass additional arguments that control the code output:
   `do`, `while` or `with` statements, even if their body is a single
   statement.
 
-- `comments` (default `false`) -- pass `true` or `"all"` to preserve all
-  comments, `"some"` to preserve some comments, a regular expression string
+- `comments` (default `"some"`) -- by default it keeps JSDoc-style comments
+  that contain "@license" or "@preserve", pass `true` or `"all"` to preserve all
+  comments, `false` to omit comments in the output, a regular expression string
   (e.g. `/^!/`) or a function.
 
 - `ecma` (default `5`) -- set output printing mode. Set `ecma` to `6` or

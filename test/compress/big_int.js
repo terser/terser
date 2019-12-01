@@ -15,8 +15,9 @@ big_int_negative: {
 big_int_hex: {
     input: {
         0x20n
+        0xfabn
     }
-    expect_exact: "0x20n;"
+    expect_exact: "0x20n;0xfabn;"
 }
 
 big_int_binary: {
@@ -31,4 +32,12 @@ big_int_octal: {
         0o7n
     }
     expect_exact: "0o7n;"
+}
+
+big_int_bad_digits_for_base: {
+    input: `0o9n`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid or unexpected token"
+    })
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+
+## v4.4.1
+
+ - Fixed a crash when `unsafe` was enabled.
+ - An issue has been fixed where `let` statements might be collapsed out of their scope.
+ - Some error messages have been improved by adding quotes around variable names.
+
 ## v4.4.0
 
  - Added `/*#__INLINE__*/` and `/*#__NOINLINE__*/` annotations for calls. If a call has one of these, it either forces or forbids inlining.

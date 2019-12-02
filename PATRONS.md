@@ -4,6 +4,7 @@ These are the first-tier patrons from [Patreon](https://www.patreon.com/fabiosan
 
  * 38elements
  * Alan Orozco
+ * Aria Buckles
  * CKEditor
  * Mariusz Nowak
  * Nakshatra Mukhopadhyay
@@ -11,3 +12,4 @@ These are the first-tier patrons from [Patreon](https://www.patreon.com/fabiosan
  * Piotrek Koszuliński
  * Serhiy Shyyko
  * Viktor Hubert
+ * 龙腾道

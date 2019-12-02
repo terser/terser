@@ -1,7 +1,12 @@
 # Changelog
 
+## v4.4.2
+
+ - Fixed a problem with inlining identity functions
 
 ## v4.4.1
+
+*note:* This introduced a feature, therefore it should have been a minor release.
 
  - Fixed a crash when `unsafe` was enabled.
  - An issue has been fixed where `let` statements might be collapsed out of their scope.

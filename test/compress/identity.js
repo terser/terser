@@ -162,3 +162,17 @@ inline_identity_async: {
     expect_stdout: "2"
     node_version: ">=8"
 }
+
+inline_identity_regression: {
+    options = {
+        defaults: true
+    }
+    input: {
+        global.id = x => x
+
+        const foo = ({bar}) => id(bar);
+
+        console.log(foo({bar: 'PASS'}));
+    }
+    expect_stdout: "PASS"
+}

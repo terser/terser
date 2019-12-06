@@ -34,6 +34,14 @@ big_int_octal: {
     expect_exact: "0o7n;"
 }
 
+big_int_no_e: {
+    input: `1e3n`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid or unexpected token"
+    })
+}
+
 big_int_bad_digits_for_base: {
     input: `0o9n`
     expect_error: ({

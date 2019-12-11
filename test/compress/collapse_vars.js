@@ -5990,3 +5990,51 @@ issue_348: {
     }
     expect_stdout: 'PASS'
 }
+
+issue_528_collapse_in_await: {
+    options = {
+        collapse_vars: true,
+        reduce_vars: true,
+        unused: true,
+        pure_funcs: ['Uint8Array'],
+        passes: 2,
+    }
+    input: {
+        (async function foo(e) {
+            doSomething(e);
+        })(new Uint8Array([1, 2, 3]));
+
+        (async function foo(e) {
+            await doSomething(e);
+        })(new Uint8Array([1, 2, 3]));
+
+        (async function foo(e) {
+            await 42;
+            doSomething(e);
+        })(new Uint8Array([1, 2, 3]));
+
+        (async function foo(e) {
+            doSomething(e);
+            await 42;
+        })(new Uint8Array([1, 2, 3]));
+    }
+    expect: {
+        (async function(e) {
+            doSomething(new Uint8Array([1, 2, 3]));
+        })();
+
+        (async function(e) {
+            await doSomething(new Uint8Array([1, 2, 3]));
+        })();
+
+        (async function(e) {
+            await 42;
+            doSomething(new Uint8Array([1, 2, 3]));
+        })();
+
+        (async function(e) {
+            doSomething(new Uint8Array([1, 2, 3]));
+            await 42;
+        })();
+    }
+}

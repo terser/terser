@@ -1523,9 +1523,7 @@ issue_2647_2: {
         }());
     }
     expect: {
-        void console.log((() => function (x) {
-            return x.toUpperCase();
-        }("pass"))());
+        void console.log("pass".toUpperCase());
     }
     expect_stdout: "PASS"
 }

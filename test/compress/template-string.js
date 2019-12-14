@@ -599,7 +599,7 @@ tagged_call_with_invalid_escape_2: {
     expect: {
         var x_y = () => String.raw;
         console.log(x_y()`\4321\u\x`);
-        console.log((() => String.raw)()`\4321\u\x`);
+        console.log(String.raw`\4321\u\x`);
     }
     expect_stdout: [
         "\\4321\\u\\x",

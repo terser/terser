@@ -2661,7 +2661,7 @@ issue_t161_top_retain_14: {
             }
         }
         let x = 2, z = 4;
-        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, (() => z)(), new Alpha().num(), new class {
+        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, z, new Alpha().num(), new class {
             num() {
                 return 3;
             }
@@ -2709,7 +2709,7 @@ issue_t161_top_retain_15: {
             }
         }
         let n = 2, u = 4;
-        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, (() => u)(), new Alpha().num(), new class {
+        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, u, new Alpha().num(), new class {
             num() {
                 return 3;
             }

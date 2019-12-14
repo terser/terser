@@ -90,8 +90,9 @@ inline_identity_inline_function: {
     options = {
         evaluate: true,
         inline: true,
-        passes: 2,
+        passes: 3,
         reduce_vars: true,
+        side_effects: true,
         unused: true,
         toplevel: true
     }

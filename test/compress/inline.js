@@ -219,3 +219,23 @@ inline_annotation: {
         external();
     }
 }
+
+inline_annotation_2: {
+    options = {
+        toplevel: true,
+        passes: 3,
+        defaults: true
+    }
+    input: {
+        const shouldInline = n => +n;
+
+        const a = /*@__INLINE__*/ shouldInline("42.0");
+        const b = /*@__INLINE__*/ shouldInline("abc");
+
+        console.log(a, b);
+    }
+    expect: {
+        console.log(42, NaN)
+    }
+    expect_stdout: "42 NaN"
+}

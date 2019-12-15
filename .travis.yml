@@ -22,3 +22,11 @@ cache:
   directories:
     - tmp
     - node_modules
+
+jobs:
+  include:
+    - stage: functional tests
+      script: npm run build && git clone https://github.com/terser/terser-functional-tests --depth 1 && cd terser-functional-tests && npm i && ./run-all.sh
+      node_js: 12
+      os: linux
+      if: branch = master

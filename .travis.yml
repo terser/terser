@@ -1,14 +1,18 @@
 os:
   - linux
   - windows
+
 language: node_js
+
 node_js:
   - 6
   - 8
   - 10
   - 12
+
 env:
   - TERSER_TEST_ALL=1
+
 matrix:
   fast_finish: true
   exclude:
@@ -18,6 +22,7 @@ matrix:
       os: windows
     - node_js: 10
       os: windows
+
 cache:
   directories:
     - tmp
@@ -25,7 +30,7 @@ cache:
 
 jobs:
   include:
-    - stage: functional tests
+    - name: Functional tests
       script: |
         npm run build
         git clone https://github.com/terser/terser-functional-tests --depth 1 || true

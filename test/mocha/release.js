@@ -1,3 +1,4 @@
+var os = require("os");
 var assert = require("assert");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
@@ -13,6 +14,7 @@ function run(command, args, done) {
 
 if (!process.env.TERSER_TEST_ALL
     || !semver.satisfies(process.version, "12")
+    || process.platform !== "linux"
 ) {
     return;
 }

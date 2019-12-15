@@ -28,8 +28,9 @@ jobs:
     - stage: functional tests
       script: |
         npm run build
-        git clone https://github.com/terser/terser-functional-tests --depth 1
+        git clone https://github.com/terser/terser-functional-tests --depth 1 || true
         cd terser-functional-tests
+        git pull
         npm i
         TERSER_PATH=`pwd`/.. ./run-all.sh
       node_js: 12
@@ -38,7 +39,4 @@ jobs:
       cache:
         directories:
           - node_modules
-            terser-functional-tests/node_modules
-            terser-functional-tests/acorn/node_modules
-            terser-functional-tests/eslint/node_modules
-            terser-functional-tests/react/node_modules
+            terser-functional-tests

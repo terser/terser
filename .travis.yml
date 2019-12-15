@@ -26,7 +26,19 @@ cache:
 jobs:
   include:
     - stage: functional tests
-      script: npm run build && git clone https://github.com/terser/terser-functional-tests --depth 1 && cd terser-functional-tests && npm i && ./run-all.sh
+      script: |
+        npm run build
+        git clone https://github.com/terser/terser-functional-tests --depth 1
+        cd terser-functional-tests
+        npm i
+        TERSER_PATH=`pwd`/.. ./run-all.sh
       node_js: 12
       os: linux
       if: branch = master
+      cache:
+        directories:
+          - node_modules
+            terser-functional-tests/node_modules
+            terser-functional-tests/acorn/node_modules
+            terser-functional-tests/eslint/node_modules
+            terser-functional-tests/react/node_modules

@@ -30,10 +30,12 @@ jobs:
     - name: Functional tests
       script: |
         npm run build
-        git clone https://github.com/terser/terser-functional-tests --depth 1 || true
+        mkdir -p terser-functional-tests
         cd terser-functional-tests
+        git checkout . || true
+        git clone https://github.com/terser/terser-functional-tests --depth 1 . || true
         git pull
-        npm i
+        npm ci
         TERSER_PATH=`pwd`/.. ./run-all.sh
       node_js: 12
       os: linux

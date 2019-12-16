@@ -6,7 +6,6 @@ language: node_js
 
 node_js:
   - 6
-  - 8
   - 10
   - 12
 
@@ -17,8 +16,6 @@ matrix:
   fast_finish: true
   exclude:
     - node_js: 6
-      os: windows
-    - node_js: 8
       os: windows
     - node_js: 10
       os: windows

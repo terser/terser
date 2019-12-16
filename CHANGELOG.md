@@ -1,5 +1,12 @@
 # Changelog
 
+## v4.4.3
+
+ - Number and BigInt parsing has been fixed
+ - `/*#__INLINE__*/` annotation fixed for arrow functions with non-block bodies.
+ - Functional tests have been added, using [this repository](https://github.com/terser/terser-functional-tests).
+ - A memory leak, where the entire AST lives on after compression, has been plugged.
+
 ## v4.4.2
 
  - Fixed a problem with inlining identity functions

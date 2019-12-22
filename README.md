@@ -2,7 +2,8 @@
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]
-  [![Linux Build][travis-image]][travis-url]
+  [![Travis Build][travis-image]][travis-url]
+  [![Opencollective financial contributors][opencollective-contributors]][opencollective-url]
 
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 
@@ -22,6 +23,8 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/maste
 [downloads-url]: https://npmjs.org/package/terser
 [travis-image]: https://img.shields.io/travis/terser/terser/master.svg
 [travis-url]: https://travis-ci.org/terser/terser
+[opencollective-contributors]: https://opencollective.com/terser/tiers/badge.svg
+[opencollective-url]: https://opencollective.com/terser
 
 Why choose terser?
 ------------------

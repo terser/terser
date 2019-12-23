@@ -1337,10 +1337,10 @@ defun_reference: {
             }
             var a = h();
             var b = 2;
-            return a + b;
+            return a + 2;
             function h() {
                 y();
-                return b;
+                return 2;
             }
         }
     }
@@ -2084,7 +2084,8 @@ redefine_arguments_1: {
             return typeof arguments;
         }
         function g() {
-            return "number";
+            var arguments = 42;
+            return typeof arguments;
         }
         function h(x) {
             var arguments = x;
@@ -2125,7 +2126,10 @@ redefine_arguments_2: {
         console.log(function() {
             var arguments;
             return typeof arguments;
-        }(), "number", function(x) {
+        }(), function() {
+            var arguments = 42;
+            return typeof arguments;
+        }(), function(x) {
             var arguments = x;
             return typeof arguments;
         }());
@@ -2164,7 +2168,10 @@ redefine_arguments_3: {
         console.log(function() {
             var arguments;
             return typeof arguments;
-        }(), "number", function(x) {
+        }(), function() {
+            var arguments = 42;
+            return typeof arguments;
+        }(), function(x) {
             var arguments = x;
             return typeof arguments;
         }());

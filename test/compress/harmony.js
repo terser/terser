@@ -1705,9 +1705,10 @@ issue_2874_1: {
     expect: {
         (function () {
             let letters = ["A", "B", "C"];
-            return [2, 1, 0].map(key => (function (value) {
-                return () => console.log(value);
-            })(letters[key] + key));
+            return [2, 1, 0].map(key => {
+                return value = letters[key] + key, () => console.log(value);
+                var value;
+            });
         })().map(fn => fn());
     }
     expect_stdout: [
@@ -1749,10 +1750,8 @@ issue_2874_2: {
         (function() {
             let keys = [];
             [ 2, 1, 0 ].map(value => {
-                return keys.push(value), function() {
-                    var letters = [ "A", "B", "C" ], key = keys.shift();
-                    return () => console.log(letters[key] + key);
-                }();
+                return keys.push(value), letters = [ "A", "B", "C" ], key = keys.shift(), () => console.log(letters[key] + key);
+                var letters, key;
             }).map(fn => fn());
         })();
     }

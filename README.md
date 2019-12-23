@@ -686,9 +686,10 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 ## Compress options
 
-- `arrows` (default: `true`) -- Converts `()=>{return x}` to `()=>x`. Class
-  and object literal methods will also be converted to arrow expressions if
-  the resultant code is shorter: `m(){return x}` becomes `m:()=>x`.
+- `arrows` (default: `true`) -- Class and object literal methods are converted
+  will also be converted to arrow expressions if the resultant code is shorter:
+  `m(){return x}` becomes `m:()=>x`. To do this to regular ES5 functions which
+  don't use `this` or `arguments`, see `unsafe_arrows`.
 
 - `arguments` (default: `false`) -- replace `arguments[index]` with function
   parameter name whenever possible.

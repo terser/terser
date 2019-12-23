@@ -692,3 +692,12 @@ issue_3092b: {
     expect_stdout: "PASS"
     node_version: ">=8"
 }
+
+object_parens: {
+    input: {
+        () => ({});
+        () => {return {}};
+        () => {foo()};
+    }
+    expect_exact: "()=>({});()=>({});()=>{foo()};"
+}

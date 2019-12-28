@@ -51,8 +51,8 @@ keep_fnames: {
     expect: {
         function f(r) {
             return function() {
-                function n(n) {
-                    return n * n;
+                function n(r) {
+                    return r * r;
                 }
                 return a ? b : c ? d : r;
             };

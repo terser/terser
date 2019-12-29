@@ -138,7 +138,7 @@ destructuring_arguments_2: {
 
 destructuring_arguments_3: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function fn3({x: {y: {z: {} = 42}}}) {}
@@ -151,7 +151,7 @@ destructuring_arguments_3: {
 
 default_arguments: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function x(a = 6) { }
@@ -163,7 +163,7 @@ default_arguments: {
 
 default_values_in_destructurings: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function x({a=(4), b}) {}

@@ -958,7 +958,7 @@ issue_2349b: {
     options = {
         arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         passes: 3,
@@ -999,7 +999,7 @@ issue_2349b: {
 
 shorthand_keywords: {
     beautify = {
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         var foo = 0,

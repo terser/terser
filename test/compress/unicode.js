@@ -17,7 +17,7 @@ unicode_parse_variables: {
 }
 
 unicode_escaped_identifier: {
-    beautify = {ecma: 6}
+    beautify = {ecma: 2015}
     input: {
         var \u{61} = "foo";
         var \u{10000} = "bar";
@@ -26,7 +26,7 @@ unicode_escaped_identifier: {
 }
 
 unicode_identifier_ascii_only: {
-    beautify = {ascii_only: true, ecma: 6}
+    beautify = {ascii_only: true, ecma: 2015}
     input: {
         var \u{0061} = "hi";
         var bar = "h\u{0065}llo";
@@ -36,7 +36,7 @@ unicode_identifier_ascii_only: {
 }
 
 unicode_string_literals: {
-    beautify = {ascii_only: true, ecma: 6}
+    beautify = {ascii_only: true, ecma: 2015}
     input: {
         var a = "6 length unicode character: \u{101111}";
     }
@@ -44,7 +44,7 @@ unicode_string_literals: {
 }
 
 check_escape_style: {
-    beautify = {ascii_only: true, ecma: 6}
+    beautify = {ascii_only: true, ecma: 2015}
     input: {
         var a = "\x01";
         var \ua0081 = "\x10"; // \u0081 only in ID_Continue
@@ -57,7 +57,7 @@ check_escape_style: {
 }
 
 ID_continue_with_surrogate_pair: {
-    beautify = {ascii_only: true, ecma: 6}
+    beautify = {ascii_only: true, ecma: 2015}
     input: {
         var \u{2f800}\u{2f800}\u{2f800}\u{2f800} = "\u{100000}\u{100000}\u{100000}\u{100000}\u{100000}";
     }
@@ -65,7 +65,7 @@ ID_continue_with_surrogate_pair: {
 }
 
 escape_non_escaped_identifier: {
-    beautify = {ascii_only: true, ecma: 6}
+    beautify = {ascii_only: true, ecma: 2015}
     input: {
         var µþ = "µþ";
     }
@@ -73,7 +73,7 @@ escape_non_escaped_identifier: {
 }
 
 non_escape_2_non_escape: {
-    beautify = {ascii_only: false, ecma: 6}
+    beautify = {ascii_only: false, ecma: 2015}
     input: {
         var µþ = "µþ";
     }

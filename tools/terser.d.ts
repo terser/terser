@@ -2,7 +2,10 @@
 
 import { RawSourceMap } from 'source-map';
 
-export type ECMA = 5 | 6 | 7 | 8 | 9;
+/** @deprecated since this versions basically do not exist */
+type ECMA_UNOFFICIAL = 6 | 7 | 8 | 9;
+
+export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | ECMA_UNOFFICIAL;
 
 export interface ParseOptions {
     bare_returns?: boolean;

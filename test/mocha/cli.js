@@ -97,7 +97,7 @@ describe("bin/terser", function() {
         exec(command, function (err, stdout) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, "function f(r){return function(){function n(n){return n*n}return r(n)}}function g(n){return n(1)+n(2)}console.log(f(g)()==5);\n");
+            assert.strictEqual(stdout, "function f(r){return function(){function n(r){return r*r}return r(n)}}function g(r){return r(1)+r(2)}console.log(f(g)()==5);\n");
             done();
         });
     });
@@ -107,7 +107,7 @@ describe("bin/terser", function() {
         exec(command, function (err, stdout) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, "function f(r){return function(){function n(n){return n*n}return r(n)}}function g(n){return n(1)+n(2)}console.log(5==f(g)());\n");
+            assert.strictEqual(stdout, "function f(r){return function(){function n(r){return r*r}return r(n)}}function g(r){return r(1)+r(2)}console.log(5==f(g)());\n");
             done();
         });
     });
@@ -117,7 +117,7 @@ describe("bin/terser", function() {
         exec(command, function (err, stdout) {
             if (err) throw err;
 
-            assert.strictEqual(stdout, "function f(r){return function(){function n(n){return n*n}return r(n)}}function g(n){return n(1)+n(2)}console.log(f(g)()==5);\n");
+            assert.strictEqual(stdout, "function f(r){return function(){function n(r){return r*r}return r(n)}}function g(r){return r(1)+r(2)}console.log(f(g)()==5);\n");
             done();
         });
     });

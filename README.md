@@ -534,7 +534,7 @@ if (result.error) throw result.error;
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to override `parse`,
+- `ecma` (default `undefined`) - pass `5`, `2015`, `2016` or `2017` to override `parse`,
   `compress` and `output`'s `ecma` options.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
@@ -611,7 +611,7 @@ if (result.error) throw result.error;
     sourceMap: {
         // source map options
     },
-    ecma: 5, // specify one of: 5, 6, 7 or 8
+    ecma: 5, // specify one of: 5, 2015, 2016, 2017 or 2018
     keep_classnames: false,
     keep_fnames: false,
     ie8: false,
@@ -676,9 +676,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `bare_returns` (default `false`) -- support top level `return` statements
 
-- `ecma` (default: `8`) -- specify one of `5`, `6`, `7` or `8`. Note: this setting
+- `ecma` (default: `2017`) -- specify one of `5`, `2015`, `2016` or `2017`. Note: this setting
   is not presently enforced except for ES8 optional trailing commas in function
-  parameter lists and calls with `ecma` `8`.
+  parameter lists and calls with `ecma` `2017`.
 
 - `html5_comments` (default `true`)
 
@@ -728,7 +728,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `drop_debugger` (default: `true`) -- remove `debugger;` statements
 
-- `ecma` (default: `5`) -- Pass `6` or greater to enable `compress` options that
+- `ecma` (default: `5`) -- Pass `2015` or greater to enable `compress` options that
   will transform ES5 code into smaller ES6+ equivalent forms.
 
 - `evaluate` (default: `true`) -- attempt to evaluate constant expressions
@@ -850,7 +850,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   expressions to arrow functions if the function body does not reference `this`.
   Note: it is not always safe to perform this conversion if code relies on the
   the function having a `prototype`, which arrow functions lack.
-  This transform requires that the `ecma` compress option is set to `6` or greater.
+  This transform requires that the `ecma` compress option is set to `2015` or greater.
 
 - `unsafe_comps` (default: `false`) -- Reverse `<` and `<=` to `>` and `>=` to
   allow improved compression. This might be unsafe when an at least one of two
@@ -985,7 +985,7 @@ can pass additional arguments that control the code output:
   comments, `false` to omit comments in the output, a regular expression string
   (e.g. `/^!/`) or a function.
 
-- `ecma` (default `5`) -- set output printing mode. Set `ecma` to `6` or
+- `ecma` (default `5`) -- set output printing mode. Set `ecma` to `2015` or
   greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`.
   The `ecma` option will only change the output in direct control of the
   beautifier. Non-compatible features in the abstract syntax tree will still

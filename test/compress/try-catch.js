@@ -1,6 +1,6 @@
 catch_destructuring_with_sequence: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         try {

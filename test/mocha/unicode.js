@@ -85,7 +85,7 @@ describe("Unicode", function() {
 
         for (var i = 0; i < tests.length; i++) {
             assert.strictEqual(terser.minify(tests[i][0], {
-                output: { ascii_only: true, ecma: 6 }
+                output: { ascii_only: true, ecma: 2015 }
             }).code, tests[i][1]);
         }
     });
@@ -105,7 +105,7 @@ describe("Unicode", function() {
         }
         code = '"' + code.join() + '"';
         [true, false].forEach(function(ascii_only) {
-            [5, 6].forEach(function(ecma) {
+            [5, 2015].forEach(function(ecma) {
                 var result = terser.minify(code, {
                     compress: false,
                     mangle: false,
@@ -115,7 +115,7 @@ describe("Unicode", function() {
                     ecma: ecma
                 });
                 if (result.error) throw result.error;
-                if (ecma > 5) assert.ok(code.length > result.code.length);
+                if (ecma >= 2015) assert.ok(code.length > result.code.length);
                 assert.strictEqual(eval(code), eval(result.code));
             });
         });

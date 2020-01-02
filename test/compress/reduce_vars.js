@@ -7131,3 +7131,41 @@ issue_443: {
     }
     expect_stdout: "PASS"
 }
+
+reduce_class_with_side_effects_in_extends: {
+    node_version = ">=12"
+    options = {
+        unused: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        let x = ""
+        class Y extends (x += "PA", Array) { }
+        class X extends (x += "SS", Array) { }
+        global.something = [new X(), new Y()]
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+reduce_class_with_side_effects_in_properties: {
+    node_version = ">=12"
+    options = {
+        unused: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        let x = ""
+        class Y {
+          static _ = (x += "PA")
+        }
+        class X {
+          static _ = (x += "SS")
+        }
+        global.something = [new X(), new Y()]
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}

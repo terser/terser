@@ -2757,3 +2757,74 @@ unused_seq_elements: {
     }
     expect_stdout: "just-make-sure-it-is-compilable"
 }
+
+unused_class_with_static_props_side_effects: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        class X {
+           static _ = (x = "PASS")
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_with_static_props_side_effects_2: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        function impure() {
+            x = "PASS"
+        }
+        class Unused {
+            static _ = impure()
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_extends_might_throw: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X extends might_throw_lol() {
+                constructor() {}
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                static _ = ima_throw_lol()
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.5.0
+
+ - Inlining has been improved
+ - An issue where keep_fnames combined with functions declared through variables was causing name shadowing has been fixed
+ - You can now set the ES version through their year
+ - The output option `keep_numbers` has been added, which prevents Terser from turning `1000` into `1e3` and such
+ - Internal small optimisations and refactors
+
 ## v4.4.3
 
  - Number and BigInt parsing has been fixed

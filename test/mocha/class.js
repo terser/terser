@@ -12,12 +12,12 @@ describe("Class", function() {
         var test = function(code) {
             return function() {
                 terser.parse(code);
-            }
-        }
+            };
+        };
         var error = function(e) {
             return e instanceof terser._JS_Parse_Error &&
                 /^Unexpected token: /.test(e.message);
-        }
+        };
 
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error);
@@ -53,5 +53,19 @@ describe("Class", function() {
             assert.strictEqual(ast.body[0].properties[0].start.value, tests[i].token_value_start);
             assert.strictEqual(ast.body[0].properties[0].end.value, tests[i].token_value_end);
         }
+    });
+
+    it("should work properly with class properties", () => {
+        const input = `class A {
+            static a
+            a;
+            static fil
+            = 1
+            another = "";
+        }`;
+
+        const result = terser.minify(input).code;
+
+        assert.strictEqual(result, 'class A{static a;a;static fil=1;another=""}');
     });
 });

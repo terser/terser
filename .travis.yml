@@ -36,8 +36,9 @@ jobs:
         git clone https://github.com/terser/terser-functional-tests --depth 1 . || true
         git pull
         npm ci
+        npm link ..
         TERSER_PATH=`pwd`/.. ./run-all.sh
-      node_js: 12
+      node_js: 13
       os: linux
       if: branch = master
       cache:

@@ -49,3 +49,14 @@ big_int_bad_digits_for_base: {
         message: "Invalid or unexpected token"
     })
 }
+
+big_int_math: {
+    input: {
+        const sum = 10n + 15n;
+        const exp = 5n ** 10n;
+        const sub = 1n - 3n;
+        const mul = 5n * 5n;
+        const div = 15n / 5n;
+    }
+    expect_exact: "const sum=10n+15n;const exp=5n**10n;const sub=1n-3n;const mul=5n*5n;const div=15n/5n;"
+}

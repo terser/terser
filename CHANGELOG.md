@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.1
+
+ - Fixed an issue where a class is duplicated by reduce_vars when there's a recursive reference to the class.
+
 ## v4.6.0
 
  - Fixed issues with recursive class references.

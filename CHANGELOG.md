@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.6.0
+
+ - Fixed issues with recursive class references.
+ - BigInt evaluation has been prevented, stopping Terser from evaluating BigInts like it would do regular numbers.
+ - Class property support has been added
+
+## v4.5.1
+
+(hotfix release)
+
+ - Fixed issue where `() => ({})[something]` was not parenthesised correctly.
+
 ## v4.5.0
 
  - Inlining has been improved

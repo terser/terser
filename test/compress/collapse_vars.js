@@ -5990,3 +5990,19 @@ issue_348: {
     }
     expect_stdout: 'PASS'
 }
+
+noinline_annotation: {
+    options = {
+        collapse_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => console.log()
+        /*#__NOINLINE__*/x()
+    }
+    expect: {
+        const x = () => console.log()
+        x()
+    }
+}

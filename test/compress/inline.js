@@ -157,6 +157,58 @@ inline_into_scope_conflict: {
     expect_stdout: "PASS"
 }
 
+inline_into_scope_conflict_enclosed: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        global.same_name = "PASS"
+
+        function $(same_name) {
+            if (same_name) indirection_1(same_name)
+        }
+        function indirection_2() {
+            console.log(same_name)
+        }
+        function indirection_1() {
+            indirection_2()
+        }
+        $("FAIL")
+    }
+    expect_stdout: "PASS"
+}
+
+inline_into_scope_conflict_enclosed_2: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        global.same_name = () => console.log("PASS")
+        function $(same_name) {
+            console.log(same_name === undefined ? "PASS" : "FAIL")
+            indirection_1();
+        }
+        function indirection_1() {
+            return indirection_2()
+        }
+        function indirection_2() {
+            for (const x of [1]) { same_name(); return; }
+        }
+        $();
+    }
+    expect_stdout: [
+        "PASS",
+        "PASS"
+    ]
+}
+
+
 noinline_annotation: {
     options = {
         reduce_vars: true,
@@ -196,6 +248,38 @@ noinline_annotation_2: {
         (() => {
             external()
         })()
+    }
+}
+
+noinline_annotation_3: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        unused: true
+    }
+    input: {
+        (function() {
+            function foo(val) { return val; }
+            function bar() {
+                var pass = 1;
+                pass = /*@__NOINLINE__*/ foo(pass);
+                window.data = pass;
+            }
+            window.bar = bar;
+            bar();
+        })();
+    }
+    expect: {
+        (function() {
+            function foo(val) { return val; }
+            function bar() {
+                var pass = 1;
+                pass = foo(pass);
+                window.data = pass;
+            }
+            window.bar = bar;
+            bar();
+        })();
     }
 }
 

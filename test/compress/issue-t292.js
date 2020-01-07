@@ -29,8 +29,14 @@ no_flatten_with_arg_colliding_with_arg_value_inner_scope: {
     }
     expect: {
         var g=["a"];
-        function problem(arg){return g.indexOf(arg)}
-        console.log(function(problem){return g[problem]}(function(arg){return problem(arg)}("a")));
+        function problem(arg) {
+            return g.indexOf(arg)
+        }
+        console.log(function(problem) {
+            return g[problem]
+        }(function(arg) {
+            return problem(arg)
+        }("a")));
     }
     expect_stdout: "a"
 }

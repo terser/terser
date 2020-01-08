@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.6.2
+
+ - A bug where functions were inlined into other functions with scope conflicts has been fixed.
+ - `/*#__NOINLINE__*/` annotation fixed for more use cases where inlining happens.
+
 ## v4.6.1
 
  - Fixed an issue where a class is duplicated by reduce_vars when there's a recursive reference to the class.

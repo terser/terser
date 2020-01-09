@@ -300,6 +300,7 @@ issue_2629_1: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ a();
@@ -318,6 +319,7 @@ issue_2629_2: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ a(1)(2)(3);
@@ -342,6 +344,7 @@ issue_2629_3: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ a.x(1).y(2).z(3);
@@ -404,6 +407,7 @@ issue_2638: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/(g() || h())(x(), y());
@@ -421,6 +425,7 @@ issue_2705_1: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ new a();
@@ -439,6 +444,7 @@ issue_2705_2: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ new a(1)(2)(3);
@@ -463,6 +469,7 @@ issue_2705_3: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/ new a.x(1).y(2).z(3);
@@ -525,6 +532,7 @@ issue_2705_6: {
     }
     beautify = {
         comments: "all",
+        preserve_annotations: true,
     }
     input: {
         /*@__PURE__*/new (g() || h())(x(), y());

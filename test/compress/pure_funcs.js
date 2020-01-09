@@ -544,6 +544,23 @@ issue_2705_6: {
     ]
 }
 
+issue_526_1: {
+    options = {
+        side_effects: true,
+    }
+    beautify = {
+        comments: "all",
+    }
+    input: {
+        /*@__PURE__*/new (g() || h())(x(), y());
+        /* */ new (/*@__PURE__*/ (a() || b()))(c(), d());
+    }
+    expect_exact: [
+        "x(),y();",
+        "new(a()||b())(c(),d());",
+    ]
+}
+
 issue_3065_1: {
     options = {
         inline: true,

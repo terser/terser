@@ -110,6 +110,7 @@ export interface OutputOptions {
     keep_quoted_props?: boolean;
     max_line_len?: number | false;
     preamble?: string;
+    preserve_annotations?: boolean;
     quote_keys?: boolean;
     quote_style?: OutputQuoteStyle;
     safari10?: boolean;

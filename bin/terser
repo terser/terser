@@ -52,7 +52,6 @@ program.option("--keep-classnames", "Do not mangle/drop class names.");
 program.option("--keep-fnames", "Do not mangle/drop function names. Useful for code relying on Function.prototype.name.");
 program.option("--module", "Input is an ES6 module");
 program.option("--name-cache <file>", "File to hold mangled name mappings.");
-program.option("--preserve-annotations", "Preserve annotation comments.");
 program.option("--rename", "Force symbol expansion.");
 program.option("--no-rename", "Disable symbol expansion.");
 program.option("--safari10", "Support non-standard Safari 10.");
@@ -101,10 +100,6 @@ if (program.beautify) {
 if (program.comments) {
     if (typeof options.output != "object") options.output = {};
     options.output.comments = typeof program.comments == "string" ? program.comments : "some";
-}
-if (program.preserveAnnotations) {
-    if (typeof options.output != "object") options.output = {};
-    options.output.preserve_annotations = true;
 }
 if (program.define) {
     if (typeof options.compress != "object") options.compress = {};

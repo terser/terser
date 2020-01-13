@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.6.3
+
+ - Annotations such as `/*#__NOINLINE__*/` and `/*#__PURE__*/` may now be preserved using the `preserve_annotations` output option
+ - A TypeScript definition update for the `keep_quoted` output option.
+
 ## v4.6.2
 
  - A bug where functions were inlined into other functions with scope conflicts has been fixed.

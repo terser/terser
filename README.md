@@ -1023,6 +1023,8 @@ can pass additional arguments that control the code output:
   - `2` -- always use double quotes
   - `3` -- always use the original quotes
 
+- `preserve_annotations` -- (default `false`) -- Preserve [Terser annotations](#annotations) in the output.
+
 - `safari10` (default `false`) -- set this option to `true` to work around
   the [Safari 10/11 await bug](https://bugs.webkit.org/show_bug.cgi?id=176685).
   See also: the `safari10` [mangle option](#mangle-options).

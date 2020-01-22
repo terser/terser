@@ -332,7 +332,7 @@ cond_7: {
         x = 'foo';
         x = 'foo';
         x = (condition(), 20);
-        x = z ? 'fuji' : (condition(), 'fuji');
+        x = ((z || condition()), 'fuji');
         x = (condition(), 'foobar');
         x = y ? a : b;
         x = y ? 'foo' : 'fo';
@@ -1346,4 +1346,44 @@ to_and_or: {
         });
     }
     expect_stdout: true
+}
+
+ifs_same_consequent: {
+    options = {
+        conditionals: true,
+    }
+    input: {
+        if (foo) {
+            x();
+        } else if (bar) {
+            x();
+        } else if (baz) {
+            x();
+        }
+
+        if (foo) {
+            x();
+        } else if (bar) {
+            x();
+        } else if (baz) {
+            x();
+        } else {
+            x();
+        }
+
+        if (foo) {
+            x();
+        } else if (bar) {
+            x();
+        } else if (baz) {
+            x();
+        } else {
+            y();
+        }
+    }
+    expect: {
+        (foo || bar || baz) && x();
+        (foo || bar || baz), x();
+        (foo || bar || baz) ? x() : y();
+    }
 }

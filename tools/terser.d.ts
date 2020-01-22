@@ -121,6 +121,7 @@ export interface OutputOptions {
     webkit?: boolean;
     width?: number;
     wrap_iife?: boolean;
+    wrap_func_args?: boolean;
 }
 
 export enum OutputQuoteStyle {

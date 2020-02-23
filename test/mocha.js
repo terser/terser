@@ -9,7 +9,7 @@ var fs = require("fs");
 var path = require("path");
 
 // Instantiate a Mocha instance
-var Mocha = require("mocha")
+var Mocha = process.env.CI ? require("mocha") : require("mochallel");
 var mocha = new Mocha({
     timeout: 5000
 });

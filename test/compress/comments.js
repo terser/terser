@@ -25,6 +25,7 @@ preserve_comments_by_default: {
     input: {
         var foo = {};
         /* @license */
+        // @lic
         /**! foo */
         /*! foo */
         /* lost */
@@ -32,6 +33,7 @@ preserve_comments_by_default: {
     expect_exact: [
         "var foo={};",
         "/* @license */",
+        "// @lic",
         "/**! foo */",
         "/*! foo */",
     ]

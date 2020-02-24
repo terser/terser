@@ -1,5 +1,15 @@
 # Changelog
 
+## v4.6.4
+
+ - The `"some"` value in the `comments` output option now preserves `@lic` and other important comments when using `//`
+ - `</script>` is now better escaped in regex, and in comments, when using the `inline_script` output option
+ - Fixed an issue when transforming `new RegExp` into `/.../` when slashes are included in the source
+ - `AST_Node.prototype.constructor` now exists, allowing for easier debugging of crashes
+ - Multiple if statements with the same consequents are now collapsed
+ - Typescript typings improvements
+ - Optimizations while looking for surrogate pairs in strings
+
 ## v4.6.3
 
  - Annotations such as `/*#__NOINLINE__*/` and `/*#__PURE__*/` may now be preserved using the `preserve_annotations` output option

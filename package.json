@@ -102,6 +102,12 @@
       ],
       "no-debugger": "error",
       "no-undef": "error",
+      "no-unused-vars": [
+        "error",
+        {
+          "varsIgnorePattern": "^_$"
+        }
+      ],
       "no-tabs": "error",
       "semi": [
         "error",

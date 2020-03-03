@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.5
+
+ - Improved compress performance through using a new method to see if two nodes are equivalent, instead of printing them to a string.
+
 ## v4.6.4
 
  - The `"some"` value in the `comments` output option now preserves `@lic` and other important comments when using `//`

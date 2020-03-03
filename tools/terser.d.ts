@@ -63,6 +63,7 @@ export interface CompressOptions {
     unsafe_comps?: boolean;
     unsafe_Function?: boolean;
     unsafe_math?: boolean;
+    unsafe_symbols?: boolean;
     unsafe_methods?: boolean;
     unsafe_proto?: boolean;
     unsafe_regexp?: boolean;

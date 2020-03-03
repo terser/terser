@@ -865,6 +865,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `unsafe_math` (default: `false`) -- optimize numerical expressions like
   `2 * x * 3` into `6 * x`, which may give imprecise floating point results.
 
+- `unsafe_symbols` (default: `false`) -- removes keys from native Symbol 
+  declarations, e.g `Symbol("kDog")` becomes `Symbol()`.
+
 - `unsafe_methods` (default: false) -- Converts `{ m: function(){} }` to
   `{ m(){} }`. `ecma` must be set to `6` or greater to enable this transform.
   If `unsafe_methods` is a RegExp then key/value pairs with keys matching the

@@ -1,6 +1,12 @@
 # Changelog
 
-## v4.6.5
+## v4.6.6
+
+(hotfix release)
+
+ - Reverted code to 4.6.4 to allow for more time to investigate an issue.
+
+## v4.6.5 (REVERTED)
 
  - Improved compress performance through using a new method to see if two nodes are equivalent, instead of printing them to a string.
 

@@ -8,6 +8,7 @@ unsafe_symbols_1: {
 
 unsafe_symbols_2: {
     options = {
+        unsafe: true,
         unsafe_symbols: true
     }
     input: {

@@ -7169,3 +7169,56 @@ reduce_class_with_side_effects_in_properties: {
     }
     expect_stdout: "PASS"
 }
+
+issue_581: {
+    options = {
+        unused: true,
+        reduce_vars: true,
+    }
+    input: {
+        class Yellow {
+            method() {
+                const errorMessage = "FAIL";
+
+                return applyCb(errorMessage, () => console.log(this.message()));
+            }
+
+            message() {
+                return "PASS";
+            }
+        }
+
+        function applyCb(errorMessage, callback) {
+            return callback(errorMessage)
+        }
+
+        (new Yellow()).method()
+    }
+    expect_stdout: "PASS"
+}
+
+issue_581_2: {
+    options = {
+        unused: true,
+        reduce_vars: true,
+    }
+    input: {
+        (function () {
+            return function(callback) {
+                return callback()
+            }(() => {
+                console.log(this.message)
+            });
+        }).call({ message: 'PASS' })
+    }
+    expect: {
+        (function () {
+            return function(callback) {
+                return callback()
+            }(() => {
+                console.log(this.message)
+            });
+        }).call({ message: 'PASS' })
+    }
+    expect_stdout: "PASS"
+}

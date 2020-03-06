@@ -27,6 +27,7 @@ export interface CompressOptions {
     defaults?: boolean;
     directives?: boolean;
     drop_console?: boolean;
+    drop_assert?: boolean;
     drop_debugger?: boolean;
     ecma?: ECMA;
     evaluate?: boolean;

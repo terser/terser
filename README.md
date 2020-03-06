@@ -726,6 +726,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   such as `console.info` and/or retain side effects from function arguments
   after dropping the function call then use `pure_funcs` instead.
 
+- `drop_assert` (default: `false`) -- Pass `true` to discard calls to
+  `assert.*` functions (part of NodeJS).
+
 - `drop_debugger` (default: `true`) -- remove `debugger;` statements
 
 - `ecma` (default: `5`) -- Pass `2015` or greater to enable `compress` options that

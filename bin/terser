@@ -99,7 +99,7 @@ if (program.beautify) {
 }
 if (program.comments) {
     if (typeof options.output != "object") options.output = {};
-    options.output.comments = typeof program.comments == "string" ? program.comments : "some";
+    options.output.comments = typeof program.comments == "string" ? (program.comments == "false" ? false : program.comments) : "some";
 }
 if (program.define) {
     if (typeof options.compress != "object") options.compress = {};

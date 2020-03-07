@@ -1224,6 +1224,23 @@ prop_side_effects_2: {
     ]
 }
 
+missing_prop: {
+    options = {
+        inline: true,
+        properties: true,
+        unsafe: true,
+    }
+    input: {
+        console.log({x: 42}.y);
+    }
+    expect: {
+        console.log(void 0);
+    }
+    expect_stdout: [
+        "undefined",
+    ]
+}
+
 accessor_1: {
     options = {
         properties: true,

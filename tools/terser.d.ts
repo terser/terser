@@ -164,7 +164,8 @@ export interface MinifyOutput {
 }
 
 export interface SourceMapOptions {
-    content?: RawSourceMap;
+    /** Source map object, 'inline' or source map file content */
+    content?: RawSourceMap | string;
     includeSources?: boolean;
     filename?: string;
     root?: string;

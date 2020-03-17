@@ -1,5 +1,13 @@
 # Changelog
 
+## v4.6.7
+
+ - Some new performance gains through a `AST_Node.size()` method which measures a node's source code length without printing it to a string first.
+ - An issue with setting `--comments` to `false` in the CLI has been fixed.
+ - Fixed some issues with inlining
+ - `unsafe_symbols` compress option was added, which turns `Symbol("name")` into just `Symbol()`
+ - Brought back compress performance improvement through the `AST_Node.equivalent_to(other)` method (which was reverted in v4.6.6).
+
 ## v4.6.6
 
 (hotfix release)

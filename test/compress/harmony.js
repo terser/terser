@@ -163,50 +163,6 @@ classes_with_expression_as_expand: {
     expect_exact: "class D extends(calls++,C){}"
 }
 
-classes_with_extend_side_effects: {
-    options = {
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        var x = "FAIL";
-        class A extends (x = "PASS", Object) {}
-        const log_return_obj = msg => {
-            console.log(msg)
-            return Object
-        }
-        class B extends log_return_obj("PASS") {}
-        console.log(x); // PASS
-    }
-    expect: {
-        var x = "FAIL";
-        x = "PASS";
-        const log_return_obj = msg => {
-            console.log(msg)
-            return Object
-        }
-        log_return_obj("PASS");
-        console.log(x)
-    }
-    expect_stdout: [
-        "PASS",
-        "PASS"
-    ]
-}
-
-classes_without_extend_side_effects: {
-    options = {
-        toplevel: true,
-        unused: true,
-        passes: 2,
-    }
-    input: {
-        class Base {}
-        class Sub extends Base {}
-    }
-    expect: { }
-}
-
 classes_extending_classes_out_of_pure_iifes: {
     options = {
         toplevel: true,
@@ -1820,8 +1776,8 @@ issue_3061: {
     }
     expect: {
         console.log(new class extends(function(base) {
-            return class extends base {};
-        }(Error)){}() instanceof Error);
+            return class extends Error {};
+        }()){}() instanceof Error);
     }
     expect_stdout: "true"
 }

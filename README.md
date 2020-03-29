@@ -686,6 +686,10 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 ## Compress options
 
+- `defaults` (default: `true`) -- Pass `false` to disable most default
+  enabled `compress` transforms. Useful when you only want to enable a few
+  `compress` options while disabling the rest.
+
 - `arrows` (default: `true`) -- Class and object literal methods are converted
   will also be converted to arrow expressions if the resultant code is shorter:
   `m(){return x}` becomes `m:()=>x`. To do this to regular ES5 functions which
@@ -714,10 +718,6 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   expressions
 
 - `dead_code` (default: `true`) -- remove unreachable code
-
-- `defaults` (default: `true`) -- Pass `false` to disable most default
-  enabled `compress` transforms. Useful when you only want to enable a few
-  `compress` options while disabling the rest.
 
 - `directives` (default: `true`) -- remove redundant or non-standard directives
 

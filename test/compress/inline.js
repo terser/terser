@@ -38,6 +38,7 @@ inline_within_extends_2: {
         reduce_funcs: true,
         reduce_vars: true,
         side_effects: true,
+        collapse_vars: false,
         unused: true,
         toplevel: true
     }

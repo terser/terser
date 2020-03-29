@@ -408,9 +408,7 @@ concise_methods_and_keyword_names: {
             throw() {}
         }
     }
-    expect: {
-        x={catch(){},throw(){}};
-    }
+    expect_exact: "x={catch(){},throw(){}};"
 }
 
 getter_setter_with_computed_value: {

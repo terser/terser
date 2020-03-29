@@ -2828,3 +2828,60 @@ unused_class_which_might_throw: {
     }
     expect_stdout: "PASS"
 }
+
+unused_class_which_might_throw_2: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                [ima_throw_lol()] = null
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw_3: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                [ima_throw_lol()]() { return null }
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw_4: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                get [ima_throw_lol()]() { return null }
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}

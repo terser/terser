@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.8
+
+ - Take into account "executed bits" of classes like static properties or computed keys, when checking if a class evaluation might throw or have side effects.
+
 ## v4.6.7
 
  - Some new performance gains through a `AST_Node.size()` method which measures a node's source code length without printing it to a string first.

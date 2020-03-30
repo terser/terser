@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.9
+
+ - Check if block scopes actually exist in blocks
+
 ## v4.6.8
 
  - Take into account "executed bits" of classes like static properties or computed keys, when checking if a class evaluation might throw or have side effects.

@@ -1776,8 +1776,8 @@ issue_3061: {
     }
     expect: {
         console.log(new class extends(function(base) {
-            return class extends Error {};
-        }()){}() instanceof Error);
+            return class extends base {};
+        }(Error)){}() instanceof Error);
     }
     expect_stdout: "true"
 }

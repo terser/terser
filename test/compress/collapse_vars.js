@@ -6007,147 +6007,20 @@ noinline_annotation: {
     }
 }
 
-class_extends: {
+ignore_class: {
     options = {
-        collapse_vars: true,
+        defaults: true,
         toplevel: true
     }
     input: {
-        var A;
-        A = class {
-            static which = 'A'
-        };
-        class B extends A { static which = 'B' };
-        console.log(B.which, A.which);
+        global.leak = x => class dummy { get pass() { return x } }
+        global.module = {};
+        (function () {
+            const SuperClass = leak("PASS")
+            class TheClass extends SuperClass {}
+            module.exports = TheClass
+        }())
+        console.log(new module.exports().pass)
     }
-    expect: {
-        var A;
-        class B extends (A = class { static which = 'A' }) {
-            static which = 'B'
-        };
-        console.log(B.which, A.which);
-    }
-    expect_stdout: "B A"
-    node_version: ">=12"
-}
-
-class_statics: {
-    options = {
-        collapse_vars: true,
-        toplevel: true
-    }
-    input: {
-        var A;
-        A = class {
-            static which = 'A'
-        };
-        class B {
-            static which = 'B'
-            static A = A
-        };
-        console.log(B.which, B.A.which, A.which);
-    }
-    expect: {
-        var A;
-        class B {
-            static which = 'B'
-            static A = (A = class { static which = 'A' })
-        };
-        console.log(B.which, B.A.which, A.which);
-    }
-    expect_stdout: "B A A"
-    node_version: ">=12"
-}
-
-class_computed_prop_defs: {
-    options = {
-        collapse_vars: true,
-        toplevel: true
-    }
-    input: {
-        var A;
-        A = class {
-            static which = 'A'
-        };
-        class B {
-            static which = 'B'
-            static [A.which] = A
-        };
-        console.log(B.which, B.A.which, A.which);
-    }
-    expect: {
-        var A;
-        class B {
-            static which = 'B'
-            static [
-                (A = class {
-                    static which = 'A'
-                }).which
-            ] = A
-        };
-        console.log(B.which, B.A.which, A.which);
-    }
-    expect_stdout: "B A A"
-    node_version: ">=12"
-}
-
-class_computed_prop_defs_2: {
-    options = {
-        collapse_vars: true,
-        toplevel: true
-    }
-    input: {
-        var A;
-        A = class {
-            static which = 'A';
-        };
-        class B {
-            static which = 'B';
-            [A.which] = A;
-        };
-        console.log(B.which, new B().A.which, A.which);
-    }
-    expect: {
-        var A;
-        class B {
-            static which = 'B';
-            [(A = class {
-                static which = 'A'
-            }).which] = A;
-        };
-        console.log(B.which, new B().A.which, A.which);
-    }
-    expect_stdout: "B A A"
-    node_version: ">=12"
-}
-
-class_regular_prop: {
-    options = {
-        collapse_vars: true,
-        toplevel: true
-    }
-    input: {
-        var A;
-        A = class {
-            static which = 'A'
-        };
-        class B {
-            static which = 'B'
-            regular_prop = A
-        };
-        console.log(B.which, new B().regular_prop.which, A.which);
-    }
-    expect: {
-        var A;
-        A = class {
-            static which = 'A'
-        };
-        class B {
-            static which = 'B'
-            regular_prop = A
-        };
-        console.log(B.which, new B().regular_prop.which, A.which);
-    }
-    expect_stdout: "B A A"
-    node_version: ">=12"
+    expect_stdout: "PASS"
 }

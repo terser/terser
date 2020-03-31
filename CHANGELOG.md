@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.6.10
+
+ - Do not use reduce_vars when classes are present
+
 ## v4.6.9
 
  - Check if block scopes actually exist in blocks

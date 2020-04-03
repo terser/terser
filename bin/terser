@@ -229,8 +229,12 @@ function run() {
     var result = Terser.minify(files, options);
     if (result.error) {
         var ex = result.error;
-        if (ex.name == "SyntaxError") {
-            print_error("Parse error at " + ex.filename + ":" + ex.line + "," + ex.col);
+        if (ex.name == "SyntaxError" || ex.name === "OutputError") {
+            if (ex.name === "SyntaxError") {
+                print_error("Parse error at " + ex.filename + ":" + ex.line + "," + ex.col);
+            } else if (ex.name === "OutputError") {
+                print_error("Output error at " + ex.filename + ":" + ex.line + "," + ex.col);
+            }
             var col = ex.col;
             var lines = files[ex.filename].split(/\r?\n/);
             var line = lines[ex.line - 1];

@@ -177,3 +177,47 @@ inline_identity_regression: {
     }
     expect_stdout: "PASS"
 }
+
+inline_identity_lose_this: {
+    options = {
+        inline: true,
+        toplevel: true,
+        reduce_vars: true
+    }
+
+    input: {
+        "use strict";
+
+        const id = x => x;
+
+        const func_bag = {
+            func: function () { return this === undefined ? "PASS" : "FAIL"; }
+        };
+
+        func_bag.func2 = function () { return this === undefined ? "PASS" : "FAIL"; };
+
+        console.log(id(func_bag.func)());
+        console.log(id(func_bag.func2)());
+    }
+
+    expect: {
+        "use strict";
+
+        const id = x => x;
+
+        const func_bag = {
+            func: function () { return void 0 === this ? "PASS" : "FAIL"; }
+        };
+
+        func_bag.func2 = function () { return void 0 === this ? "PASS" : "FAIL"; };
+
+        console.log((0, func_bag.func)());
+        console.log((0, func_bag.func2)());
+    }
+
+    expect_stdout: [
+        "PASS",
+        "PASS"
+    ]
+}
+

@@ -136,10 +136,7 @@ inline_into_scope_conflict: {
         toplevel: true
     }
     input: {
-        global.leak = x => x
-        global.modInQuestion = () => console.log("PASS")
-
-        var mod = global.modInQuestion
+        var mod = pass
 
         const c = function c() {
             mod()
@@ -150,7 +147,7 @@ inline_into_scope_conflict: {
         }
 
         ;(function () {
-            var mod = leak(mod);
+            var mod = id(mod);
             b();
         })()
     }

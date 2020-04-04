@@ -7049,8 +7049,6 @@ issue_432_1: {
         toplevel: true
     }
     input: {
-        global.leak = () => null
-
         const selectServer = () => {
           selectServers();
         }
@@ -7079,8 +7077,6 @@ issue_432_2: {
         toplevel: true
     }
     input: {
-        global.leak = fn => null
-
         const selectServer = () => {
           selectServers();
         }

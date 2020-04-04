@@ -2893,11 +2893,9 @@ variable_refs_outside_unused_class: {
         unused: true
     }
     input: {
-        global.leak = thing => thing
-
-        var symbols = leak({ prop: 'method' })
-        var input = leak({ prop: class {} })
-        var staticProp = leak({ prop: 'foo' })
+        var symbols = id({ prop: 'method' })
+        var input = id({ prop: class {} })
+        var staticProp = id({ prop: 'foo' })
 
         class unused extends input.prop {
             static prop = staticProp.prop;

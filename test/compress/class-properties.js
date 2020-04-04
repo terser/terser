@@ -63,11 +63,22 @@ class_expression_properties_side_effects: {
         unused: true,
     }
     input: {
-        (class { static foo = side() });
+        global.side = () => { console.log("PASS") };
+        (class {
+            static foo = side();
+            [side()]() {};
+            [side()] = 4
+        });
     }
     expect: {
-        side();
+        global.side = () => { console.log("PASS") };
+        side(),side(),side();
     }
+    expect_stdout: [
+        "PASS",
+        "PASS",
+        "PASS"
+    ]
 }
 
 class_expression_not_constant: {

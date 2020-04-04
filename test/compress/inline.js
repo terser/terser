@@ -350,3 +350,27 @@ inline_func_with_name_existing_in_block_scope: {
 
     expect_stdout: "PASS"
 }
+
+dont_inline_funcs_into_default_param: {
+    options = {
+        toplevel: true,
+        unused: true,
+        inline: true,
+    }
+
+    input: {
+        "use strict"
+
+        const getData = (val) => {
+            return {val}
+        }
+
+        const print = function (data = getData(id("PASS"))) {
+            console.log(data.val);
+        }
+
+        print();
+    }
+
+    expect_stdout: "PASS"
+}

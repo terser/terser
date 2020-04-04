@@ -59,7 +59,11 @@ exports.run_code = function(code, prepend_code = '') {
                         return safe_log(arg, 3);
                     }));
                 }
-            }
+            },
+            id: x => x,
+            leak: () => {},
+            pass: () => { global.console.log("PASS") },
+            fail: () => { global.console.log("FAIL") }
         };
         global.global = global;
         vm.runInNewContext([

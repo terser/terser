@@ -2885,3 +2885,30 @@ unused_class_which_might_throw_4: {
     }
     expect_stdout: "PASS"
 }
+
+variable_refs_outside_unused_class: {
+    node_version = ">=12"
+    options = {
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        global.leak = thing => thing
+
+        var symbols = leak({ prop: 'method' })
+        var input = leak({ prop: class {} })
+        var staticProp = leak({ prop: 'foo' })
+
+        class unused extends input.prop {
+            static prop = staticProp.prop;
+
+            [symbols.prop]() {
+                console.log('PASS')
+            }
+        }
+
+        console.log("PASS")  // Basically, don't crash
+    }
+
+    expect_stdout: "PASS"
+}

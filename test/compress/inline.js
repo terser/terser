@@ -324,3 +324,29 @@ inline_annotation_2: {
     }
     expect_stdout: "42 NaN"
 }
+
+inline_func_with_name_existing_in_block_scope: {
+    options = {
+        toplevel: true,
+        defaults: true
+    }
+
+    input: {
+        let something = "PASS";
+        function getSomething() {
+          return something;
+        }
+        function setSomething() {
+          something = { value: 42 };
+        }
+        function main() {
+          if (typeof somethingElse == "undefined") {
+            const something = getSomething();
+            console.log(something);
+          }
+        }
+        main();
+    }
+
+    expect_stdout: "PASS"
+}

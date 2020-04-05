@@ -3,7 +3,7 @@
 import { RawSourceMap } from 'source-map';
 
 /** @deprecated since this versions basically do not exist */
-type ECMA_UNOFFICIAL = 6 | 7 | 8 | 9;
+type ECMA_UNOFFICIAL = 6 | 7 | 8 | 9 | 10 | 11;
 
 export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | ECMA_UNOFFICIAL;
 

@@ -72,7 +72,7 @@ describe("spidermonkey export/import sanity test", function() {
         var counter_directives;
         var counter_strings;
 
-        var checkWalker = new Terser.TreeWalker(function(node, descend) {
+        var checkWalker = new Terser.TreeWalker(node => {
             if (node instanceof Terser.AST_String) {
                 counter_strings++;
             } else if (node instanceof Terser.AST_Directive) {
@@ -140,6 +140,31 @@ describe("spidermonkey export/import sanity test", function() {
         assert.strictEqual(
             Terser.AST_Node.from_mozilla_ast(parsed).print_to_string(),
             terser_ast.print_to_string()
+        );
+    });
+
+    function remove_loc(ast) {
+        for (const key of Object.keys(ast)) {
+            if (key === "loc") delete ast[key];
+            if (key === "range") delete ast[key];
+            if (typeof ast[key] === "object" && ast[key]) remove_loc(ast[key]);
+        }
+        return ast;
+    }
+
+    it("should produce correct ASTs which acorn can't read yet", function () {
+        const code = `
+            x ?? y
+        `;
+
+        assert.deepEqual(
+            remove_loc(Terser.parse(code).to_mozilla_ast()).body[0].expression,
+            {
+                type: "LogicalExpression",
+                operator: "??",
+                left: { type: "Identifier", name: "x" },
+                right: { type: "Identifier", name: "y" }
+            }
         );
     });
 });

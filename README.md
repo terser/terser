@@ -133,7 +133,7 @@ a double dash to prevent input files being used as option arguments:
                                 sequences.
     --config-file <file>        Read `minify()` options from JSON file.
     -d, --define <expr>[=value] Global definitions.
-    --ecma <version>            Specify ECMAScript release: 5, 6, 7 or 8.
+    --ecma <version>            Specify ECMAScript release: 5, 2015, 2016, etc.
     -e, --enclose [arg[:value]] Embed output in a big function with configurable
                                 arguments and values.
     --ie8                       Support non-standard Internet Explorer 8.
@@ -534,7 +534,7 @@ if (result.error) throw result.error;
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `2015`, `2016` or `2017` to override `parse`,
+- `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override `parse`,
   `compress` and `output`'s `ecma` options.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
@@ -611,7 +611,7 @@ if (result.error) throw result.error;
     sourceMap: {
         // source map options
     },
-    ecma: 5, // specify one of: 5, 2015, 2016, 2017 or 2018
+    ecma: 5, // specify one of: 5, 2015, 2016, etc.
     keep_classnames: false,
     keep_fnames: false,
     ie8: false,

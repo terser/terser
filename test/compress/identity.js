@@ -221,3 +221,31 @@ inline_identity_lose_this: {
     ]
 }
 
+inline_identity_dont_lose_this_when_arg: {
+    options = {
+        inline: true,
+        toplevel: true,
+        reduce_vars: true
+    }
+
+    input: {
+        "use strict";
+
+        const id = x => x;
+
+        const func_bag = { leak };
+
+        leak(id(func_bag.leak));
+    }
+
+    expect: {
+        "use strict";
+
+        const id = x => x;
+
+        const func_bag = { leak };
+
+        leak(func_bag.leak);
+    }
+}
+

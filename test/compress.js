@@ -163,8 +163,13 @@ function run_compress_tests() {
                 return false;
             }
             var ast = input.to_mozilla_ast();
-            var ast_as_string = U.AST_Node.from_mozilla_ast(ast).print_to_string(test.mozilla_ast);
-            var input_string = input.print_to_string(test.mozilla_ast);
+            var mozilla_options = {
+                ecma: output_options.ecma,
+                ascii_only: output_options.ascii_only,
+                comments: false,
+            };
+            var ast_as_string = U.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
+            var input_string = input.print_to_string(mozilla_options);
             if (input_string !== ast_as_string) {
                 log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
                     input: input_string,

@@ -17,7 +17,6 @@ unicode_parse_variables: {
 }
 
 unicode_escaped_identifier_2015: {
-    mozilla_ast = {ecma: 2015}
     beautify = {ecma: 2015}
     input: {
         var \u{61} = "foo";
@@ -38,7 +37,6 @@ unicode_escaped_identifier_es5: {
 }
 
 unicode_identifier_ascii_only: {
-    mozilla_ast = {ascii_only: true, ecma: 2015}
     beautify = {ascii_only: true, ecma: 2015}
     input: {
         var \u{0061} = "hi";
@@ -57,7 +55,6 @@ unicode_string_literals: {
 }
 
 check_escape_style: {
-    mozilla_ast = {ascii_only: true, ecma: 2015}
     beautify = {ascii_only: true, ecma: 2015}
     input: {
         var a = "\x01";
@@ -71,7 +68,6 @@ check_escape_style: {
 }
 
 ID_continue_with_surrogate_pair: {
-    mozilla_ast = {ascii_only: true, ecma: 2015}
     beautify = {ascii_only: true, ecma: 2015}
     input: {
         var \u{2f800}\u{2f800}\u{2f800}\u{2f800} = "\u{100000}\u{100000}\u{100000}\u{100000}\u{100000}";

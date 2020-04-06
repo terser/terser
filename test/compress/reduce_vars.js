@@ -2363,7 +2363,7 @@ booleans: {
     expect: {
         console.log(function(a) {
             if (0);
-            switch (!1) {
+            switch (a) {
               case 0:
                 return "FAIL";
               case !1:

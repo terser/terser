@@ -2727,3 +2727,33 @@ avoid_generating_duplicate_functions_compared_together_2: {
     }
     expect_stdout: "true"
 }
+
+avoid_generating_duplicate_functions_compared_together_3: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => null;
+        console.log(id(x) === id(x));
+    }
+    expect_stdout: "true"
+}
+
+avoid_generating_duplicate_functions_compared_together_4: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => null;
+        const y = () => x;
+        const fns = [y(), y()]
+        console.log(fns[0] === fns[1]);
+        const fns_obj = {a: y(), b: y()}
+        console.log(fns_obj.a === fns_obj.b);
+    }
+    expect_stdout: ["true", "true"]
+}

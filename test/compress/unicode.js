@@ -16,13 +16,24 @@ unicode_parse_variables: {
     }
 }
 
-unicode_escaped_identifier: {
+unicode_escaped_identifier_2015: {
     beautify = {ecma: 2015}
     input: {
         var \u{61} = "foo";
         var \u{10000} = "bar";
     }
     expect_exact: 'var a="foo";var \u{10000}="bar";';
+}
+
+unicode_escaped_identifier_es5: {
+    beautify = {ecma: 5}
+    input: `
+        var \u{10000} = "bar";
+    `
+    expect_error: ({
+        name: "OutputError",
+        message: "Can't output identifier: '\u{10000}', it is not valid in ECMA version 5",
+    });
 }
 
 unicode_identifier_ascii_only: {

@@ -972,3 +972,19 @@ coerce_to_string: {
         var str = '' + any;
     }
 }
+
+special_chars_in_string: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        var str = `foo ${'`;\n`${any}'} bar`;
+        var concat = `foo ${any} bar` + '`;\n`${any}';
+        var template = `foo ${'`;\n`${any}'} ${any} bar`;
+    }
+    expect: {
+        var str="foo `;\n`${any} bar";
+        var concat=`foo ${any} bar\`;\n\`\${any}`;
+        var template=`foo \`;\n\`\${any} ${any} bar`;
+    }
+}

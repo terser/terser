@@ -1,5 +1,14 @@
 # Changelog
 
+## v4.6.11
+
+ - Read unused classes' properties and method keys, to figure out if they use other variables.
+ - Prevent inlining into block scopes when there are name collisions
+ - Functions are no longer inlined into parameter defaults, because they live in their own special scope.
+ - When inlining identity functions, take into account the fact they may be used to drop `this` in function calls.
+ - Nullish coalescing operator (`x ?? y`), plus basic optimization for it.
+ - Template literals in binary expressions such as `+` have been further optimized
+
 ## v4.6.10
 
  - Do not use reduce_vars when classes are present

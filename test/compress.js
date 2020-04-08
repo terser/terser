@@ -103,6 +103,7 @@ function run_compress_tests() {
                 if (test.input.body.segments.length == 1) {
                     try {
                         var input = U.parse(test.input.body.segments[0].value);
+                        var input_code = make_code(input, output_options);
                     } catch (ex) {
                         if (!test.expect_error) {
                             log("!!! Test is missing an `expect_error` clause\n", {});
@@ -132,7 +133,6 @@ function run_compress_tests() {
                         });
                         return false;
                     }
-                    var input_code = make_code(input, output_options);
                     var input_formatted = test.input.body.segments[0].value;
                 } else {
                     log("!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {
@@ -147,6 +147,7 @@ function run_compress_tests() {
                 var input = as_toplevel(test.input, test.mangle);
                 var input_code = make_code(input, output_options);
                 var input_formatted = make_code(test.input, {
+                    ecma: 2015,
                     beautify: true,
                     quote_style: 3,
                     keep_quoted_props: true
@@ -162,8 +163,13 @@ function run_compress_tests() {
                 return false;
             }
             var ast = input.to_mozilla_ast();
-            var ast_as_string = U.AST_Node.from_mozilla_ast(ast).print_to_string();
-            var input_string = input.print_to_string();
+            var mozilla_options = {
+                ecma: output_options.ecma,
+                ascii_only: output_options.ascii_only,
+                comments: false,
+            };
+            var ast_as_string = U.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
+            var input_string = input.print_to_string(mozilla_options);
             if (input_string !== ast_as_string) {
                 log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
                     input: input_string,

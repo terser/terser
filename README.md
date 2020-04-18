@@ -1321,6 +1321,7 @@ To allow for better optimizations, the compiler makes various assumptions:
 - Object properties can be added, removed and modified (not prevented with
   `Object.defineProperty()`, `Object.defineProperties()`, `Object.freeze()`,
   `Object.preventExtensions()` or `Object.seal()`).
+- `document.all` is not `== null`
 
 ### Build Tools and Adaptors using Terser
 

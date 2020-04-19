@@ -371,3 +371,27 @@ dont_inline_funcs_into_default_param: {
 
     expect_stdout: "PASS"
 }
+
+dont_inline_funcs_into_default_param_2: {
+    options = {
+        toplevel: true
+    }
+
+    input: {
+        "use strict";
+
+        const foo = () => 42;
+
+        const getData = (val) => {
+            return {val}
+        }
+
+        const print = (data = getData(foo())) => {
+            data.val === 42 && pass();
+        }
+
+        print();
+    }
+
+    expect_stdout: "PASS"
+}

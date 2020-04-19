@@ -3791,8 +3791,8 @@ issue_2437: {
                 return Object.defineProperty(XMLHttpRequest.prototype, "onreadystatechange", xhrDesc || {}),
                     result;
             }
-            var req = new XMLHttpRequest, detectFunc = function() {};
-            req.onreadystatechange = detectFunc,
+            var req, detectFunc = function() {};
+            (req = new XMLHttpRequest).onreadystatechange = detectFunc,
                 result = req[SYMBOL_FAKE_ONREADYSTATECHANGE_1] === detectFunc,
                 req.onreadystatechange = null;
         }();

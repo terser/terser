@@ -4,6 +4,7 @@
         "mangle": true,
         "rename": true,
         "beautify": true,
+        "mozilla_ast": true,
         "console": false,
         "window": false,
         "global": false

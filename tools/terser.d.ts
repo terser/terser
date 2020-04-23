@@ -2,7 +2,10 @@
 
 import { RawSourceMap } from 'source-map';
 
-export type ECMA = 5 | 6 | 7 | 8 | 9;
+/** @deprecated since this versions basically do not exist */
+type ECMA_UNOFFICIAL = 6 | 7 | 8 | 9 | 10 | 11;
+
+export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | ECMA_UNOFFICIAL;
 
 export interface ParseOptions {
     bare_returns?: boolean;
@@ -60,6 +63,7 @@ export interface CompressOptions {
     unsafe_comps?: boolean;
     unsafe_Function?: boolean;
     unsafe_math?: boolean;
+    unsafe_symbols?: boolean;
     unsafe_methods?: boolean;
     unsafe_proto?: boolean;
     unsafe_regexp?: boolean;
@@ -90,7 +94,7 @@ export interface ManglePropertiesOptions {
     builtins?: boolean;
     debug?: boolean;
     domprops?: boolean;
-    keep_quoted?: boolean;
+    keep_quoted?: boolean | 'strict';
     regex?: RegExp | string;
     reserved?: string[];
 }
@@ -99,7 +103,13 @@ export interface OutputOptions {
     ascii_only?: boolean;
     beautify?: boolean;
     braces?: boolean;
-    comments?: boolean | 'all' | 'some' | RegExp | Function;
+    comments?: boolean | 'all' | 'some' | RegExp | ( (node: AST_Node, comment: {
+        value: string,
+        type: 'comment1' | 'comment2' | 'comment3' | 'comment4',
+        pos: number,
+        line: number,
+        col: number,
+    }) => boolean );
     ecma?: ECMA;
     ie8?: boolean;
     indent_level?: number;
@@ -108,6 +118,7 @@ export interface OutputOptions {
     keep_quoted_props?: boolean;
     max_line_len?: number | false;
     preamble?: string;
+    preserve_annotations?: boolean;
     quote_keys?: boolean;
     quote_style?: OutputQuoteStyle;
     safari10?: boolean;
@@ -118,6 +129,7 @@ export interface OutputOptions {
     webkit?: boolean;
     width?: number;
     wrap_iife?: boolean;
+    wrap_func_args?: boolean;
 }
 
 export enum OutputQuoteStyle {
@@ -153,7 +165,8 @@ export interface MinifyOutput {
 }
 
 export interface SourceMapOptions {
-    content?: RawSourceMap;
+    /** Source map object, 'inline' or source map file content */
+    content?: RawSourceMap | string;
     includeSources?: boolean;
     filename?: string;
     root?: string;

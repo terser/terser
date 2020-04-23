@@ -221,3 +221,53 @@ compress_numbers: {
         const fractional = 100.23002;
     }
 }
+
+no_number_function_transform_without_unsafe_math: {
+    options = {
+        unsafe: true
+    }
+    input: {
+        Number(1234);
+    }
+    expect: {
+        Number(1234);
+    }
+}
+
+number_function_transform_with_unsafe_math: {
+    options = {
+        unsafe: true,
+        unsafe_math: true
+    }
+    input: {
+        Number(1234);
+    }
+    expect: {
+        +1234;
+    }
+}
+
+
+keep_numbers: {
+    beautify = {
+        keep_numbers: true
+    }
+    input: {
+        const exp = 1000000000000;
+        const negativeExp = 0.00000001;
+        const huge = 1000000000001;
+        const big = 100000000001;
+        const fractional = 100.2300200;
+    }
+    expect_exact: "const exp=1000000000000;const negativeExp=0.00000001;const huge=1000000000001;const big=100000000001;const fractional=100.2300200;"
+}
+
+keep_numbers_in_properties_as_is: {
+    beautify = {
+        keep_numbers: true
+    }
+    input: {
+        var Foo = { 1000000: 80000000000 }
+    }
+    expect_exact: "var Foo={1000000:80000000000};"
+}

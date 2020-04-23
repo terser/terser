@@ -108,19 +108,19 @@ template_string_with_predefined_constants: {
         var foo = "This is undefined";
         var bar = "This is NaN";
         var baz = "This is null";
-        var foofoo = `This is ${1/0}`;
+        var foofoo = "This is " + 1/0;
         var foobar = "This is ${1/0}";
         var foobaz = 'This is ${1/0}';
         var barfoo = "This is ${NaN}";
         var bazfoo = "This is ${null}";
-        var bazbaz = `This is ${1/0}`;
+        var bazbaz = "This is " + 1/0;
         var barbar = "This is NaN";
         var barbar = "This is ${0/0}";
         var barber = 'This is ${0/0}';
 
         var a = "4194304";
         var b = "16777216"; // Potential for further concatentation
-        var c = `${4**14}`; // Not worth converting
+        var c = "" + 4**14; // Not worth converting
     }
 }
 
@@ -193,7 +193,7 @@ template_concattenating_string: {
     }
     expect: {
         var foo = "Have a nice day. day. day.";
-        var bar = "Have a nice " + `${day()}`;
+        var bar = "Have a nice " + day();
     }
 }
 
@@ -205,10 +205,14 @@ evaluate_nested_templates: {
         quote_style: 0
     }
     input: {
-        var baz = `${`${`${`foo`}`}`}`;
+        var foo = `${`${`${`foo`}`}`}`;
+        var bar = `before ${`innerBefore ${any} innerAfter`} after`;
+        var baz = `1 ${2 + `3 ${any} 4` + 5} 6`;
     }
     expect: {
-        var baz = "foo";
+        var foo = "foo";
+        var bar = `before innerBefore ${any} innerAfter after`;
+        var baz = `1 23 ${any} 45 6`;
     }
 }
 
@@ -259,7 +263,7 @@ enforce_double_quotes_and_evaluate: {
     expect: {
         var foo = "Hello world";
         var bar = "Hello world";
-        var baz = `Hello ${world()}`;
+        var baz = "Hello " + world();
     }
 }
 
@@ -278,7 +282,7 @@ enforce_single_quotes_and_evaluate: {
     expect: {
         var foo = "Hello world";
         var bar = "Hello world";
-        var baz = `Hello ${world()}`;
+        var baz = "Hello " + world();
     }
 }
 
@@ -441,8 +445,8 @@ t${5}`);
         tag`t${4}`;
         console.log("\nt5");
         function f(a) {
-            a &= `t7${a}`;
-            a = `t8${b}` | a;
+            a &= "t7" + a;
+            a = "t8" + b | a;
             a = f`t9${a}` ^ a;
         }
     }
@@ -599,7 +603,7 @@ tagged_call_with_invalid_escape_2: {
     expect: {
         var x_y = () => String.raw;
         console.log(x_y()`\4321\u\x`);
-        console.log((() => String.raw)()`\4321\u\x`);
+        console.log(String.raw`\4321\u\x`);
     }
     expect_stdout: [
         "\\4321\\u\\x",
@@ -887,4 +891,100 @@ allow_null_character: {
         `\0${x}`;
     }
     expect_exact: "`\\0`;`\\0${x}`;"
+}
+
+template_literal_plus: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        console.log(`foo${any}baz` + 1);
+        console.log(1 + `foo${any}baz`);
+        console.log(`1${any}2` + `foo${any}baz`);
+    }
+    expect: {
+        console.log(`foo${any}baz1`);
+        console.log(`1foo${any}baz`);
+        console.log(`1${any}2foo${any}baz`);
+    }
+}
+
+template_literal_plus_grouping: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        console.log((`foo${any}baz` + 'middle') + 'test');
+        console.log('test' + ('middle' + `foo${any}baz`));
+        console.log((`1${any}2` + '3') + ('4' + `foo${any}baz`));
+        console.log((1 + `2${any}3` + '4') + ('5' + `foo${any}baz` + 6));
+    }
+    expect: {
+        console.log(`foo${any}bazmiddletest`);
+        console.log(`testmiddlefoo${any}baz`);
+        console.log(`1${any}234foo${any}baz`);
+        console.log(`12${any}345foo${any}baz6`);
+    }
+}
+
+array_join: {
+    options = {
+        evaluate: true,
+        unsafe: true,
+    }
+    input: {
+        var foo = [`1 ${any} 2`].join('');
+        var bar = ["before", `1 ${any} 2`].join('');
+        var baz = [`1 ${any} 2`, "after"].join('');
+        var qux = ["before", `1 ${any} 2`, "after"].join('');
+    }
+    expect: {
+        var foo = `1 ${any} 2`;
+        var bar = `before1 ${any} 2`;
+        var baz = `1 ${any} 2after`;
+        var qux = `before1 ${any} 2after`;
+    }
+}
+
+equality: {
+    options = {
+        evaluate: true,
+        comparisons: true,
+    }
+    input: {
+        var a = `1${any}2` === '12'
+        var b = `1${any}2` === `12`
+    }
+    expect: {
+        var a = "12" == `1${any}2`
+        var b = "12" == `1${any}2`
+    }
+}
+
+coerce_to_string: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        var str = `${any}`;
+    }
+    expect: {
+        var str = '' + any;
+    }
+}
+
+special_chars_in_string: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        var str = `foo ${'`;\n`${any}'} bar`;
+        var concat = `foo ${any} bar` + '`;\n`${any}';
+        var template = `foo ${'`;\n`${any}'} ${any} bar`;
+    }
+    expect: {
+        var str="foo `;\n`${any} bar";
+        var concat=`foo ${any} bar\`;\n\`\${any}`;
+        var template=`foo \`;\n\`\${any} ${any} bar`;
+    }
 }

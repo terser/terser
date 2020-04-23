@@ -51,7 +51,7 @@ destructuring_objects: {
 
 destructuring_objects_trailing_elision: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         var {cc,} = foo;
@@ -61,7 +61,7 @@ destructuring_objects_trailing_elision: {
 
 nested_destructuring_objects: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         const [{a},b] = c;
@@ -73,7 +73,7 @@ nested_destructuring_objects: {
 
 destructuring_constdef_in_loops: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         for (const [x,y] in pairs);
@@ -85,7 +85,7 @@ destructuring_constdef_in_loops: {
 
 destructuring_letdef_in_loops: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         for (let [x,y] in pairs);
@@ -97,7 +97,7 @@ destructuring_letdef_in_loops: {
 
 destructuring_vardef_in_loops: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         for (var [x,y] in pairs);
@@ -109,7 +109,7 @@ destructuring_vardef_in_loops: {
 
 destructuring_expressions: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         ({a, b});
@@ -226,7 +226,7 @@ destructuring_remove_unused_2: {
 
 object_destructuring_may_need_parentheses: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         ({a, b} = {a: 1, b: 2});
@@ -476,7 +476,7 @@ mangle_destructuring_assign_toplevel_true: {
         toplevel: true,
     }
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function test(opts) {
@@ -516,7 +516,7 @@ mangle_destructuring_assign_toplevel_false: {
         toplevel: false,
     }
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function test(opts) {
@@ -556,7 +556,7 @@ mangle_destructuring_decl_array: {
         toplevel: true,
     }
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         var [, t, e, n, s, o = 2, r = [ 1 + 2 ]] = [ 9, 8, 7, 6 ];
@@ -633,7 +633,7 @@ issue_2044_ecma_5: {
 issue_2044_ecma_6: {
     beautify = {
         beautify: false,
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         ({x : a = 1, y = 2 + b, z = 3 - c} = obj);
@@ -655,7 +655,7 @@ issue_2044_ecma_5_beautify: {
 issue_2044_ecma_6_beautify: {
     beautify = {
         beautify: true,
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         ({x : a = 1, y = 2 + b, z = 3 - c} = obj);
@@ -1186,7 +1186,7 @@ export_unreferenced_declarations_1: {
     }
     beautify = {
         beautify: false,
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         export const { keys } = Object;

@@ -288,8 +288,8 @@ describe("comments", function() {
         });
 
         it("Should be able to filter commments with the 'some' option", function() {
-            var ast = Terser.parse("// foo\n/*@preserve*/\n// bar\n/*@license*/\n//@license with the wrong comment type\n/*@cc_on something*/");
-            assert.strictEqual(ast.print_to_string({comments: "some"}), "/*@preserve*/\n/*@license*/\n/*@cc_on something*/");
+            var ast = Terser.parse("// foo\n/*@preserve*/\n// bar\n/*@license*/\n//@lic two slashes\n/*@cc_on something*/");
+            assert.strictEqual(ast.print_to_string({comments: "some"}), "/*@preserve*/\n/*@license*/\n//@lic two slashes\n/*@cc_on something*/");
         });
 
         it("Should be able to filter comments by passing a function", function() {

@@ -262,3 +262,36 @@ issue_334: {
     }
     expect_stdout: "Hello World!";
 }
+
+issue_508: {
+    options = {
+        defaults: true,
+        toplevel: true,
+        pure_getters: true
+    }
+    input : {
+        const foo = () => {
+            let a;
+            {
+                let b = [];
+                {
+                    console.log();
+                }
+                a = b;
+
+                {
+                    let c = a;
+                    let b = 123456;
+                    console.log(b);
+                    c.push(b);
+                }
+            }
+        };
+
+        foo();
+    }
+    expect_stdout: [
+        "",
+        "123456"
+    ]
+}

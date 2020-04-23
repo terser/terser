@@ -1165,6 +1165,22 @@ collapse_vars_unary: {
     }
 }
 
+collapse_vars_unary_2: {
+    options = {
+        collapse_vars: true
+    }
+    input: {
+        global.leak = n => console.log(n);
+        global.num = 4;
+
+        let counter = -1;
+        for (const i in [0,1,2,3,4,5]) {
+            counter++, i == num && leak(counter);
+        }
+    }
+    expect_stdout: "4"
+}
+
 collapse_vars_try: {
     options = {
         booleans: true,
@@ -5973,4 +5989,38 @@ issue_348: {
         }('PASS'))
     }
     expect_stdout: 'PASS'
+}
+
+noinline_annotation: {
+    options = {
+        collapse_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => console.log()
+        /*#__NOINLINE__*/x()
+    }
+    expect: {
+        const x = () => console.log()
+        x()
+    }
+}
+
+ignore_class: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        global.leak = x => class dummy { get pass() { return x } }
+        global.module = {};
+        (function () {
+            const SuperClass = leak("PASS")
+            class TheClass extends SuperClass {}
+            module.exports = TheClass
+        }())
+        console.log(new module.exports().pass)
+    }
+    expect_stdout: "PASS"
 }

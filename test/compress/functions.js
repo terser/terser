@@ -400,22 +400,22 @@ inner_ref: {
     input: {
         console.log(function(a) {
             return function() {
-                return a;
+                return a + 1;
             }();
         }(1), function(a) {
             return function(a) {
-                return a;
+                return a === undefined;
             }();
         }(2));
     }
     expect: {
-        console.log(function(a) {
-            return a;
-        }(1), function(a) {
-            return a;
+        console.log(function (a) {
+            return a + 1;
+        }(1), function (a) {
+            return void 0 === a;
         }());
     }
-    expect_stdout: "1 undefined"
+    expect_stdout: "2 true"
 }
 
 issue_2107: {
@@ -1523,9 +1523,7 @@ issue_2647_2: {
         }());
     }
     expect: {
-        void console.log((() => function (x) {
-            return x.toUpperCase();
-        }("pass"))());
+        void console.log("pass".toUpperCase());
     }
     expect_stdout: "PASS"
 }
@@ -2102,15 +2100,15 @@ duplicate_arg_var: {
     }
     input: {
         console.log(function(b) {
-            return b;
+            return b + "ING";
             var b;
         }("PASS"));
     }
     expect: {
-        console.log((b = "PASS", b));
+        console.log((b = "PASS", b + "ING"));
         var b;
     }
-    expect_stdout: "PASS"
+    expect_stdout: "PASSING"
 }
 
 issue_2737_1: {
@@ -2728,4 +2726,34 @@ avoid_generating_duplicate_functions_compared_together_2: {
         console.log(fn() === fn());
     }
     expect_stdout: "true"
+}
+
+avoid_generating_duplicate_functions_compared_together_3: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => null;
+        console.log(id(x) === id(x));
+    }
+    expect_stdout: "true"
+}
+
+avoid_generating_duplicate_functions_compared_together_4: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+        toplevel: true
+    }
+    input: {
+        const x = () => null;
+        const y = () => x;
+        const fns = [y(), y()]
+        console.log(fns[0] === fns[1]);
+        const fns_obj = {a: y(), b: y()}
+        console.log(fns_obj.a === fns_obj.b);
+    }
+    expect_stdout: ["true", "true"]
 }

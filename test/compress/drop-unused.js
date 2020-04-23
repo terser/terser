@@ -2661,7 +2661,7 @@ issue_t161_top_retain_14: {
             }
         }
         let x = 2, z = 4;
-        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, (() => z)(), new Alpha().num(), new class {
+        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, z, new Alpha().num(), new class {
             num() {
                 return 3;
             }
@@ -2709,7 +2709,7 @@ issue_t161_top_retain_15: {
             }
         }
         let n = 2, u = 4;
-        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, (() => u)(), new Alpha().num(), new class {
+        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, u, new Alpha().num(), new class {
             num() {
                 return 3;
             }
@@ -2743,5 +2743,170 @@ issue_t183: {
             bar(x - 1);
         }("PASS"));
     }
+    expect_stdout: "PASS"
+}
+
+unused_seq_elements: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        var a = 0, b = 0;
+        console.log("just-make-sure-it-is-compilable") && (a++, b++);
+    }
+    expect_stdout: "just-make-sure-it-is-compilable"
+}
+
+unused_class_with_static_props_side_effects: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        class X {
+           static _ = (x = "PASS")
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_with_static_props_side_effects_2: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        function impure() {
+            x = "PASS"
+        }
+        class Unused {
+            static _ = impure()
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_extends_might_throw: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X extends might_throw_lol() {
+                constructor() {}
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                static _ = ima_throw_lol()
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw_2: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                [ima_throw_lol()] = null
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw_3: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                [ima_throw_lol()]() { return null }
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+unused_class_which_might_throw_4: {
+    node_version = ">=12"
+    options = {
+        toplevel: true
+    }
+    input: {
+        let x = "FAIL"
+        try {
+            class X {
+                get [ima_throw_lol()]() { return null }
+            }
+        } catch(e) {
+            x = "PASS"
+        }
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+variable_refs_outside_unused_class: {
+    node_version = ">=12"
+    options = {
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        var symbols = id({ prop: 'method' })
+        var input = id({ prop: class {} })
+        var staticProp = id({ prop: 'foo' })
+
+        class unused extends input.prop {
+            static prop = staticProp.prop;
+
+            [symbols.prop]() {
+                console.log('PASS')
+            }
+        }
+
+        console.log("PASS")  // Basically, don't crash
+    }
+
     expect_stdout: "PASS"
 }

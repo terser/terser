@@ -90,7 +90,7 @@ getter_setter: {
 getter_setter_mangler: {
     mangle = {}
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         function f(get,set) {
@@ -110,7 +110,7 @@ getter_setter_mangler: {
 
 use_shorthand_opportunity: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         var foo = 123;
@@ -251,7 +251,7 @@ shorthand_properties: {
 
 concise_methods: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         x = {
@@ -383,7 +383,7 @@ concise_methods_and_mangle_props: {
 
 concise_generators: {
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         x = {
@@ -408,9 +408,7 @@ concise_methods_and_keyword_names: {
             throw() {}
         }
     }
-    expect: {
-        x={catch(){},throw(){}};
-    }
+    expect_exact: "x={catch(){},throw(){}};"
 }
 
 getter_setter_with_computed_value: {
@@ -591,7 +589,7 @@ variable_as_computed_property: {
 
 prop_func_to_concise_method: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {
@@ -619,7 +617,7 @@ prop_func_to_concise_method: {
 
 prop_arrow_to_concise_method: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {
@@ -642,7 +640,7 @@ prop_arrow_to_concise_method: {
 concise_method_to_prop_arrow: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         console.log(({ a: () => 1 }).a());
@@ -666,7 +664,7 @@ concise_method_to_prop_arrow: {
 
 prop_func_to_async_concise_method: {
     options = {
-        ecma: 8,
+        ecma: 2017,
         unsafe_methods: true,
     }
     input: {
@@ -689,7 +687,7 @@ prop_func_to_async_concise_method: {
 
 prop_func_to_concise_method_various: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {
@@ -722,7 +720,7 @@ prop_func_to_concise_method_various: {
 
 prop_arrows_to_concise_method_various: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {
@@ -751,7 +749,7 @@ prop_arrows_to_concise_method_various: {
 
 prop_arrow_with_this: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {
@@ -788,7 +786,7 @@ prop_arrow_with_this: {
 
 prop_arrow_with_nested_this: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     input: {

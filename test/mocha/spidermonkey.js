@@ -72,7 +72,7 @@ describe("spidermonkey export/import sanity test", function() {
         var counter_directives;
         var counter_strings;
 
-        var checkWalker = new Terser.TreeWalker(function(node, descend) {
+        var checkWalker = new Terser.TreeWalker(node => {
             if (node instanceof Terser.AST_String) {
                 counter_strings++;
             } else if (node instanceof Terser.AST_Directive) {
@@ -109,11 +109,22 @@ describe("spidermonkey export/import sanity test", function() {
     it("should be capable of importing from acorn", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = Terser.parse(code);
-        var moz_ast = acorn.parse(code, {sourceType: 'module', ecmaVersion: 9});
+        var moz_ast = acorn.parse(code, {sourceType: 'module', ecmaVersion: 2018});
         var from_moz_ast = Terser.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             terser_ast.print_to_string()
+        );
+    });
+
+    it("should correctly minify AST from from_moz_ast with default destructure", () => {
+        const code = "const { a = 1, b: [b = 2] = []} = {}";
+        const acornAst = acorn.parse(code, { locations: true });
+        const terserAst = Terser.AST_Node.from_mozilla_ast(acornAst);
+        const result = Terser.minify(terserAst, {ecma: 2015});
+        assert.strictEqual(
+            result.code,
+            "const{a=1,b:[b=2]=[]}={};"
         );
     });
 
@@ -135,11 +146,36 @@ describe("spidermonkey export/import sanity test", function() {
         var generated = astring.generate(moz_ast);
         var parsed = acorn.parse(generated, {
             sourceType: "module",
-            ecmaVersion: 9
+            ecmaVersion: 2018
         });
         assert.strictEqual(
             Terser.AST_Node.from_mozilla_ast(parsed).print_to_string(),
             terser_ast.print_to_string()
+        );
+    });
+
+    function remove_loc(ast) {
+        for (const key of Object.keys(ast)) {
+            if (key === "loc") delete ast[key];
+            if (key === "range") delete ast[key];
+            if (typeof ast[key] === "object" && ast[key]) remove_loc(ast[key]);
+        }
+        return ast;
+    }
+
+    it("should produce correct ASTs which acorn can't read yet", function () {
+        const code = `
+            x ?? y
+        `;
+
+        assert.deepEqual(
+            remove_loc(Terser.parse(code).to_mozilla_ast()).body[0].expression,
+            {
+                type: "LogicalExpression",
+                operator: "??",
+                left: { type: "Identifier", name: "x" },
+                right: { type: "Identifier", name: "y" }
+            }
         );
     });
 });

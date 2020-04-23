@@ -17,8 +17,8 @@ level_zero: {
     }
     expect: {
         function f(r) {
-            function n(n) {
-                return n * n;
+            function n(r) {
+                return r * r;
             }
             return function() {
                 return r;
@@ -47,8 +47,8 @@ level_one: {
     expect: {
         function f(r) {
             return function() {
-                function n(n) {
-                    return n * n;
+                function n(r) {
+                    return r * r;
                 }
                 return r(n);
             };
@@ -81,12 +81,12 @@ level_two: {
     expect: {
         function f(t) {
             return function() {
-                function r(n) {
-                    return n * n;
+                function r(t) {
+                    return t * t;
                 }
                 return function() {
-                    function n(n) {
-                        return n * n;
+                    function n(t) {
+                        return t * t;
                     }
                     return t(n);
                 };
@@ -126,23 +126,23 @@ level_three: {
         }
     }
     expect: {
-        function f(t) {
+        function f(u) {
             return function() {
-                function r(n) {
-                    return n * n;
+                function r(u) {
+                    return u * u;
                 }
                 return [
                     function() {
-                        function t(n) {
-                            return n * n;
+                        function t(u) {
+                            return u * u;
                         }
                         return t;
                     },
                     function() {
-                        function n(n) {
-                            return n * n;
+                        function n(u) {
+                            return u * u;
                         }
-                        return t(n);
+                        return u(n);
                     }
                 ];
             };

@@ -1337,10 +1337,10 @@ defun_reference: {
             }
             var a = h();
             var b = 2;
-            return a + b;
+            return a + 2;
             function h() {
                 y();
-                return b;
+                return 2;
             }
         }
     }
@@ -1429,6 +1429,7 @@ defun_inline_3: {
 
 defun_call: {
     options = {
+        evaluate: true,
         inline: true,
         reduce_funcs: true,
         reduce_vars: true,
@@ -1447,10 +1448,7 @@ defun_call: {
     }
     expect: {
         function f() {
-            return 4 + h(1) - h(4);
-            function h(a) {
-                return a;
-            }
+            return 1;
         }
     }
 }
@@ -2086,7 +2084,8 @@ redefine_arguments_1: {
             return typeof arguments;
         }
         function g() {
-            return "number";
+            var arguments = 42;
+            return typeof arguments;
         }
         function h(x) {
             var arguments = x;
@@ -2127,7 +2126,10 @@ redefine_arguments_2: {
         console.log(function() {
             var arguments;
             return typeof arguments;
-        }(), "number", function(x) {
+        }(), function() {
+            var arguments = 42;
+            return typeof arguments;
+        }(), function(x) {
             var arguments = x;
             return typeof arguments;
         }());
@@ -2166,7 +2168,10 @@ redefine_arguments_3: {
         console.log(function() {
             var arguments;
             return typeof arguments;
-        }(), "number", function(x) {
+        }(), function() {
+            var arguments = 42;
+            return typeof arguments;
+        }(), function(x) {
             var arguments = x;
             return typeof arguments;
         }());
@@ -7044,8 +7049,6 @@ issue_432_1: {
         toplevel: true
     }
     input: {
-        global.leak = () => null
-
         const selectServer = () => {
           selectServers();
         }
@@ -7074,8 +7077,6 @@ issue_432_2: {
         toplevel: true
     }
     input: {
-        global.leak = fn => null
-
         const selectServer = () => {
           selectServers();
         }
@@ -7123,6 +7124,97 @@ issue_443: {
             let one_name = get_one();
             console.log(one_name)
         }
+    }
+    expect_stdout: "PASS"
+}
+
+reduce_class_with_side_effects_in_extends: {
+    node_version = ">=12"
+    options = {
+        unused: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        let x = ""
+        class Y extends (x += "PA", Array) { }
+        class X extends (x += "SS", Array) { }
+        global.something = [new X(), new Y()]
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+reduce_class_with_side_effects_in_properties: {
+    node_version = ">=12"
+    options = {
+        unused: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        let x = ""
+        class Y {
+          static _ = (x += "PA")
+        }
+        class X {
+          static _ = (x += "SS")
+        }
+        global.something = [new X(), new Y()]
+        console.log(x)
+    }
+    expect_stdout: "PASS"
+}
+
+issue_581: {
+    options = {
+        unused: true,
+        reduce_vars: true,
+    }
+    input: {
+        class Yellow {
+            method() {
+                const errorMessage = "FAIL";
+
+                return applyCb(errorMessage, () => console.log(this.message()));
+            }
+
+            message() {
+                return "PASS";
+            }
+        }
+
+        function applyCb(errorMessage, callback) {
+            return callback(errorMessage)
+        }
+
+        (new Yellow()).method()
+    }
+    expect_stdout: "PASS"
+}
+
+issue_581_2: {
+    options = {
+        unused: true,
+        reduce_vars: true,
+    }
+    input: {
+        (function () {
+            return function(callback) {
+                return callback()
+            }(() => {
+                console.log(this.message)
+            });
+        }).call({ message: 'PASS' })
+    }
+    expect: {
+        (function () {
+            return function(callback) {
+                return callback()
+            }(() => {
+                console.log(this.message)
+            });
+        }).call({ message: 'PASS' })
     }
     expect_stdout: "PASS"
 }

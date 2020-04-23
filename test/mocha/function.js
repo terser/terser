@@ -208,9 +208,9 @@ describe("Function", function() {
             "console.log(...[1, 2], );",
             "!function(a, b, ){ console.log(a + b); }(3, 4, );",
         ].forEach(function(code) {
-            terser.parse(code, { ecma: 8 });
+            terser.parse(code, { ecma: 2017 });
             assert.throws(function() {
-                terser.parse(code, { ecma: 6 });
+                terser.parse(code, { ecma: 2015 });
             }, function(e) {
                 return e instanceof terser._JS_Parse_Error;
             }, code);
@@ -228,7 +228,7 @@ describe("Function", function() {
         ];
         var test = function(code) {
             return function() {
-                terser.parse(code, { ecma: 8 });
+                terser.parse(code, { ecma: 2017 });
             }
         }
         var error = function(e) {

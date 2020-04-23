@@ -2,7 +2,8 @@
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]
-  [![Linux Build][travis-image]][travis-url]
+  [![Travis Build][travis-image]][travis-url]
+  [![Opencollective financial contributors][opencollective-contributors]][opencollective-url]
 
 A JavaScript parser and mangler/compressor toolkit for ES6+.
 
@@ -22,6 +23,8 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/maste
 [downloads-url]: https://npmjs.org/package/terser
 [travis-image]: https://img.shields.io/travis/terser/terser/master.svg
 [travis-url]: https://travis-ci.org/terser/terser
+[opencollective-contributors]: https://opencollective.com/terser/tiers/badge.svg
+[opencollective-url]: https://opencollective.com/terser
 
 Why choose terser?
 ------------------
@@ -121,6 +124,7 @@ a double dash to prevent input files being used as option arguments:
                                 "@preserve". You can optionally pass one of the
                                 following arguments to this flag:
                                 - "all" to keep all comments
+                                - `false` to omit comments in the output
                                 - a valid JS RegExp like `/foo/` or `/^!/` to
                                 keep only matching comments.
                                 Note that currently not *all* comments can be
@@ -129,7 +133,7 @@ a double dash to prevent input files being used as option arguments:
                                 sequences.
     --config-file <file>        Read `minify()` options from JSON file.
     -d, --define <expr>[=value] Global definitions.
-    --ecma <version>            Specify ECMAScript release: 5, 6, 7 or 8.
+    --ecma <version>            Specify ECMAScript release: 5, 2015, 2016, etc.
     -e, --enclose [arg[:value]] Embed output in a big function with configurable
                                 arguments and values.
     --ie8                       Support non-standard Internet Explorer 8.
@@ -320,7 +324,7 @@ var x={o:3,t:1,calc:function(){return this.t+this.o},bar_:2};console.log(x.calc(
 In order for this to be of any use, we avoid mangling standard JS names by
 default (`--mangle-props builtins` to override).
 
-A default exclusion file is provided in `tools/domprops.json` which should
+A default exclusion file is provided in `tools/domprops.js` which should
 cover most standard JS and DOM properties defined in various browsers.  Pass
 `--mangle-props domprops` to disable this feature.
 
@@ -530,7 +534,7 @@ if (result.error) throw result.error;
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `6`, `7` or `8` to override `parse`,
+- `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override `parse`,
   `compress` and `output`'s `ecma` options.
 
 - `warnings` (default `false`) — pass `true` to return compressor warnings
@@ -607,7 +611,7 @@ if (result.error) throw result.error;
     sourceMap: {
         // source map options
     },
-    ecma: 5, // specify one of: 5, 6, 7 or 8
+    ecma: 5, // specify one of: 5, 2015, 2016, etc.
     keep_classnames: false,
     keep_fnames: false,
     ie8: false,
@@ -672,9 +676,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `bare_returns` (default `false`) -- support top level `return` statements
 
-- `ecma` (default: `8`) -- specify one of `5`, `6`, `7` or `8`. Note: this setting
+- `ecma` (default: `2017`) -- specify one of `5`, `2015`, `2016` or `2017`. Note: this setting
   is not presently enforced except for ES8 optional trailing commas in function
-  parameter lists and calls with `ecma` `8`.
+  parameter lists and calls with `ecma` `2017`.
 
 - `html5_comments` (default `true`)
 
@@ -682,9 +686,14 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 ## Compress options
 
-- `arrows` (default: `true`) -- Converts `()=>{return x}` to `()=>x`. Class
-  and object literal methods will also be converted to arrow expressions if
-  the resultant code is shorter: `m(){return x}` becomes `m:()=>x`.
+- `defaults` (default: `true`) -- Pass `false` to disable most default
+  enabled `compress` transforms. Useful when you only want to enable a few
+  `compress` options while disabling the rest.
+
+- `arrows` (default: `true`) -- Class and object literal methods are converted
+  will also be converted to arrow expressions if the resultant code is shorter:
+  `m(){return x}` becomes `m:()=>x`. To do this to regular ES5 functions which
+  don't use `this` or `arguments`, see `unsafe_arrows`.
 
 - `arguments` (default: `false`) -- replace `arguments[index]` with function
   parameter name whenever possible.
@@ -710,10 +719,6 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `dead_code` (default: `true`) -- remove unreachable code
 
-- `defaults` (default: `true`) -- Pass `false` to disable most default
-  enabled `compress` transforms. Useful when you only want to enable a few
-  `compress` options while disabling the rest.
-
 - `directives` (default: `true`) -- remove redundant or non-standard directives
 
 - `drop_console` (default: `false`) -- Pass `true` to discard calls to
@@ -723,7 +728,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `drop_debugger` (default: `true`) -- remove `debugger;` statements
 
-- `ecma` (default: `5`) -- Pass `6` or greater to enable `compress` options that
+- `ecma` (default: `5`) -- Pass `2015` or greater to enable `compress` options that
   will transform ES5 code into smaller ES6+ equivalent forms.
 
 - `evaluate` (default: `true`) -- attempt to evaluate constant expressions
@@ -845,7 +850,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   expressions to arrow functions if the function body does not reference `this`.
   Note: it is not always safe to perform this conversion if code relies on the
   the function having a `prototype`, which arrow functions lack.
-  This transform requires that the `ecma` compress option is set to `6` or greater.
+  This transform requires that the `ecma` compress option is set to `2015` or greater.
 
 - `unsafe_comps` (default: `false`) -- Reverse `<` and `<=` to `>` and `>=` to
   allow improved compression. This might be unsafe when an at least one of two
@@ -859,6 +864,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `unsafe_math` (default: `false`) -- optimize numerical expressions like
   `2 * x * 3` into `6 * x`, which may give imprecise floating point results.
+
+- `unsafe_symbols` (default: `false`) -- removes keys from native Symbol 
+  declarations, e.g `Symbol("kDog")` becomes `Symbol()`.
 
 - `unsafe_methods` (default: false) -- Converts `{ m: function(){} }` to
   `{ m(){} }`. `ecma` must be set to `6` or greater to enable this transform.
@@ -975,11 +983,12 @@ can pass additional arguments that control the code output:
   `do`, `while` or `with` statements, even if their body is a single
   statement.
 
-- `comments` (default `false`) -- pass `true` or `"all"` to preserve all
-  comments, `"some"` to preserve some comments, a regular expression string
+- `comments` (default `"some"`) -- by default it keeps JSDoc-style comments
+  that contain "@license" or "@preserve", pass `true` or `"all"` to preserve all
+  comments, `false` to omit comments in the output, a regular expression string
   (e.g. `/^!/`) or a function.
 
-- `ecma` (default `5`) -- set output printing mode. Set `ecma` to `6` or
+- `ecma` (default `5`) -- set output printing mode. Set `ecma` to `2015` or
   greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`.
   The `ecma` option will only change the output in direct control of the
   beautifier. Non-compatible features in the abstract syntax tree will still
@@ -992,6 +1001,9 @@ can pass additional arguments that control the code output:
 
 - `inline_script` (default `true`) -- escape HTML comments and the slash in
   occurrences of `</script>` in strings
+
+- `keep_numbers` (default `false`) -- keep number literals as it was in original code
+ (disables optimizations like converting `1000000` into `1e6`)
 
 - `keep_quoted_props` (default `false`) -- when turned on, prevents stripping
   quotes from property names in object literals.
@@ -1013,6 +1025,8 @@ can pass additional arguments that control the code output:
   - `1` -- always use single quotes
   - `2` -- always use double quotes
   - `3` -- always use the original quotes
+
+- `preserve_annotations` -- (default `false`) -- Preserve [Terser annotations](#annotations) in the output.
 
 - `safari10` (default `false`) -- set this option to `true` to work around
   the [Safari 10/11 await bug](https://bugs.webkit.org/show_bug.cgi?id=176685).
@@ -1192,6 +1206,30 @@ var result = Terser.minify(ast, {
 // result.code contains the minified code in string form.
 ```
 
+
+### Annotations
+
+Annotations in Terser are a way to tell it to treat a certain function call differently. The following annotations are available:
+
+ * `/*@__INLINE__*/` - forces a function to be inlined somewhere.
+ * `/*@__NOINLINE__*/` - Makes sure the called function is not inlined into the call site.
+ * `/*@__PURE__*/` - Marks a function call as pure. That means, it can safely be dropped.
+
+You can use either a `@` sign at the start, or a `#`.
+
+Here are some examples on how to use them:
+
+```javascript
+/*@__INLINE__*/
+function_always_inlined_here()
+
+/*#__NOINLINE__*/
+function_cant_be_inlined_into_here()
+
+const x = /*#__PURE__*/i_am_dropped_if_x_is_not_used()
+```
+
+
 ### Working with Terser AST
 
 Traversal and transformation of the native AST can be performed through
@@ -1283,6 +1321,7 @@ To allow for better optimizations, the compiler makes various assumptions:
 - Object properties can be added, removed and modified (not prevented with
   `Object.defineProperty()`, `Object.defineProperties()`, `Object.freeze()`,
   `Object.preventExtensions()` or `Object.seal()`).
+- `document.all` is not `== null`
 
 ### Build Tools and Adaptors using Terser
 

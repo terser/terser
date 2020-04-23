@@ -163,50 +163,6 @@ classes_with_expression_as_expand: {
     expect_exact: "class D extends(calls++,C){}"
 }
 
-classes_with_extend_side_effects: {
-    options = {
-        toplevel: true,
-        unused: true,
-    }
-    input: {
-        var x = "FAIL";
-        class A extends (x = "PASS", Object) {}
-        const log_return_obj = msg => {
-            console.log(msg)
-            return Object
-        }
-        class B extends log_return_obj("PASS") {}
-        console.log(x); // PASS
-    }
-    expect: {
-        var x = "FAIL";
-        x = "PASS", Object;
-        const log_return_obj = msg => {
-            console.log(msg)
-            return Object
-        }
-        log_return_obj("PASS");
-        console.log(x)
-    }
-    expect_stdout: [
-        "PASS",
-        "PASS"
-    ]
-}
-
-classes_without_extend_side_effects: {
-    options = {
-        toplevel: true,
-        unused: true,
-        passes: 2,
-    }
-    input: {
-        class Base {}
-        class Sub extends Base {}
-    }
-    expect: { }
-}
-
 classes_extending_classes_out_of_pure_iifes: {
     options = {
         toplevel: true,
@@ -261,10 +217,9 @@ import_statement: {
 
 import_all_statement: {
     input: {
-        import * from 'lel';
         import * as Lel from 'lel';
     }
-    expect_exact: 'import*from"lel";import*as Lel from"lel";'
+    expect_exact: 'import*as Lel from"lel";'
 }
 
 export_statement: {
@@ -958,7 +913,7 @@ issue_2349b: {
     options = {
         arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         passes: 3,
@@ -999,7 +954,7 @@ issue_2349b: {
 
 shorthand_keywords: {
     beautify = {
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         var foo = 0,
@@ -1705,9 +1660,10 @@ issue_2874_1: {
     expect: {
         (function () {
             let letters = ["A", "B", "C"];
-            return [2, 1, 0].map(key => (function (value) {
-                return () => console.log(value);
-            })(letters[key] + key));
+            return [2, 1, 0].map(key => {
+                return value = letters[key] + key, () => console.log(value);
+                var value;
+            });
         })().map(fn => fn());
     }
     expect_stdout: [
@@ -1749,10 +1705,8 @@ issue_2874_2: {
         (function() {
             let keys = [];
             [ 2, 1, 0 ].map(value => {
-                return keys.push(value), function() {
-                    var letters = [ "A", "B", "C" ], key = keys.shift();
-                    return () => console.log(letters[key] + key);
-                }();
+                return keys.push(value), letters = [ "A", "B", "C" ], key = keys.shift(), () => console.log(letters[key] + key);
+                var letters, key;
             }).map(fn => fn());
         })();
     }

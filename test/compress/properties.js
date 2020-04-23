@@ -31,7 +31,7 @@ dot_properties: {
         a.foo = "bar";
         a["if"] = "if";
         a["*"] = "asterisk";
-        a["\u0EB3"] = "unicode";
+        a.\u0EB3 = "unicode";
         a[""] = "whitespace";
         a["1_1"] = "foo";
     }
@@ -56,7 +56,7 @@ dot_properties_es5: {
         a.foo = "bar";
         a.if = "if";
         a["*"] = "asterisk";
-        a["\u0EB3"] = "unicode";
+        a.\u0EB3 = "unicode";
         a[""] = "whitespace";
     }
 }
@@ -844,7 +844,7 @@ issue_2208_6: {
 
 issue_2208_7: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         inline: true,
         properties: true,
         side_effects: true,
@@ -865,7 +865,7 @@ issue_2208_7: {
 
 issue_2208_8: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         inline: true,
         properties: true,
         side_effects: true,
@@ -923,7 +923,7 @@ issue_2208_9: {
 methods_keep_quoted_true: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     mangle = {
@@ -943,7 +943,7 @@ methods_keep_quoted_true: {
 methods_keep_quoted_false: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: true,
     }
     mangle = {
@@ -966,7 +966,7 @@ methods_keep_quoted_from_dead_code: {
         booleans: true,
         conditionals: true,
         dead_code: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         reduce_funcs: true,
         reduce_vars: true,
@@ -1010,7 +1010,7 @@ issue_2256: {
 
 issue_2321: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: false,
     }
     input: {
@@ -1041,7 +1041,7 @@ issue_2321: {
 
 unsafe_methods_regex: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         unsafe_methods: /^[A-Z1]/,
     }
     input: {
@@ -1966,7 +1966,7 @@ issue_2893_2: {
 
 issue_2893_3: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         join_vars: true,
     }
     input: {
@@ -1992,7 +1992,7 @@ issue_2893_3: {
 
 issue_2893_4: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         join_vars: true,
     }
     input: {
@@ -2078,7 +2078,7 @@ issue_2893_6: {
 
 issue_2893_7: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         join_vars: true,
     }
     input: {
@@ -2106,7 +2106,7 @@ issue_2893_7: {
 
 issue_2893_8: {
     options = {
-        ecma: 6,
+        ecma: 2015,
         join_vars: true,
     }
     input: {

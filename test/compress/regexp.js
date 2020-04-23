@@ -37,3 +37,29 @@ regexp_2: {
     }
     expect_stdout: '["PASS","pass"]'
 }
+
+unsafe_slashes: {
+    options = {
+        defaults: true,
+        unsafe: true
+    }
+    input: {
+        console.log(new RegExp("^https://"))
+    }
+    expect: {
+        console.log(/^https:\/\//)
+    }
+}
+
+inline_script: {
+    options = {}
+    beautify = {
+        inline_script: true,
+        comments: "all"
+    }
+    input: {
+        /* </script> */
+        /[</script>]/
+    }
+    expect_exact: '/* <\\/script> */\n/[<\\/script>]/;'
+}

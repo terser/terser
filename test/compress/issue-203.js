@@ -16,10 +16,10 @@ compress_new_function_with_destruct: {
     options = {
         unsafe: true,
         unsafe_Function: true,
-        ecma: 6
+        ecma: 2015
     }
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         new Function("aa, [bb]", 'return aa;');
@@ -39,10 +39,10 @@ compress_new_function_with_destruct_arrows: {
         unsafe_arrows: true,
         unsafe: true,
         unsafe_Function: true,
-        ecma: 6,
+        ecma: 2015,
     }
     beautify = {
-        ecma: 6
+        ecma: 2015
     }
     input: {
         new Function("aa, [bb]", 'return aa;');

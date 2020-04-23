@@ -212,7 +212,7 @@ no_leading_parentheses: {
 async_identifiers: {
     options = {
         unsafe_arrows: true,
-        ecma: 6,
+        ecma: 2015,
     }
     input: {
         var async = function(x){ console.log("async", x); };
@@ -235,7 +235,7 @@ async_identifiers: {
 async_function_expression: {
     options = {
         unsafe_arrows: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         side_effects: true,
     }
@@ -261,7 +261,7 @@ issue_27: {
     options = {
         unsafe_arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         unused: true,
     }
     input: {
@@ -282,7 +282,7 @@ issue_2105_1: {
     options = {
         unsafe_arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         inline: true,
         passes: 3,
         reduce_funcs: true,
@@ -367,7 +367,7 @@ issue_2136_2: {
     options = {
         arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         inline: true,
         side_effects: true,
         unused: true,
@@ -393,7 +393,7 @@ issue_2136_3: {
     options = {
         arrows: true,
         collapse_vars: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         passes: 3,
@@ -421,7 +421,7 @@ issue_2136_3: {
 call_args: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         reduce_funcs: true,
@@ -445,7 +445,7 @@ call_args: {
 call_args_drop_param: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         keep_fargs: false,
@@ -473,7 +473,7 @@ issue_485_crashing_1530: {
         arrows: true,
         conditionals: true,
         dead_code: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         side_effects: true,
@@ -492,7 +492,7 @@ issue_2084: {
         unsafe_arrows: true,
         collapse_vars: true,
         conditionals: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         inline: true,
         passes: 2,
@@ -564,7 +564,7 @@ async_object_literal: {
     options = {
         arrows: true,
         unsafe_arrows: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
     }
     input: {
@@ -588,7 +588,7 @@ async_object_literal: {
 issue_2271: {
     options = {
         arrows: true,
-        ecma: 6,
+        ecma: 2015,
         evaluate: true,
         unsafe_arrows: false,
     }
@@ -691,4 +691,17 @@ issue_3092b: {
     }
     expect_stdout: "PASS"
     node_version: ">=8"
+}
+
+object_parens: {
+    input: {
+        () => ({});
+        () => {return {}};
+        () => {return {}[0]};
+        () => {return {}?1:0};
+        () => {return ({}, 1)};
+        () => {return (1, 2)};
+        () => {foo()};
+    }
+    expect_exact: "()=>({});()=>({});()=>({}[0]);()=>({}?1:0);()=>(({},1));()=>(1,2);()=>{foo()};"
 }

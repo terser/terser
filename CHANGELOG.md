@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.6.12
+
+ - Fixed subtree comparison code, making it see that `[1,[2, 3]]` is different from `[1, 2, [3]]`
+ - Printing of unicode identifiers has been improved
+
 ## v4.6.11
 
  - Read unused classes' properties and method keys, to figure out if they use other variables.

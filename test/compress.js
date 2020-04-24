@@ -103,7 +103,6 @@ function run_compress_tests() {
                 if (test.input.body.segments.length == 1) {
                     try {
                         var input = U.parse(test.input.body.segments[0].value);
-                        var input_code = make_code(input, output_options);
                     } catch (ex) {
                         if (!test.expect_error) {
                             log("!!! Test is missing an `expect_error` clause\n", {});
@@ -133,6 +132,7 @@ function run_compress_tests() {
                         });
                         return false;
                     }
+                    var input_code = make_code(input, output_options);
                     var input_formatted = test.input.body.segments[0].value;
                 } else {
                     log("!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {

@@ -20,6 +20,13 @@ big_int_hex: {
     expect_exact: "0x20n;0xfabn;"
 }
 
+regression_big_int_hex_lower_with_e: {
+    input: {
+        0xaefen;
+    }
+    expect_exact: "0xaefen;"
+}
+
 big_int_binary: {
     input: {
         0b101n

@@ -16,6 +16,14 @@ unicode_parse_variables: {
     }
 }
 
+keep_quoted_unicode_props_es5: {
+    beautify = { ecma: 5 }
+    input: {
+        console.log({ "\uA7A0": "2139" });
+    }
+    expect_exact: 'console.log({"Ꞡ":"2139"});'
+}
+
 unicode_escaped_identifier_2015: {
     beautify = {ecma: 2015}
     input: {

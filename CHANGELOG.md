@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.6.13
+
+ - Fixed issue where ES5 object properties were being turned into ES6 object properties due to more lax unicode rules.
+ - Fixed parsing of BigInt with lowercase `e` in them.
+
 ## v4.6.12
 
  - Fixed subtree comparison code, making it see that `[1,[2, 3]]` is different from `[1, 2, [3]]`

@@ -13,6 +13,7 @@
   ],
   "repository": "https://github.com/terser/terser",
   "main": "dist/bundle.min.js",
+  "module": "main.js",
   "types": "tools/terser.d.ts",
   "bin": {
     "terser": "bin/terser"

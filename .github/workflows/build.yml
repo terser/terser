@@ -1,0 +1,43 @@
+name: Node.js CI
+
+on:
+    # Trigger the workflow on push or pull request,
+    # but only for the master branch
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [8.x, 10.x, 12.x, 14.x]
+
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - run: npm ci
+            - run: npm run lint
+            - run: npm test
+              env:
+                  TERSER_TEST_ALL: ${{ matrix.node-version == '12.x' || matrix.node-version == '14.x' }}
+
+    functional-tests:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js 12
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12
+            - run: npm ci
+            - run: test/functional.sh

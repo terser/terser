@@ -13,6 +13,11 @@
   ],
   "repository": "https://github.com/terser/terser",
   "main": "dist/bundle.min.js",
+  "module": "main.js",
+  "exports": {
+    "import": "main.js",
+    "require": "dist/bundle.min.js"
+  },
   "types": "tools/terser.d.ts",
   "bin": {
     "terser": "bin/terser"
@@ -20,6 +25,7 @@
   "files": [
     "bin",
     "dist",
+    "lib",
     "tools",
     "LICENSE",
     "README.md",

@@ -281,6 +281,7 @@ function run() {
                     result.enclosed = value.block_scope.enclosed;
                 }
                 value.CTOR.PROPS.forEach(function(prop) {
+                    if (prop === "block_scope") return;
                     result[prop] = value[prop];
                 });
                 return result;

@@ -251,7 +251,7 @@ function run_compress_tests() {
                 });
                 return false;
             }
-            if (test.expect_warnings) {
+            if (test.expect_warnings && !process.env.TEST_NO_COMPARE) {
                 U.AST_Node.warn_function = original_warn_function;
                 var expected_warnings = make_code(test.expect_warnings, {
                     beautify: false,

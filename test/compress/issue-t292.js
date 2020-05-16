@@ -28,14 +28,16 @@ no_flatten_with_arg_colliding_with_arg_value_inner_scope: {
         console.log(c("a"));
     }
     expect: {
-        var g=["a"];
+        var g = [ "a" ];
+
         function problem(arg) {
-            return g.indexOf(arg)
+            return g.indexOf(arg);
         }
+
         console.log(function(problem) {
-            return g[problem]
+            return g[problem];
         }(function(arg) {
-            return problem(arg)
+            return problem(arg);
         }("a")));
     }
     expect_stdout: "a"
@@ -73,9 +75,18 @@ no_flatten_with_var_colliding_with_arg_value_inner_scope: {
         console.log(c("a"));
     }
     expect: {
-        var g=["a"];
-        function problem(arg){return g.indexOf(arg)}
-        console.log(function(test){var problem=2*test;return console.log(problem),g[problem]}(function(arg){return problem(arg)}("a")));
+        var g = [ "a" ];
+
+        function problem(arg) {
+            return g.indexOf(arg);
+        }
+
+        console.log(function(test) {
+            var problem = 2 * test;
+            return console.log(problem), g[problem];
+        }(function(arg) {
+            return problem(arg);
+        }("a")));
     }
     expect_stdout: [
         "0",

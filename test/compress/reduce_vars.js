@@ -2363,7 +2363,7 @@ booleans: {
     expect: {
         console.log(function(a) {
             if (0);
-            switch (!1) {
+            switch (a) {
               case 0:
                 return "FAIL";
               case !1:
@@ -6972,7 +6972,14 @@ variables_collision_in_immediately_invoked_func: {
     expect: {
         !function () {
             window.used = function () {
-                return window.foo,function(A,c){return-1===c?A:$(A,c)}(window.bar,window.foobar)
+                return (
+                    window.foo,
+                    function (A, c) {
+                        return -1 === c
+                            ? A
+                            : $(A,c)
+                    }(window.bar, window.foobar)
+                );
             }.call(this);
         }();
     }
@@ -7217,4 +7224,33 @@ issue_581_2: {
         }).call({ message: 'PASS' })
     }
     expect_stdout: "PASS"
+}
+
+issue_639: {
+    input: {
+        const path = id({ extname: (name) => { console.log('PASS:' + name) } })
+
+        global.getExtFn = function getExtFn() {
+          return function(path) {
+            return getExt(path);
+          }
+        }
+
+        function getExt(name) {
+          let ext;
+          if (!ext) {
+            ext = getExtInner(name);
+          }
+          return ext;
+        }
+
+        function getExtInner(name) {
+          return path.extname(name);
+        }
+
+        getExtFn()('name')
+    }
+    expect_stdout: [
+        "PASS:name"
+    ]
 }

@@ -13,10 +13,18 @@
   ],
   "repository": "https://github.com/terser/terser",
   "main": "dist/bundle.min.js",
-  "module": "main.js",
+  "type": "module",
   "exports": {
-    "import": "main.js",
-    "require": "dist/bundle.min.js"
+    ".": {
+      "import": "./main.js",
+      "require": "./dist/bundle.min.js"
+    },
+    "./package": {
+      "default": "./package.json"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
   },
   "types": "tools/terser.d.ts",
   "bin": {
@@ -56,7 +64,7 @@
     "test:mocha": "npm run build -- --configTest && node test/mocha.js",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
-    "build": "rimraf dist/* && rollup --config --silent",
+    "build": "rimraf dist/bundle* && rollup --config --silent",
     "prepare": "npm run build",
     "postversion": "echo 'Remember to update the changelog!'"
   },

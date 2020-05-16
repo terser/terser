@@ -3,7 +3,7 @@ try {
     require("source-map-support").install();
 } catch (err) {}
 
-require("../tools/colorless-console");
+require("./colorless-console");
 var path = require("path");
 var fs = require("fs");
 var assert = require("assert");

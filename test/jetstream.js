@@ -9,7 +9,7 @@ if (Number((/([0-9]+)\./.exec(process.version) || [])[1]) >= 8) {
 
 var site = "https://browserbench.org/JetStream";
 if (typeof phantom == "undefined") {
-    require("../tools/exit");
+    require("../tools/exit.cjs");
     var args = process.argv.slice(2);
     var debug = args.indexOf("--debug");
     if (debug >= 0) {

@@ -6,7 +6,7 @@
 // bin/terser s.js -c && bin/terser s.js -c passes=3 && bin/terser s.js -c passes=3 -m
 // cat s.js | node && node s.js && bin/terser s.js -c | node && bin/terser s.js -c passes=3 | node && bin/terser s.js -c passes=3 -m | node
 
-require("../tools/exit");
+require("../tools/exit.cjs");
 
 var Terser = require("..");
 var randomBytes = require("crypto").randomBytes;

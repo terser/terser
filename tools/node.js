@@ -1,4 +1,4 @@
-import { minify } from "../lib/minify";
+import { minify } from "../lib/minify.js";
 
 export function default_options() {
     const defs = {};

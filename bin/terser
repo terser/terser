@@ -4,7 +4,7 @@
 
 "use strict";
 
-require("../tools/exit.js");
+require("../tools/exit.cjs");
 
 var fs = require("fs");
 var info = require("../package.json");

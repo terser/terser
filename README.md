@@ -819,10 +819,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   occasions the default sequences limit leads to very slow compress times in which
   case a value of `20` or less is recommended.
 
-- `side_effects` (default: `true`) -- Pass `false` to disable potentially dropping
-  function calls marked as "pure".  A function call is marked as "pure" if a comment
-  annotation `/*@__PURE__*/` or `/*#__PURE__*/` immediately precedes the call. For
-  example: `/*@__PURE__*/foo();`
+- `side_effects` (default: `true`) -- Remove expressions which have no side effects
+  and whose results aren't used.
 
 - `switches` (default: `true`) -- de-duplicate and remove unreachable `switch` branches
 

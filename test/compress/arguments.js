@@ -358,3 +358,20 @@ duplicate_parameter_with_arguments: {
     }
     expect_stdout: "foo baz"
 }
+
+issue_687: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+
+    input: {
+        function shouldBePure() {
+            return arguments.length
+        }
+        shouldBePure();
+    }
+    expect: {
+        // *Poof!*
+    }
+}

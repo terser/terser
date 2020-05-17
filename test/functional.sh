@@ -2,8 +2,9 @@
 
 set -exuo pipefail
 
+workdir=$(pwd)
 # for tests that need terser-under-test path and @terser/require-terser
-export TERSER_PATH="$CWD"
+export TERSER_PATH="$workdir"
 
 # build terser
 npm run build -- --configTest

@@ -3,7 +3,7 @@
 set -exuo pipefail
 
 # for tests that need terser-under-test path and @terser/require-terser
-TERSER_PATH="$(pwd)"
+export TERSER_PATH="$CWD"
 
 # build terser
 npm run build -- --configTest
@@ -19,5 +19,4 @@ git pull
 npm ci
 (cd node_modules && rm -rf terser && ln -s ../.. terser)
 
-# source the script so it can use our environment (for nvm, which is a shell function, to work)
-TERSER_PATH="$TERSER_PATH" ./run-all.sh
+npm t

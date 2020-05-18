@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.7.0
+
+ - A bug was fixed where an arrow function would have the wrong size
+ - `arguments` object is now considered safe to retrieve properties from (useful for `length`, or `0`) even when `pure_getters` is not set.
+ - Fixed erroneous `const` declarations without value (which is invalid) in some corner cases when using `collapse_vars`.
+
 ## v4.6.13
 
  - Fixed issue where ES5 object properties were being turned into ES6 object properties due to more lax unicode rules.

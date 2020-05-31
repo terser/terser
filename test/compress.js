@@ -177,21 +177,7 @@ function run_compress_tests() {
                 });
                 return false;
             }
-            var options = U.defaults(test.options, {
-                warnings: false
-            });
-            var warnings_emitted = [];
-            var original_warn_function = U.AST_Node.warn_function;
-            if (test.expect_warnings) {
-                U.AST_Node.warn_function = function(text) {
-                    text = text.replace(/:(\d+),/, function(_, $1) {
-                        var relative_line = Number($1) - input.start.line;
-                        return ":" + relative_line + ",";
-                    });
-                    warnings_emitted.push("WARN: " + text);
-                };
-                if (!options.warnings) options.warnings = true;
-            }
+            var options = U.defaults(test.options, { });
             if (test.mangle && test.mangle.properties && test.mangle.properties.keep_quoted) {
                 var quoted_props = test.mangle.properties.reserved;
                 if (!Array.isArray(quoted_props)) quoted_props = [];
@@ -250,25 +236,6 @@ function run_compress_tests() {
                     error: ex.stack,
                 });
                 return false;
-            }
-            if (test.expect_warnings && !process.env.TEST_NO_COMPARE) {
-                U.AST_Node.warn_function = original_warn_function;
-                var expected_warnings = make_code(test.expect_warnings, {
-                    beautify: false,
-                    quote_style: 2, // force double quote to match JSON
-                });
-                warnings_emitted = warnings_emitted.map(function(input) {
-                    return input.split(process.cwd() + path.sep).join("").split(path.sep).join("/");
-                });
-                var actual_warnings = JSON.stringify(warnings_emitted);
-                if (expected_warnings != actual_warnings) {
-                    log("!!! failed\n---INPUT---\n{input}\n---EXPECTED WARNINGS---\n{expected_warnings}\n---ACTUAL WARNINGS---\n{actual_warnings}\n\n", {
-                        input: input_formatted,
-                        expected_warnings: JSON.parse(expected_warnings).join("\n"),
-                        actual_warnings: JSON.parse(actual_warnings).join("\n"),
-                    });
-                    return false;
-                }
             }
             if (test.expect_stdout
                 && (!test.node_version || semver.satisfies(process.version, test.node_version))
@@ -416,7 +383,6 @@ function parse_test(file) {
                         "expect",
                         "expect_error",
                         "expect_exact",
-                        "expect_warnings",
                         "expect_stdout",
                         "node_version",
                         "reminify",

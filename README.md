@@ -166,8 +166,6 @@ a double dash to prevent input files being used as option arguments:
                                        `//# sourceMappingURL`.
     --timings                   Display operations run time on STDERR.
     --toplevel                  Compress and/or mangle variables in top level scope.
-    --verbose                   Print diagnostic messages.
-    --warn                      Print warning messages.
     --wrap <name>               Embed everything in a big function, making the
                                 “exports” and “global” variables available. You
                                 need to pass an argument to this option to
@@ -504,16 +502,6 @@ console.log(result.code);
 // alert(10);"
 ```
 
-To produce warnings:
-```javascript
-var code = "function f(){ var u; return 2 + 3; }";
-var options = { warnings: true };
-var result = Terser.minify(code, options);
-console.log(result.error);    // runtime error, `undefined` in this case
-console.log(result.warnings); // [ 'Dropping unused variable u [0:1,18]' ]
-console.log(result.code);     // function f(){return 5}
-```
-
 An error example:
 ```javascript
 var result = Terser.minify({"foo.js" : "if (0) else console.log(1);"});
@@ -531,9 +519,6 @@ if (result.error) throw result.error;
 
 - `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override `parse`,
   `compress` and `output`'s `ecma` options.
-
-- `warnings` (default `false`) — pass `true` to return compressor warnings
-  in `result.warnings`. Use the value `"verbose"` for more detailed warnings.
 
 - `parse` (default `{}`) — pass an object if you wish to specify some
   additional [parse options](#parse-options).
@@ -614,7 +599,6 @@ if (result.error) throw result.error;
     nameCache: null, // or specify a name cache object
     safari10: false,
     toplevel: false,
-    warnings: false,
 }
 ```
 
@@ -881,9 +865,6 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `unused` (default: `true`) -- drop unreferenced functions and variables (simple
   direct variable assignments do not count as references unless set to `"keep_assign"`)
 
-- `warnings` (default: `false`) -- display warnings when dropping unreachable
-  code or unused declarations etc.
-
 ## Mangle options
 
 - `eval` (default `false`) -- Pass `true` to mangle names visible in scopes
@@ -1100,10 +1081,6 @@ if (DEBUG) {
 ```
 
 You can specify nested constants in the form of `--define env.DEBUG=false`.
-
-Terser will warn about the condition being always false and about dropping
-unreachable code; for now there is no option to turn off only this specific
-warning, you can pass `warnings=false` to turn off *all* warnings.
 
 Another way of doing that is to declare your globals as constants in a
 separate file and include it into the build.  For example you can have a

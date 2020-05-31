@@ -69,7 +69,6 @@ export interface CompressOptions {
     unsafe_regexp?: boolean;
     unsafe_undefined?: boolean;
     unused?: boolean;
-    warnings?: boolean;
 }
 
 export enum InlineFunctions {
@@ -152,7 +151,6 @@ export interface MinifyOptions {
     safari10?: boolean;
     sourceMap?: boolean | SourceMapOptions;
     toplevel?: boolean;
-    warnings?: boolean | 'verbose';
 }
 
 export interface MinifyOutput {
@@ -160,7 +158,6 @@ export interface MinifyOutput {
     code?: string;
     error?: Error;
     map?: RawSourceMap | string;
-    warnings?: string[];
 }
 
 export interface SourceMapOptions {
@@ -210,7 +207,6 @@ export class AST_Node {
     static documentation: string;
     static propdoc?: Record<string, string>;
     static expressions?: AST_Node[];
-    static warn?: (text: string, props: any) => void;
     static from_mozilla_ast?: (node: AST_Node) => any;
     walk: (visitor: TreeWalker) => void;
     print_to_string: (options?: OutputOptions) => string;

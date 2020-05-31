@@ -214,26 +214,6 @@ describe("minify", function() {
             }).code + "\n";
             assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));
         });
-        it("Should warn for missing inline source map", function() {
-            var warn_function = Terser.AST_Node.warn_function;
-            var warnings = [];
-            Terser.AST_Node.warn_function = function(txt) {
-                warnings.push(txt);
-            };
-            try {
-                var result = Terser.minify(read("./test/input/issue-1323/sample.js"), {
-                    mangle: false,
-                    sourceMap: {
-                        content: "inline"
-                    }
-                });
-                assert.strictEqual(result.code, "var bar=function(bar){return bar};");
-                assert.strictEqual(warnings.length, 1);
-                assert.strictEqual(warnings[0], "inline source map not found");
-            } finally {
-                Terser.AST_Node.warn_function = warn_function;
-            }
-        });
         it("Should fail with multiple input and inline source map", function() {
             var result = Terser.minify([
                 read("./test/input/issue-520/input.js"),

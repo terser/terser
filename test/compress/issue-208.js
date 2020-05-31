@@ -63,12 +63,4 @@ mixed: {
         f(0);
         x = 0;
     }
-    expect_warnings: [
-        "WARN: global_defs ENV redefined [test/compress/issue-208.js:1,14]",
-        "WARN: global_defs FOO redefined [test/compress/issue-208.js:2,12]",
-        "WARN: global_defs FOO redefined [test/compress/issue-208.js:4,10]",
-        "WARN: global_defs DEBUG redefined [test/compress/issue-208.js:5,8]",
-        "WARN: global_defs DEBUG redefined [test/compress/issue-208.js:6,8]",
-        "WARN: global_defs DEBUG redefined [test/compress/issue-208.js:7,8]",
-    ]
 }

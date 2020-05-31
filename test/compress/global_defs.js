@@ -140,10 +140,6 @@ mixed: {
         CONFIG.VALUE.FOO = "bar";
         console.log(CONFIG);
     }
-    expect_warnings: [
-        "WARN: global_defs CONFIG.VALUE redefined [test/compress/global_defs.js:4,22]",
-        "WARN: global_defs CONFIG.VALUE redefined [test/compress/global_defs.js:7,8]",
-    ]
 }
 
 issue_1801: {

@@ -1,6 +1,5 @@
 var assert = require("assert");
 var exec = require("child_process").exec;
-var execSync = require("child_process").execSync;
 var fs = require("fs");
 var {assertCodeWithInlineMapEquals} = require("./utils");
 
@@ -178,21 +177,6 @@ describe("bin/terser", function() {
             if (err) throw err;
 
             assertCodeWithInlineMapEquals(stdout, read("test/input/issue-520/output.js"));
-            done();
-        });
-    });
-    it("Should warn for missing inline source map", function(done) {
-        var command = tersercmd + " test/input/issue-1323/sample.js --source-map content=inline,url=inline";
-
-        exec(command, function (err, stdout, stderr) {
-            if (err) throw err;
-
-            assertCodeWithInlineMapEquals(stdout, [
-                "var bar=function(){function foo(bar){return bar}return foo}();",
-                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QvaW5wdXQvaXNzdWUtMTMyMy9zYW1wbGUuanMiXSwibmFtZXMiOlsiYmFyIiwiZm9vIl0sIm1hcHBpbmdzIjoiQUFBQSxJQUFJQSxJQUFNLFdBQ04sU0FBU0MsSUFBS0QsS0FDVixPQUFPQSxJQUdYLE9BQU9DLElBTEQifQ==",
-                "",
-            ].join("\n"));
-            assert.strictEqual(stderr, "WARN: inline source map not found\n");
             done();
         });
     });

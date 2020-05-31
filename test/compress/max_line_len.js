@@ -14,9 +14,6 @@ too_short: {
         'd:a(),',
         'e:"foo"}}',
     ]
-    expect_warnings: [
-        "WARN: Output exceeds 10 characters"
-    ]
 }
 
 just_enough: {
@@ -33,7 +30,5 @@ just_enough: {
         'return{c:42,',
         'd:a(),e:"foo"}',
         '}',
-    ]
-    expect_warnings: [
     ]
 }

@@ -35,12 +35,6 @@ non_hoisted_function_after_return: {
             function baz() { return 8 }
         }
     }
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:4,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:7,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:10,12]",
-        "WARN: Dropping unused function UnusedFunction [test/compress/issue-1034.js:11,21]"
-    ]
 }
 
 non_hoisted_function_after_return_2a: {
@@ -59,7 +53,6 @@ non_hoisted_function_after_return_2a: {
         passes: 2,
         side_effects: true,
         unused: true,
-        warnings: "verbose",
     }
     input: {
         function foo(x) {
@@ -84,21 +77,6 @@ non_hoisted_function_after_return_2a: {
             }
         }
     }
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:4,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:4,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:7,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:7,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:9,12]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:9,12]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:12,12]",
-        "WARN: Dropping unused variable a [test/compress/issue-1034.js:4,20]",
-        "WARN: Dropping unused variable b [test/compress/issue-1034.js:7,20]",
-        "WARN: Dropping unused variable c [test/compress/issue-1034.js:9,16]",
-        "WARN: Dropping unused function nope [test/compress/issue-1034.js:11,21]",
-        "WARN: pass 0: last_count: Infinity, count: 22",
-        "WARN: pass 1: last_count: 22, count: 18",
-    ]
 }
 
 non_hoisted_function_after_return_2b: {
@@ -138,13 +116,6 @@ non_hoisted_function_after_return_2b: {
             function bar(x) { return 7 - x; }
         }
     }
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:6,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:6,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:8,12]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:8,12]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:12,12]",
-    ]
 }
 
 non_hoisted_function_after_return_strict: {
@@ -189,12 +160,6 @@ non_hoisted_function_after_return_strict: {
         console.log(foo(0), foo(1));
     }
     expect_stdout: "8 7"
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:5,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:8,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:11,12]",
-        "WARN: Dropping unused function UnusedFunction [test/compress/issue-1034.js:12,21]",
-    ]
 }
 
 non_hoisted_function_after_return_2a_strict: {
@@ -213,7 +178,6 @@ non_hoisted_function_after_return_2a_strict: {
         passes: 2,
         side_effects: true,
         unused: true,
-        warnings: "verbose",
     }
     input: {
         "use strict";
@@ -243,21 +207,6 @@ non_hoisted_function_after_return_2a_strict: {
         console.log(foo(0), foo(1));
     }
     expect_stdout: "5 6"
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:5,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:5,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:8,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:8,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:10,12]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:10,12]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:13,12]",
-        "WARN: Dropping unused variable a [test/compress/issue-1034.js:5,20]",
-        "WARN: Dropping unused variable b [test/compress/issue-1034.js:8,20]",
-        "WARN: Dropping unused variable c [test/compress/issue-1034.js:10,16]",
-        "WARN: Dropping unused function nope [test/compress/issue-1034.js:12,21]",
-        "WARN: pass 0: last_count: Infinity, count: 33",
-        "WARN: pass 1: last_count: 33, count: 29",
-    ]
 }
 
 non_hoisted_function_after_return_2b_strict: {
@@ -302,11 +251,4 @@ non_hoisted_function_after_return_2b_strict: {
         console.log(foo(0), foo(1));
     }
     expect_stdout: "5 6"
-    expect_warnings: [
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:7,16]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:7,16]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:9,12]",
-        "WARN: Declarations in unreachable code! [test/compress/issue-1034.js:9,12]",
-        "WARN: Dropping unreachable code [test/compress/issue-1034.js:13,12]",
-    ]
 }

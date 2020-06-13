@@ -258,8 +258,9 @@ keep_numbers: {
         const huge = 1000000000001;
         const big = 100000000001;
         const fractional = 100.2300200;
+        const numeric_separators = 1_000_000_000_000;
     }
-    expect_exact: "const exp=1000000000000;const negativeExp=0.00000001;const huge=1000000000001;const big=100000000001;const fractional=100.2300200;"
+    expect_exact: "const exp=1000000000000;const negativeExp=0.00000001;const huge=1000000000001;const big=100000000001;const fractional=100.2300200;const numeric_separators=1_000_000_000_000;"
 }
 
 keep_numbers_in_properties_as_is: {
@@ -270,4 +271,34 @@ keep_numbers_in_properties_as_is: {
         var Foo = { 1000000: 80000000000 }
     }
     expect_exact: "var Foo={1000000:80000000000};"
+}
+
+numeric_separators: {
+    input: {
+        const one = 1_000;
+        const two = 1_000_000;
+        const bin = 0b0101_0101;
+        const oct = 0o0123_4567;
+        const hex = 0xDEAD_BEEF;
+        const fractional = 1_000.000_100;
+        const identifier = _1000;
+        const negate_identifier = -_1000;
+    }
+    expect_exact: "const one=1e3;const two=1e6;const bin=85;const oct=342391;const hex=3735928559;const fractional=1000.0001;const identifier=_1000;const negate_identifier=-_1000;"
+}
+
+numeric_separator_trailing_underscore: {
+    input: `const trailing = 1000_`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Numeric separators are not allowed at the end of numeric literals"
+    })
+}
+
+numeric_separator_double_underscore: {
+    input: `const double = 1__000`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Only one underscore is allowed as numeric separator"
+    })
 }

@@ -1,7 +1,7 @@
-var assert = require("assert");
-var exec = require("child_process").exec;
-var fs = require("fs");
-var {assertCodeWithInlineMapEquals} = require("./utils");
+import assert from "assert";
+import { exec } from "child_process";
+import fs from "fs";
+import { assertCodeWithInlineMapEquals } from "./utils.js";
 
 function read(path) {
     return fs.readFileSync(path, "utf8");
@@ -9,7 +9,7 @@ function read(path) {
 
 describe("bin/terser", function() {
     var tersercmd = '"' + process.argv[0] + '" bin/terser';
-    it("Should be able to filter comments correctly with `--comments all`", function (done) {
+    it("Should be able to filter comments correctly with `--comments all`", function(done) {
         var command = tersercmd + ' test/input/comments/filter.js --comments all';
 
         exec(command, function (err, stdout) {
@@ -19,7 +19,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should be able to filter comments correctly with `--comment <RegExp>`", function (done) {
+    it("Should be able to filter comments correctly with `--comment <RegExp>`", function(done) {
         this.timeout(10 * 1000);
         var command = tersercmd + ' test/input/comments/filter.js --comments /r/';
 
@@ -30,7 +30,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should be able to filter comments correctly with just `--comment`", function (done) {
+    it("Should be able to filter comments correctly with just `--comment`", function(done) {
         var command = tersercmd + ' test/input/comments/filter.js --comments';
 
         exec(command, function (err, stdout) {
@@ -40,7 +40,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should append source map to output when using --source-map url=inline", function (done) {
+    it("Should append source map to output when using --source-map url=inline", function(done) {
         var command = tersercmd + " test/input/issue-1323/sample.js --source-map url=inline";
 
         exec(command, function (err, stdout) {
@@ -51,7 +51,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should not append source map to output when not using --source-map url=inline", function (done) {
+    it("Should not append source map to output when not using --source-map url=inline", function(done) {
         var command = tersercmd + ' test/input/issue-1323/sample.js';
 
         exec(command, function (err, stdout) {
@@ -90,7 +90,7 @@ describe("bin/terser", function() {
             child.stdin.end(read("test/input/source-maps/input.js"));
         }, 1000);
     });
-    it("Should work with --keep-fnames (mangle only)", function (done) {
+    it("Should work with --keep-fnames (mangle only)", function(done) {
         var command = tersercmd + ' test/input/issue-1431/sample.js --keep-fnames -m';
 
         exec(command, function (err, stdout) {
@@ -100,7 +100,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with --keep-fnames (mangle & compress)", function (done) {
+    it("Should work with --keep-fnames (mangle & compress)", function(done) {
         var command = tersercmd + ' test/input/issue-1431/sample.js --keep-fnames -m -c unused=false';
 
         exec(command, function (err, stdout) {
@@ -110,7 +110,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with keep_fnames under mangler options", function (done) {
+    it("Should work with keep_fnames under mangler options", function(done) {
         var command = tersercmd + ' test/input/issue-1431/sample.js -m keep_fnames=true';
 
         exec(command, function (err, stdout) {
@@ -120,7 +120,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with --define (simple)", function (done) {
+    it("Should work with --define (simple)", function(done) {
         var command = tersercmd + ' test/input/global_defs/simple.js --define D=5 -c';
 
         exec(command, function (err, stdout) {
@@ -130,7 +130,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with --define (nested)", function (done) {
+    it("Should work with --define (nested)", function(done) {
         var command = tersercmd + ' test/input/global_defs/nested.js --define C.D=5,C.V=3 -c';
 
         exec(command, function (err, stdout) {
@@ -140,7 +140,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with --define (AST_Node)", function (done) {
+    it("Should work with --define (AST_Node)", function(done) {
         var command = tersercmd + ' test/input/global_defs/simple.js --define console.log=stdout.println -c';
 
         exec(command, function (err, stdout) {
@@ -150,7 +150,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with `--beautify`", function (done) {
+    it("Should work with `--beautify`", function(done) {
         var command = tersercmd + ' test/input/issue-1482/input.js -b';
 
         exec(command, function (err, stdout) {
@@ -160,7 +160,7 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with `--beautify braces`", function (done) {
+    it("Should work with `--beautify braces`", function(done) {
         var command = tersercmd + ' test/input/issue-1482/input.js -b braces';
 
         exec(command, function (err, stdout) {

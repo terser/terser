@@ -1,28 +1,29 @@
-const assert = require("assert");
-const Terser = require("../../");
-const { _PURE, _INLINE, _NOINLINE, _has_annotation } = Terser;
+import assert from "assert";
+import { parse } from "../../lib/parse.js";
+import { _PURE, _INLINE, _NOINLINE } from "../../lib/ast.js";
+import { has_annotation } from "../../lib/utils/index.js";
 
 describe("annotations", () => {
     describe("#__PURE__", function() {
         it("Should add a 'pure' annotation to the AST node", () => {
-            const ast = Terser.parse("/*@__PURE__*/foo.bar.baz();impure()");
+            const ast = parse("/*@__PURE__*/foo.bar.baz();impure()");
             const [{body: call}, {body: call2}] = ast.body;
-            assert(_has_annotation(call, _PURE));
-            assert(!_has_annotation(call2, _PURE));
+            assert(has_annotation(call, _PURE));
+            assert(!has_annotation(call2, _PURE));
         });
     });
     describe("#__INLINE__", () => {
         it("Adds an annotation", () => {
-            const ast = Terser.parse("/*@__INLINE__*/foo();");
+            const ast = parse("/*@__INLINE__*/foo();");
             const [{body: call}] = ast.body;
-            assert(_has_annotation(call, _INLINE));
+            assert(has_annotation(call, _INLINE));
         });
     });
     describe("#__NOINLINE__", () => {
         it("Adds an annotation", () => {
-            const ast = Terser.parse("/*@__NOINLINE__*/foo();");
+            const ast = parse("/*@__NOINLINE__*/foo();");
             const [{body: call}] = ast.body;
-            assert(_has_annotation(call, _NOINLINE));
+            assert(has_annotation(call, _NOINLINE));
         });
     });
 });

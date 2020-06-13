@@ -3,7 +3,7 @@ function decodeMap(mapData) {
     return JSON.parse(buffer.toString());
 }
 
-function assertCodeWithInlineMapEquals(actual, expected) {
+export function assertCodeWithInlineMapEquals(actual, expected) {
     if (actual === expected) return;
     const [actualCode, actualSourceMapData] = actual.split('//# sourceMappingURL=', 2);
     const [expectedCode, expectedSourceMapData] = expected.split('//# sourceMappingURL=', 2);
@@ -12,4 +12,8 @@ function assertCodeWithInlineMapEquals(actual, expected) {
     assert.deepStrictEqual({code: actualCode, map: actualSourceMap}, {code: expectedCode, map: expectedSourceMap});
 }
 
-module.exports.assertCodeWithInlineMapEquals = assertCodeWithInlineMapEquals;
+export async function for_each_async (array, async_fn) {
+    for (const item of array) {
+        await async_fn(item)
+    }
+}

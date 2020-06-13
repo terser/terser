@@ -1,6 +1,6 @@
-var assert = require("assert");
-var exec = require("child_process").exec;
-var readFileSync = require("fs").readFileSync;
+import assert from "assert";
+import { exec } from "child_process";
+import { readFileSync } from "fs";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -159,7 +159,7 @@ describe("bin/terser (2)", function() {
             done();
         });
     });
-    it("should read files list from config file", (done) => {
+    it("should read files list from config file", done => {
         var command = tersercmd + " --config-file test/input/config-file/cf.json";
         exec(command, function(err, stdout, stderr) {
             if (err) throw err;
@@ -167,7 +167,7 @@ describe("bin/terser (2)", function() {
             done();
         });
     });
-    it("should parse regex options correctly", (done) => {
+    it("should parse regex options correctly", done => {
         var command = tersercmd + " --toplevel -m keep_fnames=/1$/ --mangle-props regex=/^_/ test/input/issue-483/input.js";
         exec(command, function(err, stdout, stderr) {
             if (err) throw err;

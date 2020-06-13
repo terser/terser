@@ -1,6 +1,6 @@
-var assert = require("assert");
-var exec = require("child_process").exec;
-var path = require("path");
+import assert from "assert";
+import { exec } from "child_process";
+import path from "path";
 
 describe("bin/terser with input file globs", function() {
     var tersercmd = '"' + process.argv[0] + '" bin/terser';

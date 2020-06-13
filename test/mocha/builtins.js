@@ -1,13 +1,13 @@
-var Terser = require("../../");
-var assert = require("assert");
+import { minify } from "../../main.js";
+import assert from "assert";
 
 describe("builtins", function() {
-    it ("Should not mangle builtins", function() {
+    it("Should not mangle builtins", async function() {
         var test = "function foo(something){\n" +
             "    return [Object,Array,Function,Number,String,Boolean,Error,Math,Date,RegExp,Symbol,Map,Promise,Proxy,Reflect,Set,WeakMap,WeakSet,Float32Array,something];\n" +
             "};";
 
-        var result = Terser.minify(test, {parse: {bare_returns: true}}).code;
+        var result = (await minify(test, {parse: {bare_returns: true}})).code;
 
         assert.strictEqual(result.indexOf("something"), -1);
 

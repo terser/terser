@@ -169,7 +169,7 @@ if (filesList) {
     simple_glob(filesList).forEach(function(name) {
         files[convert_path(name)] = read_file(name);
     });
-    run();
+    run_cli().catch(handle_cli_error);
 } else {
     var chunks = [];
     process.stdin.setEncoding("utf8");
@@ -177,7 +177,7 @@ if (filesList) {
         chunks.push(chunk);
     }).on("end", function() {
         files = [ chunks.join("") ];
-        run();
+        run_cli().catch(handle_cli_error);
     });
     process.stdin.resume();
 }
@@ -186,7 +186,7 @@ function convert_ast(fn) {
     return Terser.AST_Node.from_mozilla_ast(Object.keys(files).reduce(fn, null));
 }
 
-function run() {
+async function run_cli() {
     var content = program.sourceMap && program.sourceMap.content;
     if (content && content !== "inline") {
         options.sourceMap.content = read_file(content, content);
@@ -216,7 +216,7 @@ function run() {
     } catch (ex) {
         fatal(ex);
     }
-    var result = Terser.minify(files, options);
+    var result = await Terser.minify(files, options);
     if (result.error) {
         var ex = result.error;
         if (ex.name == "SyntaxError") {
@@ -279,7 +279,7 @@ function run() {
             return value;
         }, 2));
     } else if (program.output == "spidermonkey") {
-        print(JSON.stringify(Terser.minify(result.code, {
+        print(JSON.stringify(await Terser.minify(result.code, {
             compress: false,
             mangle: false,
             output: {
@@ -301,6 +301,15 @@ function run() {
     if (result.timings) for (var phase in result.timings) {
         print_error("- " + phase + ": " + result.timings[phase].toFixed(3) + "s");
     }
+}
+
+function handle_cli_error(error) {
+    if (typeof error === "function") {
+        // Thrown by tools/exit
+        return;
+    }
+    console.error(error);
+    process.exit(1);
 }
 
 function fatal(message) {

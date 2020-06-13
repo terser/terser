@@ -1,8 +1,10 @@
-var assert = require("assert");
-var terser = require("../node");
+import assert from "assert";
+import { minify } from "../../main.js";
+import { parse } from "../../lib/parse.js";
+import * as AST from "../../lib/ast.js";
 
 describe("Export/Import", function() {
-    it("Should parse export directives", function() {
+    it("Should parse export directives", async function() {
         var inputs = [
             ['export * from "a.js"', ['*'], "a.js"],
             ['export {A} from "a.js"', ['A'], "a.js"],
@@ -12,7 +14,7 @@ describe("Export/Import", function() {
         ];
 
         function test(code) {
-            return terser.parse(code);
+            return parse(code);
         }
 
         function extractNames(symbols) {
@@ -27,31 +29,31 @@ describe("Export/Import", function() {
             var ast = test(inputs[i][0]);
             var names = inputs[i][1];
             var filename = inputs[i][2];
-            assert(ast instanceof terser.AST_Toplevel);
+            assert(ast instanceof AST.AST_Toplevel);
             assert.equal(ast.body.length, 1);
             var st = ast.body[0];
-            assert(st instanceof terser.AST_Export);
+            assert(st instanceof AST.AST_Export);
             var actualNames = extractNames(st.exported_names);
             assert.deepEqual(actualNames, names);
             assert.equal(st.module_name.value, filename);
         }
     });
 
-    it("Should not parse invalid uses of export", function() {
-        assert.equal(terser.minify("export").error.message, "Unexpected token: eof (undefined)");
-        assert.equal(terser.minify("export;").error.message, "Unexpected token: punc (;)");
-        assert.equal(terser.minify("export();").error.message, "Unexpected token: keyword (export)");
-        assert.equal(terser.minify("export(1);").error.message, "Unexpected token: keyword (export)");
-        assert.equal(terser.minify("var export;").error.message, "Name expected");
-        assert.equal(terser.minify("var export = 1;").error.message, "Name expected");
-        assert.equal(terser.minify("function f(export){}").error.message, "Invalid function parameter");
+    it("Should not parse invalid uses of export", async function() {
+        assert.equal((await minify("export")).error.message, "Unexpected token: eof (undefined)");
+        assert.equal((await minify("export;")).error.message, "Unexpected token: punc (;)");
+        assert.equal((await minify("export();")).error.message, "Unexpected token: keyword (export)");
+        assert.equal((await minify("export(1);")).error.message, "Unexpected token: keyword (export)");
+        assert.equal((await minify("var export;")).error.message, "Name expected");
+        assert.equal((await minify("var export = 1;")).error.message, "Name expected");
+        assert.equal((await minify("function f(export){}")).error.message, "Invalid function parameter");
     });
 
-    it("Should not parse invalid uses of import", function() {
-        assert.equal(terser.minify("import").error.message, "Unexpected token: eof (undefined)");
-        assert.equal(terser.minify("import;").error.message, "Unexpected token: punc (;)");
-        assert.equal(terser.minify("var import;").error.message, "Unexpected token: import");
-        assert.equal(terser.minify("var import = 1;").error.message, "Unexpected token: import");
-        assert.equal(terser.minify("function f(import){}").error.message, "Unexpected token: name (import)");
+    it("Should not parse invalid uses of import", async function() {
+        assert.equal((await minify("import")).error.message, "Unexpected token: eof (undefined)");
+        assert.equal((await minify("import;")).error.message, "Unexpected token: punc (;)");
+        assert.equal((await minify("var import;")).error.message, "Unexpected token: import");
+        assert.equal((await minify("var import = 1;")).error.message, "Unexpected token: import");
+        assert.equal((await minify("function f(import){}")).error.message, "Unexpected token: name (import)");
     });
 });

@@ -1,11 +1,13 @@
-var assert = require("assert");
-var fs = require("fs");
-var acorn = require("acorn");
-var astring = require("astring");
-var Terser = require("../..");
+import assert from "assert";
+import fs from "fs";
+import acorn from "acorn";
+import astring from "astring";
+import * as AST from "../../lib/ast.js";
+import { parse } from "../../lib/parse.js";
+import { minify } from "../../main.js";
 
 describe("spidermonkey export/import sanity test", function() {
-    it("Should judge between directives and strings correctly on import", function() {
+    it("Should judge between directives and strings correctly on import", async function() {
         var tests = [
             {
                 input: '"use strict";;"use sloppy"',
@@ -72,10 +74,10 @@ describe("spidermonkey export/import sanity test", function() {
         var counter_directives;
         var counter_strings;
 
-        var checkWalker = new Terser.TreeWalker(node => {
-            if (node instanceof Terser.AST_String) {
+        var checkWalker = new AST.TreeWalker(node => {
+            if (node instanceof AST.AST_String) {
                 counter_strings++;
-            } else if (node instanceof Terser.AST_Directive) {
+            } else if (node instanceof AST.AST_Directive) {
                 counter_directives++;
             }
         });
@@ -84,9 +86,9 @@ describe("spidermonkey export/import sanity test", function() {
             counter_directives = 0;
             counter_strings = 0;
 
-            var ast = Terser.parse(tests[i].input);
+            var ast = parse(tests[i].input);
             var moz_ast = ast.to_mozilla_ast();
-            var from_moz_ast = Terser.AST_Node.from_mozilla_ast(moz_ast);
+            var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
 
             from_moz_ast.walk(checkWalker);
 
@@ -95,53 +97,53 @@ describe("spidermonkey export/import sanity test", function() {
         }
     });
 
-    it("should output and parse ES6 code correctly", function() {
+    it("should output and parse ES6 code correctly", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var terser_ast = Terser.parse(code);
+        var terser_ast = parse(code);
         var moz_ast = terser_ast.to_mozilla_ast();
-        var from_moz_ast = Terser.AST_Node.from_mozilla_ast(moz_ast);
+        var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             terser_ast.print_to_string()
         );
     });
 
-    it("should be capable of importing from acorn", function() {
+    it("should be capable of importing from acorn", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var terser_ast = Terser.parse(code);
+        var terser_ast = parse(code);
         var moz_ast = acorn.parse(code, {sourceType: 'module', ecmaVersion: 2018});
-        var from_moz_ast = Terser.AST_Node.from_mozilla_ast(moz_ast);
+        var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             terser_ast.print_to_string()
         );
     });
 
-    it("should correctly minify AST from from_moz_ast with default destructure", () => {
+    it("should correctly minify AST from from_moz_ast with default destructure", async () => {
         const code = "const { a = 1, b: [b = 2] = []} = {}";
         const acornAst = acorn.parse(code, { locations: true });
-        const terserAst = Terser.AST_Node.from_mozilla_ast(acornAst);
-        const result = Terser.minify(terserAst, {ecma: 2015});
+        const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
+        const result = await minify(terserAst, {ecma: 2015});
         assert.strictEqual(
             result.code,
             "const{a=1,b:[b=2]=[]}={};"
         );
     });
 
-    it("should correctly minify AST from from_moz_ast with default function parameter", () => {
+    it("should correctly minify AST from from_moz_ast with default function parameter", async () => {
         const code = "function run(x = 2){}";
         const acornAst = acorn.parse(code, { locations: true });
-        const terserAst = Terser.AST_Node.from_mozilla_ast(acornAst);
-        const result = Terser.minify(terserAst);
+        const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
+        const result = await minify(terserAst);
         assert.strictEqual(
             result.code,
             "function run(x=2){}"
         );
     });
 
-    it("should produce an AST compatible with astring", function() {
+    it("should produce an AST compatible with astring", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
-        var terser_ast = Terser.parse(code);
+        var terser_ast = parse(code);
         var moz_ast = terser_ast.to_mozilla_ast();
         var generated = astring.generate(moz_ast);
         var parsed = acorn.parse(generated, {
@@ -149,7 +151,7 @@ describe("spidermonkey export/import sanity test", function() {
             ecmaVersion: 2018
         });
         assert.strictEqual(
-            Terser.AST_Node.from_mozilla_ast(parsed).print_to_string(),
+            AST.AST_Node.from_mozilla_ast(parsed).print_to_string(),
             terser_ast.print_to_string()
         );
     });
@@ -163,13 +165,13 @@ describe("spidermonkey export/import sanity test", function() {
         return ast;
     }
 
-    it("should produce correct ASTs which acorn can't read yet", function () {
+    it("should produce correct ASTs which acorn can't read yet", async function() {
         const code = `
             x ?? y
         `;
 
         assert.deepEqual(
-            remove_loc(Terser.parse(code).to_mozilla_ast()).body[0].expression,
+            remove_loc(parse(code).to_mozilla_ast()).body[0].expression,
             {
                 type: "LogicalExpression",
                 operator: "??",

@@ -1,16 +1,8 @@
-var assert = require("assert");
-var terser = require("../node");
+import assert from "assert";
+import { parse } from "../../lib/parse.js";
 
 describe("EOF", function() {
-    it("Should test code for at least throwing syntax error when incomplete", function() {
-        var error = function(e) {
-            return e instanceof terser._JS_Parse_Error;
-        }
-        var parse = function(test) {
-            return function() {
-                terser.parse(test);
-            }
-        }
+    it("Should test code for at least throwing syntax error when incomplete", async function() {
         // Chops off 1 char at a time until limit or start of string is reached
         // The passed code must still be valid when unchopped
         var test_eol = function(input, chopLimit) {
@@ -18,11 +10,11 @@ describe("EOF", function() {
                 chopLimit = input.length - 1;
             }
 
-            assert.doesNotThrow(parse(input), "Expected valid code for \n" + input);
+            assert.doesNotThrow(() => parse(input), "Expected valid code for \n" + input);
 
             for (var i = input.length - 1; chopLimit > 0; chopLimit--, i--) {
                 var code = input.substr(0, i);
-                assert.throws(parse(code), error, code);
+                assert.throws(() => parse(code), Error, code);
             }
         }
 

@@ -1,4 +1,5 @@
-var vm = require("vm");
+import vm from "vm";
+import "./colorless-console.js";
 
 function safe_log(arg, level) {
     if (arg) switch (typeof arg) {
@@ -42,7 +43,8 @@ var FUNC_TOSTRING = [
     "    }",
     "}();",
 ]).join("\n");
-exports.run_code = function(code, prepend_code = '') {
+
+export function run_code(code, prepend_code = '') {
     var stdout = "";
     var original_write = process.stdout.write;
     process.stdout.write = function(chunk) {
@@ -62,8 +64,8 @@ exports.run_code = function(code, prepend_code = '') {
             },
             id: x => x,
             leak: () => {},
-            pass: () => { global.console.log("PASS") },
-            fail: () => { global.console.log("FAIL") }
+            pass: () => { global.console.log("PASS"); },
+            fail: () => { global.console.log("FAIL"); }
         };
         global.global = global;
         vm.runInNewContext([
@@ -78,7 +80,8 @@ exports.run_code = function(code, prepend_code = '') {
     } finally {
         process.stdout.write = original_write;
     }
-};
-exports.same_stdout = function(expected, actual) {
+}
+
+export function same_stdout(expected, actual) {
     return typeof expected == typeof actual && strip_func_ids(expected) == strip_func_ids(actual);
-};
+}

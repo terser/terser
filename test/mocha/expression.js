@@ -1,8 +1,8 @@
-var assert = require("assert");
-var terser = require("../node");
+import assert from "assert";
+import { parse } from "../../lib/parse.js";
 
 describe("Expression", function() {
-    it("Should not allow the first exponentiation operator to be prefixed with an unary operator", function() {
+    it("Should not allow the first exponentiation operator to be prefixed with an unary operator", async function() {
         var tests = [
             "+5 ** 3",
             "-5 ** 3",
@@ -15,18 +15,11 @@ describe("Expression", function() {
         ];
 
         var fail = function(e) {
-            return e instanceof terser._JS_Parse_Error &&
-                /^Unexpected token: operator \((?:[!+~-]|void|typeof|delete)\)/.test(e.message);
-        }
-
-        var exec = function(test) {
-            return function() {
-                terser.parse(test);
-            }
+            return /^Unexpected token: operator \((?:[!+~-]|void|typeof|delete)\)/.test(e.message);
         }
 
         for (var i = 0; i < tests.length; i++) {
-            assert.throws(exec(tests[i]), fail, tests[i]);
+            assert.throws(() => parse(tests[i]), fail, tests[i]);
         }
     });
 });

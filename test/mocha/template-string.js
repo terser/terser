@@ -1,8 +1,9 @@
-var assert = require("assert");
-var terser = require("../node");
+import assert from "assert";
+import "../../main.js";
+import { parse } from "../../lib/parse.js";
 
 describe("Template string", function() {
-    it("Should not accept invalid sequences", function() {
+    it("Should not accept invalid sequences", async function() {
         var tests = [
             // Stress invalid expression
             "var foo = `Hello ${]}`",
@@ -17,31 +18,30 @@ describe("Template string", function() {
 
         var exec = function(test) {
             return function() {
-                terser.parse(test);
-            }
+                parse(test);
+            };
         };
 
         var fail = function(e) {
-            return e instanceof terser._JS_Parse_Error
-                && /^Unexpected token: /.test(e.message);
+            return /^Unexpected token: /.test(e.message);
         };
 
-        for (var i = 0; i < tests.length; i++) {
-            assert.throws(exec(tests[i]), fail, tests[i]);
+        for (const test of tests) {
+            assert.throws(() => parse(test), fail, test);
         }
     });
-    it("Should process all line terminators as LF", function() {
+    it("Should process all line terminators as LF", async function() {
         [
             "`a\rb`",
             "`a\nb`",
             "`a\r\nb`",
         ].forEach(function(code) {
-            assert.strictEqual(terser.parse(code).print_to_string(), "`a\\nb`;");
+            assert.strictEqual(parse(code).print_to_string(), "`a\\nb`;");
         });
     });
-    it("Should not throw on extraneous escape (#231)", function() {
+    it("Should not throw on extraneous escape (#231)", async function() {
         assert.doesNotThrow(function() {
-            terser.parse("`\\a`");
+            parse("`\\a`");
         });
     });
 });

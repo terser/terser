@@ -79,3 +79,19 @@ class_duplication_2: {
     }
 }
 
+pure_prop_assignment_for_classes: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        class A {}
+        A.staticProp = "A"
+
+        class B {
+            static get danger() { }
+        }
+        B.staticProp = ""
+    }
+    expect: { }
+}

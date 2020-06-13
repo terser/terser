@@ -1,5 +1,5 @@
-var assert = require("assert");
-var Terser = require("../node");
+import assert from "assert";
+import { parse } from "../../lib/parse.js";
 
 describe("Getters and setters", function() {
     it("Should not accept operator symbols as getter/setter name", function() {
@@ -62,17 +62,8 @@ describe("Getters and setters", function() {
             return results;
         };
 
-        var testCase = function(data) {
-            return function() {
-                Terser.parse(data.code);
-            };
-        };
-
-        var fail = function(data) {
-            return function (e) {
-                return e instanceof Terser._JS_Parse_Error &&
-                    /^Unexpected token: /.test(e.message);
-            };
+        var fail = function(e) {
+            return /^Unexpected token: /.test(e.message);
         };
 
         var errorMessage = function(data) {
@@ -82,7 +73,7 @@ describe("Getters and setters", function() {
         var tests = generator();
         for (var i = 0; i < tests.length; i++) {
             var test = tests[i];
-            assert.throws(testCase(test), fail(test), errorMessage(test));
+            assert.throws(() => parse(test.code), fail, errorMessage(test));
         }
     });
 

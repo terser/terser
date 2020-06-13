@@ -1,8 +1,9 @@
-var assert = require("assert");
-var Terser = require("../..");
+import assert from "assert";
+import "../../main.js";
+import { parse } from "../../lib/parse.js";
 
 describe("operator", function() {
-    it("Should handle mixing of ++/+/--/- correctly", function() {
+    it("Should handle mixing of ++/+/--/- correctly", async function() {
         this.timeout(10000);
 
         function evaluate(exp) {
@@ -16,11 +17,11 @@ describe("operator", function() {
                         [ "++b", "--b", "b", "b--", "b++" ].forEach(function(b) {
                             var exp = [p, a, o, q, b].join(" ");
                             var orig = evaluate(exp);
-                            var terser = evaluate(Terser.parse(exp).print_to_string());
+                            var terser = evaluate(parse(exp).print_to_string());
                             assert.strictEqual(orig.a, terser.a);
                             assert.strictEqual(orig.b, terser.b);
                             assert.strictEqual(orig.c, terser.c);
-                            var beautify = evaluate(Terser.parse(exp).print_to_string({
+                            var beautify = evaluate(parse(exp).print_to_string({
                                 beautify: true
                             }));
                             assert.strictEqual(orig.a, beautify.a);
@@ -32,7 +33,7 @@ describe("operator", function() {
             });
         });
     });
-    it("Should remove extraneous spaces", function() {
+    it("Should remove extraneous spaces", async function() {
         [
             [ "++a + ++b", "++a+ ++b" ],
             [ "++a + --b", "++a+--b" ],
@@ -485,7 +486,7 @@ describe("operator", function() {
             [ "- a++ - - b--", "-a++- -b--" ],
             [ "- a++ - - b++", "-a++- -b++" ],
         ].forEach(function(exp) {
-            assert.strictEqual(Terser.parse(exp[0]).print_to_string(), exp[1] + ";");
+            assert.strictEqual(parse(exp[0]).print_to_string(), exp[1] + ";");
         });
     });
 });

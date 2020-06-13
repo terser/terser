@@ -1,62 +1,66 @@
-var assert = require("assert");
-var Terser = require("../node");
+import assert from "assert";
+import { minify } from "../../main.js";
+import * as AST from "../../lib/ast.js";
+import { parse, tokenizer } from "../../lib/parse.js";
+import { OutputStream } from "../../lib/output.js";
+import { for_each_async } from "./utils.js";
 
 describe("Directives", function() {
-    it("Should allow tokenizer to store directives state", function() {
-        var tokenizer = Terser._tokenizer("", "foo.js");
+    it("Should allow tokenizer to store directives state", async function() {
+        var tok = tokenizer("", "foo.js");
         // Stack level 0
-        assert.strictEqual(tokenizer.has_directive("use strict"), false);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        assert.strictEqual(tok.has_directive("use strict"), false);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 2
-        tokenizer.push_directives_stack();
-        tokenizer.push_directives_stack();
-        tokenizer.add_directive("use strict");
-        assert.strictEqual(tokenizer.has_directive("use strict"), true);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.push_directives_stack();
+        tok.push_directives_stack();
+        tok.add_directive("use strict");
+        assert.strictEqual(tok.has_directive("use strict"), true);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 3
-        tokenizer.push_directives_stack();
-        tokenizer.add_directive("use strict");
-        tokenizer.add_directive("use asm");
-        assert.strictEqual(tokenizer.has_directive("use strict"), true);
-        assert.strictEqual(tokenizer.has_directive("use asm"), true);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.push_directives_stack();
+        tok.add_directive("use strict");
+        tok.add_directive("use asm");
+        assert.strictEqual(tok.has_directive("use strict"), true);
+        assert.strictEqual(tok.has_directive("use asm"), true);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 2
-        tokenizer.pop_directives_stack();
-        assert.strictEqual(tokenizer.has_directive("use strict"), true);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.pop_directives_stack();
+        assert.strictEqual(tok.has_directive("use strict"), true);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 3
-        tokenizer.push_directives_stack();
-        tokenizer.add_directive("use thing");
-        tokenizer.add_directive("use\\\nasm");
-        assert.strictEqual(tokenizer.has_directive("use strict"), true);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false); // Directives are strict!
-        assert.strictEqual(tokenizer.has_directive("use thing"), true);
+        tok.push_directives_stack();
+        tok.add_directive("use thing");
+        tok.add_directive("use\\\nasm");
+        assert.strictEqual(tok.has_directive("use strict"), true);
+        assert.strictEqual(tok.has_directive("use asm"), false); // Directives are strict!
+        assert.strictEqual(tok.has_directive("use thing"), true);
         // Stack level 2
-        tokenizer.pop_directives_stack();
-        assert.strictEqual(tokenizer.has_directive("use strict"), true);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.pop_directives_stack();
+        assert.strictEqual(tok.has_directive("use strict"), true);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 1
-        tokenizer.pop_directives_stack();
-        assert.strictEqual(tokenizer.has_directive("use strict"), false);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.pop_directives_stack();
+        assert.strictEqual(tok.has_directive("use strict"), false);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
         // Stack level 0
-        tokenizer.pop_directives_stack();
-        assert.strictEqual(tokenizer.has_directive("use strict"), false);
-        assert.strictEqual(tokenizer.has_directive("use asm"), false);
-        assert.strictEqual(tokenizer.has_directive("use thing"), false);
+        tok.pop_directives_stack();
+        assert.strictEqual(tok.has_directive("use strict"), false);
+        assert.strictEqual(tok.has_directive("use asm"), false);
+        assert.strictEqual(tok.has_directive("use thing"), false);
     });
-    it("Should know which strings are directive and which ones are not", function() {
-        var test_directive = function(tokenizer, test) {
+    it("Should know which strings are directive and which ones are not", async function() {
+        var test_directive = function(tok, test) {
             test.directives.map(function(directive) {
-                assert.strictEqual(tokenizer.has_directive(directive), true, "Didn't found directive `" + directive + "` at the end of `" + test.input + '`');
+                assert.strictEqual(tok.has_directive(directive), true, "Didn't found directive `" + directive + "` at the end of `" + test.input + '`');
             });
             test.non_directives.map(function(fake_directive) {
-                assert.strictEqual(tokenizer.has_directive(fake_directive), false, "Unexpectedly found directive `" + fake_directive + "` at the end of `" + test.input + '`');
+                assert.strictEqual(tok.has_directive(fake_directive), false, "Unexpectedly found directive `" + fake_directive + "` at the end of `" + test.input + '`');
             });
         }
 
@@ -125,17 +129,16 @@ describe("Directives", function() {
 
         for (var i = 0; i < tests.length; i++) {
             // Fail parser deliberately to get state at failure
-            var tokenizer = Terser._tokenizer(tests[i].input + "]", "foo.js");
+            var tok = tokenizer(tests[i].input + "]", "foo.js");
 
             try {
-                var parser = Terser.parse(tokenizer);
+                var parser = parse(tok);
                 throw new Error("Expected parser to fail");
             } catch (e) {
-                assert.strictEqual(e instanceof Terser._JS_Parse_Error, true);
                 assert.strictEqual(e.message, "Unexpected token: punc (])");
             }
 
-            test_directive(tokenizer, tests[i]);
+            test_directive(tok, tests[i]);
         }
         
         [
@@ -228,22 +231,21 @@ describe("Directives", function() {
                 [ "use\nstrict", "use \nstrict", "use asm" ]
             ],
         ].forEach(function(test) {
-            var tokenizer = Terser._tokenizer(test[0] + "]", "foo.js");
+            var tok = tokenizer(test[0] + "]", "foo.js");
             assert.throws(function() {
-                Terser.parse(tokenizer);
+                parse(tok);
             }, function(e) {
-                return e instanceof Terser._JS_Parse_Error
-                    && e.message === "Unexpected token: punc (])"
+                return e.message === "Unexpected token: punc (])"
             }, test[0]);
             test[1].forEach(function(directive) {
-                assert.strictEqual(tokenizer.has_directive(directive), true, directive + " in " + test[0]);
+                assert.strictEqual(tok.has_directive(directive), true, directive + " in " + test[0]);
             });
             test[2].forEach(function(fake_directive) {
-                assert.strictEqual(tokenizer.has_directive(fake_directive), false, fake_directive + " in " + test[0]);
+                assert.strictEqual(tok.has_directive(fake_directive), false, fake_directive + " in " + test[0]);
             });
         });
     });
-    it("Should test EXPECT_DIRECTIVE RegExp", function() {
+    it("Should test EXPECT_DIRECTIVE RegExp", async function() {
         [
             [ "", true ],
             [ "'test';", true ],
@@ -254,14 +256,14 @@ describe("Directives", function() {
             [ "'tests';\n\n", true ],
             [ "\n\n\"use strict\";\n\n", true ],
         ].forEach(function(test) {
-            var out = Terser.OutputStream();
+            var out = OutputStream();
             out.print(test[0]);
             out.print_string("", null, true);
             assert.strictEqual(out.get() === test[0] + ';""', test[1], test[0]);
         });
     });
-    it("Should only print 2 semicolons spread over 2 lines in beautify mode", function() {
-        var result = Terser.minify([
+    it("Should only print 2 semicolons spread over 2 lines in beautify mode", async function() {
+        var result = await minify([
             '"use strict";',
             "'use strict';",
             '"use strict";',
@@ -285,8 +287,8 @@ describe("Directives", function() {
             "console.log('use strict');"
         ].join("\n\n"));
     });
-    it("Should not add double semicolons in non-scoped block statements to avoid strings becoming directives", function() {
-        [
+    it("Should not add double semicolons in non-scoped block statements to avoid strings becoming directives", async function() {
+        await for_each_async([
             [
                 '{"use\x20strict"}',
                 '{"use strict"}'
@@ -303,8 +305,8 @@ describe("Directives", function() {
                 'if(1){"use\x20strict"} else {"use strict"}',
                 'if(1){"use strict"}else{"use strict"}'
             ]
-        ].forEach(function(test) {
-            var result = Terser.minify(test[0], {
+        ], async function(test) {
+            var result = await minify(test[0], {
                 compress: false,
                 mangle: false
             });
@@ -312,8 +314,8 @@ describe("Directives", function() {
             assert.strictEqual(result.code, test[1], test[0]);
         });
     });
-    it("Should add double semicolon when relying on automatic semicolon insertion", function() {
-        var result = Terser.minify('"use strict";"use\\x20strict";', {
+    it("Should add double semicolon when relying on automatic semicolon insertion", async function() {
+        var result = await minify('"use strict";"use\\x20strict";', {
             compress: false,
             output: {
                 semicolons: false
@@ -322,8 +324,8 @@ describe("Directives", function() {
         if (result.error) throw result.error;
         assert.strictEqual(result.code, '"use strict";;"use strict"\n');
     });
-    it("Should check quote style of directives", function() {
-        [
+    it("Should check quote style of directives", async function() {
+        await for_each_async([
             // 0. Prefer double quotes, unless string contains more double quotes than single quotes
             [
                 '"testing something";',
@@ -420,8 +422,8 @@ describe("Directives", function() {
                 3,
                 "'\"use strict\"';",
             ],
-        ].forEach(function(test) {
-            var result = Terser.minify(test[0], {
+        ], async function(test) {
+            var result = await minify(test[0], {
                 compress: false,
                 output: {
                     quote_style: test[1]
@@ -431,8 +433,8 @@ describe("Directives", function() {
             assert.strictEqual(result.code, test[2], test[0] + " using mode " + test[1]);
         });
     });
-    it("Should be able to compress without side effects", function() {
-        [
+    it("Should be able to compress without side effects", async function() {
+        await for_each_async([
             [
                 '"use strict";"use strict";"use strict";"use foo";"use strict";;"use sloppy";doSomething("foo");',
                 '"use strict";doSomething("foo");'
@@ -463,13 +465,13 @@ describe("Directives", function() {
                 'function f(){ "use \\n"; }',
                 'function f(){}'
             ],
-        ].forEach(function(test) {
-            var result = Terser.minify(test[0]);
+        ], async function(test) {
+            var result = await minify(test[0]);
             if (result.error) throw result.error;
             assert.strictEqual(result.code, test[1], test[0]);
         });
     });
-    it("Should be detect implicit usages of strict mode from tree walker", function() {
+    it("Should be detect implicit usages of strict mode from tree walker", async function() {
         var tests = [
             {
                 input: 'class foo {bar(){_check_}}',
@@ -485,8 +487,8 @@ describe("Directives", function() {
 
         var i = 0;
         var checked;
-        var checkWalker = new Terser.TreeWalker(function(node, descend) {
-            if (node instanceof Terser.AST_Symbol && node.name === "_check_") {
+        var checkWalker = new AST.TreeWalker(function(node, descend) {
+            if (node instanceof AST.AST_Symbol && node.name === "_check_") {
                 checked = true;
                 for (var j = 0; j < tests[i].directives.length; j++) {
                     assert.ok(checkWalker.has_directive(tests[i].directives[j]),
@@ -502,7 +504,7 @@ describe("Directives", function() {
         for (; i < tests.length; i++) {
             // Do tests - iterate the ast in each test - check only when _check_ occurs - fail when no _check_ has been found
             checked = false;
-            var ast = Terser.parse(tests[i].input);
+            var ast = parse(tests[i].input);
             ast.walk(checkWalker);
             if (!checked) {
                 throw "No _check_ symbol found in " + tests[i].input;

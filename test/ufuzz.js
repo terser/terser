@@ -6,11 +6,18 @@
 // bin/terser s.js -c && bin/terser s.js -c passes=3 && bin/terser s.js -c passes=3 -m
 // cat s.js | node && node s.js && bin/terser s.js -c | node && bin/terser s.js -c passes=3 | node && bin/terser s.js -c passes=3 -m | node
 
-require("../tools/exit.cjs");
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
+import { randomBytes } from "crypto";
 
-var Terser = require("..");
-var randomBytes = require("crypto").randomBytes;
-var sandbox = require("./sandbox");
+import "../tools/exit.cjs";
+import * as sandbox from "./sandbox.js";
+import { minify } from "../main.js";
+import { defaults } from "../lib/utils/index.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 var MAX_GENERATED_TOPLEVELS_PER_RUN = 1;
 var MAX_GENERATION_RECURSION_DEPTH = 12;
@@ -45,8 +52,8 @@ var num_iterations = +process.argv[2] || 1/0;
 var verbose = false; // log every generated test
 var verbose_interval = false; // log every 100 generated tests
 var use_strict = false;
-var catch_redef = require.main === module;
-var generate_directive = require.main === module;
+var catch_redef = true;
+var generate_directive = true;
 for (var i = 2; i < process.argv.length; ++i) {
     switch (process.argv[i]) {
       case '-v':
@@ -115,7 +122,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         println('--without-stmt <statement names>: a comma delimited black list of statements never to generate');
         println('List of accepted statement names: ' + Object.keys(STMT_ARG_TO_ID));
         println('** Terser fuzzer exiting **');
-        return 0;
+        process.exit();
       default:
         // first arg may be a number.
         if (i > 2 || !parseInt(process.argv[i], 10)) throw new Error('Unknown argument[' + process.argv[i] + ']; see -h for help');
@@ -953,12 +960,6 @@ function createVarName(maybe, dontStore) {
     return '';
 }
 
-if (require.main !== module) {
-    exports.createTopLevelCode = createTopLevelCode;
-    exports.num_iterations = num_iterations;
-    return;
-}
-
 function println(msg) {
     if (typeof msg != "undefined") process.stdout.write(msg);
     process.stdout.write("\n");
@@ -969,8 +970,8 @@ function errorln(msg) {
     process.stderr.write("\n");
 }
 
-function try_beautify(code, result, printfn) {
-    var beautified = Terser.minify(code, {
+async function try_beautify(code, result, printfn) {
+    var beautified = await minify(code, {
         compress: false,
         mangle: false,
         output: {
@@ -990,30 +991,35 @@ function try_beautify(code, result, printfn) {
     printfn(code);
 }
 
-var default_options = Terser.default_options();
+var default_options = defaults();
 
-function log_suspects(minify_options, component) {
+async function log_suspects(minify_options, component) {
     var options = component in minify_options ? minify_options[component] : true;
     if (!options) return;
     if (typeof options != "object") options = {};
     var defs = default_options[component];
-    var suspects = Object.keys(defs).filter(function(name) {
+    var suspects = [];
+
+    for (const name of Object.keys(defs)) {
         var flip = name == "keep_fargs";
         if (flip ? name in options : (name in options ? options : defs)[name]) {
             var m = JSON.parse(JSON.stringify(minify_options));
             var o = JSON.parse(JSON.stringify(options));
             o[name] = flip;
             m[component] = o;
-            var result = Terser.minify(original_code, m);
+            var result = await minify(original_code, m);
             if (result.error) {
                 errorln("Error testing options." + component + "." + name);
                 errorln(result.error.stack);
             } else {
                 var r = sandbox.run_code(result.code);
-                return sandbox.same_stdout(original_result, r);
+                const same_stdout = sandbox.same_stdout(original_result, r);
+                if (same_stdout) {
+                    suspects.push(name);
+                }
             }
         }
-    });
+    }
     if (suspects.length > 0) {
         errorln("Suspicious " + component + " options:");
         suspects.forEach(function(name) {
@@ -1023,10 +1029,10 @@ function log_suspects(minify_options, component) {
     }
 }
 
-function log_rename(options) {
+async function log_rename(options) {
     var m = JSON.parse(JSON.stringify(options));
     m.rename = false;
-    var result = Terser.minify(original_code, m);
+    var result = await minify(original_code, m);
     if (result.error) {
         errorln("Error testing options.rename");
         errorln(result.error.stack);
@@ -1040,18 +1046,18 @@ function log_rename(options) {
     }
 }
 
-function log(options) {
+async function log(options) {
     if (!ok) errorln('\n\n\n\n\n\n!!!!!!!!!!\n\n\n');
     errorln("//=============================================================");
     if (!ok) errorln("// !!!!!! Failed... round " + round);
     errorln("// original code");
-    try_beautify(original_code, original_result, errorln);
+    await try_beautify(original_code, original_result, errorln);
     errorln();
     errorln();
     errorln("//-------------------------------------------------------------");
     if (typeof terser_code == "string") {
         errorln("// uglified code");
-        try_beautify(terser_code, terser_result, errorln);
+        await try_beautify(terser_code, terser_result, errorln);
         errorln();
         errorln();
         errorln("original result:");
@@ -1073,8 +1079,10 @@ function log(options) {
     errorln(JSON.stringify(options, null, 2));
     errorln();
     if (!ok && typeof terser_code == "string") {
-        Object.keys(default_options).forEach(log_suspects.bind(null, options));
-        log_rename(options);
+        for (const key of Object.keys(default_options)) {
+            await log_suspects(options);
+        }
+        await log_rename(options);
         errorln("!!!!!! Failed... round " + round);
     }
 }
@@ -1083,41 +1091,51 @@ var fallback_options = [ JSON.stringify({
     compress: false,
     mangle: false
 }) ];
-var minify_options = require("./ufuzz.json").map(JSON.stringify);
+var minify_options = JSON.parse(readFileSync(path.join(__dirname, 'ufuzz.json'), 'utf-8')).map(JSON.stringify);
 var original_code, original_result;
 var terser_code, terser_result, ok;
-for (var round = 1; round <= num_iterations; round++) {
-    process.stdout.write(round + " of " + num_iterations + "\r");
 
-    original_code = createTopLevelCode();
-    original_result = sandbox.run_code(original_code);
-    (typeof original_result != "string" ? fallback_options : minify_options).forEach(function(options) {
-        terser_code = Terser.minify(original_code, JSON.parse(options));
-        if (!terser_code.error) {
-            terser_code = terser_code.code;
-            terser_result = sandbox.run_code(terser_code);
-            ok = sandbox.same_stdout(original_result, terser_result);
-        } else {
-            terser_code = terser_code.error;
-            if (typeof original_result != "string") {
-                ok = terser_code.name == original_result.name;
+async function main() {
+    for (var round = 1; round <= num_iterations; round++) {
+        process.stdout.write(round + " of " + num_iterations + "\r");
+
+        original_code = createTopLevelCode();
+        original_result = sandbox.run_code(original_code);
+        const options_sets = (typeof original_result != "string" ? fallback_options : minify_options)
+
+        for (const options of options_sets) {
+            terser_code = await minify(original_code, JSON.parse(options));
+            if (!terser_code.error) {
+                terser_code = terser_code.code;
+                terser_result = sandbox.run_code(terser_code);
+                ok = sandbox.same_stdout(original_result, terser_result);
+            } else {
+                terser_code = terser_code.error;
+                if (typeof original_result != "string") {
+                    ok = terser_code.name == original_result.name;
+                }
+            }
+            if (verbose || (verbose_interval && !(round % INTERVAL_COUNT)) || !ok) await log(options);
+            else if (typeof original_result != "string") {
+                println("//=============================================================");
+                println("// original code");
+                await try_beautify(original_code, original_result, println);
+                println();
+                println();
+                println("original result:");
+                println(original_result.stack);
+                println();
+            }
+            if (!ok && isFinite(num_iterations)) {
+                println();
+                process.exit(1);
             }
         }
-        if (verbose || (verbose_interval && !(round % INTERVAL_COUNT)) || !ok) log(options);
-        else if (typeof original_result != "string") {
-            println("//=============================================================");
-            println("// original code");
-            try_beautify(original_code, original_result, println);
-            println();
-            println();
-            println("original result:");
-            println(original_result.stack);
-            println();
-        }
-        if (!ok && isFinite(num_iterations)) {
-            println();
-            process.exit(1);
-        }
-    });
+    }
+    println();
 }
-println();
+
+main().catch(e => {
+    console.error(e);
+    process.exit(1)
+})

@@ -1,38 +1,28 @@
-var Terser = require("../node");
-var assert = require("assert");
+import assert from "assert";
+import { minify } from "../../main.js";
+import { parse } from "../../lib/parse.js";
 
 describe("Object", function() {
-    it("Should allow objects to have a methodDefinition as property", function() {
+    it("Should allow objects to have a methodDefinition as property", async function() {
         var code = "var a = {test() {return true;}}";
-        assert.equal(Terser.minify(code, {
+        assert.equal((await minify(code, {
             compress: {
                 arrows: false
             }
-        }).code, "var a={test(){return!0}};");
+        })).code, "var a={test(){return!0}};");
     });
 
-    it("Should not allow objects to use static keywords like in classes", function() {
+    it("Should not allow objects to use static keywords like in classes", async function() {
         var code = "{static test() {}}";
-        var parse = function() {
-            Terser.parse(code);
-        }
-        var expect = function(e) {
-            return e instanceof Terser._JS_Parse_Error;
-        }
-        assert.throws(parse, expect);
+        assert.throws(() => parse(code));
     });
 
-    it("Should not allow objects to have static computed properties like in classes", function() {
+    it("Should not allow objects to have static computed properties like in classes", async function() {
         var code = "var foo = {static [123](){}}";
-        var parse = function() {
-            console.log(Terser.parse(code).body[0].body[0]);
-        }
-        var expect = function(e) {
-            return e instanceof Terser._JS_Parse_Error;
-        }
-        assert.throws(parse, expect);
+        assert.throws(() => parse(code));
     });
-    it("Should not accept operator tokens as property/getter/setter name", function() {
+
+    it("Should not accept operator tokens as property/getter/setter name", async function() {
         var illegalOperators = [
             "++",
             "--",
@@ -102,15 +92,9 @@ describe("Object", function() {
             return results;
         };
 
-        var testCase = function(data) {
-            return function() {
-                Terser.parse(data.code);
-            };
-        };
-
         var fail = function(data) {
             return function (e) {
-                return e instanceof Terser._JS_Parse_Error && (
+                return (
                     e.message === "Unexpected token: operator (" + data.operator + ")" ||
                     (e.message === "Unterminated regular expression" && data.operator[0] === "/") ||
                     (e.message === "Unexpected token: punc (()" && data.operator === "*")
@@ -125,11 +109,11 @@ describe("Object", function() {
         var tests = generator();
         for (var i = 0; i < tests.length; i++) {
             var test = tests[i];
-            assert.throws(testCase(test), fail(test), errorMessage(test));
+            assert.throws(() => parse(test.code), fail(test), errorMessage(test));
         }
     });
-    it("Should be able to use shorthand properties", function() {
-        var ast = Terser.parse("var foo = 123\nvar obj = {foo: foo}");
+    it("Should be able to use shorthand properties", async function() {
+        var ast = parse("var foo = 123\nvar obj = {foo: foo}");
         assert.strictEqual(ast.print_to_string({ecma: 2015}), "var foo=123;var obj={foo};");
     })
 });

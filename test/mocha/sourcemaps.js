@@ -1,19 +1,22 @@
-var assert = require("assert");
-var readFileSync = require("fs").readFileSync;
-var SourceMapConsumer = require("source-map").SourceMapConsumer;
-var {assertCodeWithInlineMapEquals} = require("./utils");
-var Terser = require("../..");
+import assert from "assert";
+import { readFileSync } from "fs";
+import source_map_module from "source-map"
+import { assertCodeWithInlineMapEquals } from "./utils.js";
+import { to_ascii } from "../../lib/minify.js";
+import { minify } from "../../main.js";
+
+const { SourceMapConsumer } = source_map_module
 
 function read(path) {
     return readFileSync(path, "utf8");
 }
 
-function source_map(code) {
-    return JSON.parse(Terser.minify(code, {
+async function source_map(code) {
+    return JSON.parse((await minify(code, {
         compress: false,
         mangle: false,
         sourceMap: true,
-    }).map);
+    })).map);
 }
 
 function get_map() {
@@ -43,7 +46,7 @@ function get_sections_map() {
     };
 }
 
-function prepare_map(sourceMap) {
+async function prepare_map(sourceMap) {
     var code = [
         '"use strict";',
         "",
@@ -54,7 +57,7 @@ function prepare_map(sourceMap) {
         "",
         "//# sourceMappingURL=bundle.js.map",
     ].join("\n");
-    var result = Terser.minify(code, {
+    var result = await minify(code, {
         sourceMap: {
             content: sourceMap,
             includeSources: true,
@@ -65,13 +68,13 @@ function prepare_map(sourceMap) {
 }
 
 describe("sourcemaps", function() {
-    it("Should give correct version", function() {
-        var map = source_map("var x = 1 + 1;");
+    it("Should give correct version", async function() {
+        var map = await source_map("var x = 1 + 1;");
         assert.strictEqual(map.version, 3);
         assert.deepEqual(map.names, [ "x" ]);
     });
-    it("Should give correct names", function() {
-        var map = source_map([
+    it("Should give correct names", async function() {
+        var map = await source_map([
             "({",
             "    get enabled() {",
             "        return 3;",
@@ -83,8 +86,8 @@ describe("sourcemaps", function() {
         ].join("\n"));
         assert.deepEqual(map.names, [ "enabled", "x" ]);
     });
-    it("Should mark array/object literals", function() {
-        var result = Terser.minify([
+    it("Should mark array/object literals", async function() {
+        var result = await minify([
             "var obj = {};",
             "obj.wat([]);",
         ].join("\n"), {
@@ -95,8 +98,8 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.code, "({}).wat([]);");
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["wat"],"mappings":"CAAU,IACNA,IAAI"}');
     });
-    it("Should mark class literals", function() {
-        var result = Terser.minify([
+    it("Should mark class literals", async function() {
+        var result = await minify([
             "class bar {};",
             "var obj = class {};",
             "obj.wat(bar);",
@@ -108,9 +111,9 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.code, "(class{}).wat(class{});");
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["wat"],"mappings":"CACU,SACNA,IAFJ"}');
     });
-    it("Should give correct sourceRoot", function() {
+    it("Should give correct sourceRoot", async function() {
         var code = "console.log(42);";
-        var result = Terser.minify(code, {
+        var result = await minify(code, {
             sourceMap: {
                 root: "//foo.bar/",
             },
@@ -119,9 +122,9 @@ describe("sourcemaps", function() {
         assert.strictEqual(result.code, code);
         assert.strictEqual(result.map, '{"version":3,"sources":["0"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI","sourceRoot":"//foo.bar/"}');
     });
-    it("Should return source map as object when asObject is given", function() {
+    it("Should return source map as object when asObject is given", async function() {
         var code = "console.log(42);";
-        var result = Terser.minify(code, {
+        var result = await minify(code, {
             sourceMap: {
                 asObject: true,
             },
@@ -132,8 +135,8 @@ describe("sourcemaps", function() {
     });
 
     describe("inSourceMap", function() {
-        it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", function() {
-            var result = Terser.minify(read("./test/input/issue-1236/simple.js"), {
+        it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", async function() {
+            var result = await minify(read("./test/input/issue-1236/simple.js"), {
                 sourceMap: {
                     content: read("./test/input/issue-1236/simple.js.map"),
                     filename: "simple.min.js",
@@ -146,8 +149,8 @@ describe("sourcemaps", function() {
             assert.equal(map.sourcesContent.length, 1);
             assert.equal(map.sourcesContent[0], 'let foo = x => "foo " + x;\nconsole.log(foo("bar"));');
         });
-        it("Should process inline source map", function() {
-            var result = Terser.minify(read("./test/input/issue-520/input.js"), {
+        it("Should process inline source map", async function() {
+            var result = await minify(read("./test/input/issue-520/input.js"), {
                 compress: { toplevel: true },
                 sourceMap: {
                     content: "inline",
@@ -161,8 +164,8 @@ describe("sourcemaps", function() {
     });
 
     describe("sourceMapInline", function() {
-        it("Should append source map to output js when sourceMapInline is enabled", function() {
-            var result = Terser.minify("var a = function(foo) { return foo; };", {
+        it("Should append source map to output js when sourceMapInline is enabled", async function() {
+            var result = await minify("var a = function(foo) { return foo; };", {
                 sourceMap: {
                     url: "inline"
                 }
@@ -172,14 +175,14 @@ describe("sourcemaps", function() {
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};\n" +
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
-        it("Should not append source map to output js when sourceMapInline is not enabled", function() {
-            var result = Terser.minify("var a = function(foo) { return foo; };");
+        it("Should not append source map to output js when sourceMapInline is not enabled", async function() {
+            var result = await minify("var a = function(foo) { return foo; };");
             if (result.error) throw result.error;
             var code = result.code;
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};");
         });
-        it("Should work with max_line_len", function() {
-            var result = Terser.minify(read("./test/input/issue-505/input.js"), {
+        it("Should work with max_line_len", async function() {
+            var result = await minify(read("./test/input/issue-505/input.js"), {
                 compress: {
                     directives: false,
                 },
@@ -193,12 +196,12 @@ describe("sourcemaps", function() {
             if (result.error) throw result.error;
             assertCodeWithInlineMapEquals(result.code, read("./test/input/issue-505/output.js"));
         });
-        it("Should work with unicode characters", function() {
+        it("Should work with unicode characters", async function() {
             var code = [
                 "var tëst = '→unicøde←';",
                 "alert(tëst);",
             ].join("\n");
-            var result = Terser.minify(code, {
+            var result = await minify(code, {
                 sourceMap: {
                     includeSources: true,
                     url: "inline",
@@ -209,10 +212,10 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             var encoded = result.code.slice(result.code.lastIndexOf(",") + 1);
-            map = JSON.parse(Terser.to_ascii(encoded).toString());
+            map = JSON.parse(to_ascii(encoded).toString());
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
-            result = Terser.minify(result.code, {
+            result = await minify(result.code, {
                 sourceMap: {
                     content: "inline",
                     includeSources: true,
@@ -224,8 +227,8 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.names[0], "tëst");
             assert.strictEqual(map.names[1], "alert");
         });
-        it("Should append source map to file when asObject is present", function() {
-            var result = Terser.minify("var a = function(foo) { return foo; };", {
+        it("Should append source map to file when asObject is present", async function() {
+            var result = await minify("var a = function(foo) { return foo; };", {
                 sourceMap: {
                     url: "inline",
                     asObject: true
@@ -239,26 +242,26 @@ describe("sourcemaps", function() {
     });
 
     describe("input sourcemaps", function() {
-        it("Should copy over original sourcesContent", function() {
+        it("Should copy over original sourcesContent", async function() {
             var orig = get_map();
-            var map = prepare_map(orig);
+            var map = await prepare_map(orig);
             assert.equal(map.sourceContentFor("index.js"), orig.sourcesContent[0]);
         });
-        it("Should copy over original sourcesContent for section sourcemaps", function() {
+        it("Should copy over original sourcesContent for section sourcemaps", async function() {
             var orig = get_sections_map();
-            var map = prepare_map(orig);
+            var map = await prepare_map(orig);
             assert.equal(map.sourceContentFor("index.js"), orig.sections[0].map.sourcesContent[0]);
         });
-        it("Should copy sourcesContent if sources are relative", function() {
+        it("Should copy sourcesContent if sources are relative", async function() {
             var relativeMap = get_map();
             relativeMap.sources = ["./index.js"];
-            var map = prepare_map(relativeMap);
+            var map = await prepare_map(relativeMap);
             assert.notEqual(map.sourcesContent, null);
             assert.equal(map.sourcesContent.length, 1);
             assert.equal(map.sourceContentFor("index.js"), relativeMap.sourcesContent[0]);
         });
-        it("Should not have invalid mappings from inputSourceMap", function() {
-            var map = prepare_map(get_map());
+        it("Should not have invalid mappings from inputSourceMap", async function() {
+            var map = await prepare_map(get_map());
             // The original source has only 2 lines, check that mappings don't have more lines
             var msg = "Mapping should not have higher line number than the original file had";
             map.eachMapping(function(mapping) {

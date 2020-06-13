@@ -1,24 +1,36 @@
 /* globals module, __dirname, console */
-try {
-    require("source-map-support").install();
-} catch (err) {}
+import "source-map-support/register.js";
+import path from "path";
+import fs from "fs";
+import assert from "assert";
+import semver from "semver";
+import { fileURLToPath } from "url";
 
-require("./colorless-console");
-var path = require("path");
-var fs = require("fs");
-var assert = require("assert");
-var semver = require("semver");
-var U = require("..");
-var sandbox = require("./sandbox");
+import { minify } from "../main.js";
+import * as AST from "../lib/ast.js";
+import { parse } from "../lib/parse.js";
+import { OutputStream } from "../lib/output.js";
+import { Compressor } from "../lib/compress/index.js";
+import {
+    reserve_quoted_keys,
+    mangle_properties,
+} from "../lib/propmangle.js";
+import { base54 } from "../lib/scope.js";
+import { string_template, defaults } from "../lib/utils/index.js";
+
+import * as sandbox from "./sandbox.js"
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 var tests_dir = __dirname;
 var failed_files = {};
-var minify_options = require("./ufuzz.json").map(JSON.stringify);
+var minify_options = JSON.parse(fs.readFileSync(path.join(__dirname, "ufuzz.json"), 'utf-8')).map(JSON.stringify);
 
-module.exports = run_compress_tests;
-if (module.parent === null) {
-    module.exports();
-}
+run_compress_tests().catch(e => {
+    console.error(e);
+    process.exit(1);
+});
 
 /* -----[ utils ]----- */
 
@@ -27,7 +39,7 @@ function HOP(obj, prop) {
 }
 
 function tmpl() {
-    return U.string_template.apply(this, arguments);
+    return string_template.apply(this, arguments);
 }
 
 function log() {
@@ -65,27 +77,27 @@ function test_directory(dir) {
 }
 
 function as_toplevel(input, mangle_options) {
-    if (!(input instanceof U.AST_BlockStatement))
+    if (!(input instanceof AST.AST_BlockStatement))
         throw new Error("Unsupported input syntax");
     for (var i = 0; i < input.body.length; i++) {
         var stat = input.body[i];
-        if (stat instanceof U.AST_SimpleStatement && stat.body instanceof U.AST_String)
-            input.body[i] = new U.AST_Directive(stat.body);
+        if (stat instanceof AST.AST_SimpleStatement && stat.body instanceof AST.AST_String)
+            input.body[i] = new AST.AST_Directive(stat.body);
         else break;
     }
-    var toplevel = new U.AST_Toplevel(input);
+    var toplevel = new AST.AST_Toplevel(input);
     toplevel.figure_out_scope(mangle_options);
     return toplevel;
 }
 
-function run_compress_tests() {
+async function run_compress_tests() {
     var failures = 0;
     var dir = test_directory("compress");
     log_directory("compress");
     var files = find_test_files(dir);
-    function test_file(file) {
+    async function test_file(file) {
         log_start_file(file);
-        function test_case(test) {
+        async function test_case(test) {
             log_test(test.name);
             var output_options = test.beautify || {};
             var expect;
@@ -98,18 +110,18 @@ function run_compress_tests() {
                 log("!!! Test cannot have an `expect_error` with other expect clauses\n", {});
                 return false;
             }
-            if (test.input instanceof U.AST_SimpleStatement
-                && test.input.body instanceof U.AST_TemplateString) {
+            if (test.input instanceof AST.AST_SimpleStatement
+                && test.input.body instanceof AST.AST_TemplateString) {
                 if (test.input.body.segments.length == 1) {
                     try {
-                        var input = U.parse(test.input.body.segments[0].value);
+                        var input = parse(test.input.body.segments[0].value);
                     } catch (ex) {
                         if (!test.expect_error) {
                             log("!!! Test is missing an `expect_error` clause\n", {});
                             return false;
                         }
-                        if (test.expect_error instanceof U.AST_SimpleStatement
-                        && test.expect_error.body instanceof U.AST_Object) {
+                        if (test.expect_error instanceof AST.AST_SimpleStatement
+                        && test.expect_error.body instanceof AST.AST_Object) {
                             var expect_error = eval("(" + test.expect_error.body.print_to_string() + ")");
                             var ex_normalized = JSON.parse(JSON.stringify(ex));
                             ex_normalized.name = ex.name;
@@ -154,7 +166,7 @@ function run_compress_tests() {
                 });
             }
             try {
-                U.parse(input_code);
+                parse(input_code);
             } catch (ex) {
                 log("!!! Cannot parse input\n---INPUT---\n{input}\n--PARSE ERROR--\n{error}\n\n", {
                     input: input_formatted,
@@ -168,7 +180,7 @@ function run_compress_tests() {
                 ascii_only: output_options.ascii_only,
                 comments: false,
             };
-            var ast_as_string = U.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
+            var ast_as_string = AST.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
             var input_string = input.print_to_string(mozilla_options);
             if (input_string !== ast_as_string) {
                 log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
@@ -177,24 +189,24 @@ function run_compress_tests() {
                 });
                 return false;
             }
-            var options = U.defaults(test.options, { });
+            var options = defaults(test.options, { });
             if (test.mangle && test.mangle.properties && test.mangle.properties.keep_quoted) {
                 var quoted_props = test.mangle.properties.reserved;
                 if (!Array.isArray(quoted_props)) quoted_props = [];
                 test.mangle.properties.reserved = quoted_props;
                 if (test.mangle.properties.keep_quoted !== "strict") {
-                    U.reserve_quoted_keys(input, quoted_props);
+                    reserve_quoted_keys(input, quoted_props);
                 }
             }
             if (test.rename) {
                 input.figure_out_scope(test.mangle);
                 input.expand_names(test.mangle);
             }
-            var cmp = new U.Compressor(options, options.defaults === undefined ? true : !options.defaults);
+            var cmp = new Compressor(options, options.defaults === undefined ? true : !options.defaults);
             var output = cmp.compress(input);
             output.figure_out_scope(test.mangle);
             if (test.mangle) {
-                U.base54.reset();
+                base54.reset();
                 output.compute_char_frequency(test.mangle);
                 (function(cache) {
                     if (!cache) return;
@@ -212,7 +224,7 @@ function run_compress_tests() {
                 })(test.mangle.cache);
                 output.mangle_names(test.mangle);
                 if (test.mangle.properties) {
-                    output = U.mangle_properties(output, test.mangle.properties);
+                    output = mangle_properties(output, test.mangle.properties);
                 }
             }
             output = make_code(output, output_options);
@@ -228,7 +240,7 @@ function run_compress_tests() {
                 return false;
             }
             try {
-                U.parse(output);
+                parse(output);
             } catch (ex) {
                 log("!!! Test matched expected result but cannot parse output\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n--REPARSE ERROR--\n{error}\n\n", {
                     input: input_formatted,
@@ -267,7 +279,7 @@ function run_compress_tests() {
                     });
                     return false;
                 }
-                if (test.reminify && !reminify(test, input_code, input_formatted)) {
+                if (test.reminify && !await reminify(test, input_code, input_formatted)) {
                     return false;
                 }
             }
@@ -275,7 +287,7 @@ function run_compress_tests() {
         }
         var tests = parse_test(path.resolve(dir, file));
         for (var i in tests) if (tests.hasOwnProperty(i)) {
-            if (!test_case(tests[i])) {
+            if (!await test_case(tests[i])) {
                 failures++;
                 failed_files[file] = 1;
                 if (process.env.TEST_FAIL_FAST) return false;
@@ -284,7 +296,7 @@ function run_compress_tests() {
         return true;
     }
     for (const file of files) {
-        if (!test_file(file)) {
+        if (!await test_file(file)) {
             break;
         }
     }
@@ -299,7 +311,7 @@ function parse_test(file) {
     var script = fs.readFileSync(file, "utf8");
     // TODO try/catch can be removed after fixing https://github.com/mishoo/UglifyJS2/issues/348
     try {
-        var ast = U.parse(script, {
+        var ast = parse(script, {
             filename: file
         });
     } catch (e) {
@@ -308,9 +320,11 @@ function parse_test(file) {
         throw e;
     }
     var tests = {};
-    var tw = new U.TreeWalker(function(node, descend) {
-        if (node instanceof U.AST_LabeledStatement
-            && tw.parent() instanceof U.AST_Toplevel) {
+    var tw = new AST.TreeWalker(function(node, descend) {
+        if (
+            node instanceof AST.AST_LabeledStatement
+            && tw.parent() instanceof AST.AST_Toplevel
+        ) {
             var name = node.label.name;
             if (name in tests) {
                 throw new Error('Duplicated test name "' + name + '" in ' + file);
@@ -318,7 +332,7 @@ function parse_test(file) {
             tests[name] = get_one_test(name, node.body);
             return true;
         }
-        if (!(node instanceof U.AST_Toplevel)) croak(node);
+        if (!(node instanceof AST.AST_Toplevel)) croak(node);
     });
     ast.walk(tw);
     return tests;
@@ -335,7 +349,7 @@ function parse_test(file) {
     function read_boolean(stat) {
         if (stat.TYPE == "SimpleStatement") {
             var body = stat.body;
-            if (body instanceof U.AST_Boolean) {
+            if (body instanceof AST.AST_Boolean) {
                 return body.value;
             }
         }
@@ -365,16 +379,16 @@ function parse_test(file) {
             options: {},
             reminify: true,
         };
-        var tw = new U.TreeWalker(function(node, descend) {
-            if (node instanceof U.AST_Assign) {
-                if (!(node.left instanceof U.AST_SymbolRef)) {
+        var tw = new AST.TreeWalker(function(node, descend) {
+            if (node instanceof AST.AST_Assign) {
+                if (!(node.left instanceof AST.AST_SymbolRef)) {
                     croak(node);
                 }
                 var name = node.left.name;
                 test[name] = evaluate(node.right);
                 return true;
             }
-            if (node instanceof U.AST_LabeledStatement) {
+            if (node instanceof AST.AST_LabeledStatement) {
                 var label = node.label;
                 assert.ok(
                     [
@@ -401,16 +415,16 @@ function parse_test(file) {
                     test.reminify = value == null || value;
                 } else if (label.name == "expect_stdout") {
                     var body = stat.body;
-                    if (body instanceof U.AST_Boolean) {
+                    if (body instanceof AST.AST_Boolean) {
                         test[label.name] = body.value;
-                    } else if (body instanceof U.AST_Call) {
+                    } else if (body instanceof AST.AST_Call) {
                         var ctor = global[body.expression.name];
                         assert.ok(ctor === Error || ctor.prototype instanceof Error, tmpl("Unsupported expect_stdout format [{line},{col}]", {
                             line: label.start.line,
                             col: label.start.col
                         }));
                         test[label.name] = ctor.apply(null, body.args.map(function(node) {
-                            assert.ok(node instanceof U.AST_Constant, tmpl("Unsupported expect_stdout format [{line},{col}]", {
+                            assert.ok(node instanceof AST.AST_Constant, tmpl("Unsupported expect_stdout format [{line},{col}]", {
                                 line: label.start.line,
                                 col: label.start.col
                             }));
@@ -433,20 +447,20 @@ function parse_test(file) {
 }
 
 function make_code(ast, options) {
-    var stream = U.OutputStream(options);
+    var stream = OutputStream(options);
     ast.print(stream);
     return stream.get();
 }
 
 function evaluate(code) {
-    if (code instanceof U.AST_Node)
+    if (code instanceof AST.AST_Node)
         code = make_code(code, { beautify: true });
     return new Function("return(" + code + ")")();
 }
 
 // Try to reminify original input with standard options
 // to see if it matches expect_stdout.
-function reminify(test, input_code, input_formatted) {
+async function reminify(test, input_code, input_formatted) {
     if (process.env.TEST_NO_REMINIFY) return true;
     const { options: orig_options, expect_stdout } = test;
     for (var i = 0; i < minify_options.length; i++) {
@@ -463,7 +477,7 @@ function reminify(test, input_code, input_formatted) {
             options.mangle.keep_fnames = orig_options.mangle.keep_fnames;
         }
         var options_formatted = JSON.stringify(options, null, 4);
-        var result = U.minify(input_code, options);
+        var result = await minify(input_code, options);
         if (result.error) {
             log("!!! failed input reminify\n---INPUT---\n{input}\n--ERROR---\n{error}\n\n", {
                 input: input_formatted,

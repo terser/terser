@@ -1,9 +1,10 @@
 "use strict";
 
-const assert = require("assert");
-const terser = require("../..");
+import assert from "assert";
 
-const { AST_Scope, AST_SymbolRef, AST_Call, TreeWalker } = terser;
+import "../../main.js";
+import { parse } from "../../lib/parse.js";
+import * as AST from "../../lib/ast.js"
 
 const sample_code = `
     var x = 'x'
@@ -89,11 +90,11 @@ const draw_scopes = toplevel => {
         [toplevel, current_scope]
     ]);
 
-    toplevel.walk(new TreeWalker((node, descend) => {
+    toplevel.walk(new AST.TreeWalker((node, descend) => {
         if (node === toplevel) return;
 
         const scope =
-            node instanceof AST_Scope ? node :
+            node instanceof AST.AST_Scope ? node :
             node.is_block_scope() ? node.block_scope : null;
 
         if (scope) {
@@ -110,14 +111,14 @@ const draw_scopes = toplevel => {
             return true;
         }
 
-        if (node instanceof AST_Call && node.expression.name === "scope") {
+        if (node instanceof AST.AST_Call && node.expression.name === "scope") {
             current_scope.name = node.args[0].value;
         }
     }));
 
     // Find refs
-    toplevel.walk(new TreeWalker((node) => {
-        if (node instanceof AST_SymbolRef) {
+    toplevel.walk(new AST.TreeWalker((node) => {
+        if (node instanceof AST.AST_SymbolRef) {
             if (node.name === "scope") return;
             if (node.name === "leak") return;
 
@@ -143,8 +144,8 @@ const draw_scopes = toplevel => {
 };
 
 describe("figure_out_scope", () => {
-    it("can figure out the scope by calling figure_out_scope on the toplevel", () => {
-        const ast = terser.parse(sample_code);
+    it("can figure out the scope by calling figure_out_scope on the toplevel", async () => {
+        const ast = parse(sample_code);
 
         ast.figure_out_scope();
 
@@ -153,8 +154,8 @@ describe("figure_out_scope", () => {
         assert.deepEqual(simplified, scopes_simplified);
     });
 
-    it("can figure out scope partially after first figure_out_scope has been called", () => {
-        const toplevel = terser.parse(sample_code);
+    it("can figure out scope partially after first figure_out_scope has been called", async () => {
+        const toplevel = parse(sample_code);
 
         toplevel.figure_out_scope();
 
@@ -175,14 +176,11 @@ describe("figure_out_scope", () => {
             obj[prop] = (function reparse(node) {
                 const string = node.print_to_string();
 
-                let parsed;
                 try {
-                    parsed = terser.parse(string).body[0];
+                    return parse(string).body[0];
                 } catch (e) {
-                    parsed = terser.parse(`(${string})`).body[0].body;
+                    return parse(`(${string})`).body[0].body;
                 }
-
-                return parsed;
             })(obj[prop]);
 
             obj[prop].figure_out_scope({}, { toplevel, parent_scope: toplevel });

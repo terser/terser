@@ -1,15 +1,7 @@
-import { terser as terserPlugin } from "rollup-plugin-terser";
-
-export default ({ configTest }) => {
-    const noMinify = Boolean(configTest || process.env.CI);
+export default () => {
     return {
         input: "main.js",
-        plugins: noMinify ? [] : [
-            terserPlugin({
-                compress: true,
-                mangle: true
-            })
-        ],
+        plugins: [],
         output: {
             file: "dist/bundle.min.js",
             format: "umd",
@@ -18,7 +10,9 @@ export default ({ configTest }) => {
             },
             name: "Terser",
             sourcemap: true,
+            sourcemapExcludeSources: true,
             esModule: false,
+            indent: false
         },
         external: "source-map",
     };

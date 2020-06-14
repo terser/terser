@@ -16,6 +16,13 @@ jobs:
           - node_modules
           - terser-functional-tests
 
+    - node_js: 10
+      script: |
+        node --require esm test/compress.js
+        npm run test:mocha -- --require esm
+      env:
+        - TEST_NO_SANDBOX=1
+
     - node_js: 14
       env:
         - TERSER_TEST_ALL=1
@@ -26,4 +33,6 @@ jobs:
 
     - node_js: 14
       os: windows
+      env:
+        - TEST_NO_SANDBOX=1
 

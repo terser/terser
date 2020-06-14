@@ -9,7 +9,9 @@ export default () => {
             },
             name: "Terser",
             sourcemap: true,
+            sourcemapExcludeSources: true,
             esModule: false,
+            indent: false
         },
         external: "source-map",
     };

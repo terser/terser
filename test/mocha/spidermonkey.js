@@ -1,10 +1,13 @@
 import assert from "assert";
 import fs from "fs";
-import { parse as acornParse } from "acorn";
-import { generate as astringGenerate } from "astring";
+import * as acorn from "acorn";
+import * as astring from "astring";
 import * as AST from "../../lib/ast.js";
 import { parse } from "../../lib/parse.js";
 import { minify } from "../../main.js";
+
+const acornParse = acorn.default ? acorn.default.parse : acorn.parse;
+const astringGenerate = astring.default ? astring.default.generate : astring.generate;
 
 describe("spidermonkey export/import sanity test", function() {
     it("Should judge between directives and strings correctly on import", async function() {

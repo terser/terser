@@ -1,7 +1,7 @@
 import assert from "assert";
 import fs from "fs";
-import acorn from "acorn";
-import astring from "astring";
+import { parse as acornParse } from "acorn";
+import { generate as astringGenerate } from "astring";
 import * as AST from "../../lib/ast.js";
 import { parse } from "../../lib/parse.js";
 import { minify } from "../../main.js";
@@ -111,7 +111,7 @@ describe("spidermonkey export/import sanity test", function() {
     it("should be capable of importing from acorn", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);
-        var moz_ast = acorn.parse(code, {sourceType: 'module', ecmaVersion: 2018});
+        var moz_ast = acornParse(code, {sourceType: 'module', ecmaVersion: 2018});
         var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
@@ -121,7 +121,7 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should correctly minify AST from from_moz_ast with default destructure", async () => {
         const code = "const { a = 1, b: [b = 2] = []} = {}";
-        const acornAst = acorn.parse(code, { locations: true });
+        const acornAst = acornParse(code, { locations: true });
         const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
         const result = await minify(terserAst, {ecma: 2015});
         assert.strictEqual(
@@ -132,7 +132,7 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should correctly minify AST from from_moz_ast with default function parameter", async () => {
         const code = "function run(x = 2){}";
-        const acornAst = acorn.parse(code, { locations: true });
+        const acornAst = acornParse(code, { locations: true });
         const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
         const result = await minify(terserAst);
         assert.strictEqual(
@@ -145,8 +145,8 @@ describe("spidermonkey export/import sanity test", function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);
         var moz_ast = terser_ast.to_mozilla_ast();
-        var generated = astring.generate(moz_ast);
-        var parsed = acorn.parse(generated, {
+        var generated = astringGenerate(moz_ast);
+        var parsed = acornParse(generated, {
             sourceType: "module",
             ecmaVersion: 2018
         });

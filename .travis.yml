@@ -24,8 +24,6 @@ jobs:
           - node_modules
           - tmp
 
-    - node_js: 10
-
     - node_js: 14
       os: windows
 

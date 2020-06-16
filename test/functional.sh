@@ -7,7 +7,7 @@ workdir=$(pwd)
 export TERSER_PATH="$workdir"
 
 # build terser
-npm run build -- --configTest
+npm run build
 
 # grab the functional tests
 mkdir -p terser-functional-tests

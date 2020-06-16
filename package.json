@@ -42,8 +42,6 @@
   ],
   "dependencies": {
     "commander": "^2.20.0",
-    "estraverse": "^5.1.0",
-    "jscodeshift": "^0.10.0",
     "source-map": "~0.6.1",
     "source-map-support": "~0.5.12"
   },

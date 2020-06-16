@@ -22,6 +22,15 @@ describe("minify", function() {
         assert.strictEqual(result.code, "alert(2);");
     });
 
+    it("Should accept new `format` options as well as `output` options", async function() {
+        const { code } = await minify("x(1,2);", { format: { beautify: true }});
+        assert.strictEqual(code, "x(1, 2);");
+    });
+
+    it("Should refuse `format` and `output` option together", async function() {
+        await assert.rejects(() => minify("x(1,2);", { format: { beautify: true }, output: { beautify: true } }));
+    });
+
     it("Should work with mangle.cache", async function() {
         var cache = {};
         var original = "";
@@ -95,7 +104,7 @@ describe("minify", function() {
         await for_each_async([
             '"xxxyy";var i={s:1};',
             '"xxyyy";var j={t:2,u:3},k=4;',
-            'console.log(i.s,j.t,j.u,k);',
+            "console.log(i.s,j.t,j.u,k);",
         ], async function(code) {
             var result = await minify(code, {
                 compress: false,
@@ -105,7 +114,6 @@ describe("minify", function() {
                 },
                 nameCache: cache
             });
-            if (result.error) throw result.error;
             original += code;
             compressed += result.code;
         });
@@ -118,10 +126,10 @@ describe("minify", function() {
     });
 
     it("Should not parse invalid use of reserved words", async function() {
-        assert.strictEqual((await minify("function enum(){}")).error, undefined);
-        assert.strictEqual((await minify("function static(){}")).error, undefined);
-        assert.strictEqual((await minify("function super(){}")).error.message, "Unexpected token: name (super)");
-        assert.strictEqual((await minify("function this(){}")).error.message, "Unexpected token: name (this)");
+        await assert.doesNotReject(() => minify("function enum(){}"));
+        await assert.doesNotReject(() => minify("function static(){}"));
+        await assert.rejects(() => minify("function super(){}"), {message: "Unexpected token: name (super)" });
+        await assert.rejects(() => minify("function this(){}"), {message: "Unexpected token: name (this)" });
     });
 
     describe("keep_quoted_props", function() {
@@ -216,18 +224,19 @@ describe("minify", function() {
             assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));
         });
         it("Should fail with multiple input and inline source map", async function() {
-            var result = await minify([
-                read("./test/input/issue-520/input.js"),
-                read("./test/input/issue-520/output.js")
-            ], {
-                sourceMap: {
-                    content: "inline",
-                    url: "inline"
-                }
-            });
-            var err = result.error;
-            assert.ok(err instanceof Error);
-            assert.strictEqual(err.stack.split(/\n/)[0], "Error: inline source map only works with singular input");
+            await assert.rejects(
+                () =>
+                    minify([
+                        read("./test/input/issue-520/input.js"),
+                        read("./test/input/issue-520/output.js")
+                    ], {
+                        sourceMap: {
+                            content: "inline",
+                            url: "inline"
+                        }
+                    }),
+                { message: "inline source map only works with singular input" }
+            );
         });
     });
 
@@ -266,37 +275,31 @@ describe("minify", function() {
 
     describe("JS_Parse_Error", function() {
         it("Should return syntax error", async function() {
-            var result = await minify("function f(a{}");
-            var err = result.error;
-            assert.ok(err instanceof Error);
-            assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: Unexpected token punc «{», expected punc «,»");
-            assert.strictEqual(err.filename, "0");
-            assert.strictEqual(err.line, 1);
-            assert.strictEqual(err.col, 12);
+            await assert.rejects(
+                () => minify("function f(a{}"),
+                {message: "Unexpected token punc «{», expected punc «,»"}
+            );
         });
         it("Should reject duplicated label name", async function() {
-            var result = await minify("L:{L:{}}");
-            var err = result.error;
-            assert.ok(err instanceof Error);
-            assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: Label L defined twice");
-            assert.strictEqual(err.filename, "0");
-            assert.strictEqual(err.line, 1);
-            assert.strictEqual(err.col, 4);
+            await assert.rejects(
+                () => minify("L:{L:{}}"),
+                {message: "Label L defined twice"}
+            );
         });
     });
 
     describe("global_defs", function() {
         it("Should throw for non-trivial expressions", async function() {
-            var result = await minify("alert(42);", {
-                compress: {
-                    global_defs: {
-                        "@alert": "debugger"
+            await assert.rejects(
+                () => minify("alert(42);", {
+                    compress: {
+                        global_defs: {
+                            "@alert": "debugger"
+                        }
                     }
-                }
-            });
-            var err = result.error;
-            assert.ok(err instanceof Error);
-            assert.strictEqual(err.stack.split(/\n/)[0], "SyntaxError: Unexpected token: keyword (debugger)");
+                }),
+                { message: "Unexpected token: keyword (debugger)"}
+            );
         });
         it("Should skip inherited properties", async function() {
             var foo = Object.create({ skip: this });
@@ -312,8 +315,8 @@ describe("minify", function() {
         });
     });
 
-    describe("duplicated block-scoped declarations", function() {
-        [
+    it("duplicated block-scoped declarations", async () => {
+        await for_each_async([
             "let a=1;let a=2;",
             "let a=1;var a=2;",
             "var a=1;let a=2;",
@@ -326,19 +329,19 @@ describe("minify", function() {
             "const[a]=[1];var a=2;",
             "const a=1;var[a]=[2];",
             "const[a]=[1];var[a]=[2];",
-        ].forEach(function(code) {
-            it(code, async function() {
-                var result = await minify(code, {
+        ], async code => {
+            await assert.doesNotReject(
+                () => minify(code, {
                     compress: false,
                     mangle: false
-                });
-                assert.strictEqual(result.error, undefined);
-                assert.strictEqual(result.code, code);
-                result = await minify(code);
-                var err = result.error;
-                assert.ok(err instanceof Error);
-                assert.strictEqual(err.stack.split(/\n/)[0], `SyntaxError: "a" is redeclared`);
-            });
+                }),
+                JSON.stringify(code) + " should be compressed"
+            );
+            await assert.rejects(
+                () => minify(code),
+                { message: '"a" is redeclared' },
+                JSON.stringify(code) + " should throw a SyntaxError"
+            );
         });
     });
 
@@ -439,8 +442,16 @@ describe("minify", function() {
             ], async function(entry) {
                 var code = entry[0];
                 var expected_error = entry[1];
-                var result = await minify(code);
-                assert.strictEqual(result.error && result.error.message, expected_error, JSON.stringify(entry));
+
+                if (!expected_error) {
+                    await assert.doesNotReject(() => minify(code));
+                } else {
+                    await assert.rejects(
+                        () => minify(code),
+                        {message: expected_error},
+                        JSON.stringify(entry)
+                    );
+                }
             });
         });
     });

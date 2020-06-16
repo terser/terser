@@ -170,6 +170,26 @@ describe("bin/terser", function() {
             done();
         });
     });
+    it("Should work with `--format beautify=true`", function (done) {
+        var command = tersercmd + ' test/input/issue-1482/input.js -f beautify=true';
+
+        exec(command, function (err, stdout) {
+            if (err) throw err;
+
+            assert.strictEqual(stdout, read("test/input/issue-1482/default.js"));
+            done();
+        });
+    });
+    it("Should work with `--format beautify=true,braces`", function (done) {
+        var command = tersercmd + ' test/input/issue-1482/input.js -f beautify=true,braces';
+
+        exec(command, function (err, stdout) {
+            if (err) throw err;
+
+            assert.strictEqual(stdout, read("test/input/issue-1482/braces.js"));
+            done();
+        });
+    });
     it("Should process inline source map", function(done) {
         var command = tersercmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline";
 

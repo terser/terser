@@ -99,7 +99,7 @@ a double dash to prevent input files being used as option arguments:
                                                being automatically reserved.
                                 `regex`  Only mangle matched property names.
                                 `reserved`  List of names that should not be mangled.
-    -b, --beautify [options]     Specify output options:
+    -f, --format [options]      Specify format options.
                                 `preamble`  Preamble to prepend to the output. You
                                             can use this to insert a comment, for
                                             example for licensing information.
@@ -137,7 +137,7 @@ a double dash to prevent input files being used as option arguments:
                                 arguments and values.
     --ie8                       Support non-standard Internet Explorer 8.
                                 Equivalent to setting `ie8: true` in `minify()`
-                                for `compress`, `mangle` and `output` options.
+                                for `compress`, `mangle` and `format` options.
                                 By default Terser will not try to be IE-proof.
     --keep-classnames           Do not mangle/drop class names.
     --keep-fnames               Do not mangle/drop function names.  Useful for
@@ -147,7 +147,7 @@ a double dash to prevent input files being used as option arguments:
     --name-cache <file>         File to hold mangled name mappings.
     --safari10                  Support non-standard Safari 10/11.
                                 Equivalent to setting `safari10: true` in `minify()`
-                                for `mangle` and `output` options.
+                                for `mangle` and `format` options.
                                 By default `terser` will not work around
                                 Safari 10/11 bugs.
     --source-map [options]      Enable source map/specify source map options:
@@ -392,24 +392,32 @@ identify mistakes like writing mangled keys to storage.
 
 Assuming installation via NPM, you can load Terser in your application
 like this:
+
 ```javascript
-var Terser = require("terser");
+const { minify } = require("terser");
 ```
+
+Or,
+
+```javascript
+import { minify } from "terser";
+```
+
 Browser loading is also supported:
 ```html
 <script src="node_modules/source-map/dist/source-map.min.js"></script>
 <script src="dist/bundle.min.js"></script>
 ```
 
-There is a single high level function, **`minify(code, options)`**,
+There is a single async high level function, **`async minify(code, options)`**,
 which will perform all minification [phases](#minify-options) in a configurable
 manner. By default `minify()` will enable the options [`compress`](#compress-options)
 and [`mangle`](#mangle-options). Example:
 ```javascript
 var code = "function add(first, second) { return first + second; }";
-var result = Terser.minify(code);
-console.log(result.error); // runtime error, or `undefined` if no error
+var result = await minify(code, { sourceMap: true });
 console.log(result.code);  // minified output: function add(n,d){return n+d}
+console.log(result.map);  // source map
 ```
 
 You can `minify` more than one JavaScript file at a time by using an object
@@ -420,7 +428,7 @@ var code = {
     "file1.js": "function add(first, second) { return first + second; }",
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 };
-var result = Terser.minify(code);
+var result = await minify(code);
 console.log(result.code);
 // function add(d,n){return d+n}console.log(add(3,7));
 ```
@@ -432,7 +440,7 @@ var code = {
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 };
 var options = { toplevel: true };
-var result = Terser.minify(code, options);
+var result = await minify(code, options);
 console.log(result.code);
 // console.log(3+7);
 ```
@@ -445,10 +453,10 @@ var options = {
     },
     nameCache: {}
 };
-var result1 = Terser.minify({
+var result1 = await minify({
     "file1.js": "function add(first, second) { return first + second; }"
 }, options);
-var result2 = Terser.minify({
+var result2 = await minify({
     "file2.js": "console.log(add(1 + 2, 3 + 4));"
 }, options);
 console.log(result1.code);
@@ -466,11 +474,11 @@ var options = {
     },
     nameCache: JSON.parse(fs.readFileSync(cacheFileName, "utf8"))
 };
-fs.writeFileSync("part1.js", Terser.minify({
+fs.writeFileSync("part1.js", await minify({
     "file1.js": fs.readFileSync("file1.js", "utf8"),
     "file2.js": fs.readFileSync("file2.js", "utf8")
 }, options).code, "utf8");
-fs.writeFileSync("part2.js", Terser.minify({
+fs.writeFileSync("part2.js", await minify({
     "file3.js": fs.readFileSync("file3.js", "utf8"),
     "file4.js": fs.readFileSync("file4.js", "utf8")
 }, options).code, "utf8");
@@ -491,12 +499,11 @@ var options = {
         },
         passes: 2
     },
-    output: {
-        beautify: false,
+    format: {
         preamble: "/* minified */"
     }
 };
-var result = Terser.minify(code, options);
+var result = await minify(code, options);
 console.log(result.code);
 // /* minified */
 // alert(10);"
@@ -504,21 +511,19 @@ console.log(result.code);
 
 An error example:
 ```javascript
-var result = Terser.minify({"foo.js" : "if (0) else console.log(1);"});
-console.log(JSON.stringify(result.error));
-// {"message":"Unexpected token: keyword (else)","filename":"foo.js","line":1,"col":7,"pos":7}
-```
-Note: unlike `uglify-js@2.x`, the Terser API does not throw errors.
-To achieve a similar effect one could do the following:
-```javascript
-var result = Terser.minify(code, options);
-if (result.error) throw result.error;
+try {
+    const result = await minify({"foo.js" : "if (0) else console.log(1);"});
+    // Do something with result
+} catch (error) {
+    const { message, filename, line, col, pos } = error;
+    // Do something with error
+}
 ```
 
 ## Minify options
 
 - `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override `parse`,
-  `compress` and `output`'s `ecma` options.
+  `compress` and `format`'s `ecma` options.
 
 - `parse` (default `{}`) — pass an object if you wish to specify some
   additional [parse options](#parse-options).
@@ -536,8 +541,8 @@ if (result.error) throw result.error;
   is implied and names can be mangled on the top scope. If `compress` or
   `mangle` is enabled then the `toplevel` option will be enabled.
 
-- `output` (default `null`) — pass an object if you wish to specify
-  additional [output options](#output-options).  The defaults are optimized
+- `format` or `output` (default `null`) — pass an object if you wish to specify
+  additional [format options](#format-options).  The defaults are optimized
   for best compression.
 
 - `sourceMap` (default `false`) - pass an object if you wish to specify
@@ -566,7 +571,7 @@ if (result.error) throw result.error;
 
 - `safari10` (default: `false`) - pass `true` to work around Safari 10/11 bugs in
   loop scoping and `await`. See `safari10` options in [`mangle`](#mangle-options)
-  and [`output`](#output-options) for details.
+  and [`format`](#format-options) for details.
 
 ## Minify options structure
 
@@ -585,8 +590,8 @@ if (result.error) throw result.error;
             // mangle property options
         }
     },
-    output: {
-        // output options
+    format: {
+        // format options (can also use `output` for backwards compatibility)
     },
     sourceMap: {
         // source map options
@@ -606,7 +611,7 @@ if (result.error) throw result.error;
 
 To generate a source map:
 ```javascript
-var result = Terser.minify({"file1.js": "var a = function() {};"}, {
+var result = await minify({"file1.js": "var a = function() {};"}, {
     sourceMap: {
         filename: "out.js",
         url: "out.js.map"
@@ -627,7 +632,7 @@ be appended to code.
 
 You can also specify sourceRoot property to be included in source map:
 ```javascript
-var result = Terser.minify({"file1.js": "var a = function() {};"}, {
+var result = await minify({"file1.js": "var a = function() {};"}, {
     sourceMap: {
         root: "http://example.com/src",
         url: "out.js.map"
@@ -638,7 +643,7 @@ var result = Terser.minify({"file1.js": "var a = function() {};"}, {
 If you're compressing compiled JavaScript and have a source map for it, you
 can use `sourceMap.content`:
 ```javascript
-var result = Terser.minify({"compiled.js": "compiled code"}, {
+var result = await minify({"compiled.js": "compiled code"}, {
     sourceMap: {
         content: "content from compiled.js.map",
         url: "minified.js.map"
@@ -891,7 +896,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `safari10` (default `false`) -- Pass `true` to work around the Safari 10 loop
   iterator [bug](https://bugs.webkit.org/show_bug.cgi?id=171041)
   "Cannot declare a let variable twice".
-  See also: the `safari10` [output option](#output-options).
+  See also: the `safari10` [format option](#format-options).
 
 Examples:
 
@@ -905,13 +910,13 @@ function funcName(firstLongName, anotherLongName) {
 ```javascript
 var code = fs.readFileSync("test.js", "utf8");
 
-Terser.minify(code).code;
+await minify(code).code;
 // 'function funcName(a,n){}var globalVar;'
 
-Terser.minify(code, { mangle: { reserved: ['firstLongName'] } }).code;
+await minify(code, { mangle: { reserved: ['firstLongName'] } }).code;
 // 'function funcName(firstLongName,a){}var globalVar;'
 
-Terser.minify(code, { mangle: { toplevel: true } }).code;
+await minify(code, { mangle: { toplevel: true } }).code;
 // 'function n(n,a){}var a;'
 ```
 
@@ -939,16 +944,16 @@ Terser.minify(code, { mangle: { toplevel: true } }).code;
   found in input code. May be useful when only minifying parts of a project.
   See [#397](https://github.com/terser/terser/issues/397) for more details.
 
-## Output options
 
-The code generator tries to output shortest code possible by default.  In
-case you want beautified output, pass `--beautify` (`-b`).  Optionally you
-can pass additional arguments that control the code output:
+## Format options
+
+These options control the format of Terser's output code. Previously known
+as "output options".
 
 - `ascii_only` (default `false`) -- escape Unicode characters in strings and
   regexps (affects directives with non-ascii characters becoming invalid)
 
-- `beautify` (default `true`) -- whether to actually beautify the output.
+- `beautify` (default `false`) -- whether to actually beautify the output.
   Passing `-b` will set this to true, but you might need to pass `-b` even
   when you want to generate minified code, in order to specify additional
   arguments, so you can use `-b beautify=false` to override it.
@@ -962,12 +967,12 @@ can pass additional arguments that control the code output:
   comments, `false` to omit comments in the output, a regular expression string
   (e.g. `/^!/`) or a function.
 
-- `ecma` (default `5`) -- set output printing mode. Set `ecma` to `2015` or
-  greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`.
-  The `ecma` option will only change the output in direct control of the
-  beautifier. Non-compatible features in the abstract syntax tree will still
-  be output as is. For example: an `ecma` setting of `5` will **not** convert
-  ES6+ code to ES5.
+- `ecma` (default `5`) -- set desired EcmaScript standard version for output.
+  Set `ecma` to `2015` or greater to emit shorthand object properties - i.e.:
+  `{a}` instead of `{a: a}`.  The `ecma` option will only change the output in
+  direct control of the beautifier. Non-compatible features in your input will
+  still be output as is. For example: an `ecma` setting of `5` will **not**
+  convert modern code to ES5.
 
 - `indent_level` (default `4`)
 
@@ -1107,7 +1112,7 @@ You can also use conditional compilation via the programmatic API. With the diff
 property name is `global_defs` and is a compressor property:
 
 ```javascript
-var result = Terser.minify(fs.readFileSync("input.js", "utf8"), {
+var result = await minify(fs.readFileSync("input.js", "utf8"), {
     compress: {
         dead_code: true,
         global_defs: {
@@ -1121,7 +1126,7 @@ To replace an identifier with an arbitrary non-constant expression it is
 necessary to prefix the `global_defs` key with `"@"` to instruct Terser
 to parse the value as an expression:
 ```javascript
-Terser.minify("alert('hello');", {
+await minify("alert('hello');", {
     compress: {
         global_defs: {
             "@alert": "console.log"
@@ -1133,7 +1138,7 @@ Terser.minify("alert('hello');", {
 
 Otherwise it would be replaced as string literal:
 ```javascript
-Terser.minify("alert('hello');", {
+await minify("alert('hello');", {
     compress: {
         global_defs: {
             "alert": "console.log"
@@ -1142,40 +1147,6 @@ Terser.minify("alert('hello');", {
 }).code;
 // returns: '"console.log"("hello");'
 ```
-
-### Using native Terser AST with `minify()`
-```javascript
-// example: parse only, produce native Terser AST
-
-var result = Terser.minify(code, {
-    parse: {},
-    compress: false,
-    mangle: false,
-    output: {
-        ast: true,
-        code: false  // optional - faster if false
-    }
-});
-
-// result.ast contains native Terser AST
-```
-```javascript
-// example: accept native Terser AST input and then compress and mangle
-//          to produce both code and native AST.
-
-var result = Terser.minify(ast, {
-    compress: {},
-    mangle: {},
-    output: {
-        ast: true,
-        code: true  // optional - faster if false
-    }
-});
-
-// result.ast contains native Terser AST
-// result.code contains the minified code in string form.
-```
-
 
 ### Annotations
 
@@ -1198,18 +1169,6 @@ function_cant_be_inlined_into_here()
 
 const x = /*#__PURE__*/i_am_dropped_if_x_is_not_used()
 ```
-
-
-### Working with Terser AST
-
-Traversal and transformation of the native AST can be performed through
-[`TreeWalker`](https://github.com/fabiosantoscode/terser/blob/master/lib/ast.js) and
-[`TreeTransformer`](https://github.com/fabiosantoscode/terser/blob/master/lib/transform.js)
-respectively.
-
-Largely compatible native AST examples can be found in the original UglifyJS
-documentation. See: [tree walker](http://lisperator.net/uglifyjs/walk) and
-[tree transform](http://lisperator.net/uglifyjs/transform).
 
 ### ESTree / SpiderMonkey AST
 
@@ -1265,7 +1224,7 @@ terser file.js -m
 ```
 To enable fast minify mode with the API use:
 ```js
-Terser.minify(code, { compress: false, mangle: true });
+await minify(code, { compress: false, mangle: true });
 ```
 
 #### Source maps and debugging
@@ -1322,7 +1281,7 @@ $ yarn
 
 # Reporting issues
 
-In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will make good issues.
+In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will help you write good issues.
 
 # README.md Patrons:
 

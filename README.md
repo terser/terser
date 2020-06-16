@@ -1317,6 +1317,7 @@ To allow for better optimizations, the compiler makes various assumptions:
   `Object.defineProperty()`, `Object.defineProperties()`, `Object.freeze()`,
   `Object.preventExtensions()` or `Object.seal()`).
 - `document.all` is not `== null`
+- Assigning properties to a class doesn't have side effects and does not throw.
 
 ### Build Tools and Adaptors using Terser
 

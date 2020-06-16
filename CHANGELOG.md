@@ -1,5 +1,11 @@
 # Changelog
 
+## v4.8.0
+
+ - Support for numeric separators (`million = 1_000_000`) was added.
+ - Assigning properties to a class is now assumed to be pure.
+ - Fixed bug where `yield` wasn't considered a valid property key in generators.
+
 ## v4.7.0
 
  - A bug was fixed where an arrow function would have the wrong size

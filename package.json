@@ -38,7 +38,8 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "PATRONS.md"
+    "PATRONS.md",
+    "main.js"
   ],
   "dependencies": {
     "commander": "^2.20.0",

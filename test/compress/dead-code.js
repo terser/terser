@@ -1235,3 +1235,22 @@ issue_2929: {
     }
     expect_stdout: "PASS"
 }
+
+issue_718: {
+    options = {
+        dead_code: true
+    }
+    input: {
+        throw 'error'
+
+        // Keep imports and exports please
+        import 'x'
+        export {y}
+    }
+    expect: {
+        throw 'error'
+
+        import 'x'
+        export {y}
+    }
+}

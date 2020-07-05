@@ -640,74 +640,6 @@ unsafe_evaluate_array_5: {
     expect_stdout: "1 2 2 2"
 }
 
-unsafe_evaluate_equality_1: {
-    options = {
-        evaluate: true,
-        reduce_funcs: true,
-        reduce_vars: true,
-        unsafe: true,
-        unused: true,
-    }
-    input: {
-        function f0() {
-            var a = {};
-            return a === a;
-        }
-        function f1() {
-            var a = [];
-            return a === a;
-        }
-        console.log(f0(), f1());
-    }
-    expect: {
-        function f0() {
-            return true;
-        }
-        function f1() {
-            return true;
-        }
-        console.log(f0(), f1());
-    }
-    expect_stdout: true
-}
-
-unsafe_evaluate_equality_2: {
-    options = {
-        collapse_vars: true,
-        evaluate: true,
-        passes: 2,
-        reduce_funcs: true,
-        reduce_vars: true,
-        unsafe: true,
-        unused: true,
-    }
-    input: {
-        function f2() {
-            var a = {a:1, b:2};
-            var b = a;
-            var c = a;
-            return b === c;
-        }
-        function f3() {
-            var a = [1, 2, 3];
-            var b = a;
-            var c = a;
-            return b === c;
-        }
-        console.log(f2(), f3());
-    }
-    expect: {
-        function f2() {
-            return true;
-        }
-        function f3() {
-            return true;
-        }
-        console.log(f2(), f3());
-    }
-    expect_stdout: true
-}
-
 passes: {
     options = {
         conditionals: true,
@@ -7253,4 +7185,36 @@ issue_639: {
     expect_stdout: [
         "PASS:name"
     ]
+}
+
+issue_741_reference_cycle: {
+    input: {
+        for (var a = console.log, s = 1; s <= 3;) {
+            var c = s;
+            a(c);
+            s++;
+        }
+    }
+    expect_stdout: ["1", "2", "3"]
+}
+
+issue_741_2: {
+    input: {
+        var a = console.log
+        var might_change = 0;
+
+        global.problem = () => {
+            var c = might_change
+            a(c)
+        }
+        global.increment = () => {
+            might_change++
+        }
+
+        increment()
+        problem()
+        increment()
+        problem()
+    }
+    expect_stdout: ["1", "2"]
 }

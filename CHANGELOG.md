@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.0.0-beta.0
+
+ - `minify()` is now async and rejects a promise instead of returning an error.
+ - Internal AST is no longer exposed, so that it can be improved without releasing breaking changes.
+ - Lowest supported node version is 10
+ - Module is now distributed as a dual package - You can `import` and `require()` too.
+ - Inline improvements were made
+
 ## v4.6.13
 
  - Fixed issue where ES5 object properties were being turned into ES6 object properties due to more lax unicode rules.

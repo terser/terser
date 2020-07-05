@@ -22,6 +22,33 @@ describe("minify", function() {
         assert.strictEqual(result.code, "alert(2);");
     });
 
+    it("Should not mutate options", async function () {
+        const options = { compress: true };
+        const options_snapshot = JSON.stringify(options);
+
+        await minify("x()", options);
+
+        assert.strictEqual(JSON.stringify(options), options_snapshot);
+    });
+
+    it("Should not mutate options, BUT mutate the nameCache", async function () {
+        const nameCache = {};
+
+        const options = {
+            nameCache,
+            toplevel: true,
+            mangle: {
+                properties: true
+            },
+            compress: false
+        };
+
+        await minify("const a_var = { a_prop: 'long' }", options);
+
+        assert.deepEqual(Object.keys(nameCache.vars.props), ["$a_var"]);
+        assert.deepEqual(Object.keys(nameCache.props.props), ["$a_prop"]);
+    });
+
     it("Should accept new `format` options as well as `output` options", async function() {
         const { code } = await minify("x(1,2);", { format: { beautify: true }});
         assert.strictEqual(code, "x(1, 2);");

@@ -11,7 +11,6 @@ try {
 const fs = require("fs");
 const path = require("path");
 const program = require("commander");
-
 const packageJson = require("../package.json");
 const { _run_cli: run_cli } = require("..");
 

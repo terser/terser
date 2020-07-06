@@ -8,6 +8,18 @@
  - Module is now distributed as a dual package - You can `import` and `require()` too.
  - Inline improvements were made
 
+## v4.8.0
+
+ - Support for numeric separators (`million = 1_000_000`) was added.
+ - Assigning properties to a class is now assumed to be pure.
+ - Fixed bug where `yield` wasn't considered a valid property key in generators.
+
+## v4.7.0
+
+ - A bug was fixed where an arrow function would have the wrong size
+ - `arguments` object is now considered safe to retrieve properties from (useful for `length`, or `0`) even when `pure_getters` is not set.
+ - Fixed erroneous `const` declarations without value (which is invalid) in some corner cases when using `collapse_vars`.
+
 ## v4.6.13
 
  - Fixed issue where ES5 object properties were being turned into ES6 object properties due to more lax unicode rules.

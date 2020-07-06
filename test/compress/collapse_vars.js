@@ -3897,8 +3897,8 @@ issue_2453: {
         function log(n) {
             console.log(n);
         }
-        const a = 42;
-        log(a);
+        const a = void 0;
+        log(42);
     }
     expect_stdout: "42"
 }

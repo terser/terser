@@ -1,0 +1,8 @@
+ls:
+    '{lib, tools}':
+        .js: kebab-case
+        .ts: kebab-case
+        .d.ts: kebab-case
+
+ignore:
+    - lib/utils/first_in_statement.js

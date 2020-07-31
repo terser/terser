@@ -1,0 +1,12 @@
+ls:
+    '{lib,tools,test}':
+        .js: kebab-case
+        .ts: kebab-case
+        .d.ts: kebab-case
+        .html: kebab-case
+        .json: kebab-case
+
+ignore:
+    - test/input
+    - test/compress
+    - lib/utils/first_in_statement.js

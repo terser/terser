@@ -1,10 +1,17 @@
 # Changelog
 
+## v5.0.0
+
+ - `in` operator now taken into account during property mangle.
+ - Fixed infinite loop in face of a reference loop in some situations.
+ - Kept exports and imports around even if there's something which will throw before them.
+ - The main exported bundle for commonjs, dist/bundle.min.js is no longer minified.
+
 ## v5.0.0-beta.0
 
- - `minify()` is now async and rejects a promise instead of returning an error.
- - Internal AST is no longer exposed, so that it can be improved without releasing breaking changes.
- - Lowest supported node version is 10
+ - BREAKING: `minify()` is now async and rejects a promise instead of returning an error.
+ - BREAKING: Internal AST is no longer exposed, so that it can be improved without releasing breaking changes.
+ - BREAKING: Lowest supported node version is 10
  - Module is now distributed as a dual package - You can `import` and `require()` too.
  - Inline improvements were made
 

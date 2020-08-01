@@ -42,7 +42,7 @@
     "main.js"
   ],
   "dependencies": {
-    "commander": "^2.20.0",
+    "commander": "^6.0.0",
     "source-map": "~0.6.1",
     "source-map-support": "~0.5.12"
   },

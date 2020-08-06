@@ -222,6 +222,14 @@ import_all_statement: {
     expect_exact: 'import*as Lel from"lel";'
 }
 
+import_meta: {
+    input: {
+        import.meta;
+        import.meta.url;
+    }
+    expect_exact: 'import.meta;import.meta.url;'
+}
+
 export_statement: {
     options = {
         evaluate: true,

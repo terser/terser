@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.9.2",
-    "acorn": "^7.1.1",
+    "acorn": "^7.4.0",
     "astring": "^1.4.1",
     "eslint": "^7.0.0",
     "eslump": "^2.0.0",

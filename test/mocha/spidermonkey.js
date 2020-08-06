@@ -114,7 +114,7 @@ describe("spidermonkey export/import sanity test", function() {
     it("should be capable of importing from acorn", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);
-        var moz_ast = acornParse(code, {sourceType: 'module', ecmaVersion: 2018});
+        var moz_ast = acornParse(code, {sourceType: 'module', ecmaVersion: 2020});
         var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
@@ -151,7 +151,7 @@ describe("spidermonkey export/import sanity test", function() {
         var generated = astringGenerate(moz_ast);
         var parsed = acornParse(generated, {
             sourceType: "module",
-            ecmaVersion: 2018
+            ecmaVersion: 2020
         });
         assert.strictEqual(
             AST.AST_Node.from_mozilla_ast(parsed).print_to_string(),

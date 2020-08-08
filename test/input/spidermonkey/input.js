@@ -7,6 +7,8 @@ import { Bar2 as kex, Baz as food } from "lel";
 
 const x = 0b01;
 let y = 6;
+import.meta;
+console.log(import.meta.url);
 
 export default x;
 export const z = 4;

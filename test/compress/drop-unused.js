@@ -2910,3 +2910,24 @@ variable_refs_outside_unused_class: {
 
     expect_stdout: "PASS"
 }
+
+unused_null_conditional_chain: {
+    options = {
+        defaults: true,
+        sequences: false,
+        evaluate: false
+    }
+    input: {
+        null?.unused;
+        null?.[side_effect()];
+        null?.unused.i_will_throw;
+        null?.call(1);
+        null?.(2);
+        null?.maybe_call?.(3);
+    }
+    expect: {
+        undefined.i_will_throw;
+        undefined(1);
+    }
+}
+

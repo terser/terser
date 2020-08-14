@@ -7218,3 +7218,180 @@ issue_741_2: {
     }
     expect_stdout: ["1", "2"]
 }
+
+conditional_chain_call: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.c(foo = "FAIL")
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.c(foo = "FAIL")
+
+        console.log(foo)
+    }
+    expect_stdout: ["PASS"]
+    node_version = ">=14"
+}
+
+conditional_chain_call_direct: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.(foo = "FAIL")
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.(foo = "FAIL")
+
+        console.log(foo)
+    }
+    expect_stdout: ["PASS"]
+    node_version = ">=14"
+}
+
+conditional_chain_prop: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = null
+
+        let foo = "PASS"
+
+        a?.b[foo = "FAIL"]
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = null
+
+        let foo = "PASS"
+
+        a?.b[foo = "FAIL"]
+
+        console.log(foo)
+    }
+    expect_stdout: ["PASS"]
+    node_version = ">=14"
+}
+
+conditional_chain_prop_direct: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.[foo = "FAIL"]
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = { b: null }
+
+        let foo = "PASS"
+
+        a.b?.[foo = "FAIL"]
+
+        console.log(foo)
+    }
+    expect_stdout: ["PASS"]
+    node_version = ">=14"
+}
+
+conditional_chain_certain_part: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = { b: null }
+
+        let foo = "FAIL"
+
+        a.b.c(foo = "PASS")?.x
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = { b: null }
+
+        let foo = "FAIL"
+
+        a.b.c(foo = "PASS")?.x
+
+        // "PASS" here because we know `foo = "PASS"` always happens.
+        console.log("PASS")
+    }
+}
+
+conditional_chain_certain_and_uncertain_part: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        global.a = { b: null }
+
+        let foo = "FAIL"
+
+        a.b?.[foo = "PASS"]?.d(foo = "FAIL")
+
+        console.log(foo)
+    }
+    expect: {
+        global.a = { b: null }
+
+        let foo = "FAIL"
+
+        a.b?.[foo = "PASS"]?.d(foo = "FAIL")
+
+        console.log(foo)
+    }
+}

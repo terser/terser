@@ -212,3 +212,17 @@ issue_3217: {
         console.log(42);
     }
 }
+
+conditional_chains: {
+    options = {
+        global_defs: {
+            "a.b.c": "d",
+        },
+    }
+    input: {
+        console.log(a?.b.c);
+    }
+    expect: {
+        console.log("d");
+    }
+}

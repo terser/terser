@@ -1768,3 +1768,22 @@ issue_399: {
         console.log(/\n\r\u2028\u2029/);
     }
 }
+
+null_conditional_chain_eval: {
+    options = {
+        evaluate: true,
+        side_effects: true
+    }
+    input: {
+        null?.unused
+        null?.[side_effect()]
+        null?.unused.but_might_throw
+        null?.call(1)
+        null?.(2)
+        null?.maybe_call?.(3)
+    }
+    expect: {
+        (void 0).but_might_throw;
+        (void 0)(1);
+    }
+}

@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.1.0
+
+ - `import.meta` is now supported
+ - Typescript typings have been improved
+
 ## v5.0.0
 
  - `in` operator now taken into account during property mangle.
@@ -12,6 +17,7 @@
  - BREAKING: `minify()` is now async and rejects a promise instead of returning an error.
  - BREAKING: Internal AST is no longer exposed, so that it can be improved without releasing breaking changes.
  - BREAKING: Lowest supported node version is 10
+ - BREAKING: There are no more warnings being emitted
  - Module is now distributed as a dual package - You can `import` and `require()` too.
  - Inline improvements were made
 

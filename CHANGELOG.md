@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.2.0
+
+ - Optional chaining syntax is now supported.
+ - Consecutive await expressions don't have unnecessary parens
+ - Taking the variable name's length (after mangling) into consideration when deciding to inline
+
 ## v5.1.0
 
  - `import.meta` is now supported

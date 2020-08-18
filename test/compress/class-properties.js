@@ -246,3 +246,32 @@ mangle_class_properties_keep_quoted: {
         }
     }
 }
+
+private_class_properties: {
+    no_mozilla_ast = true;
+    node_version = ">=12";
+    options = {
+        ecma: 2015
+    }
+    input: {
+        class Foo {
+            #bar = "FooBar"
+
+            get bar() {
+                return this.#bar;
+            }
+        }
+        console.log(new Foo().bar)
+    }
+    expect: {
+        class Foo {
+            #bar = "FooBar"
+
+            get bar() {
+                return this.#bar;
+            }
+        }
+        console.log(new Foo().bar)
+    }
+    expect_stdout: "FooBar"
+}

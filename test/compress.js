@@ -202,7 +202,10 @@ async function run_compress_tests() {
                 input.figure_out_scope(test.mangle);
                 input.expand_names(test.mangle);
             }
-            var cmp = new Compressor(options, options.defaults === undefined ? true : !options.defaults);
+            var cmp = new Compressor(options, {
+                false_by_default: options.defaults === undefined ? true : !options.defaults,
+                mangle_options: test.mangle
+            });
             var output = cmp.compress(input);
             output.figure_out_scope(test.mangle);
             if (test.mangle) {

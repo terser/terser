@@ -7,7 +7,10 @@
         "mozilla_ast": true,
         "console": false,
         "window": false,
-        "global": false
+        "global": false,
+        "pass": false,
+        "fail": false,
+        "leak": false
     },
     "rules": {
         "semi": "off"

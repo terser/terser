@@ -395,3 +395,35 @@ dont_inline_funcs_into_default_param_2: {
 
     expect_stdout: "PASS"
 }
+
+do_not_repeat_when_variable_larger_than_inlined_node: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        inline: true
+    }
+
+    mangle = {
+        toplevel: true
+    }
+
+    input: {
+        const _string_ = "string";
+
+        pass(_string_);
+        pass(_string_);
+        pass(_string_);
+        pass(_string_);
+        pass(_string_);
+    }
+
+    expect: {
+        const s = "string";
+
+        pass(s);
+        pass(s);
+        pass(s);
+        pass(s);
+        pass(s);
+    }
+}

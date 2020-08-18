@@ -411,7 +411,7 @@ Browser loading is also supported:
 
 There is a single async high level function, **`async minify(code, options)`**,
 which will perform all minification [phases](#minify-options) in a configurable
-manner. By default `minify()` will enable the options [`compress`](#compress-options)
+manner. There is no synchronous function, but this functionality can be achieved with a package like [deasync](https://github.com/abbr/deasync). By default `minify()` will enable the options [`compress`](#compress-options)
 and [`mangle`](#mangle-options). Example:
 ```javascript
 var code = "function add(first, second) { return first + second; }";

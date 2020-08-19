@@ -522,7 +522,7 @@ try {
 
 ## Minify options
 
-- `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override `parse`,
+- `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override
   `compress` and `format`'s `ecma` options.
 
 - `parse` (default `{}`) — pass an object if you wish to specify some
@@ -659,10 +659,6 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 ## Parse options
 
 - `bare_returns` (default `false`) -- support top level `return` statements
-
-- `ecma` (default: `2017`) -- specify one of `5`, `2015`, `2016` or `2017`. Note: this setting
-  is not presently enforced except for ES8 optional trailing commas in function
-  parameter lists and calls with `ecma` `2017`.
 
 - `html5_comments` (default `true`)
 

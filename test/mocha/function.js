@@ -189,7 +189,6 @@ describe("Function", function() {
     it("Should not accept empty parameters after elision", async function() {
         var tests = [
             "(function(,){})()",
-            "(function(a,){})()",
         ];
         var test = function(code) {
             return function() {
@@ -202,21 +201,6 @@ describe("Function", function() {
         for (var i = 0; i < tests.length; i++) {
             assert.throws(test(tests[i]), error, tests[i]);
         }
-    });
-    it("Should accept trailing commas only for ES8", async function() {
-        [
-            "new Foo(a, );",
-            "async(...[1, 2], );",
-            "console.log(...[1, 2], );",
-            "!function(a, b, ){ console.log(a + b); }(3, 4, );",
-        ].forEach(function(code) {
-            parse(code, { ecma: 2017 });
-            assert.throws(function() {
-                parse(code, { ecma: 2015 });
-            }, function(e) {
-                return e instanceof Error;
-            }, code);
-        });
     });
     it("Should not accept invalid trailing commas", async function() {
         var tests = [

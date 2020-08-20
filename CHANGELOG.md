@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.2.1
+
+ - The parse step now doesn't accept an `ecma` option, so that all ES code is accepted.
+ - Optional dotted chains now accept keywords, just like dotted expressions (`foo?.default`)
+
 ## v5.2.0
 
  - Optional chaining syntax is now supported.

@@ -17,6 +17,10 @@ with the project. In general also try to be nice to others.
 
 Every new feature and API change should be accompanied by a README addition.
 
+## Node version
+
+To install Terser's dev dependencies and run tests locally, oftentimes you will need the latest stable version of node. This is the highest even numbered version that's available.
+
 ## Testing
 
 All features and bugs should have tests that verify the fix. You can run all

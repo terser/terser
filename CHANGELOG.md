@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.3.0
+
+ - Fixed a crash when compressing object spreads in some cases
+ - Fixed compiletime evaluation of optional chains (caused typeof a?.b to always return "object")
+ - domprops has been updated to contain every single possible prop
+
 ## v5.2.1
 
  - The parse step now doesn't accept an `ecma` option, so that all ES code is accepted.

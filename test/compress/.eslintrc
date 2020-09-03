@@ -10,7 +10,8 @@
         "global": false,
         "pass": false,
         "fail": false,
-        "leak": false
+        "leak": false,
+        "id": false
     },
     "rules": {
         "semi": "off"

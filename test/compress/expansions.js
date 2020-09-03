@@ -68,3 +68,37 @@ avoid_spread_in_ternary: {
         "3 4",
     ]
 }
+
+object_spread_regression: {
+    options = {
+        hoist_props: true
+    }
+
+    input: {
+        const x = () => {
+            let o = { ...{} }
+        }
+    }
+
+    expect: {
+        const x = () => {
+            let o = {}
+        }
+    }
+}
+
+object_spread: {
+    options = {
+        defaults: true
+    }
+    input: {
+        let obj = { ...{} }
+        console.log(Object.keys(obj))
+        let objWithKeys = { a: 1, ...{ b: 2 } }
+        console.log(Object.keys(objWithKeys).join(","))
+    }
+    expect_stdout: [
+        "[]",
+        "a,b",
+    ]
+}

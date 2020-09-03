@@ -2444,9 +2444,9 @@ mangle_properties_which_matches_pattern: {
     expect: {
         var acd = {
             get asd() {
-                return this.s
+                return this.t
             },
-            s: !0
+            t: !0
         };
 
         console.log(acd);

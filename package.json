@@ -142,6 +142,7 @@
     }
   },
   "pre-commit": [
+    "build",
     "lint-fix",
     "ls-lint",
     "test"

@@ -923,6 +923,27 @@ unused_destructuring_decl_5: {
     expect_stdout: "7 8 3"
 }
 
+unused_destructuring_decl_6: {
+    options = {
+        pure_getters: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        const { a, b: c, ...d } = { b: 7 };
+        let { e, f: g, ...h } = { e: 8 };
+        var { w, x: y, ...z } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z.y);
+    }
+    expect: {
+        const { a, b: c, ...d } = { b: 7 };
+        let { e, f: g, ...h } = { e: 8 };
+        var { w, x: y, ...z } = { w: 4, x: 5, y: 6 };
+        console.log(c, e, z.y);
+    }
+    expect_stdout: "7 8 6"
+}
+
 unused_destructuring_function_param: {
     options = {
         pure_getters: true,

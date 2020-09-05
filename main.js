@@ -1,8 +1,8 @@
 import "./lib/transform.js";
 import "./lib/mozilla-ast.js";
-import { minify } from "./lib/minify.js";
+import { minify, minifySync } from "./lib/minify.js";
 
-export { minify } from "./lib/minify.js";
+export { minify, minifySync } from "./lib/minify.js";
 export { run_cli as _run_cli } from "./lib/cli.js";
 
 export async function _default_options() {

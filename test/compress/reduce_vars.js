@@ -5588,6 +5588,33 @@ duplicate_lambda_defun_name_2: {
     expect_stdout: "0"
 }
 
+named_function_with_recursive_ref_reuse: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true
+    }
+    input: {
+        var result = [];
+        var do_not_inline = function foo() {
+            result.push(foo)
+        };
+        [0, 1].map(() => do_not_inline());
+        console.log(result[0] === result[1]);
+    }
+    expect: {
+        var result = [];
+        var do_not_inline = function foo() {
+            result.push(foo)
+        };
+        [0, 1].map(() => do_not_inline());
+        console.log(result[0] === result[1]);
+    }
+    expect_stdout: "true"
+}
+
 issue_2757_1: {
     options = {
         evaluate: true,
@@ -5692,10 +5719,11 @@ issue_2799_1: {
     expect: {
         console.log(function() {
             return function(n) {
+                function g(i) {
+                    return i && i + g(i - 1);
+                }
                 return function(j) {
-                    return function g(i) {
-                        return i && i + g(i - 1);
-                    }(j);
+                    return g(j);
                 }(n);
             }
         }()(5));

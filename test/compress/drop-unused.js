@@ -1915,9 +1915,10 @@ issue_2665: {
     }
     expect: {
         var a = 1;
-        !function g() {
+        function g() {
             a-- && g();
-        }();
+        };
+        g();
         console.log(a);
     }
     expect_stdout: "-1"

@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.3.1
+
+ - An issue with destructuring declarations when `pure_getters` is enabled has been fixed
+ - Fixed a crash when chain expressions need to be shallowly compared
+ - Made inlining functions more conservative to make sure a function that contains a reference to itself isn't moved into a place that can create multiple instances of itself.
+
 ## v5.3.0
 
  - Fixed a crash when compressing object spreads in some cases

@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.3.2
+
+ - Prevented spread operations from being expanded when the expanded array/object contains getters, setters, or array holes.
+ - Fixed _very_ slow self-recursion in some cases of removing extraneous parentheses from `+` operations.
+
 ## v5.3.1
 
  - An issue with destructuring declarations when `pure_getters` is enabled has been fixed

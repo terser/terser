@@ -94,17 +94,19 @@ export interface ManglePropertiesOptions {
     reserved?: string[];
 }
 
+export type CommentsOption = boolean | 'all' | 'some' | RegExp | ( (node: any, comment: {
+    value: string,
+    type: 'comment1' | 'comment2' | 'comment3' | 'comment4',
+    pos: number,
+    line: number,
+    col: number,
+}) => boolean );
+
 export interface FormatOptions {
     ascii_only?: boolean;
     beautify?: boolean;
     braces?: boolean;
-    comments?: boolean | 'all' | 'some' | RegExp | ( (node: any, comment: {
-        value: string,
-        type: 'comment1' | 'comment2' | 'comment3' | 'comment4',
-        pos: number,
-        line: number,
-        col: number,
-    }) => boolean );
+    comments?: CommentsOption;
     ecma?: ECMA;
     ie8?: boolean;
     indent_level?: number;
@@ -135,6 +137,7 @@ export enum OutputQuoteStyle {
 }
 
 export interface MinifyOptions {
+    comments?: CommentsOptions;
     compress?: boolean | CompressOptions;
     ecma?: ECMA;
     ie8?: boolean;

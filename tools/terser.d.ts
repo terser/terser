@@ -137,7 +137,6 @@ export enum OutputQuoteStyle {
 }
 
 export interface MinifyOptions {
-    comments?: CommentsOptions;
     compress?: boolean | CompressOptions;
     ecma?: ECMA;
     ie8?: boolean;

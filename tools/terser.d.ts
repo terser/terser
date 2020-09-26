@@ -144,6 +144,8 @@ export interface MinifyOptions {
     module?: boolean;
     nameCache?: object;
     format?: FormatOptions;
+    /** @deprecated */
+    output?: FormatOptions;
     parse?: ParseOptions;
     safari10?: boolean;
     sourceMap?: boolean | SourceMapOptions;

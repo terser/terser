@@ -105,6 +105,7 @@ export interface FormatOptions {
         line: number,
         col: number,
     }) => boolean );
+    ecma?: ECMA;
     ie8?: boolean;
     indent_level?: number;
     indent_start?: number;

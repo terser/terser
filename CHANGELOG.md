@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.3.3
+
+ - `source-map` library has been updated, bringing memory usage and CPU time improvements when reading input source maps (the SourceMapConsumer is now WASM based).
+ - The `wrap_func_args` option now also wraps arrow functions, as opposed to only function expressions.
+
 ## v5.3.2
 
  - Prevented spread operations from being expanded when the expanded array/object contains getters, setters, or array holes.

@@ -32,7 +32,7 @@ describe("input sourcemaps", function() {
             }
         });
 
-        map = new SourceMapConsumer(result.map);
+        map = await new SourceMapConsumer(result.map);
     }
 
     beforeEach(async function () {

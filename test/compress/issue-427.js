@@ -8,9 +8,9 @@ wrap_func_args: {
     input: {
         console.log(function() {
             return "test";
-        });
+        }, () => null);
     }
-    expect_exact: 'console.log((function(){return"test"}));'
+    expect_exact: 'console.log((function(){return"test"}),(()=>null));'
 }
 
 no_wrap_func_args: {
@@ -23,7 +23,7 @@ no_wrap_func_args: {
     input: {
         console.log(function() {
             return "test";
-        });
+        }, () => null);
     }
-    expect_exact: 'console.log(function(){return"test"});'
+    expect_exact: 'console.log(function(){return"test"},()=>null);'
 }

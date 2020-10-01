@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "depTypeList": ["dependencies"],
+      "updateTypes": ["major"]
+    },
+    {
+      "depTypeList": ["devDependencies"],
+      "enabled": false
+    }
+  ]
+}

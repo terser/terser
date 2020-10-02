@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.3.4
+
+ - Fixed a crash when hoisting (with `hoist_vars`) a destructuring variable declaration
+
 ## v5.3.3
 
  - `source-map` library has been updated, bringing memory usage and CPU time improvements when reading input source maps (the SourceMapConsumer is now WASM based).

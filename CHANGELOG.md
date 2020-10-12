@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.3.5
+
+ - Avoid moving named functions into default exports.
+ - Enabled transform() for chain expressions. This allows AST transformers to reach inside chain expressions.
+
 ## v5.3.4
 
  - Fixed a crash when hoisting (with `hoist_vars`) a destructuring variable declaration

@@ -127,3 +127,21 @@ nullish_coalescing_mandatory_parens: {
 
     expect_exact: "(x??y)||z;x||(y??z);"
 }
+
+nullish_coalescing_parens: {
+    input: {
+        console.log((false || null) ?? "PASS");
+        console.log(null ?? (true && "PASS"));
+        console.log((null ?? 0) || "PASS");
+        console.log(null || (null ?? "PASS"));
+    }
+
+    node_version: ">=14"
+
+    expect_stdout: [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+    ]
+}

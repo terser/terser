@@ -1098,3 +1098,30 @@ does_not_hoist_objects_with_computed_props: {
     }
     expect_stdout: "PASS"
 }
+
+issue_851_hoist_to_conflicting_name: {
+    options = {
+        hoist_props: true,
+        reduce_vars: true,
+        toplevel: true
+    }
+    input: {
+        const BBB = { CCC: "PASS" }
+
+        if (id(true)) {
+            const BBB_CCC = BBB.CCC
+            console.log(BBB_CCC)
+        }
+    }
+
+    expect: {
+        const BBB_CCC$0 = "PASS";
+
+        if (id(true)) {
+            const BBB_CCC = BBB_CCC$0;
+            console.log(BBB_CCC);
+        }
+    }
+
+    expect_stdout: "PASS"
+}

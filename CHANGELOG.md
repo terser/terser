@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.3.7
+
+Hotfix release, fixes package.json "engines" syntax
+
 ## v5.3.6
 
  - Fixed parentheses when outputting `??` mixed with `||` and `&&`

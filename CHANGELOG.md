@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.3.6
+
+ - Fixed parentheses when outputting `??` mixed with `||` and `&&`
+ - Improved hygiene of the symbol generator
+
 ## v5.3.5
 
  - Avoid moving named functions into default exports.

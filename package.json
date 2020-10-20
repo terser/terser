@@ -6,7 +6,7 @@
   "license": "BSD-2-Clause",
   "version": "5.3.7",
   "engines": {
-    "node": "^10.0.0 || ^11.0.0 || ^12.0.0 || >=14.0.0"
+    "node": "^10 || ^11 || ^12 || ^13 || ^14 || >=15.0.0"
   },
   "maintainers": [
     "Fábio Santos <fabiosantosart@gmail.com>"
@@ -16,16 +16,15 @@
   "type": "module",
   "module": "./main.js",
   "exports": {
-    ".": {
-      "import": "./main.js",
-      "require": "./dist/bundle.min.js"
-    },
-    "./package": {
-      "default": "./package.json"
-    },
-    "./package.json": {
-      "default": "./package.json"
-    }
+    ".": [
+      {
+        "import": "./main.js",
+        "require": "./dist/bundle.min.js"
+      },
+      "./dist/bundle.min.js"
+    ],
+    "./package": "./package.json",
+    "./package.json": "./package.json"
   },
   "types": "tools/terser.d.ts",
   "bin": {

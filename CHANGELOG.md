@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.3.8
+
+ - Restore node 13 support
+
 ## v5.3.7
 
 Hotfix release, fixes package.json "engines" syntax

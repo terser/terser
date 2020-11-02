@@ -169,6 +169,24 @@ lift_sequences_5: {
     expect_stdout: "6"
 }
 
+lift_sequences_6: {
+    options = {
+        sequences: true,
+        toplevel: true,
+    }
+    input: {
+        var a = 2;
+        a &&= (leak(), a = 4, 3);
+        console.log(a);
+    }
+    expect: {
+        var a = 2;
+        a &&= (leak(), a = 4, 3),
+        console.log(a);
+    }
+    expect_stdout: "3"
+}
+
 for_sequences: {
     options = {
         sequences: true,

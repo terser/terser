@@ -23,7 +23,7 @@ jobs:
       env:
         - TEST_NO_SANDBOX=1
 
-    - node_js: 14
+    - node_js: 15
       env:
         - TERSER_TEST_ALL=1
       cache:
@@ -31,7 +31,7 @@ jobs:
           - node_modules
           - tmp
 
-    - node_js: 14
+    - node_js: 15
       os: windows
       env:
         - TEST_NO_SANDBOX=1

@@ -30,9 +30,11 @@ jobs:
         directories:
           - node_modules
           - tmp
+      before_script: npm run build
 
     - node_js: 15
       os: windows
       env:
         - TEST_NO_SANDBOX=1
+      before_script: npm run build
 

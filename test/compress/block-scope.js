@@ -31,6 +31,17 @@ do_not_hoist_let: {
     }
 }
 
+drop_undefined_vardef: {
+    input: {
+        let x = undefined;
+        const y = undefined;
+    }
+    expect: {
+        let x;
+        const y = void 0;
+    }
+}
+
 do_not_remove_anon_blocks_if_they_have_decls: {
     input: {
         function x() {

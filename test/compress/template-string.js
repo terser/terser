@@ -81,7 +81,7 @@ template_string_with_constant_expression: {
 
 template_string_with_predefined_constants: {
     options = {
-        evaluate: true
+        evaluate: true,
     }
     beautify = {
         quote_style: 3
@@ -120,7 +120,7 @@ template_string_with_predefined_constants: {
 
         var a = "4194304";
         var b = "16777216"; // Potential for further concatentation
-        var c = "" + 4**14; // Not worth converting
+        var c = `${4**14}`; // Not worth converting
     }
 }
 
@@ -182,7 +182,8 @@ template_string_to_normal_string: {
 
 template_concattenating_string: {
     options = {
-        evaluate: true
+        evaluate: true,
+        unsafe: true
     }
     beautify = {
         quote_style: 3 // Yes, keep quotes
@@ -213,76 +214,6 @@ evaluate_nested_templates: {
         var foo = "foo";
         var bar = `before innerBefore ${any} innerAfter after`;
         var baz = `1 23 ${any} 45 6`;
-    }
-}
-
-enforce_double_quotes: {
-    beautify = {
-        quote_style: 1
-    }
-    input: {
-        var foo = `Hello world`;
-        var bar = `Hello ${'world'}`;
-        var baz = `Hello ${world()}`;
-    }
-    expect: {
-        var foo = `Hello world`;
-        var bar = `Hello ${"world"}`;
-        var baz = `Hello ${world()}`;
-    }
-}
-
-enforce_single_quotes: {
-    beautify = {
-        quote_style: 2
-    }
-    input: {
-        var foo = `Hello world`;
-        var bar = `Hello ${"world"}`;
-        var baz = `Hello ${world()}`;
-    }
-    expect: {
-        var foo = `Hello world`;
-        var bar = `Hello ${'world'}`;
-        var baz = `Hello ${world()}`;
-    }
-}
-
-enforce_double_quotes_and_evaluate: {
-    beautify = {
-        quote_style: 1
-    }
-    options = {
-        evaluate: true
-    }
-    input: {
-        var foo = `Hello world`;
-        var bar = `Hello ${'world'}`;
-        var baz = `Hello ${world()}`;
-    }
-    expect: {
-        var foo = "Hello world";
-        var bar = "Hello world";
-        var baz = "Hello " + world();
-    }
-}
-
-enforce_single_quotes_and_evaluate: {
-    beautify = {
-        quote_style: 2
-    }
-    options = {
-        evaluate: true
-    }
-    input: {
-        var foo = `Hello world`;
-        var bar = `Hello ${"world"}`;
-        var baz = `Hello ${world()}`;
-    }
-    expect: {
-        var foo = "Hello world";
-        var bar = "Hello world";
-        var baz = "Hello " + world();
     }
 }
 
@@ -445,8 +376,8 @@ t${5}`);
         tag`t${4}`;
         console.log("\nt5");
         function f(a) {
-            a &= "t7" + a;
-            a = "t8" + b | a;
+            a &= `t7${a}`;
+            a = `t8${b}` | a;
             a = f`t9${a}` ^ a;
         }
     }
@@ -964,6 +895,7 @@ equality: {
 coerce_to_string: {
     options = {
         evaluate: true,
+        unsafe: true
     }
     input: {
         var str = `${any}`;

@@ -50,6 +50,8 @@ From NPM for programmatic use:
 
 # Command line usage
 
+<!-- CLI_USAGE:START -->
+
     terser [input files] [options]
 
 Terser can take multiple input files.  It's recommended that you pass the
@@ -387,8 +389,11 @@ random number on every compile to simulate mangling changing with different
 inputs (e.g. as you update the input script with new properties), and to help
 identify mistakes like writing mangled keys to storage.
 
+<!-- CLI_USAGE:END -->
 
 # API Reference
+
+<!-- API_REFERENCE:START -->
 
 Assuming installation via NPM, you can load Terser in your application
 like this:
@@ -1275,6 +1280,8 @@ to remove the existing `yarn` lock file and reinstall all packages:
 $ rm -rf node_modules yarn.lock
 $ yarn
 ```
+
+<!-- API_REFERENCE:END -->
 
 # Reporting issues
 

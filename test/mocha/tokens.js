@@ -33,14 +33,11 @@ describe("tokens", function() {
             if (node instanceof AST.AST_ObjectProperty) {
                 found = true;
                 assert.equal(node.start.pos, 12);
-                assert.equal(node.end.endpos, 46);
 
                 assert(node.key instanceof AST.AST_SymbolMethod);
                 assert.equal(node.key.start.pos, 12);
-                assert.equal(node.key.end.endpos, 22);
                 assert(node.value instanceof AST.AST_Accessor);
                 assert.equal(node.value.start.pos, 22);
-                assert.equal(node.value.end.endpos, 46);
             }
         }));
         assert(found, "AST_ObjectProperty not found");

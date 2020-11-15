@@ -410,8 +410,8 @@ import { minify } from "terser";
 
 Browser loading is also supported:
 ```html
-<script src="node_modules/source-map/dist/source-map.min.js"></script>
-<script src="dist/bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/source-map@0.7.3/dist/source-map.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/terser/dist/bundle.min.js"></script>
 ```
 
 There is a single async high level function, **`async minify(code, options)`**,

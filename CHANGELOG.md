@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.4.0
+
+ - Logical assignment
+ - Change `let x = undefined` to just `let x`
+ - Removed some optimizations for template strings, placing them behind `unsafe` options. Reason: adding strings is not equivalent to template strings, due to valueOf differences.
+ - The AST_Token class was slimmed down in order to use less memory.
+
 ## v5.3.8
 
  - Restore node 13 support

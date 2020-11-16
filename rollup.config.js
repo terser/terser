@@ -8,7 +8,7 @@ export default () => {
                 "source-map": "sourceMap",
             },
             name: "Terser",
-            sourcemap: true,
+            sourcemap: false,
             sourcemapExcludeSources: true,
             esModule: false,
             indent: false

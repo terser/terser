@@ -23,6 +23,18 @@ describe("Arrow functions", function() {
             assert.throws(test(tests[i]), error);
         }
     });
+
+    it("ASd", async function () {
+        var result = await minify("const fn = () => { b.asd(); return 'asd'; }", {
+            compress: true,
+            // mangle: false,
+        });
+        if (result.error) throw result.error;
+        // assert.ok(/const fn=[\w]=>"asd"/.test(result.code));
+        assert.strictEqual(result.code, 'const fn=a=>"asd"');
+        // assert.strictEqual(result.code, 'const fn=_=>"asd"');
+    });
+
     it("Should not accept holes in object binding patterns, while still allowing a trailing elision", async function() {
         var tests = [
             "f = ({, , ...x} = [1, 2]) => {};"
@@ -404,7 +416,8 @@ describe("Arrow functions", function() {
 
         assert.strictEqual(
           await min("export function foo(x) { bar = () => x; return 2};"),
-            "export function foo(x){return bar=()=>x,2}"
+            "export function foo(x){return bar=a=>x,2}"
+            // "export function foo(x){return bar=_=>x,2}"
         );
     });
 });

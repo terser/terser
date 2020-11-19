@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.4.1
+
+ - Fixed crash when inlining uninitialized variable into template string.
+ - The sourcemap for dist was removed for being too large.
+
 ## v5.4.0
 
  - Logical assignment

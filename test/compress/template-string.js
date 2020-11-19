@@ -198,6 +198,26 @@ template_concattenating_string: {
     }
 }
 
+template_evaluate_undefined: {
+    options = {
+        evaluate: true,
+        reduce_vars: true
+    }
+    input: {
+        // test.js
+        () => {
+            let x;
+            console.log(x + `?ts=${Date.now()}`);
+        };
+    }
+    expect: {
+        () => {
+            let x;
+            console.log(`undefined?ts=${Date.now()}`);
+        };
+    }
+}
+
 evaluate_nested_templates: {
     options = {
         evaluate: true

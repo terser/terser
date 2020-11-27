@@ -24,6 +24,22 @@ keep_quoted_unicode_props_es5: {
     expect_exact: 'console.log({"Ꞡ":"2139"});'
 }
 
+keep_quoted_unicode_props_safari: {
+    beautify = { safari10: true, ecma: 2020 }
+    input: {
+        console.log({ "\uA7A0": "2139" });
+    }
+    expect_exact: 'console.log({"Ꞡ":"2139"});'
+}
+
+unicode_props_safari: {
+    beautify = { safari10: true, ecma: 2020 }
+    input: {
+        console.log({ 𝒶: "foo" })
+    }
+    expect_exact: 'console.log({"𝒶":"foo"});'
+}
+
 unicode_escaped_identifier_2015: {
     beautify = {ecma: 2015}
     input: {
@@ -31,6 +47,14 @@ unicode_escaped_identifier_2015: {
         var \u{10000} = "bar";
     }
     expect_exact: 'var a="foo";var \u{10000}="bar";';
+}
+
+unicode_escaped_identifier_safari: {
+    beautify = {ecma: 2020, safari10: true}
+    input: {
+        var \u{61} = "foo";
+    }
+    expect_exact: 'var a="foo";';
 }
 
 unicode_escaped_identifier_es5_as_is: {

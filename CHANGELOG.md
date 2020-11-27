@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.5.1
+
+ - Fixed object properties with unicode surrogates on safari.
+
 ## v5.5.0
 
  - Fixed crash when inlining uninitialized variable into template string.

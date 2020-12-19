@@ -64,7 +64,7 @@ describe("bin/terser (2)", function() {
         });
     });
     it("Should print supported options on invalid option syntax", function(done) {
-        var command = tersercmd + " test/input/comments/filter.js -b ascii-only";
+        var command = tersercmd + " test/input/comments/filter.js -f ascii-only";
         exec(command, function (err, stdout, stderr) {
             assert.ok(err);
             assert.strictEqual(stdout, "");

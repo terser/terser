@@ -10,7 +10,7 @@ with the project. In general also try to be nice to others.
 
 1. When fixing a bug, include one or more tests which prove that your changes are correct, and
    that they fix something wrong. When adding a feature, include tests that show it in practice.
-2. Update the README.md with details of changes to the interface, this includes new environmen
+2. Update the README.md with details of changes to the interface, this includes new environment
    variables, options, useful file locations and others.
 
 ## Documentation

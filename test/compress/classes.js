@@ -23,7 +23,7 @@ class_recursive_refs: {
         }
     }
     expect: {
-        
+
     }
 }
 
@@ -94,4 +94,32 @@ pure_prop_assignment_for_classes: {
         B.staticProp = ""
     }
     expect: { }
+}
+
+private_class_methods: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            #method() {
+                return "I'm private"
+            }
+            print() {
+                console.log(this.#method());
+            }
+        }
+        new A().print();
+    }
+    expect: {
+        class A {
+            #method() {
+                return "I'm private"
+            }
+            print() {
+                console.log(this.#method());
+            }
+        }
+        new A().print();
+    }
+    expect_stdout: "I'm private"
 }

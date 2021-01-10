@@ -335,6 +335,7 @@ function parse_test(file) {
             tests[name] = get_one_test(name, node.body);
             return true;
         }
+        if (node instanceof AST.AST_Directive) return true;
         if (!(node instanceof AST.AST_Toplevel)) croak(node);
     });
     ast.walk(tw);

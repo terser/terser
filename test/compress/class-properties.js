@@ -299,3 +299,14 @@ same_name_public_private: {
     }
     expect_stdout: "PASS"
 }
+
+tolerate_nonclass_private_fields: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        Bar.#foo = "bad"
+    }
+    expect: {
+        Bar["#foo"] = "bad"
+    }
+}

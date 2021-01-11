@@ -275,3 +275,27 @@ private_class_properties: {
     }
     expect_stdout: "FooBar"
 }
+
+same_name_public_private: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            static foo
+            bar
+            static fil
+            = "P"
+            another =
+            "A";
+            #fil;
+            #another = "SS";
+            toString() {
+                if ('bar' in this && 'foo' in A && !("fil" in this)) {
+                    return A.fil + this.another + this.#another;
+                }
+            }
+        }
+        console.log(new A().toString())
+    }
+    expect_stdout: "PASS"
+}

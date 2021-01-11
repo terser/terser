@@ -9,17 +9,17 @@ basic_class_properties: {
             = "P"
             another =
             "A";
-            //#private;
-            //#private2 = "SS";
+            #private;
+            #private2 = "SS";
             toString() {
                 if ('bar' in this && 'foo' in A) {
-                    return A.fil + this.another// + this.#private2
+                    return A.fil + this.another + this.#private2
                 }
             }
         }
         console.log(new A().toString())
     }
-    expect_stdout: "PA" // SS"
+    expect_stdout: "PASS"
 }
 
 computed_class_properties: {

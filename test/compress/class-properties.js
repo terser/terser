@@ -300,7 +300,24 @@ same_name_public_private: {
     expect_stdout: "PASS"
 }
 
-tolerate_nonclass_private_fields: {
+static_private_fields: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            static #a = "P";
+            b = "A";
+            #c = "SS";
+            toString() {
+                return A.#a + this.b + this.#c;
+            }
+        }
+        console.log(new A().toString())
+    }
+    expect_stdout: "PASS"
+}
+
+tolerate_out_of_class_private_fields: {
     no_mozilla_ast = true;
     node_version = ">=12"
     input: {

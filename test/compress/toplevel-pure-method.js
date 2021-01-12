@@ -45,3 +45,27 @@ inline_different_name: {
     }
 }
 
+// TODO:
+rename_and_inline: {
+    options = {
+        toplevel: true,
+        defaults: true,
+        pure_getters: true
+    }
+    input: {
+        class MyClass {
+          method(a) {
+           myPureFunction(a)
+          }
+        }
+
+        function myPureFunction (a) {
+         console.log(a)
+        }
+
+        new MyClass();
+    }
+    expect: {
+        new class{method(a) {console.log(a)}};
+    }
+}

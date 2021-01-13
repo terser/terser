@@ -29,6 +29,7 @@ describe('release', () => {
             it("Should pass with options " + options, function(done) {
                 var args = options.split(/ /);
                 args.unshift("test/benchmark.cjs");
+                args.push("-f", "webkit");
                 run(process.argv[0], args, done);
             });
         });

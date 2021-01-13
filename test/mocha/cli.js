@@ -150,6 +150,21 @@ describe("bin/terser", function() {
             done();
         });
     });
+    it("Should alias `--beautify` with `--format`", function(done) {
+        var command1 = tersercmd + ' test/input/enclose/input.js --beautify preamble=oops';
+        var command2 = tersercmd + ' test/input/enclose/input.js --format preamble=oops';
+
+        exec(command1, function (err, stdout1) {
+            if (err) throw err;
+            exec(command2, function(err, stdout2) {
+                if (err) throw err;
+                assert.strictEqual(stdout1, stdout2);
+                done();
+            });
+
+
+        });
+    });
     it("Should process inline source map", function(done) {
         var command = tersercmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline";
 

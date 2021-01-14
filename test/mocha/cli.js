@@ -150,44 +150,19 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should work with `--beautify`", function(done) {
-        var command = tersercmd + ' test/input/issue-1482/input.js -b';
+    it("Should alias `--beautify` with `--format`", function(done) {
+        var command1 = tersercmd + ' test/input/enclose/input.js --beautify preamble=oops';
+        var command2 = tersercmd + ' test/input/enclose/input.js --format preamble=oops';
 
-        exec(command, function (err, stdout) {
+        exec(command1, function (err, stdout1) {
             if (err) throw err;
+            exec(command2, function(err, stdout2) {
+                if (err) throw err;
+                assert.strictEqual(stdout1, stdout2);
+                done();
+            });
 
-            assert.strictEqual(stdout, read("test/input/issue-1482/default.js"));
-            done();
-        });
-    });
-    it("Should work with `--beautify braces`", function(done) {
-        var command = tersercmd + ' test/input/issue-1482/input.js -b braces';
 
-        exec(command, function (err, stdout) {
-            if (err) throw err;
-
-            assert.strictEqual(stdout, read("test/input/issue-1482/braces.js"));
-            done();
-        });
-    });
-    it("Should work with `--format beautify=true`", function (done) {
-        var command = tersercmd + ' test/input/issue-1482/input.js -f beautify=true';
-
-        exec(command, function (err, stdout) {
-            if (err) throw err;
-
-            assert.strictEqual(stdout, read("test/input/issue-1482/default.js"));
-            done();
-        });
-    });
-    it("Should work with `--format beautify=true,braces`", function (done) {
-        var command = tersercmd + ' test/input/issue-1482/input.js -f beautify=true,braces';
-
-        exec(command, function (err, stdout) {
-            if (err) throw err;
-
-            assert.strictEqual(stdout, read("test/input/issue-1482/braces.js"));
-            done();
         });
     });
     it("Should process inline source map", function(done) {

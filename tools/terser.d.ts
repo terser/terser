@@ -96,6 +96,7 @@ export interface ManglePropertiesOptions {
 
 export interface FormatOptions {
     ascii_only?: boolean;
+    /** @deprecated Not implemented anymore */
     beautify?: boolean;
     braces?: boolean;
     comments?: boolean | 'all' | 'some' | RegExp | ( (node: any, comment: {

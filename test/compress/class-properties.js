@@ -289,6 +289,7 @@ same_name_public_private: {
             "A";
             #fil;
             #another = "SS";
+            ["#another"] = "XX";
             toString() {
                 if ('bar' in this && 'foo' in A && !("fil" in this)) {
                     return A.fil + this.another + this.#another;
@@ -324,6 +325,6 @@ tolerate_out_of_class_private_fields: {
         Bar.#foo = "bad"
     }
     expect: {
-        Bar["#foo"] = "bad"
+        Bar.#foo = "bad"
     }
 }

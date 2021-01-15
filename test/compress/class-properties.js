@@ -9,17 +9,17 @@ basic_class_properties: {
             = "P"
             another =
             "A";
-            //#private;
-            //#private2 = "SS";
+            #private;
+            #private2 = "SS";
             toString() {
                 if ('bar' in this && 'foo' in A) {
-                    return A.fil + this.another// + this.#private2
+                    return A.fil + this.another + this.#private2
                 }
             }
         }
         console.log(new A().toString())
     }
-    expect_stdout: "PA" // SS"
+    expect_stdout: "PASS"
 }
 
 computed_class_properties: {
@@ -244,5 +244,87 @@ mangle_class_properties_keep_quoted: {
                 return this.bar + Foo.zzz;
             }
         }
+    }
+}
+
+private_class_properties: {
+    no_mozilla_ast = true;
+    node_version = ">=12";
+    options = {
+        ecma: 2015
+    }
+    input: {
+        class Foo {
+            #bar = "FooBar"
+
+            get bar() {
+                return this.#bar;
+            }
+        }
+        console.log(new Foo().bar)
+    }
+    expect: {
+        class Foo {
+            #bar = "FooBar"
+
+            get bar() {
+                return this.#bar;
+            }
+        }
+        console.log(new Foo().bar)
+    }
+    expect_stdout: "FooBar"
+}
+
+same_name_public_private: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            static foo
+            bar
+            static fil
+            = "P"
+            another =
+            "A";
+            #fil;
+            #another = "SS";
+            ["#another"] = "XX";
+            toString() {
+                if ('bar' in this && 'foo' in A && !("fil" in this)) {
+                    return A.fil + this.another + this.#another;
+                }
+            }
+        }
+        console.log(new A().toString())
+    }
+    expect_stdout: "PASS"
+}
+
+static_private_fields: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            static #a = "P";
+            b = "A";
+            #c = "SS";
+            toString() {
+                return A.#a + this.b + this.#c;
+            }
+        }
+        console.log(new A().toString())
+    }
+    expect_stdout: "PASS"
+}
+
+tolerate_out_of_class_private_fields: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        Bar.#foo = "bad"
+    }
+    expect: {
+        Bar.#foo = "bad"
     }
 }

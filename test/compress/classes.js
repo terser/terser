@@ -104,14 +104,14 @@ private_class_methods: {
             #method() {
                 return "PA"
             }
-            static #method() {
+            static async* #method2() {
                 return "S"
             }
             ["#method"]() {
                 return "S"
             }
-            print() {
-                console.log(this.#method() + A.#method() + this["#method"]());
+            async print() {
+                console.log(this.#method() + (await A.#method2().next()).value + this["#method"]());
             }
         }
         new A().print();
@@ -121,16 +121,17 @@ private_class_methods: {
             #method() {
                 return "PA"
             }
-            static #method() {
+            static async* #method2() {
                 return "S"
             }
             ["#method"]() {
                 return "S"
             }
-            print() {
-                console.log(this.#method() + A.#method() + this["#method"]());
+            async print() {
+                console.log(this.#method() + (await A.#method2().next()).value + this["#method"]());
             }
         }
         new A().print();
     }
+    // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
 }

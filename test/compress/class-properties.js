@@ -318,6 +318,30 @@ static_private_fields: {
     expect_stdout: "PASS"
 }
 
+optional_chaining_private_fields: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            #opt = undefined;
+            toString() {
+                return this?.#opt ?? "PASS";
+            }
+        }
+        console.log(new A().toString())
+    }
+    expect: {
+        class A {
+            #opt = void 0;
+            toString() {
+                return this?.#opt ?? "PASS";
+            }
+        }
+        console.log(new A().toString())
+    }
+    // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
+}
+
 tolerate_out_of_class_private_fields: {
     no_mozilla_ast = true;
     node_version = ">=12"

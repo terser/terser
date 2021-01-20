@@ -748,7 +748,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `keep_classnames` (default: `false`) -- Pass `true` to prevent the compressor from
   discarding class names. Pass a regular expression to only keep class names matching
-  that regex. See also: the `keep_classnames` [mangle option](#mangle).
+  that regex. See also: the `keep_classnames` [mangle option](#mangle-options).
 
 - `keep_fargs` (default: `true`) -- Prevents the compressor from discarding unused
   function arguments.  You need this for code which relies on `Function.length`.
@@ -756,7 +756,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `keep_fnames` (default: `false`) -- Pass `true` to prevent the
   compressor from discarding function names. Pass a regular expression to only keep
   function names matching that regex. Useful for code relying on `Function.prototype.name`.
-  See also: the `keep_fnames` [mangle option](#mangle).
+  See also: the `keep_fnames` [mangle option](#mangle-options).
 
 - `keep_infinity` (default: `false`) -- Pass `true` to prevent `Infinity` from
   being compressed into `1/0`, which may cause performance issues on Chrome.

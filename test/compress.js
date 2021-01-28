@@ -174,20 +174,22 @@ async function run_compress_tests() {
                 });
                 return false;
             }
-            var ast = input.to_mozilla_ast();
-            var mozilla_options = {
-                ecma: output_options.ecma,
-                ascii_only: output_options.ascii_only,
-                comments: false,
-            };
-            var ast_as_string = AST.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
-            var input_string = input.print_to_string(mozilla_options);
-            if (input_string !== ast_as_string) {
-                log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
-                    input: input_string,
-                    output: ast_as_string,
-                });
-                return false;
+            if (!test.no_mozilla_ast) {
+                var ast = input.to_mozilla_ast();
+                var mozilla_options = {
+                    ecma: output_options.ecma,
+                    ascii_only: output_options.ascii_only,
+                    comments: false,
+                };
+                var ast_as_string = AST.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
+                var input_string = input.print_to_string(mozilla_options);
+                if (input_string !== ast_as_string) {
+                    log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
+                        input: input_string,
+                        output: ast_as_string,
+                    });
+                    return false;
+                }
             }
             var options = defaults(test.options, { });
             if (test.mangle && test.mangle.properties && test.mangle.properties.keep_quoted) {

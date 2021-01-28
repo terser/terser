@@ -95,3 +95,43 @@ pure_prop_assignment_for_classes: {
     }
     expect: { }
 }
+
+private_class_methods: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    input: {
+        class A {
+            #method() {
+                return "PA"
+            }
+            static async* #method2() {
+                return "S"
+            }
+            ["#method"]() {
+                return "S"
+            }
+            async print() {
+                console.log(this.#method() + (await A.#method2().next()).value + this["#method"]());
+            }
+        }
+        new A().print();
+    }
+    expect: {
+        class A {
+            #method() {
+                return "PA"
+            }
+            static async* #method2() {
+                return "S"
+            }
+            ["#method"]() {
+                return "S"
+            }
+            async print() {
+                console.log(this.#method() + (await A.#method2().next()).value + this["#method"]());
+            }
+        }
+        new A().print();
+    }
+    // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
+}

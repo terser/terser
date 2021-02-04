@@ -348,7 +348,41 @@ tolerate_out_of_class_private_fields: {
     input: {
         Bar.#foo = "bad"
     }
+    expect_exact: 'Bar.#foo="bad";'
+}
+
+private_properties_can_be_mangled: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    mangle = {
+        properties: true
+    }
+    input: {
+        class X {
+            aaaaaa = "P"
+            #aaaaaa = "A"
+            #bbbbbb() {
+                return "SS"
+            }
+            log() {
+                console.log(this.aaaaaa + this.#aaaaaa + this.#bbbbbb())
+            }
+        }
+
+        new X().log()
+    }
     expect: {
-        Bar.#foo = "bad"
+        class X {
+            t = "P"
+            #a = "A"
+            #b() {
+                return "SS"
+            }
+            log() {
+                console.log(this.t + this.#a + this.#b())
+            }
+        }
+
+        new X().log()
     }
 }

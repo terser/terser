@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.6.0
+
+ - Added top-level await
+ - Beautify option has been removed in #895
+ - Private properties, getters and setters have been added in #913 and some more commits
+ - Docs improvements: #896, #903, #916
+
 ## v5.5.1
 
  - Fixed object properties with unicode surrogates on safari.

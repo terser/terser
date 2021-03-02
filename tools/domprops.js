@@ -4120,6 +4120,7 @@ export var domprops = [
     "exponent",
     "exponentialRampToValueAtTime",
     "exportKey",
+    "exports",
     "extend",
     "extensions",
     "extentNode",

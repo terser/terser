@@ -132,3 +132,17 @@ avoid_spread_getset_object: {
 
     expect_stdout: "1 undefined 2 3 2 3"
 }
+
+avoid_spread_this: {
+    input: {
+        function foo() {
+            const defaults = { SS: 2 };
+
+            return { ...this, ...defaults };
+        }
+
+        console.log(Object.keys(foo.call({ PA: 1 })));
+    }
+
+    expect_stdout: "[ 'PA', 'SS' ]"
+}

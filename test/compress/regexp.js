@@ -50,6 +50,18 @@ unsafe_slashes: {
         console.log(/^https:\/\//)
     }
 }
+unsafe_nul_byte: {
+    options = {
+        defaults: true,
+        unsafe: true
+    }
+    input: {
+        console.log(new RegExp("\0"))
+    }
+    expect: {
+        console.log(/\0/)
+    }
+}
 
 inline_script: {
     options = {}

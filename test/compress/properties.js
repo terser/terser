@@ -1369,12 +1369,14 @@ const_prop_assign_strict: {
             this._aircraft = [];
         }
         (function() {}).prototype.destroy = x();
+        (class {}).prototype.destroy = y();
     }
     expect: {
         function Simulator() {
             this._aircraft = [];
         }
         x();
+        y();
     }
 }
 
@@ -1389,12 +1391,14 @@ const_prop_assign_pure: {
             this._aircraft = [];
         }
         (function() {}).prototype.destroy = x();
+        (class {}).prototype.destroy = y();
     }
     expect: {
         function Simulator() {
             this._aircraft = [];
         }
         x();
+        y();
     }
 }
 

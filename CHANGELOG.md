@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.6.1
+
+ - Mark assignments to the `.prototype` of a class as pure
+ - Parenthesize `await` on the left of `**` (while accepting legacy non-parenthesised input)
+ - Avoided outputting NUL bytes in optimized RegExps, to stop the output from breaking other tools
+ - Added `exports` to domprops (#939)
+ - Fixed a crash when spreading `...this`
+ - Fixed the computed size of arrow functions, which improves their inlining
+
 ## v5.6.0
 
  - Added top-level await

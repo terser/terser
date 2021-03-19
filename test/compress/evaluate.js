@@ -1787,3 +1787,32 @@ null_conditional_chain_eval: {
         (void 0)(1);
     }
 }
+
+regexp_property_eval: {
+    options = {
+        evaluate: true,
+        unsafe: true
+    }
+    input: {
+        console.log(/abc/i.source);
+        console.log(/abc/i.flags);
+
+        console.log(/abc/i.dotAll);
+        console.log(/abc/i.global);
+        console.log(/abc/i.ignoreCase);
+        console.log(/abc/i.multiline);
+        console.log(/abc/i.sticky);
+        console.log(/abc/i.unicode);
+    }
+    expect: {
+        console.log("abc");
+        console.log("i");
+
+        console.log(false);
+        console.log(false);
+        console.log(true);
+        console.log(false);
+        console.log(false);
+        console.log(false);
+    }
+}

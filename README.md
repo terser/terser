@@ -964,9 +964,9 @@ as "output options".
   statement.
 
 - `comments` (default `"some"`) -- by default it keeps JSDoc-style comments
-  that contain "@license" or "@preserve", pass `true` or `"all"` to preserve all
-  comments, `false` to omit comments in the output, a regular expression string
-  (e.g. `/^!/`) or a function.
+  that contain "@license", "@preserve" or start with `!`, pass `true` or
+  `"all"` to preserve all comments, `false` to omit comments in the output,
+  a regular expression string (e.g. `/^!/`) or a function.
 
 - `ecma` (default `5`) -- set desired EcmaScript standard version for output.
   Set `ecma` to `2015` or greater to emit shorthand object properties - i.e.:

@@ -79,6 +79,21 @@ class_duplication_2: {
     }
 }
 
+export_default_class_expr: {
+    options = {
+        defaults: true,
+        module: true
+    }
+
+    input: {
+        export default class extends Foo { }
+    }
+
+    expect: {
+        export default class extends Foo { }
+    }
+}
+
 pure_prop_assignment_for_classes: {
     options = {
         defaults: true,

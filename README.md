@@ -416,7 +416,7 @@ Browser loading is also supported:
 
 There is a single async high level function, **`async minify(code, options)`**,
 which will perform all minification [phases](#minify-options) in a configurable
-manner. There is no synchronous function, but this functionality can be achieved with a package like [deasync](https://github.com/abbr/deasync). By default `minify()` will enable the options [`compress`](#compress-options)
+manner. By default `minify()` will enable [`compress`](#compress-options)
 and [`mangle`](#mangle-options). Example:
 ```javascript
 var code = "function add(first, second) { return first + second; }";
@@ -929,11 +929,10 @@ await minify(code, { mangle: { toplevel: true } }).code;
 - `debug` (default: `false`) — Mangle names with the original name still present.
   Pass an empty string `""` to enable, or a non-empty string to set the debug suffix.
 
-- `keep_quoted` (default: `false`) — Only mangle unquoted property names.
-  - `true` -- Quoted property names are automatically reserved and any unquoted
-    property names will not be mangled.
-  - `"strict"` -- Advanced, all unquoted property names are mangled unless
-    explicitly reserved.
+- `keep_quoted` (default: `false`) — How quoting properties (`{"prop": ...}` and `obj["prop"]`) controls what gets mangled.
+  - `"strict"` (recommended) -- `obj.prop` is mangled.
+  - `false` -- `obj["prop"]` is mangled.
+  - `true` -- `obj.prop` is mangled unless there is `obj["prop"]` elsewhere in the code.
 
 - `regex` (default: `null`) — Pass a [RegExp literal or pattern string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) to only mangle property matching the regular expression.
 

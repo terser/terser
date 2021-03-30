@@ -24,7 +24,8 @@
       "./dist/bundle.min.js"
     ],
     "./package": "./package.json",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./bin/terser": "./bin/terser"
   },
   "types": "tools/terser.d.ts",
   "bin": {

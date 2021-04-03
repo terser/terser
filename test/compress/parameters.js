@@ -149,6 +149,29 @@ destructuring_arguments_3: {
     expect_exact: "function fn3({x:{y:{z:{}=42}}}){}const{a=function(){},b=(0,function(){})}={};let{c=function(){},d=(0,function(){})}={};var{e=function(){},f=(0,function(){})}={};"
 }
 
+destructuring_parameters_get_set: {
+    beautify = {
+        ecma: 2015
+    }
+    input: {
+        function default_get({ get = "PASS" }) { return get }
+        function default_set({ set = "PASS" }) { return set }
+        const default_get_arrow = ({ get = "PASS" }) => { return get }
+        const default_set_arrow = ({ set = "PASS" }) => { return set }
+
+        console.log(default_get({}))
+        console.log(default_set({}))
+        console.log(default_get_arrow({}))
+        console.log(default_set_arrow({}))
+    }
+    expect_stdout: [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS",
+    ]
+}
+
 default_arguments: {
     beautify = {
         ecma: 2015

@@ -21,8 +21,8 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/maste
 [npm-url]: https://npmjs.org/package/terser
 [downloads-image]: https://img.shields.io/npm/dm/terser.svg
 [downloads-url]: https://npmjs.org/package/terser
-[travis-image]: https://img.shields.io/travis/terser/terser/master.svg
-[travis-url]: https://travis-ci.org/terser/terser
+[travis-image]: https://travis-ci.com/terser/terser.svg?branch=master
+[travis-url]: https://travis-ci.com/terser/terser
 [opencollective-contributors]: https://opencollective.com/terser/tiers/badge.svg
 [opencollective-url]: https://opencollective.com/terser
 

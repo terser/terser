@@ -608,7 +608,7 @@ try {
     module: false,
     nameCache: null, // or specify a name cache object
     safari10: false,
-    toplevel: false,
+    toplevel: false
 }
 ```
 
@@ -668,6 +668,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `html5_comments` (default `true`)
 
 - `shebang` (default `true`) -- support `#!command` as the first line
+
+- `spidermonkey` (default `false`) -- accept a Spidermonkey (Mozilla) AST
 
 ## Compress options
 
@@ -848,7 +850,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `unsafe_math` (default: `false`) -- optimize numerical expressions like
   `2 * x * 3` into `6 * x`, which may give imprecise floating point results.
 
-- `unsafe_symbols` (default: `false`) -- removes keys from native Symbol 
+- `unsafe_symbols` (default: `false`) -- removes keys from native Symbol
   declarations, e.g `Symbol("kDog")` becomes `Symbol()`.
 
 - `unsafe_methods` (default: false) -- Converts `{ m: function(){} }` to
@@ -1017,6 +1019,8 @@ as "output options".
   gzip could be smaller; size after gzip insignificantly larger).
 
 - `shebang` (default `true`) -- preserve shebang `#!` in preamble (bash scripts)
+
+- `spidermonkey` (default `false`) -- produce a Spidermonkey (Mozilla) AST
 
 - `webkit` (default `false`) -- enable workarounds for WebKit bugs.
   PhantomJS users should set this option to `true`.
@@ -1188,6 +1192,9 @@ The `-p spidermonkey` option tells Terser that all input files are not
 JavaScript, but JS code described in SpiderMonkey AST in JSON.  Therefore we
 don't use our own parser in this case, but just transform that AST into our
 internal AST.
+
+`spidermonkey` is also available in `minify` as `parse` and `format` options to
+accept and/or produce a spidermonkey AST.
 
 ### Use Acorn for parsing
 

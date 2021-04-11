@@ -1659,12 +1659,12 @@ issue_2926_1: {
         unsafe: true,
     }
     input: {
-        (function f(a) {
+        (function f(a, not_counted = true, ...also_not_counted) {
             console.log(f.name.length, f.length);
         })();
     }
     expect: {
-        (function f(a) {
+        (function f(a, not_counted = true, ...also_not_counted) {
             console.log(1, 1);
         })();
     }
@@ -1786,4 +1786,18 @@ null_conditional_chain_eval: {
         (void 0).but_might_throw;
         (void 0)(1);
     }
+}
+
+avoid_higher_order_functions: {
+    input: {
+        (function () {
+            var b = "PASS";
+            console.log('FAIL FAIL'.replace(/FAIL/g, function () { return b; }));
+            console.log('FAIL FAIL'.replace(/FAIL/g, () => b));
+        }());
+    }
+    expect_stdout: [
+        "PASS PASS",
+        "PASS PASS"
+    ]
 }

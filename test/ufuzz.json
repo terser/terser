@@ -40,5 +40,10 @@
     },
     {
         "safari10": true
+    },
+    {
+        "compress": {
+            "reduce_funcs": false
+        }
     }
 ]

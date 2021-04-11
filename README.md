@@ -797,10 +797,12 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   Specify `"strict"` to treat `foo.bar` as side-effect-free only when
   `foo` is certain to not throw, i.e. not `null` or `undefined`.
 
-- `reduce_funcs` (legacy option, safely ignored for backwards compatibility).
-
 - `reduce_vars` (default: `true`) -- Improve optimization on variables assigned with and
   used as constant values.
+
+- `reduce_funcs` (default: `true`) -- Inline single-use functions when
+  possible. Depends on `reduce_vars` being enabled.  Disabling this option
+  sometimes improves performance of the output code.
 
 - `sequences` (default: `true`) -- join consecutive simple statements using the
   comma operator.  May be set to a positive integer to specify the maximum number
@@ -955,10 +957,8 @@ as "output options".
 - `ascii_only` (default `false`) -- escape Unicode characters in strings and
   regexps (affects directives with non-ascii characters becoming invalid)
 
-- `beautify` (default `false`) -- whether to actually beautify the output.
-  Passing `-b` will set this to true, but you might need to pass `-b` even
-  when you want to generate minified code, in order to specify additional
-  arguments, so you can use `-b beautify=false` to override it.
+- `beautify` (default `false`) -- (DEPRECATED) whether to beautify the output.
+  When using the legacy `-b` CLI flag, this is set to true by default.
 
 - `braces` (default `false`) -- always insert braces in `if`, `for`,
   `do`, `while` or `with` statements, even if their body is a single

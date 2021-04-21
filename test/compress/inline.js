@@ -93,6 +93,38 @@ inline_within_extends_2: {
     expect_stdout: "PASS"
 }
 
+dont_inline_side_effects: {
+    options = {
+        inline: true,
+        toplevel: true
+    }
+    input: {
+        class X extends (console.log("PASS 1"), null) {
+            static [(console.log("PASS 2"), 'prop')] = "PASS 4"
+        }
+
+        console.log("PASS 3")
+
+        console.log(X.prop)
+    }
+    expect: {
+        class X extends (console.log("PASS 1"), null) {
+            static [(console.log("PASS 2"), 'prop')] = "PASS 4"
+        }
+
+        console.log("PASS 3")
+
+        console.log(X.prop)
+    }
+    expect_stdout: [
+        "PASS 1",
+        "PASS 2",
+        "PASS 3",
+        "PASS 4"
+    ]
+    node_version: ">=14"
+}
+
 issue_308: {
     options = {
         defaults: true,

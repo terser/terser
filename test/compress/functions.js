@@ -2035,6 +2035,7 @@ issue_2842: {
     options = {
         side_effects: true,
         reduce_vars: true,
+        reduce_funcs: true,
         unused: true,
     }
     input: {

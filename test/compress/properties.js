@@ -1302,10 +1302,10 @@ computed_property: {
         }.a);
     }
     expect: {
-        console.log([
-            "bar",
-            console.log("foo")
-        ][0]);
+        console.log({
+            a: "bar",
+            [console.log("foo")]: 42,
+        }.a);
     }
     expect_stdout: [
         "foo",
@@ -2424,6 +2424,31 @@ dont_mangle_computed_property_2: {
         "bar 1 2 seven zero one Null Undefined infinity nan Void",
         "Null Undefined infinity nan",
     ]
+}
+
+dont_flatten_computed_property: {
+    options = {
+        properties: true
+    }
+    input: {
+        console.log({
+            a: "FAIL",
+            [String.fromCharCode(97)]: "PASS"
+        }.a);
+    }
+    expect_stdout: "PASS"
+}
+
+dont_flatten_proto: {
+    options = {
+        properties: true
+    }
+    input: {
+        console.log(typeof {
+            __proto__: "FAIL",
+        }.__proto__);
+    }
+    expect_stdout: "object"
 }
 
 mangle_properties_which_matches_pattern: {

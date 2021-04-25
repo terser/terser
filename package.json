@@ -24,7 +24,8 @@
       "./dist/bundle.min.js"
     ],
     "./package": "./package.json",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./bin/terser": "./bin/terser"
   },
   "types": "tools/terser.d.ts",
   "bin": {
@@ -124,7 +125,7 @@
       "no-unused-vars": [
         "error",
         {
-          "varsIgnorePattern": "^_$"
+          "varsIgnorePattern": "^_"
         }
       ],
       "no-tabs": "error",

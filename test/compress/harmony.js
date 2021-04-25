@@ -293,7 +293,7 @@ export_default_anon_class: {
     expect_exact: "export default class{foo(){console.log(3)}}"
 }
 
-export_module_statement: {
+export_from_statement: {
     input: {
         export * from "a.js";
         export {A} from "a.js";

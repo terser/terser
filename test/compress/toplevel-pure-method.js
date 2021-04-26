@@ -45,7 +45,6 @@ inline_different_name: {
     }
 }
 
-// TODO:
 rename_and_inline: {
     options = {
         toplevel: true,

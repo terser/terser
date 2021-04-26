@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.7.0
+
+ - Several compile-time evaluation and inlining fixes
+ - Allow `reduce_funcs` to be disabled again.
+ - Add `spidermonkey` options to parse and format (#974)
+ - Accept `{get = "default val"}` and `{set = "default val"}` in destructuring arguments.
+ - Change package.json export map to help require.resolve (#971)
+ - Improve docs
+ - Fix `export default` of an anonymous class with `extends`
+
 ## v5.6.1
 
  - Mark assignments to the `.prototype` of a class as pure

@@ -51,7 +51,7 @@ rename_and_inline: {
     options = {
         toplevel: true,
         defaults: true,
-        pure_getters: true
+        pure_getters: false // TODO This even works without pure getters which is not consistent with the previous test
     }
     input: {
         class MyClass {

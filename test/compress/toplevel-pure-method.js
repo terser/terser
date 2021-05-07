@@ -7,6 +7,7 @@ assign_and_inline: {
         class MyClass {
           method(a1) {
            myPureFunction(a1)
+           return a1 + 2
           }
         }
 
@@ -17,7 +18,7 @@ assign_and_inline: {
         new MyClass();
     }
     expect: {
-        new class{method(a1) {var a;a=a1,console.log(a)}};
+        new class{method(a1) {var a;return a=a1,console.log(a),a1+2}};
     }
 }
 
@@ -31,6 +32,7 @@ inline_different_name: {
         class MyClass {
           method(a1) {
            myPureFunction(a1)
+           return a1 + 2
           }
         }
 
@@ -41,7 +43,7 @@ inline_different_name: {
         new MyClass();
     }
     expect: {
-        new class{method(a1) {console.log(a1)}};
+        new class{method(a1) {return console.log(a1),a1+2}};
     }
 }
 
@@ -55,6 +57,7 @@ rename_and_inline: {
         class MyClass {
           method(a) {
            myPureFunction(a)
+           return a + 2
           }
         }
 
@@ -65,6 +68,6 @@ rename_and_inline: {
         new MyClass();
     }
     expect: {
-        new class{method(a) {console.log(a)}};
+        new class{method(a) {return console.log(a),a+2}};
     }
 }

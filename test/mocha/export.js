@@ -39,6 +39,23 @@ describe("Export/Import", function() {
         }
     });
 
+    it("Should parse export with classes and functions", async function() {
+        var inputs = [
+            ["export class X {}", "export class X{}"],
+            ["export function X(){}", "export function X(){}"],
+            ["export default function X(){}", "export default function X(){}"],
+            ["export default class X{}", "export default class X{}"],
+            ["export default class X extends Y{}", "export default class X extends Y{}"],
+            ["export default class extends Y{}", "export default class extends Y{}"],
+        ];
+
+        for (const [input, output] of inputs) {
+            const minified = await minify(input);
+
+            assert.equal(minified.code, output);
+        }
+    });
+
     it("Should not parse invalid uses of export", async function() {
         await assert.rejects(() => minify("export"), { message: "Unexpected token: eof (undefined)" });
         await assert.rejects(() => minify("export;"), { message: "Unexpected token: punc (;)" });

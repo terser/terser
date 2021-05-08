@@ -4,7 +4,7 @@
   "homepage": "https://terser.org",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
-  "version": "5.5.1",
+  "version": "5.7.0",
   "engines": {
     "node": ">=10"
   },
@@ -24,7 +24,8 @@
       "./dist/bundle.min.js"
     ],
     "./package": "./package.json",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./bin/terser": "./bin/terser"
   },
   "types": "tools/terser.d.ts",
   "bin": {
@@ -48,16 +49,16 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.9.2",
-    "acorn": "^7.4.0",
-    "astring": "^1.4.1",
-    "eslint": "^7.0.0",
+    "acorn": "^8.0.5",
+    "astring": "^1.6.2",
+    "eslint": "^7.19.0",
     "eslump": "^2.0.0",
     "esm": "^3.2.25",
-    "mocha": "^8.0.0",
+    "mocha": "^8.2.1",
     "pre-commit": "^1.2.2",
-    "rimraf": "^3.0.0",
-    "rollup": "2.0.6",
-    "semver": "^7.1.3"
+    "rimraf": "^3.0.2",
+    "rollup": "2.38.4",
+    "semver": "^7.3.4"
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",
@@ -124,7 +125,7 @@
       "no-unused-vars": [
         "error",
         {
-          "varsIgnorePattern": "^_$"
+          "varsIgnorePattern": "^_"
         }
       ],
       "no-tabs": "error",

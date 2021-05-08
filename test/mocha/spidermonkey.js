@@ -114,12 +114,23 @@ describe("spidermonkey export/import sanity test", function() {
     it("should be capable of importing from acorn", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);
-        var moz_ast = acornParse(code, {sourceType: 'module', ecmaVersion: 2020});
+        var moz_ast = acornParse(code, {sourceType: "module", ecmaVersion: 2020});
         var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
             terser_ast.print_to_string()
         );
+    });
+
+    it("should accept a spidermonkey AST w/ `parse.spidermonkey: true`", async function() {
+        var moz_ast = acornParse("var a = 1 + 2", {sourceType: "module", ecmaVersion: 2020});
+        var result = await minify(moz_ast, {ecma: 2015, parse: {spidermonkey: true}});
+        assert.deepStrictEqual(result.code, "var a=3;");
+    });
+
+    it("should produce a spidermonkey AST w/ `format.spidermonkey: true`", async function() {
+        var result = await minify("var a = 1 + 2", {ecma: 2015, format: {spidermonkey: true}});
+        assert.deepStrictEqual(astringGenerate(result.ast), "var a = 3;\n");
     });
 
     it("should correctly minify AST from from_moz_ast with default destructure", async () => {

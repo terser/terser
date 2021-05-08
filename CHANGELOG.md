@@ -1,5 +1,31 @@
 # Changelog
 
+## v5.7.0
+
+ - Several compile-time evaluation and inlining fixes
+ - Allow `reduce_funcs` to be disabled again.
+ - Add `spidermonkey` options to parse and format (#974)
+ - Accept `{get = "default val"}` and `{set = "default val"}` in destructuring arguments.
+ - Change package.json export map to help require.resolve (#971)
+ - Improve docs
+ - Fix `export default` of an anonymous class with `extends`
+
+## v5.6.1
+
+ - Mark assignments to the `.prototype` of a class as pure
+ - Parenthesize `await` on the left of `**` (while accepting legacy non-parenthesised input)
+ - Avoided outputting NUL bytes in optimized RegExps, to stop the output from breaking other tools
+ - Added `exports` to domprops (#939)
+ - Fixed a crash when spreading `...this`
+ - Fixed the computed size of arrow functions, which improves their inlining
+
+## v5.6.0
+
+ - Added top-level await
+ - Beautify option has been removed in #895
+ - Private properties, getters and setters have been added in #913 and some more commits
+ - Docs improvements: #896, #903, #916
+
 ## v5.5.1
 
  - Fixed object properties with unicode surrogates on safari.

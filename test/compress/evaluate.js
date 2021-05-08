@@ -1659,12 +1659,12 @@ issue_2926_1: {
         unsafe: true,
     }
     input: {
-        (function f(a) {
+        (function f(a, not_counted = true, ...also_not_counted) {
             console.log(f.name.length, f.length);
         })();
     }
     expect: {
-        (function f(a) {
+        (function f(a, not_counted = true, ...also_not_counted) {
             console.log(1, 1);
         })();
     }
@@ -1785,5 +1785,48 @@ null_conditional_chain_eval: {
     expect: {
         (void 0).but_might_throw;
         (void 0)(1);
+    }
+}
+
+avoid_higher_order_functions: {
+    input: {
+        (function () {
+            var b = "PASS";
+            console.log('FAIL FAIL'.replace(/FAIL/g, function () { return b; }));
+            console.log('FAIL FAIL'.replace(/FAIL/g, () => b));
+        }());
+    }
+    expect_stdout: [
+        "PASS PASS",
+        "PASS PASS"
+    ]
+}
+
+regexp_property_eval: {
+    options = {
+        evaluate: true,
+        unsafe: true
+    }
+    input: {
+        console.log(/abc/i.source);
+        console.log(/abc/i.flags);
+
+        console.log(/abc/i.dotAll);
+        console.log(/abc/i.global);
+        console.log(/abc/i.ignoreCase);
+        console.log(/abc/i.multiline);
+        console.log(/abc/i.sticky);
+        console.log(/abc/i.unicode);
+    }
+    expect: {
+        console.log("abc");
+        console.log("i");
+
+        console.log(false);
+        console.log(false);
+        console.log(true);
+        console.log(false);
+        console.log(false);
+        console.log(false);
     }
 }

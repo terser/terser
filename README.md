@@ -315,6 +315,9 @@ Mangle all private class fields (this should generally be safe, unless you are u
 ```javascript
 export class MyClass {
   #someField = 5
+  someMethod() {
+    this.#someField = 42;
+  }
 };
 export const obj = {
   ['#someField']: 42,
@@ -325,7 +328,7 @@ export const obj = {
 $ terser example2.js -c passes=2 -m --mangle-props regex=/^#/
 ```
 ```javascript
-export class MyClass{#s=5}export const obj={o:42};
+export class MyClass{#s=5;someMethod(){this.#s=42}}export const obj={o:42};
 ```
 
 Combining mangle properties options:

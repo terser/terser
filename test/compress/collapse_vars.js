@@ -6024,3 +6024,35 @@ ignore_class: {
     }
     expect_stdout: "PASS"
 }
+
+do_not_place_chain_on_lhs_1: {
+    options = {
+        collapse_vars: true,
+        toplevel: true
+    }
+    input: {
+        var a = b?.c;
+        a.d = e;
+    }
+    expect: {
+        var a = b?.c;
+        a.d = e;
+    }
+}
+
+do_not_place_chain_on_lhs_2: {
+    options = {
+        collapse_vars: true,
+        toplevel: true
+    }
+    input: {
+        var a;
+        a = b?.c;
+        a.d = e;
+    }
+    expect: {
+        var a;
+        a = b?.c;
+        a.d = e;
+    }
+}

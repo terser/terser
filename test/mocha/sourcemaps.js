@@ -134,6 +134,29 @@ describe("sourcemaps", function() {
         assert.deepStrictEqual(result.map, {"version":3,"sources":["0"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI"});
     });
 
+    it("Should grab names from methods and properties correctly", async () => {
+        const code = `class Foo {
+            property = 6
+            #private = 4
+            method () {}
+            404() {}
+            "quoted method name" () {}
+            get getter(){}
+            set setter(){}
+        }`;
+        const result = await minify(code, {
+            sourceMap: {asObject: true},
+        });
+        assert.deepStrictEqual(result.map.names, [
+            "Foo",
+            "property",
+            "private",
+            "method",
+            "getter",
+            "setter"
+        ]);
+    });
+
     describe("inSourceMap", function() {
         it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", async function() {
             var result = await minify(read("./test/input/issue-1236/simple.js"), {

@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.7.1
+
+ - Avoided collapsing assignments together if it would place a chain assignment on the left hand side, which is invalid syntax (`a?.b = c`)
+ - Removed undefined from object expansions (`{ ...void 0 }` -> `{}`)
+ - Fix crash when checking if something is nullish or undefined (#1009)
+ - Fixed comparison of private class properties (#1015)
+ - Minor performance improvements (#993)
+ - Fixed scope of function defs in strict mode (they are block scoped)
+
 ## v5.7.0
 
  - Several compile-time evaluation and inlining fixes

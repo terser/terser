@@ -530,6 +530,11 @@ try {
 - `ecma` (default `undefined`) - pass `5`, `2015`, `2016`, etc to override
   `compress` and `format`'s `ecma` options.
 
+- `enclose` (default `false`) - pass `true`, or a string in the format
+  of `"args[:values]"`, where `args` and `values` are comma-separated
+  argument names and values, respectively, to embed the output in a big
+  function with the configurable arguments and values.
+
 - `parse` (default `{}`) — pass an object if you wish to specify some
   additional [parse options](#parse-options).
 
@@ -602,6 +607,7 @@ try {
         // source map options
     },
     ecma: 5, // specify one of: 5, 2015, 2016, etc.
+    enclose: false, // or specify true, or "args:values"
     keep_classnames: false,
     keep_fnames: false,
     ie8: false,

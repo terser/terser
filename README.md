@@ -540,12 +540,12 @@ function js() {
     };
     return src('app/**/*.js')
         .on('data', function(file) {
-            async function getAllBooks() {
+            async function getJs() {
                 const result = await minify(file.contents.toString(), options);
                 return await minify(result)
             }
             (async function() {
-                file.contents = Buffer.from(JSON.parse(Buffer.from(JSON.stringify(await getAllBooks()))).code)
+                file.contents = Buffer.from(JSON.parse(Buffer.from(JSON.stringify(await getJs()))).code)
             })();
         })
         .pipe(dest('build'))

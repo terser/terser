@@ -507,6 +507,7 @@ do_switch: {
     }
 }
 
+// Avoid for turning into for..in
 in_parenthesis_1: {
     input: {
         for (("foo" in {});0;);
@@ -519,6 +520,13 @@ in_parenthesis_2: {
         for ((function(){ "foo" in {}; });0;);
     }
     expect_exact: 'for(function(){"foo"in{}};0;);'
+}
+
+in_parenthesis_3: {
+    input: {
+        for (var x = a => (b in c);0;);
+    }
+    expect_exact: 'for(var x=(a=>b in c);0;);'
 }
 
 init_side_effects: {

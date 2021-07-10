@@ -341,7 +341,11 @@ function parse_test(file) {
         if (!(node instanceof AST.AST_Toplevel)) croak(node);
     });
     ast.walk(tw);
-    return tests;
+
+    const only_tests = Object.entries(tests).filter(([_name, test]) => test.only);
+    return only_tests.length > 0
+        ? Object.fromEntries(only_tests)
+        : tests;
 
     function croak(node) {
         throw new Error(tmpl("Can't understand test file {file} [{line},{col}]\n{code}", {
@@ -384,6 +388,7 @@ function parse_test(file) {
             name: name,
             options: {},
             reminify: true,
+            only: false
         };
         var tw = new AST.TreeWalker(function(node, descend) {
             if (node instanceof AST.AST_Assign) {

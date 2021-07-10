@@ -10,16 +10,18 @@ conditional_to_nullish_coalescing: {
         const foo = id('something');
 
         leak(foo == null ? bar : foo);
+        leak(foo != null ? foo : bar);
     }
 
     expect: {
         const foo = id('something');
 
         leak(foo ?? bar);
+        leak(foo ?? bar);
     }
 }
 
-conditional_to_nullish_coalescing_2: {
+conditional_to_nullish_coalescing_strict: {
     options = {
         ecma: 2020,
         toplevel: true,
@@ -29,31 +31,71 @@ conditional_to_nullish_coalescing_2: {
     input: {
         const foo = id('something')
 
-        console.log('negative cases')
-        foo === null || foo === null ? bar : foo;
-        foo === undefined || foo === undefined ? bar : foo;
-        foo === null || foo === undefined ? foo : bar;
-        some_global === null || some_global === undefined ? bar : some_global;
-
-        console.log('positive cases')
-        foo === null || foo === void 0 ? bar : foo;
         foo === null || foo === undefined ? bar : foo;
         foo === undefined || foo === null ? bar : foo;
+        foo !== null && foo !== undefined ? foo : bar;
+        foo !== undefined && foo !== null ? foo : bar;
     }
 
     expect: {
         const foo = id('something')
 
-        console.log('negative cases')
+        foo ?? bar;
+        foo ?? bar;
+        foo ?? bar;
+        foo ?? bar;
+    }
+}
+
+conditional_to_nullish_coalescing_strict_negative: {
+    options = {
+        ecma: 2020,
+        toplevel: true,
+        conditionals: true
+    }
+
+    input: {
+        const foo = id('something')
+
+        foo === null || foo === null ? bar : foo;
+        foo === undefined || foo === undefined ? bar : foo;
+        foo === null || foo === undefined ? foo : bar;
+        foo !== null && foo !== null ? foo : bar;
+        foo !== undefined && foo !== undefined ? foo : bar;
+        foo !== null && foo !== undefined ? bar : foo;
+    }
+
+    expect: {
+        const foo = id('something')
+
         null === foo || null === foo ? bar : foo;
         void 0 === foo || void 0 === foo ? bar : foo;
         null === foo || void 0 === foo ? foo : bar;
-        null === some_global || void 0 === some_global ? bar : some_global;
+        null !== foo && null !== foo ? foo : bar ;
+        void 0 !== foo && void 0 !== foo ? foo : bar ;
+        null !== foo && void 0 !== foo ? bar : foo ;
+    }
+}
 
-        console.log('positive cases')
-        foo ?? bar;
-        foo ?? bar;
-        foo ?? bar;
+conditional_to_nullish_coalescing_global: {
+    options = {
+        ecma: 2020,
+        toplevel: true,
+        conditionals: true
+    }
+
+    input: {
+        some_global == null ? bar : some_global;
+        some_global != null ? some_global : bar;
+        some_global === null || some_global === undefined ? bar : some_global;
+        some_global !== null && some_global !== undefined ? some_global : bar;
+    }
+
+    expect: {
+        null == some_global ? bar : some_global;
+        null != some_global ? some_global : bar;
+        null === some_global || void 0 === some_global ? bar : some_global;
+        null !== some_global && void 0 !== some_global ? some_global : bar;
     }
 }
 

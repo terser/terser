@@ -574,7 +574,7 @@ try {
   of class names. Pass a regular expression to only keep class names matching that regex.
 
 - `keep_fnames` (default: `false`) - pass `true` to prevent discarding or mangling
-  of function names. Pass a regular expression to only keep class names matching that regex.
+  of function names. Pass a regular expression to only keep function names matching that regex.
   Useful for code relying on `Function.prototype.name`. If the top level minify option
   `keep_classnames` is `undefined` it will be overridden with the value of the top level
   minify option `keep_fnames`.
@@ -891,7 +891,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   See also: the `keep_classnames` [compress option](#compress-options).
 
 - `keep_fnames` (default `false`) -- Pass `true` to not mangle function names.
-  Pass a regular expression to only keep class names matching that regex.
+  Pass a regular expression to only keep function names matching that regex.
   Useful for code relying on `Function.prototype.name`. See also: the `keep_fnames`
   [compress option](#compress-options).
 

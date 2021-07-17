@@ -545,7 +545,16 @@ function js() {
                 return await minify(result)
             }
             (async function() {
-                file.contents = Buffer.from(JSON.parse(Buffer.from(JSON.stringify(await getJs()))).code)
+                try {
+                    file.contents = Buffer.from(JSON.parse(Buffer.from(JSON.stringify(await getJs()))).code)
+                } catch (error) {
+                    const { message, line, col, pos } = error
+                    console.log('message: ' + message)
+                    console.log('filename: ' + file.basename)
+                    console.log('line: ' + line)
+                    console.log('col: ' + col)
+                    console.log('pos: ' + pos)
+                }
             })();
         })
         .pipe(dest('build'))

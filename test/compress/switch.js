@@ -515,6 +515,39 @@ collapse_into_default_7: {
     }
 }
 
+collapse_into_default_8: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        function test(foo) {
+            switch (foo) {
+              case 1:
+                return 1;
+              case 2:
+              default:
+              case 3:
+            }
+        }
+
+        console.log(test(1));
+    }
+    expect: {
+        console.log(function (foo) {
+            switch (foo) {
+              case 1:
+                return 1;
+            }
+        }(1));
+    }
+}
+
 issue_1663: {
     options = {
         dead_code: true,
@@ -582,7 +615,7 @@ keep_case: {
     }
     expect: {
         switch (foo) {
-          case 'bar': baz(); break;
+          case 'bar': baz();
           case moo:
         }
     }
@@ -799,7 +832,6 @@ issue_1679: {
               case b--:
                 0;
                 a--;
-                break;
               case (a++):
             }
         }
@@ -878,8 +910,6 @@ issue_1680_2: {
             break;
           case b:
             var c;
-            break;
-          case a:
           case a--:
         }
         console.log(a, b);

@@ -313,6 +313,208 @@ keep_default: {
     }
 }
 
+collapse_into_default: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case 1:
+            1;
+          case 2:
+            invariant();
+          case 3:
+          default:
+            doSomething();
+        }
+        function invariant() {
+            /* production build */
+        }
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_2: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case 1:
+            doSomething();
+            break;
+          default:
+            doSomething();
+            break;
+        }
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_3: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          default:
+            doSomething();
+            break;
+          case 1:
+            doSomething();
+            break;
+        }
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_4: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case 1:
+            doSomething();
+            break;
+          default:
+            doSomething();
+            break;
+          case 2:
+            doSomething();
+            break;
+        }
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_5: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case "bar":
+            doSomething();
+            break;
+          default:
+            doSomething();
+            break;
+          case "qux":
+            doSomething();
+            break;
+        }
+
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_6: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case 1:
+            doSomething();
+            break;
+          default:
+            doSomething();
+            break;
+          case 2:
+            doSomething();
+        }
+    }
+    expect: {
+        foo;
+        doSomething();
+    }
+}
+
+collapse_into_default_7: {
+    options = {
+        dead_code: true,
+        switches: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        switch (foo) {
+          case bar:
+            doSomething();
+            break;
+          default:
+            doSomething();
+            break;
+          case qux:
+            doSomething();
+            break;
+        }
+    }
+    expect: {
+        switch (foo) {
+          case bar:
+          default:
+          case qux:
+            doSomething();
+        }
+    }
+}
+
 issue_1663: {
     options = {
         dead_code: true,
@@ -446,7 +648,6 @@ issue_441_2: {
     input: {
         switch (foo) {
           case bar:
-            // TODO: Fold into the case below
             qux();
             break;
           case fall:
@@ -461,12 +662,80 @@ issue_441_2: {
     expect: {
         switch (foo) {
           case bar:
-            qux();
-            break;
           case fall:
           case baz:
           default:
             qux();
+        }
+    }
+}
+
+issue_441_3: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          case bar:
+            qux();
+            break;
+          case fall:
+          case baz:
+            qux();
+            break;
+        }
+    }
+    expect: {
+        switch (foo) {
+          case bar:
+          case fall:
+          case baz:
+            qux();
+        }
+    }
+}
+
+issue_441_4: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          case 1:
+            qux();
+            break;
+          case fall1:
+          case 2:
+            qux();
+            break;
+          case 3:
+            other();
+            break;
+          case 4:
+            qux();
+            break;
+          case fall2:
+          case 5:
+            qux();
+            break;
+        }
+    }
+    expect: {
+        switch (foo) {
+          case 1:
+          case fall1:
+          case 2:
+            qux();
+            break;
+          case 3:
+            other();
+            break;
+          case 4:
+          case fall2:
+          case 5:
+            qux()
         }
     }
 }
@@ -528,10 +797,8 @@ issue_1679: {
               case !function x() {}:
                 break;
               case b--:
-                switch (0) {
-                  default:
-                  case a--:
-                }
+                0;
+                a--;
                 break;
               case (a++):
             }

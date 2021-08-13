@@ -1814,6 +1814,31 @@ if_else7: {
     }
 }
 
+if_else8: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        function test(foo) {
+            switch (foo) {
+            case 'bar':
+                return 'PASS';
+            default:
+                return 'FAIL';
+            }
+        }
+        console.log(test('bar'));
+    }
+    expect: {
+        function test(foo) {
+            return 'bar' === foo ? 'PASS' : 'FAIL';
+
+        }
+        console.log(test('bar'));
+    }
+    expect_stdout: ["PASS"]
+}
+
 issue_376: {
     options = {
         dead_code: true,

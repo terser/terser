@@ -266,9 +266,7 @@ drop_default_1: {
         }
     }
     expect: {
-        switch (foo) {
-          case 'bar': baz();
-        }
+        if ("bar" === foo) baz();
     }
 }
 
@@ -285,9 +283,7 @@ drop_default_2: {
         }
     }
     expect: {
-        switch (foo) {
-          case 'bar': baz();
-        }
+        if ("bar" === foo) baz();
     }
 }
 
@@ -305,11 +301,8 @@ keep_default: {
         }
     }
     expect: {
-        switch (foo) {
-          case 'bar': baz();
-          default:
-            something();
-        }
+        if ('bar' === foo) baz();
+        something();
     }
 }
 
@@ -540,10 +533,7 @@ collapse_into_default_8: {
     }
     expect: {
         console.log(function (foo) {
-            switch (foo) {
-              case 1:
-                return 1;
-            }
+            if (1 === foo) return 1;
         }(1));
     }
 }
@@ -595,8 +585,29 @@ drop_case: {
         }
     }
     expect: {
+        if ('bar' === foo) baz();
+    }
+}
+
+drop_case_2: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
         switch (foo) {
-          case 'bar': baz();
+          case 'bar': bar(); break;
+          case 'moo':
+          case moo:
+          case 'baz':
+            break;
+        }
+    }
+    expect: {
+        switch (foo) {
+          case 'bar': bar();
+          case 'moo':
+          case moo:
         }
     }
 }
@@ -621,6 +632,84 @@ keep_case: {
     }
 }
 
+if_else: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          case 'bar':
+            bar();
+            break;
+          default:
+            other();
+        }
+    }
+    expect: {
+        if ('bar' === foo) bar();
+        else other();
+    }
+}
+
+if_else2: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          case 'bar':
+            bar();
+          default:
+            other();
+        }
+    }
+    expect: {
+        if ('bar' === foo) bar();
+        other();
+    }
+}
+
+if_else3: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          default:
+            other();
+            break;
+          case 'bar':
+            bar();
+        }
+    }
+    expect: {
+        if ('bar' === foo) bar();
+        else other();
+    }
+}
+
+if_else4: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        switch (foo) {
+          default:
+            other();
+          case 'bar':
+            bar();
+        }
+    }
+    expect: {
+        if ('bar' !== foo) other();
+        bar();
+    }
+}
+
 issue_376: {
     options = {
         dead_code: true,
@@ -638,10 +727,7 @@ issue_376: {
         }
     }
     expect: {
-        switch (true) {
-          case boolCondition:
-            console.log(1);
-        }
+        if (true === boolCondition) console.log(1);
     }
 }
 
@@ -801,6 +887,8 @@ issue_1679: {
         dead_code: true,
         evaluate: true,
         switches: true,
+        conditionals: true,
+        side_effects: true,
     }
     input: {
         var a = 100, b = 10;
@@ -830,7 +918,6 @@ issue_1679: {
               case !function x() {}:
                 break;
               case b--:
-                0;
                 a--;
               case (a++):
             }
@@ -838,7 +925,7 @@ issue_1679: {
         f();
         console.log(a, b);
     }
-    expect_stdout: true
+    expect_stdout: ["99 8"]
 }
 
 issue_1680_1: {
@@ -910,6 +997,7 @@ issue_1680_2: {
             break;
           case b:
             var c;
+          case a:
           case a--:
         }
         console.log(a, b);
@@ -998,11 +1086,7 @@ issue_1705_1: {
     }
     expect: {
         var a = 0;
-        switch (a) {
-          default:
-            console.log("FAIL");
-          case 0:
-        }
+        if (0 !== a) console.log("FAIL");
     }
     expect_stdout: true
 }

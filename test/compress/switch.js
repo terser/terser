@@ -682,6 +682,125 @@ remove_switch_13: {
     expect_stdout: ["undefined"]
 }
 
+remove_switch_14: {
+    options = {
+        dead_code: true,
+        switches: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              case 1:
+              default:
+              case x--:
+                console.log(x);
+            }
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              case 1:
+              case x--:
+            }
+            console.log(x);
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect_stdout: ["1", "1", "0"]
+}
+
+remove_switch_15: {
+    options = {
+        dead_code: true,
+        switches: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              default:
+              case x--:
+                console.log(x);
+            }
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              case x--:
+            }
+            console.log(x);
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect_stdout: ["1", "0", "0"]
+}
+
+remove_switch_16: {
+    options = {
+        dead_code: true,
+        switches: true,
+        side_effects: true,
+        unused: true,
+        module: true,
+        evaluate: true,
+    }
+    input: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              default:
+              case x--:
+            }
+            console.log(x);
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect: {
+        function test(foo) {
+            var x = 1;
+            switch (foo) {
+              case 0:
+              case x--:
+            }
+            console.log(x);
+        }
+        test(0);
+        test(1);
+        test(2);
+    }
+    expect_stdout: ["1", "0", "0"]
+}
+
 collapse_into_default_1: {
     options = {
         dead_code: true,

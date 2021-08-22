@@ -2393,3 +2393,193 @@ issue_445: {
     }
     expect_stdout: "PASS"
 }
+
+collapse_same_branches: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break
+            
+            case 2: 
+                console.log("PASS");
+                break
+            
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 2: 
+                console.log("PASS");
+        }
+    }
+    expect_stdout: "PASS"
+}
+
+// Not when the branches are break-less
+collapse_same_branches_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+            
+            case 2: 
+                console.log("PASS");
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+            
+            case 2: 
+                console.log("PASS");
+        }
+    }
+    expect_stdout: ["PASS", "PASS"]
+}
+
+// Empty branches at the end of the switch get trimmed
+trim_empty_last_branches: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS")
+            case 2:
+                // break should be removed too
+                break
+            case 3: {}
+            case 4: 
+        }
+    }
+    expect: {
+        if (1 === id(1)) console.log("PASS")
+    }
+    expect_stdout: "PASS"
+}
+
+// ... But break should be kept if we're breaking to somewhere else
+trim_empty_last_branches_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        somewhere_else: if (id(true)) {
+            switch (id(1)) {
+                case 1:
+                    console.log("PASS")
+                case 2:
+                    break somewhere_else
+                case 3: {}
+                case 4: 
+            }
+        }
+    }
+    expect: {
+        somewhere_else: if (id(true))
+            switch (id(1)) {
+                case 1:
+                    console.log("PASS")
+                case 2:
+                    break somewhere_else
+            }
+    }
+    expect_stdout: "PASS"
+}
+
+trim_side_effect_free_branches_falling_into_default: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 0:
+                "no side effect"
+            case 1:
+                // Not here either
+            default:
+                console.log("PASS default")
+            case 2:
+                console.log("PASS 2")
+        }
+    }
+    expect: {
+        if (2 !== id(1))
+            console.log("PASS default");
+        console.log("PASS 2")
+    }
+}
+
+gut_entire_switch: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(123)) {
+            case 1:
+            case 2:
+            case 3:
+            default:
+                console.log("PASS");
+        }
+    }
+    expect: {
+        id(123); console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}
+
+turn_into_if: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case id(2):
+                console.log("FAIL");
+        }
+        console.log("PASS");
+    }
+    expect: {
+        if (id(1) === id(2)) console.log("FAIL");
+        console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}
+
+turn_into_if_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case id(2):
+                console.log("FAIL");
+            default:
+                console.log("PASS");
+        }
+    }
+    expect: {
+        if (id(1) === id(2)) console.log("FAIL");
+        console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}

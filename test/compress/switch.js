@@ -2121,7 +2121,6 @@ issue_1680_2: {
         var a = 100, b = 10;
         switch (b) {
           case a--:
-            break;
           case b:
             var c;
           case a:
@@ -2129,7 +2128,7 @@ issue_1680_2: {
         }
         console.log(a, b);
     }
-    expect_stdout: true
+    expect_stdout: ["99 10"]
 }
 
 issue_1690_1: {
@@ -2404,17 +2403,17 @@ collapse_same_branches: {
             case 1:
                 console.log("PASS");
                 break
-            
-            case 2: 
+
+            case 2:
                 console.log("PASS");
                 break
-            
+
         }
     }
     expect: {
         switch (id(1)) {
             case 1:
-            case 2: 
+            case 2:
                 console.log("PASS");
         }
     }
@@ -2431,8 +2430,8 @@ collapse_same_branches_2: {
         switch (id(1)) {
             case 1:
                 console.log("PASS");
-            
-            case 2: 
+
+            case 2:
                 console.log("PASS");
         }
     }
@@ -2440,8 +2439,8 @@ collapse_same_branches_2: {
         switch (id(1)) {
             case 1:
                 console.log("PASS");
-            
-            case 2: 
+
+            case 2:
                 console.log("PASS");
         }
     }
@@ -2462,7 +2461,7 @@ trim_empty_last_branches: {
                 // break should be removed too
                 break
             case 3: {}
-            case 4: 
+            case 4:
         }
     }
     expect: {
@@ -2485,7 +2484,7 @@ trim_empty_last_branches_2: {
                 case 2:
                     break somewhere_else
                 case 3: {}
-                case 4: 
+                case 4:
             }
         }
     }
@@ -2497,6 +2496,25 @@ trim_empty_last_branches_2: {
                 case 2:
                     break somewhere_else
             }
+    }
+    expect_stdout: "PASS"
+}
+
+trim_empty_last_branches_3: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS")
+            case 2:
+                "no side effect"
+        }
+    }
+    expect: {
+        if (1 === id(1)) console.log("PASS")
     }
     expect_stdout: "PASS"
 }
@@ -2525,6 +2543,29 @@ trim_side_effect_free_branches_falling_into_default: {
     }
 }
 
+trim_side_effect_free_branches_falling_into_default_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            default:
+            case 0:
+                "no side effect"
+            case 1:
+                console.log("PASS default")
+            case 2:
+                console.log("PASS 2")
+        }
+    }
+    expect: {
+        if (2 !== id(1))
+            console.log("PASS default");
+        console.log("PASS 2")
+    }
+}
+
 gut_entire_switch: {
     options = {
         switches: true,
@@ -2535,6 +2576,27 @@ gut_entire_switch: {
             case 1:
             case 2:
             case 3:
+            default:
+                console.log("PASS");
+        }
+    }
+    expect: {
+        id(123); console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}
+
+gut_entire_switch_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(123)) {
+            case 1:
+                "no side effect"
+            case 1:
+                // Not here either
             default:
                 console.log("PASS");
         }

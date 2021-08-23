@@ -1,0 +1,179 @@
+name: CI pipeline
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  build:
+    name: "Build ${{ matrix.os }} node${{ matrix.node-version }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        node-version: [ 10.x, 12.x, 14.x, 16.x ]
+    outputs:
+      package_version: ${{ steps.proj_ver_determiner.outputs.package_version }}
+      package_version_tag: ${{ steps.proj_ver_determiner.outputs.package_version_tag }}
+      latest_github_tag: ${{ steps.proj_ver_determiner.outputs.latest_github_tag }}
+      should_deploy: ${{ steps.proj_ver_determiner.outputs.should_deploy }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Tooling setup
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      # Information setup
+
+      - name: Pipeline data gatherer
+        id: data_gatherer
+        shell: sh
+        run: |
+          # Get default branch
+          REPO="${{ github.repository }}"
+          DEFAULT_BRANCH=`(curl -X GET https://api.github.com/repos/$REPO) | jq '.default_branch'`
+
+          echo "::set-output name=default_branch::$(echo $DEFAULT_BRANCH)"
+
+      - name: Pipeline conditionals handler
+        id: conditionals_handler
+        shell: sh
+        run: |
+          DEFAULT_BRANCH="${{ steps.data_gatherer.outputs.default_branch }}"
+          GITHUB_REF="${{ github.ref }}"
+          CURRENT_BRANCH=`echo $GITHUB_REF | sed -e "s/^refs\/heads\///"`
+          GITHUB_EVENT_NAME="${{ github.event_name }}"
+          IS_DEFAULT_BRANCH='false'
+          IS_PUSH='false'
+          IS_PUSH_TO_DEFAULT_BRANCH='false'
+
+          if [ $CURRENT_BRANCH == $DEFAULT_BRANCH ]; then
+            IS_DEFAULT_BRANCH='true'
+          fi
+          if [ $GITHUB_EVENT_NAME == 'push' ]; then
+            IS_PUSH='true'
+          fi
+          if [ $CURRENT_BRANCH == $DEFAULT_BRANCH ] && [ $GITHUB_EVENT_NAME == 'push' ]; then
+            IS_PUSH_TO_DEFAULT_BRANCH='true'
+          fi
+
+          echo "::set-output name=is_default_branch::$(echo $IS_DEFAULT_BRANCH)"
+          echo "::set-output name=is_push::$(echo $IS_PUSH)"
+          echo "::set-output name=is_push_to_default_branch::$(echo $IS_PUSH_TO_DEFAULT_BRANCH)"
+
+      - if: steps.conditionals_handler.outputs.is_push_to_default_branch == 'true'
+        name: Project version/deploy determiner
+        id: proj_ver_determiner
+        shell: sh
+        run: |
+          git fetch --all --tags
+
+          PACKAGE_VERSION=$(cat package.json \
+            | grep version \
+            | head -1 \
+            | awk -F: '{ print $2 }' \
+            | sed 's/[",]//g')
+          PACKAGE_VERSION_TAG=`echo v$PACKAGE_VERSION | sed -e 's/[[:space:]]//'`
+          LATEST_GITHUB_TAG=`echo $(git tag | sort --version-sort | tail -n1)`
+          SHOULD_DEPLOY="false"
+
+          # download semver compare tool
+          curl https://raw.githubusercontent.com/Ariel-Rodriguez/sh-semversion-2/main/semver2.sh -o semver2.sh
+          chmod +x semver2.sh
+
+          if [ `echo $(./semver2.sh $PACKAGE_VERSION_TAG $LATEST_GITHUB_TAG)` = 1 ]; then
+            SHOULD_DEPLOY="true"
+          fi
+
+          echo "::set-output name=package_version::$(echo $PACKAGE_VERSION)"
+          echo "::set-output name=package_version_tag::$(echo $PACKAGE_VERSION_TAG)"
+          echo "::set-output name=latest_github_tag::$(echo $LATEST_GITHUB_TAG)"
+          echo "::set-output name=should_deploy::$(echo $SHOULD_DEPLOY)"
+
+      - name: Create logs directory
+        shell: sh
+        run: |
+          mkdir -p logs
+
+      - name: Install dependencies
+        shell: sh
+        run: |
+          npm ci --loglevel verbose 2>&1 | tee logs/install.log
+
+      - name: Build the app
+        shell: sh
+        run: |
+          npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
+        env:
+          TEST_NO_SANDBOX: 1
+          TERSER_TEST_ALL: 1
+
+      - if: matrix.node-version != '10.x'
+        name: Run compress tests
+        shell: sh
+        run: |
+          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
+
+      - if: matrix.node-version != '10.x'
+        name: Run mocha tests
+        shell: sh
+        run: |
+          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+
+      - if: matrix.node-version == '10.x'
+        name: Run all tests with Node 10.x
+        shell: sh
+        run: |
+          node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
+        env:
+          TEST_NO_SANDBOX: 1
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
+        name: Run functional tests on ${{ matrix.os }} with Node 12.x
+        run: |
+          ./test/functional.sh 2>&1 | tee logs/functional_tests.log
+
+      - name: Upload logs as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
+          path: logs/
+
+  deploy:
+    if: needs.build.outputs.package_version != ''
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Deploy to npm
+        run: |
+          echo $'registry=https://registry.npmjs.org/\n' //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+
+          npm publish --access public
+
+          rm -f .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push GitHub tag
+        run: |
+          GITHUB_TAG=`echo v$PACKAGE_VERSION | sed -e 's/[[:space:]]//'`
+
+          git config --global user.email ${{ secrets.GITHUB_EMAIL }}
+          git config --global user.name ${{ secrets.GITHUB_NAME }}
+          git tag $GITHUB_TAG
+          git push origin --tags

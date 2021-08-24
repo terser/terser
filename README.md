@@ -1090,6 +1090,7 @@ You might want to try it on your own code; it should reduce the minified size.
 Some examples of the optimizations made when this option is enabled:
 
 - `new Array(1, 2, 3)` or `Array(1, 2, 3)` → `[ 1, 2, 3 ]`
+- `Array.from([1, 2, 3])` → `[1, 2, 3]`
 - `new Object()` → `{}`
 - `String(exp)` or `exp.toString()` → `"" + exp`
 - `new Object/RegExp/Function/Error/Array (...)` → we discard the `new`

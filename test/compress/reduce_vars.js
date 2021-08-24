@@ -1947,13 +1947,8 @@ issue_1670_6: {
     }
     expect: {
         (function(a) {
-            switch (1) {
-              case a = 1:
-                console.log(a);
-                break;
-              default:
-                console.log(2);
-            }
+            if (1 === (a = 1)) console.log(a);
+            else console.log(2);
         })(1);
     }
     expect_stdout: "1"

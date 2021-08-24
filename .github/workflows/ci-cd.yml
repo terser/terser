@@ -1,4 +1,4 @@
-name: CI pipeline
+name: CI/CD pipeline
 
 on: [ push, pull_request, workflow_dispatch ]
 
@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
 
       # Information setup
 
@@ -94,6 +93,8 @@ jobs:
           echo "::set-output name=latest_github_tag::$(echo $LATEST_GITHUB_TAG)"
           echo "::set-output name=should_deploy::$(echo $SHOULD_DEPLOY)"
 
+      # Build and test validation
+
       - name: Create logs directory
         shell: sh
         run: |
@@ -138,6 +139,8 @@ jobs:
         run: |
           ./test/functional.sh 2>&1 | tee logs/functional_tests.log
 
+      # Artifact publish to pipeline
+
       - name: Upload logs as artifact
         uses: actions/upload-artifact@v2
         with:
@@ -145,7 +148,7 @@ jobs:
           path: logs/
 
   deploy:
-    if: needs.build.outputs.package_version != ''
+    if: needs.build.outputs.should_deploy == 'true'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -154,14 +157,20 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Tooling setup
+
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
 
+      # Package deploy
+
       - name: Deploy to npm
         run: |
           echo $'registry=https://registry.npmjs.org/\n' //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+
+          npm ci
 
           npm publish --access public
 
@@ -169,11 +178,26 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      # GitHub deploy
+
       - name: Push GitHub tag
         run: |
-          GITHUB_TAG=`echo v$PACKAGE_VERSION | sed -e 's/[[:space:]]//'`
+          GITHUB_TAG="${{ needs.build.outputs.package_version_tag }}"
 
-          git config --global user.email ${{ secrets.GITHUB_EMAIL }}
-          git config --global user.name ${{ secrets.GITHUB_NAME }}
+          git config --global user.email ${{ secrets.GH_USER_EMAIL }}
+          git config --global user.name ${{ secrets.GH_USER_NAME }}
           git tag $GITHUB_TAG
           git push origin --tags
+
+      - name: Create and publish release
+        run: |
+          RELEASE_TAG="${{ needs.build.outputs.package_version_tag }}"
+          PREVIOUS_TAG="${{ needs.build.outputs.latest_github_tag }}"
+          RELEASE_TITLE="$RELEASE_TAG"
+          START_LINE=$(( $( grep -n "## $RELEASE_TAG" CHANGELOG.md | grep -Eo '^[^:]+' ) + 2 ))
+          END_LINE=$(( $( grep -n "## $PREVIOUS_TAG" CHANGELOG.md | grep -Eo '^[^:]+' ) - 2 ))
+          RELEASE_NOTES=$(echo $'### Changelog:\n\n' "$( sed -n "$START_LINE,$END_LINE"p CHANGELOG.md )")
+
+          gh release create $RELEASE_TAG --title $RELEASE_TITLE --notes "$RELEASE_NOTES"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

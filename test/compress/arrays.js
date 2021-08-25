@@ -314,3 +314,27 @@ index_length: {
     }
     expect_stdout: "1 2"
 }
+
+array_from: {
+    options = {
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        var a = Array.from([1]);
+        var b = Array.from([1], a => a);
+        var c = Array.from(1);
+        var d = Array.from("String");
+        var e = Array.from({  });
+        console.log(a[0], b[0], c, d[3], e);
+    }
+    expect: {
+        var a = [1];
+        var b = Array.from([1], a => a);
+        var c = Array.from(1);
+        var d = Array.from("String");
+        var e = Array.from({});
+        console.log(a[0], b[0], c, d[3], e);
+    }
+    expect_stdout: "1 1 [] i []"
+}

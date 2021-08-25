@@ -1,5 +1,16 @@
 # Changelog
 
+## v5.7.2
+
+ - Fixed issues with compressing functions defined in `global_defs` option (#1036)
+ - New recipe for using Terser in gulp was added to RECIPES.md (#1035)
+ - Fixed issues with `??` and `?.` (#1045)
+ - Future reserved words such as `package` no longer require you to disable strict mode to be used as names.
+ - Refactored huge compressor file into multiple more focused files.
+ - Avoided unparenthesized `in` operator in some for loops (it breaks parsing because of for..in loops)
+ - Improved documentation (#1021, #1025)
+ - More type definitions (#1021)
+
 ## v5.7.1
 
  - Avoided collapsing assignments together if it would place a chain assignment on the left hand side, which is invalid syntax (`a?.b = c`)

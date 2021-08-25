@@ -16,10 +16,7 @@ case_1: {
     }
     expect: {
         var a = 0, b = 1;
-        switch (true) {
-          case a || true:
-            b = 2;
-        }
+        if (true === (a || true)) b = 2;
         console.log(a, b);
     }
     expect_stdout: "0 2"
@@ -44,10 +41,7 @@ case_2: {
     }
     expect: {
         var a = 0, b = 1;
-        switch (0) {
-          case a:
-            a = 3;
-        }
+        if (0 === a) a = 3;
         console.log(a, b);
     }
     expect_stdout: "3 1"

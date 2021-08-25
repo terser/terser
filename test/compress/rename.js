@@ -362,6 +362,36 @@ mangle_catch_redef_2_ie8_toplevel: {
     expect_stdout: "undefined"
 }
 
+mangle_catch_nth_identifier: {
+    rename = true
+    options = {
+        ie8: false,
+        toplevel: true,
+    }
+    mangle = {
+        ie8: false,
+        toplevel: true,
+        nth_identifier: (function () {
+            function get(n) {
+                return "foo";
+            }
+            return {
+                get
+            };
+        })()
+    }
+    input: {
+        try {
+            throw "FAIL1";
+        } catch (a) {
+            var a = "FAIL2";
+        }
+        console.log(a);
+    }
+    expect_exact: 'try{throw"FAIL1"}catch(foo){var foo="FAIL2"}console.log(foo);'
+    expect_stdout: "undefined"
+}
+
 issue_2120_1: {
     rename = true
     mangle = {

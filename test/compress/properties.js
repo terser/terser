@@ -202,6 +202,31 @@ mangle_unquoted_properties: {
     }
 }
 
+mangle_nth_identifier: {
+    mangle = {
+        properties: {
+            nth_identifier: (function () {
+                function get(n) {
+                    return "zyxwvutsrq"[n];
+                }
+                return {
+                    get
+                };
+            })()
+        },
+    }
+    input: {
+        var a = {};
+        a.foo = "bar";
+        x = { baz: "ban" };
+    }
+    expect: {
+        var a = {};
+        a.v = "bar";
+        x = { u: "ban" };
+    }
+}
+
 mangle_debug: {
     mangle = {
         properties: {

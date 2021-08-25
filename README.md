@@ -898,6 +898,12 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `module` (default `false`) -- Pass `true` an ES6 modules, where the toplevel
   scope is not the global scope. Implies `toplevel`.
 
+- `nth_identifier` (default: an internal mangler that weights based on character
+  frequency analysis) -- Pass an object with a `get(n)` function that converts an
+  ordinal into the nth most favored (usually shortest) identifier.
+  Optionally also provide `reset()`, `sort()`, and `consider(chars, delta)` to
+  use character frequency analysis of the source code.
+
 - `reserved` (default `[]`) -- Pass an array of identifiers that should be
   excluded from mangling. Example: `["foo", "bar"]`.
 
@@ -943,6 +949,12 @@ await minify(code, { mangle: { toplevel: true } }).code;
   - `"strict"` (recommended) -- `obj.prop` is mangled.
   - `false` -- `obj["prop"]` is mangled.
   - `true` -- `obj.prop` is mangled unless there is `obj["prop"]` elsewhere in the code.
+
+- `nth_identifer` (default: an internal mangler that weights based on character
+  frequency analysis) -- Pass an object with a `get(n)` function that converts an
+  ordinal into the nth most favored (usually shortest) identifier.
+  Optionally also provide `reset()`, `sort()`, and `consider(chars, delta)` to
+  use character frequency analysis of the source code.
 
 - `regex` (default: `null`) — Pass a [RegExp literal or pattern string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) to only mangle property matching the regular expression.
 
@@ -1078,6 +1090,7 @@ You might want to try it on your own code; it should reduce the minified size.
 Some examples of the optimizations made when this option is enabled:
 
 - `new Array(1, 2, 3)` or `Array(1, 2, 3)` → `[ 1, 2, 3 ]`
+- `Array.from([1, 2, 3])` → `[1, 2, 3]`
 - `new Object()` → `{}`
 - `String(exp)` or `exp.toString()` → `"" + exp`
 - `new Object/RegExp/Function/Error/Array (...)` → we discard the `new`

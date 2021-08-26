@@ -1,9 +1,193 @@
-computed_props_keep_quoted_inlined_sub_1: {
+inline_string_keep_quoted_strict: {
     options = {
         defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
+    }
+    mangle = {
+        properties: {
+            keep_quoted: 'strict',
+        },
+    }
+    input: {
+        let quoted_obj = {
+            '_obj_prop': 'bar',
+            '_obj_method'() {},
+            get '_obj_getter'() {},
+        };
+        let quoted_static_class = class {
+            static '_static_prop' = 'bar';
+            static '_static_method'() {}
+            static get '_static_getter'() {}
+        };
+        let quoted_instance_class = class {
+            '_instance_prop' = 'bar';
+            '_instance_method'() {}
+            get '_instance_getter'() {}
+        };
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { '_destructure': quoted_destructure } = global;
+
+        let obj = {
+            _obj_prop: 'bar',
+            _obj_method() {},
+            get _obj_getter() {},
+        };
+        let static_class = class {
+            static _static_prop = 'bar';
+            static _static_method() {}
+            static get _static_getter() {}
+        };
+        let instance_class = class {
+            _instance_prop = 'bar';
+            _instance_method() {}
+            get _instance_getter() {}
+        };
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { _destructure: destructure } = global;
+    }
+    expect: {
+        let quoted_obj = {
+            '_obj_prop': 'bar',
+            '_obj_method'() {},
+            get '_obj_getter'() {},
+        };
+        let quoted_static_class = class {
+            static '_static_prop' = 'bar';
+            static '_static_method'() {}
+            static get '_static_getter'() {}
+        };
+        let quoted_instance_class = class {
+            '_instance_prop' = 'bar';
+            '_instance_method'() {}
+            get '_instance_getter'() {}
+        };
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { '_destructure': quoted_destructure } = global;
+
+        let obj = {
+            t: "bar",
+            _() {},
+            get l() {}
+        };
+        let static_class = class {
+            static o = "bar";
+            static i() {}
+            static get g() {}
+        };
+        let instance_class = class {
+            p = "bar";
+            u() {}
+            get j() {}
+        };
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { h: destructure } = global;
+    }
+}
+
+computed_inline_string_keep_quoted_strict_no_computed_props: {
+    options = {
+        defaults: false,
+        computed_props: false,
+    }
+    mangle = {
+        properties: {
+            keep_quoted: 'strict',
+        },
+    }
+    input: {
+        let quoted_obj = {
+            ['_obj_prop']: 'bar',
+            ['_obj_method']() {},
+            get ['_obj_getter']() {},
+        };
+        let quoted_static_class = class {
+            static ['_static_prop'] = 'bar';
+            static ['_static_method']() {}
+            static get ['_static_getter']() {}
+        };
+        let quoted_instance_class = class {
+            ['_instance_prop'] = 'bar';
+            ['_instance_method']() {}
+            get ['_instance_getter']() {}
+        };
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { ['_destructure']: quoted_destructure } = global;
+
+        let obj = {
+            _obj_prop: 'bar',
+            _obj_method() {},
+            get _obj_getter() {},
+        };
+        let static_class = class {
+            static _static_prop = 'bar';
+            static _static_method() {}
+            static get _static_getter() {}
+        };
+        let instance_class = class {
+            _instance_prop = 'bar';
+            _instance_method() {}
+            get _instance_getter() {}
+        };
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { _destructure: destructure } = global;
+    }
+    expect: {
+        let quoted_obj = {
+            ['_obj_prop']: 'bar',
+            ['_obj_method']() {},
+            get ['_obj_getter']() {},
+        };
+        let quoted_static_class = class {
+            static ['_static_prop'] = 'bar';
+            static ['_static_method']() {}
+            static get ['_static_getter']() {}
+        };
+        let quoted_instance_class = class {
+            ['_instance_prop'] = 'bar';
+            ['_instance_method']() {}
+            get ['_instance_getter']() {}
+        };
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { ['_destructure']: quoted_destructure } = global;
+
+        let obj = {
+            _: "bar",
+            l() {},
+            get o() {}
+        };
+        let static_class = class {
+            static i = 'bar';
+            static g() {}
+            static get p() {}
+        };
+        let instance_class = class {
+            u = 'bar';
+            j() {}
+            get h() {}
+        };
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { m: destructure } = global;
+    }
+}
+
+computed_inline_string_keep_quoted_strict_computed_props: {
+    options = {
+        defaults: false,
         computed_props: true,
     }
     mangle = {
@@ -12,760 +196,85 @@ computed_props_keep_quoted_inlined_sub_1: {
         },
     }
     input: {
-        let prop = '_foo';
-        let o = {
-            [prop]: 'bar'
+        let quoted_obj = {
+            ['_obj_prop']: 'bar',
+            ['_obj_method']() {},
+            get ['_obj_getter']() {},
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_2: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = {
-            [prop]() { return 'bar' }
+        let quoted_static_class = class {
+            static ['_static_prop'] = 'bar';
+            static ['_static_method']() {}
+            static get ['_static_getter']() {}
         };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_3: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = {
-            get [prop]() { return 'bar' }
+        let quoted_instance_class = class {
+            ['_instance_prop'] = 'bar';
+            ['_instance_method']() {}
+            get ['_instance_getter']() {}
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { ['_destructure']: quoted_destructure } = global;
 
-computed_props_keep_quoted_inlined_sub_4: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static [prop] = 'bar'
+        let obj = {
+            _obj_prop: 'bar',
+            _obj_method() {},
+            get _obj_getter() {},
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_5: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static [prop]() { return 'bar' }
+        let static_class = class {
+            static _static_prop = 'bar';
+            static _static_method() {}
+            static get _static_getter() {}
         };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_6: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static get [prop]() { return 'bar' }
+        let instance_class = class {
+            _instance_prop = 'bar';
+            _instance_method() {}
+            get _instance_getter() {}
         };
-        console.log(o[id('_foo')]);
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { _destructure: destructure } = global;
     }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_7: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            [prop] = 'bar'
+    expect: {
+        let quoted_obj = {
+            _obj_prop: 'bar',
+            _obj_method() {},
+            get _obj_getter() {},
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_8: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            [prop]() { return 'bar' }
+        let quoted_static_class = class {
+            static _static_prop = 'bar';
+            static _static_method() {}
+            static get _static_getter() {}
         };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_inlined_sub_9: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            get [prop]() { return 'bar' }
+        let quoted_instance_class = class {
+            _instance_prop = 'bar';
+            _instance_method() {}
+            get _instance_getter() {}
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
+        global['_sub'];
+        global?.['_optional_sub'];
+        global?.deep['_deep_optional_sub'];
+        let { _destructure: quoted_destructure } = global;
 
-computed_props_keep_quoted_inlined_sub_10: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let {
-            [prop]: val
-        } = { [id('_foo')]: 'bar' };
-        console.log(val);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_1: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = {
-            [prop]: 'bar'
+        let obj = {
+            t: "bar",
+            _() {},
+            get l() {}
         };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_2: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = {
-            [prop]() { return 'bar' }
+        let static_class = class {
+            static o = "bar";
+            static i() {}
+            static get g() {}
         };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_3: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = {
-            get [prop]() { return 'bar' }
+        let instance_class = class {
+            p = "bar";
+            u() {}
+            get j() {}
         };
-        console.log(o[id('_foo')]);
+        global._sub;
+        global?._optional_sub;
+        global?.deep._deep_optional_sub;
+        let { h: destructure } = global;
     }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_4: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static [prop] = 'bar'
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_5: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static [prop]() { return 'bar' }
-        };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_6: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = class {
-            static get [prop]() { return 'bar' }
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_7: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            [prop] = 'bar'
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_8: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            [prop]() { return 'bar' }
-        };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_9: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let o = new class {
-            get [prop]() { return 'bar' }
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_inlined_sub_10: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = '_foo';
-        let {
-            [prop]: val
-        } = { [id('_foo')]: 'bar' };
-        console.log(val);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_1: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = {
-            '_foo': 'bar'
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_2: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = {
-            '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_3: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = {
-            get '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_4: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = class {
-            static '_foo' = 'bar'
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_5: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = class {
-            static '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_6: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = class {
-            static get '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_7: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = new class {
-            '_foo' = 'bar'
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_8: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = new class {
-            '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]());
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_9: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let o = new class {
-            get '_foo'() { return 'bar' }
-        };
-        console.log(o[id('_foo')]);
-    }
-    expect_stdout: 'bar'
-}
-
-inline_string_keep_quoted_strict_10: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let {
-            '_foo': val
-        } = { [id('_foo')]: 'bar' };
-        console.log(val);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_strict_property_access_sub: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = 'foo_';
-        let o = {
-            [id('foo_')]: 'bar'
-        };
-        console.log(o[prop]);
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_strict_property_access_sub: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = 'foo_';
-        let o = {
-            [id('foo_')]: 'bar'
-        };
-        console.log(o[prop]);
-    }
-    expect_stdout: 'bar'
-}
-
-no_computed_props_keep_quoted_strict_optional_property_access_sub: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: false,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = 'foo_';
-        let o = {
-            [id('foo_')]: 'bar'
-        };
-        console.log(o?.[prop]);
-    }
-    expect_stdout: 'bar'
-}
-
-computed_props_keep_quoted_strict_optional_property_access_sub: {
-    options = {
-        defaults: false,
-        reduce_vars: true,
-        unused: true,
-        toplevel: true,
-        computed_props: true,
-    }
-    mangle = {
-        properties: {
-            keep_quoted: 'strict',
-        },
-    }
-    input: {
-        let prop = 'foo_';
-        let o = {
-            [id('foo_')]: 'bar'
-        };
-        console.log(o?.[prop]);
-    }
-    expect_stdout: 'bar'
 }

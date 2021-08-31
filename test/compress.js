@@ -293,7 +293,6 @@ async function run_compress_tests() {
         }
         var tests = parse_test(path.resolve(dir, file));
         for (var i in tests) if (tests.hasOwnProperty(i)) {
-            if (process.env.GREP && !i.includes(process.env.GREP)) continue;
             if (!await test_case(tests[i])) {
                 failures++;
                 failed_files[file] = 1;

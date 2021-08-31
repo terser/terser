@@ -145,6 +145,7 @@ describe("sourcemaps", function() {
             set setter(){}
         }`;
         const result = await minify(code, {
+            mangle: false,
             sourceMap: {asObject: true},
         });
         assert.deepStrictEqual(result.map.names, [

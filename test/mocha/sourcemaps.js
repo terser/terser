@@ -137,24 +137,45 @@ describe("sourcemaps", function() {
     it("Should grab names from methods and properties correctly", async () => {
         const code = `class Foo {
             property = 6
-            #private = 4
             method () {}
             404() {}
             "quoted method name" () {}
             get getter(){}
             set setter(){}
+            #private = 4
+            #private_method() {}
+            get #private_getter() {}
+            set #private_setter() {}
+
+            test() {
+                this.property;
+                this.method;
+                this[404];
+                this["quoted method name"];
+                this.getter;
+                this.setter;
+                this.#private;
+                this.#private_method;
+                this.#private_getter;
+                this.#private_setter;
+            }
         }`;
         const result = await minify(code, {
-            mangle: false,
-            sourceMap: {asObject: true},
+            sourceMap: { asObject: true },
+            mangle: { properties: true },
         });
         assert.deepStrictEqual(result.map.names, [
             "Foo",
             "property",
-            "private",
             "method",
             "getter",
-            "setter"
+            "setter",
+            "private",
+            "private_method",
+            "private_getter",
+            "private_setter",
+            "test",
+            "this",
         ]);
     });
 

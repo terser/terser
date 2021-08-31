@@ -74,10 +74,10 @@ ternary_and_private_methods: {
     }
     expect: {
         class A {
-            #fail() { return false; }
-            get #pass() { return "PASS"; }
+            #s() { return false; }
+            get #i() { return "PASS"; }
             print() {
-                console.log(this.#fail() ? this.#fail() : this.#pass);
+                console.log(this.#s() ? this.#s() : this.#i);
             }
         }
         new A().print();

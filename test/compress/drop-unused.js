@@ -2927,8 +2927,6 @@ unused_null_conditional_chain: {
         null?.maybe_call?.(3);
     }
     expect: {
-        undefined.i_will_throw;
-        undefined(1);
     }
 }
 

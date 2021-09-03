@@ -124,7 +124,7 @@ describe("minify", function() {
         assert.strictEqual(run_code(compressed), run_code(original));
     });
 
-    it.skip("Should avoid mangled names in cache", async function() {
+    it("Should avoid mangled names in cache", async function() {
         var cache = {};
         var original = "";
         var compressed = "";
@@ -145,11 +145,42 @@ describe("minify", function() {
             compressed += result.code;
         });
         assert.strictEqual(compressed, [
-            '"xxxyy";var x={x:1};',
-            '"xxyyy";var y={y:2,a:3},a=4;',
-            'console.log(x.x,y.y,y.a,a);',
+            '"xxxyy";var x={s:1};',
+            '"xxyyy";var y={t:2,u:3},a=4;',
+            "console.log(x.s,y.t,y.u,a);",
         ].join(""));
         assert.strictEqual(run_code(compressed), run_code(original));
+    });
+
+    it("Should consistently rename properties colliding with a mangled name", async function() {
+        var cache = {};
+        var compressed = "";
+
+        await for_each_async([
+            "function fn1(obj) { obj.prop = 1; obj.i = 5; }",
+            "function fn2(obj) { obj.prop = 1; obj.i = 5; }",
+            "let o1 = {}, o2 = {}; fn1(o1); fn2(o2);",
+            "console.log(o1.prop === o2.prop, o1.i === o2.i);",
+        ], async function(code) {
+            var result = await minify(code, {
+                compress: false,
+                mangle: {
+                    properties: true,
+                    toplevel: true
+                },
+                nameCache: cache
+            });
+            compressed += result.code;
+        });
+        console.log(run_code(compressed));
+        assert.strictEqual(compressed, [
+            // It's important that the `n.i` here conflicts with the original's
+            // `obj.i`, so `obj.i` gets consistently renamed to `n.o`.
+            "function n(n){n.i=1;n.o=5}",
+            "function c(n){n.i=1;n.o=5}",
+            "let f={},e={};n(f);c(e);",
+            "console.log(f.i===e.i,f.o===e.o);",
+        ].join(""));
     });
 
     it("Should not parse invalid use of reserved words", async function() {

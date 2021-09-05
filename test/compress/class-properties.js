@@ -364,8 +364,10 @@ private_properties_can_be_mangled: {
             #bbbbbb() {
                 return "SS"
             }
+            get #cccccc() {}
+            set #dddddd(v) {}
             log() {
-                console.log(this.aaaaaa + this.#aaaaaa + this.#bbbbbb())
+                console.log(this.aaaaaa + this.#aaaaaa + this.#bbbbbb() + this.#cccccc + this.#dddddd)
             }
         }
 
@@ -375,11 +377,13 @@ private_properties_can_be_mangled: {
         class X {
             t = "P"
             #a = "A"
-            #b() {
+            #s() {
                 return "SS"
             }
+            get #c() {}
+            set #t(a) {}
             log() {
-                console.log(this.t + this.#a + this.#b())
+                console.log(this.t + this.#a + this.#s() + this.#c + this.#t)
             }
         }
 

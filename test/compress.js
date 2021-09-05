@@ -14,6 +14,7 @@ import { Compressor } from "../lib/compress/index.js";
 import {
     reserve_quoted_keys,
     mangle_properties,
+    mangle_private_properties,
 } from "../lib/propmangle.js";
 import { base54 } from "../lib/scope.js";
 import { string_template, defaults } from "../lib/utils/index.js";
@@ -227,6 +228,7 @@ async function run_compress_tests() {
                     }
                 })(test.mangle.cache);
                 output.mangle_names(test.mangle);
+                mangle_private_properties(output, test.mangle);
                 if (test.mangle.properties) {
                     output = mangle_properties(output, test.mangle.properties);
                 }

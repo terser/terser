@@ -6056,3 +6056,69 @@ do_not_place_chain_on_lhs_2: {
         a.d = e;
     }
 }
+
+shadowed_variable: {
+    options = {
+        pure_getters: true,
+        collapse_vars: true,
+        unused: true,
+    }
+    input: {
+        function test(e) {
+            const result = {};
+            const test = e.test;
+
+            {
+                const e = random(test);
+                result.discretized = e
+            }
+
+            return result;
+        }
+    }
+    expect: {
+        function test(e) {
+          const result = {};
+          const test = e.test;
+          {
+            const e = random(test);
+            result.discretized = e;
+          }
+          return result;
+        }
+    }
+}
+
+shadowed_variable2: {
+    options = {
+        pure_getters: true,
+        collapse_vars: true,
+        unused: true,
+    }
+    input: {
+        function test(e) {
+            const result = {};
+            const test = e.test;
+            {
+                {
+                    result.discretized = random(test);
+                }
+                const e = random();
+                console.log(e);
+            }
+            return result;
+        }
+    }
+    expect: {
+        function test(e) {
+          const result = {};
+          const test = e.test;
+          {
+            result.discretized = random(test);
+            const e = random();
+            console.log(e);
+          }
+          return result;
+        }
+    }
+}

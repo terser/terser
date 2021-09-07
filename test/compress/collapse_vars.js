@@ -6089,7 +6089,7 @@ shadowed_variable: {
     }
 }
 
-shadowed_variable2: {
+shadowed_variable_2: {
     options = {
         pure_getters: true,
         collapse_vars: true,

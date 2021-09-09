@@ -390,3 +390,66 @@ private_properties_can_be_mangled: {
         new X().log()
     }
 }
+
+nested_private_properties_can_be_mangled: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    mangle = {
+        properties: true
+    }
+    input: {
+        class X {
+            #test = "PASS"
+            #aaaaaa = this;
+            #bbbbbb() {
+                return this;
+            }
+            get #cccccc() { return this; }
+            log() {
+                console.log(this.#test);
+                console.log(this.#aaaaaa.#test);
+                console.log(this.#bbbbbb().#test);
+                console.log(this.#cccccc.#test);
+                console.log(this?.#test);
+                console.log(this?.#aaaaaa.#test);
+                console.log(this?.#bbbbbb().#test);
+                console.log(this?.#cccccc.#test);
+                console.log(this.#test);
+                console.log(this.#aaaaaa?.#test);
+                console.log(this.#bbbbbb?.().#test);
+                console.log(this.#bbbbbb()?.#test);
+                console.log(this.#cccccc?.#test);
+            }
+        }
+
+        new X().log()
+    }
+    expect: {
+        class X {
+            #s = "PASS";
+            #o = this;
+            #t() {
+                return this;
+            }
+            get #c() {
+                return this;
+            }
+            log() {
+                console.log(this.#s);
+                console.log(this.#o.#s);
+                console.log(this.#t().#s);
+                console.log(this.#c.#s);
+                console.log(this?.#s);
+                console.log(this?.#o.#s);
+                console.log(this?.#t().#s);
+                console.log(this?.#c.#s);
+                console.log(this.#s);
+                console.log(this.#o?.#s);
+                console.log(this.#t?.().#s);
+                console.log(this.#t()?.#s);
+                console.log(this.#c?.#s);
+            }
+        }
+        new X().log();
+    }
+}

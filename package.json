@@ -45,19 +45,19 @@
   "dependencies": {
     "commander": "^2.20.0",
     "source-map": "~0.7.2",
-    "source-map-support": "~0.5.19"
+    "source-map-support": "~0.5.20"
   },
   "devDependencies": {
-    "@ls-lint/ls-lint": "^1.9.2",
-    "acorn": "^8.0.5",
-    "astring": "^1.6.2",
-    "eslint": "^7.19.0",
-    "eslump": "^2.0.0",
+    "@ls-lint/ls-lint": "^1.10.0",
+    "acorn": "^8.5.0",
+    "astring": "^1.7.5",
+    "eslint": "^7.32.0",
+    "eslump": "^3.0.0",
     "esm": "^3.2.25",
-    "mocha": "^8.2.1",
+    "mocha": "^9.1.1",
     "pre-commit": "^1.2.2",
     "rimraf": "^3.0.2",
-    "rollup": "2.38.4",
+    "rollup": "2.56.3",
     "semver": "^7.3.4"
   },
   "scripts": {

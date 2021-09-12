@@ -191,14 +191,15 @@ describe("minify", function() {
     });
 
     describe("mangleProperties", function() {
-        it.skip("Shouldn't mangle quoted properties", async function() {
-            var js = 'a["foo"] = "bar"; a.color = "red"; x = {"bar": 10};';
+        it("Shouldn't mangle quoted properties", async function() {
+            var js = 'var a = {}; a["foo"] = "bar"; a.color = "red"; x = {"bar": 10};';
             var result = await minify(js, {
                 compress: {
                     properties: false
                 },
                 mangle: {
                     properties: {
+                        builtins: true,
                         keep_quoted: true
                     }
                 },
@@ -208,9 +209,10 @@ describe("minify", function() {
                 }
             });
             assert.strictEqual(result.code,
-                    'a["foo"]="bar",a.a="red",x={"bar":10};');
+                    'var a={foo:"bar",r:"red"};x={"bar":10};');
         });
-        it.skip("Should not mangle quoted property within dead code", async function() {
+
+        it("Should not mangle quoted property within dead code", async function() {
             var result = await minify('var g = {}; ({ "keep": 1 }); g.keep = g.change;', {
                 mangle: {
                     properties: {

@@ -10,9 +10,9 @@ function read(path) {
 
 describe("minify", function() {
     it("Should test basic sanity of minify with default options", async function() {
-        var js = 'function foo(bar) { if (bar) return 3; else return 7; var u = not_called(); }';
+        var js = "function foo(bar) { if (bar) return 3; else return 7; var u = not_called(); }";
         var result = await minify(js);
-        assert.strictEqual(result.code, 'function foo(n){return n?3:7}');
+        assert.strictEqual(result.code, "function foo(n){return n?3:7}");
     });
 
     it("Should skip inherited keys from `files`", async function() {
@@ -128,10 +128,50 @@ describe("minify", function() {
         var cache = {};
         var original = "";
         var compressed = "";
+        const nth_identifier = {
+            get(n) {
+                return String.fromCharCode(n + "a".charCodeAt(0));
+            }
+        };
+
         await for_each_async([
-            '"xxxyy";var i={s:1};',
-            '"xxyyy";var j={t:2,u:3},k=4;',
-            "console.log(i.s,j.t,j.u,k);",
+            '"xxxyy";var i={prop1:1};',
+            '"xxyyy";var j={prop2:2,prop3:3},k=4;',
+            "console.log(i.prop1,j.prop2,j.prop3,k);",
+            "console.log(i.prop2 === undefined, j.prop1 === undefined);",
+        ], async function(code) {
+            var result = await minify(code, {
+                compress: false,
+                mangle: {
+                    properties: {
+                        nth_identifier,
+                    },
+                    toplevel: true,
+                },
+                nameCache: cache
+            });
+            original += code;
+            compressed += result.code;
+        });
+        assert.strictEqual(compressed, [
+            '"xxxyy";var x={g:1};',
+            '"xxyyy";var p={h:2,i:3},r=4;',
+            "console.log(x.g,p.h,p.i,r);",
+            "console.log(x.h===undefined,p.g===undefined);"
+        ].join(""));
+        assert.strictEqual(run_code(compressed), run_code(original));
+    });
+
+    it("Should consistently rename properties colliding with a mangled name", async function() {
+        var cache = {};
+        var original = "";
+        var compressed = "";
+
+        await for_each_async([
+            "function fn1(obj) { obj.prop = 1; obj.i = 2; }",
+            "function fn2(obj) { obj.prop = 1; obj.i = 2; }",
+            "let o1 = {}, o2 = {}; fn1(o1); fn2(o2);",
+            "console.log(o1.prop === o2.prop, o2.prop === 1, o1.i === o2.i, o2.i === 2);",
         ], async function(code) {
             var result = await minify(code, {
                 compress: false,
@@ -145,42 +185,14 @@ describe("minify", function() {
             compressed += result.code;
         });
         assert.strictEqual(compressed, [
-            '"xxxyy";var x={s:1};',
-            '"xxyyy";var y={t:2,u:3},a=4;',
-            "console.log(x.s,y.t,y.u,a);",
-        ].join(""));
-        assert.strictEqual(run_code(compressed), run_code(original));
-    });
-
-    it("Should consistently rename properties colliding with a mangled name", async function() {
-        var cache = {};
-        var compressed = "";
-
-        await for_each_async([
-            "function fn1(obj) { obj.prop = 1; obj.i = 5; }",
-            "function fn2(obj) { obj.prop = 1; obj.i = 5; }",
-            "let o1 = {}, o2 = {}; fn1(o1); fn2(o2);",
-            "console.log(o1.prop === o2.prop, o1.i === o2.i);",
-        ], async function(code) {
-            var result = await minify(code, {
-                compress: false,
-                mangle: {
-                    properties: true,
-                    toplevel: true
-                },
-                nameCache: cache
-            });
-            compressed += result.code;
-        });
-        console.log(run_code(compressed));
-        assert.strictEqual(compressed, [
             // It's important that the `n.i` here conflicts with the original's
             // `obj.i`, so `obj.i` gets consistently renamed to `n.o`.
-            "function n(n){n.i=1;n.o=5}",
-            "function c(n){n.i=1;n.o=5}",
+            "function n(n){n.i=1;n.o=2}",
+            "function c(n){n.i=1;n.o=2}",
             "let f={},e={};n(f);c(e);",
-            "console.log(f.i===e.i,f.o===e.o);",
+            "console.log(f.i===e.i,e.i===1,f.o===e.o,e.o===2);",
         ].join(""));
+        assert.equal(run_code(compressed), run_code(original));
     });
 
     it("Should not parse invalid use of reserved words", async function() {
@@ -217,7 +229,7 @@ describe("minify", function() {
                     keep_quoted_props: false,
                     quote_style: 3
                 }});
-            assert.strictEqual(result.code, 'var foo={x:1,y:2,z:3};');
+            assert.strictEqual(result.code, "var foo={x:1,y:2,z:3};");
         });
     });
 
@@ -268,7 +280,7 @@ describe("minify", function() {
 
             var map = JSON.parse(result.map);
 
-            assert.equal(map.file, 'simple.min.js');
+            assert.equal(map.file, "simple.min.js");
             assert.equal(map.sourcesContent.length, 1);
             assert.equal(map.sourcesContent[0],
                 'let foo = x => "foo " + x;\nconsole.log(foo("bar"));');
@@ -302,7 +314,7 @@ describe("minify", function() {
 
     describe("sourceMapInline", function() {
         it("should append source map to output js when sourceMapInline is enabled", async function() {
-            var result = await minify('var a = function(foo) { return foo; };', {
+            var result = await minify("var a = function(foo) { return foo; };", {
                 sourceMap: {
                     url: "inline"
                 }
@@ -312,7 +324,7 @@ describe("minify", function() {
                 "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
         });
         it("should not append source map to output js when sourceMapInline is not enabled", async function() {
-            var result = await minify('var a = function(foo) { return foo; };');
+            var result = await minify("var a = function(foo) { return foo; };");
             var code = result.code;
             assert.strictEqual(code, "var a=function(n){return n};");
         });
@@ -421,24 +433,24 @@ describe("minify", function() {
     });
 
     it("should work with compress defaults disabled", async function() {
-        var code = 'if (true) { console.log(1 + 2); }';
+        var code = "if (true) { console.log(1 + 2); }";
         var options = {
             compress: {
                 defaults: false,
             }
         };
-        assert.strictEqual((await minify(code, options)).code, 'if(true)console.log(1+2);');
+        assert.strictEqual((await minify(code, options)).code, "if(true)console.log(1+2);");
     });
 
     it("should work with compress defaults disabled and evaluate enabled", async function() {
-        var code = 'if (true) { console.log(1 + 2); }';
+        var code = "if (true) { console.log(1 + 2); }";
         var options = {
             compress: {
                 defaults: false,
                 evaluate: true,
             }
         };
-        assert.strictEqual((await minify(code, options)).code, 'if(true)console.log(3);');
+        assert.strictEqual((await minify(code, options)).code, "if(true)console.log(3);");
     });
 
     describe("enclose", function() {
@@ -455,7 +467,7 @@ describe("minify", function() {
         it("Should work with arg", async function() {
             var result = await minify(code, {
                 compress: false,
-                enclose: 'undefined',
+                enclose: "undefined",
                 mangle: false,
             });
             if (result.error) throw result.error;
@@ -464,7 +476,7 @@ describe("minify", function() {
         it("Should work with arg:value", async function() {
             var result = await minify(code, {
                 compress: false,
-                enclose: 'window,undefined:window',
+                enclose: "window,undefined:window",
                 mangle: false,
             });
             if (result.error) throw result.error;
@@ -473,9 +485,9 @@ describe("minify", function() {
         it("Should work alongside wrap", async function() {
             var result = await minify(code, {
                 compress: false,
-                enclose: 'window,undefined:window',
+                enclose: "window,undefined:window",
                 mangle: false,
-                wrap: 'exports',
+                wrap: "exports",
             });
             if (result.error) throw result.error;
             assert.strictEqual(result.code, '(function(window,undefined){(function(exports){function enclose(){console.log("test enclose")}enclose()})(typeof exports=="undefined"?exports={}:exports)})(window);');

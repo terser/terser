@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.8.0
+
+ - Fixed shadowing variables while moving code in some cases (#1065)
+ - Stop mangling computed & quoted properties when keep_quoted is enabled.
+ - Fix for mangling private getter/setter and .#private access (#1060, #1068)
+ - Array.from has a new optimization when the unsafe option is set (#737)
+ - Mangle/propmangle let you generate your own identifiers through the nth_identifier option (#1061)
+ - More optimizations to switch statements (#1044)
+
 ## v5.7.2
 
  - Fixed issues with compressing functions defined in `global_defs` option (#1036)

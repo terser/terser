@@ -2513,6 +2513,40 @@ collapse_same_branches_not_in_a_row2: {
     expect_stdout: ["PASS"]
 }
 
+collapse_same_branches_not_in_a_row_ensure_no_side_effects: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        let i = 1;
+        switch (id(2)) {
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            case ++i:
+                console.log(1);
+        }
+    }
+    expect: {
+        let i = 1;
+        switch (id(2)) {
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            case ++i:
+                console.log(1);
+        }
+    }
+    expect_stdout: ["2"]
+}
+
 
 collapse_same_branches_as_default_not_in_a_row: {
     options = {

@@ -2513,6 +2513,53 @@ collapse_same_branches_not_in_a_row2: {
     expect_stdout: ["PASS"]
 }
 
+collapse_same_branches_not_in_a_row_including_fallthrough_with_same_body: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+            case 4:
+                console.log("PASS");
+                break;
+            case 9:
+                console.log("FAIL");
+                break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                console.log("PASS");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                console.log("PASS");
+                break;
+            case 2:
+            case 9:
+                console.log("FAIL");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
 collapse_same_branches_not_in_a_row_ensure_no_side_effects: {
     options = {
         switches: true,

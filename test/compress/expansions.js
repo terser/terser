@@ -103,6 +103,31 @@ object_spread: {
     ]
 }
 
+object_spread_nullish_undefined: {
+    input: {
+        let o = { ...undefined, ...{a: true} }
+        id(o);
+    }
+
+    expect: {
+        let o = {a: true};
+        id(o)
+    }
+}
+
+object_spread_nullish_null: {
+    input: {
+        let o = { ...null, ...{a: true} }
+        id(o);
+    }
+
+    expect: {
+        let o = {a: true};
+        id(o)
+    }
+}
+
+
 avoid_spread_hole: {
     input: {
         let x = [...[,]]

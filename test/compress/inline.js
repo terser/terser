@@ -459,3 +459,30 @@ do_not_repeat_when_variable_larger_than_inlined_node: {
         pass(s);
     }
 }
+
+inline_using_correct_arguments: {
+    options = {
+        reduce_vars: true,
+        inline: true,
+        passes: 2,
+        toplevel: true,
+        unused: true
+    }
+
+    input: {
+        function run (s, t) {
+            return s.run(t);
+        }
+
+        /*#__INLINE__*/ run(a, "foo");
+        /*#__INLINE__*/ run(a, "bar");
+        /*#__INLINE__*/ run(a, "123");
+    }
+
+    expect: {
+        s = a, t = "foo", s.run(t);
+        var s, t;
+        (function(s, t) { return s.run("bar") })(a);
+        (function(s, t) { return s.run("123") })(a);
+    }
+}

@@ -2576,6 +2576,7 @@ collapse_same_branches_not_in_a_row_ensure_no_side_effects: {
                 break;
             case ++i:
                 console.log(1);
+                break;
         }
     }
     expect: {

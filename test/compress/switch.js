@@ -2447,6 +2447,294 @@ collapse_same_branches_2: {
     expect_stdout: ["PASS", "PASS"]
 }
 
+collapse_same_branches_not_in_a_row: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS")
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+                console.log("PASS");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 3:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
+collapse_same_branches_not_in_a_row2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+                console.log("PASS");
+                break;
+            case 4:
+                console.log("PASS");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 3:
+            case 4:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
+collapse_same_branches_not_in_a_row_including_fallthrough_with_same_body: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+            case 4:
+                console.log("PASS");
+                break;
+            case 9:
+                console.log("FAIL");
+                break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                console.log("PASS");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                console.log("PASS");
+                break;
+            case 2:
+            case 9:
+                console.log("FAIL");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
+collapse_same_branches_not_in_a_row_ensure_no_side_effects: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        let i = 1;
+        switch (id(2)) {
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            case ++i:
+                console.log(1);
+                break;
+        }
+    }
+    expect: {
+        let i = 1;
+        switch (id(2)) {
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            case ++i:
+                console.log(1);
+        }
+    }
+    expect_stdout: ["2"]
+}
+collapse_same_branches_not_in_a_row_even_if_last_case_without_abort: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(3)) {
+            case 1:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+                break;
+            case 3:
+                console.log(1);
+        }
+    }
+    expect: {
+        switch (id(3)) {
+            case 1:
+            case 3:
+                console.log(1);
+                break;
+            case 2:
+                console.log(2);
+        }
+    }
+    expect_stdout: ["1"]
+}
+
+
+collapse_same_branches_as_default_not_in_a_row: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+                console.log("PREVENT_IFS");
+                break;
+            case 4:
+                console.log("PASS");
+                break;
+            default:
+                console.log("PASS");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            default:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+                console.log("PREVENT_IFS");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
+collapse_same_branches_in_a_row2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        switch (id(1)) {
+            case 1:
+                console.log("PASS");
+                break;
+            case 2:
+                console.log("FAIL");
+                break;
+            case 3:
+                console.log("PASS");
+                break;
+            case 4:
+                console.log("FAIL");
+                break;
+        }
+    }
+    expect: {
+        switch (id(1)) {
+            case 1:
+            case 3:
+                console.log("PASS");
+                break;
+            case 2:
+            case 4:
+                console.log("FAIL");
+        }
+    }
+    expect_stdout: ["PASS"]
+}
+
+collapse_same_branches_in_a_row_with_return: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function fn() {
+            switch (id(1)) {
+                case 1:
+                    return "PASS";
+                case 2:
+                    return "FAIL";
+                case 3:
+                    return "PASS";
+                case 4:
+                    return "FAIL";
+            }
+        }
+        console.log(fn())
+    }
+    expect: {
+        function fn() {
+            switch (id(1)) {
+                case 1:
+                case 3:
+                    return "PASS";
+                case 2:
+                case 4:
+                    return "FAIL";
+            }
+        }
+        console.log(fn())
+    }
+    expect_stdout: ["PASS"]
+}
+
 // Empty branches at the end of the switch get trimmed
 trim_empty_last_branches: {
     options = {

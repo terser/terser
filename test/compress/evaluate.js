@@ -1783,8 +1783,29 @@ null_conditional_chain_eval: {
         null?.maybe_call?.(3)
     }
     expect: {
-        (void 0).but_might_throw;
-        (void 0)(1);
+    }
+}
+
+null_conditional_chain_eval_2: {
+    options = {
+        evaluate: true,
+        side_effects: true
+    }
+    input: {
+        null.deep?.unused
+        null.deep?.[side_effect()]
+        null.deep?.unused.but_might_throw
+        null.deep?.call(1)
+        null.deep?.(2)
+        null.deep?.maybe_call?.(3)
+    }
+    expect: {
+        null.deep?.unused
+        null.deep?.[side_effect()]
+        null.deep?.unused.but_might_throw
+        null.deep?.call(1)
+        null.deep?.(2)
+        null.deep?.maybe_call?.(3)
     }
 }
 

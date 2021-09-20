@@ -2927,8 +2927,115 @@ unused_null_conditional_chain: {
         null?.maybe_call?.(3);
     }
     expect: {
-        undefined.i_will_throw;
-        undefined(1);
     }
 }
 
+unused_null_conditional_chain_2: {
+    options = {
+        toplevel: true,
+        defaults: true,
+        passes: 5,
+    }
+    input: {
+        let i = 0;
+        (i++, null)?.unused;
+        (i++, null)?.[side_effect()];
+        (i++, null)?.unused.i_will_throw;
+        (i++, null)?.call(1);
+        (i++, null)?.(2);
+        (i++, null)?.maybe_call?.(3);
+    }
+    expect: {
+    }
+}
+
+unused_null_conditional_chain_3: {
+    options = {
+        toplevel: true,
+        defaults: true,
+        passes: 5,
+    }
+    input: {
+        (side_effect(), null)?.unused;
+        (side_effect(), null)?.[side_effect()];
+        (side_effect(), null)?.unused.i_will_throw;
+        (side_effect(), null)?.call(1);
+        (side_effect(), null)?.(2);
+        (side_effect(), null)?.maybe_call?.(3);
+    }
+    expect: {
+        // TODO: Elminate everything after ?.
+        (side_effect(), null)?.unused,
+            (side_effect(), null)?.[side_effect()],
+            (side_effect(), null)?.unused.i_will_throw,
+            (side_effect(), null)?.call(1),
+            (side_effect(), null)?.(2),
+            (side_effect(), null)?.maybe_call?.(3);
+    }
+}
+
+unused_null_conditional_chain_4: {
+    options = {
+        toplevel: true,
+        defaults: true,
+        passes: 5,
+    }
+    input: {
+        function nullish() {
+            side_effect();
+            return null;
+        }
+        nullish()?.unused;
+        nullish()?.[side_effect()];
+        nullish()?.unused.i_will_throw;
+        nullish()?.call(1);
+        nullish()?.(2);
+        nullish()?.maybe_call?.(3);
+    }
+    expect: {
+        // TODO: Elminate everything after ?.
+        function nullish() {
+            return side_effect(), null;
+        }
+        nullish()?.unused,
+            nullish()?.[side_effect()],
+            nullish()?.unused.i_will_throw,
+            nullish()?.call(1),
+            nullish()?.(2),
+            nullish()?.maybe_call?.(3);
+    }
+}
+
+unused_null_conditional_chain_5: {
+    options = {
+        toplevel: true,
+        defaults: true,
+        passes: 5,
+    }
+    input: {
+        export const obj = {
+            side_effect() {
+                side_effect();
+                return { null: null };
+            }
+        }
+        obj.side_effect().null?.unused;
+        obj.side_effect().null?.[side_effect()];
+        obj.side_effect().null?.unused.i_will_throw;
+        obj.side_effect().null?.call(1);
+        obj.side_effect().null?.(2);
+        obj.side_effect().null?.maybe_call?.(3);
+    }
+    expect: {
+        export const obj = {
+            side_effect: () => (side_effect(), {null: null})
+        }
+        // TODO: Elminate everything after ?.
+        obj.side_effect().null?.unused,
+            obj.side_effect().null?.[side_effect()],
+            obj.side_effect().null?.unused.i_will_throw,
+            obj.side_effect().null?.call(1),
+            obj.side_effect().null?.(2),
+            obj.side_effect().null?.maybe_call?.(3);
+    }
+}

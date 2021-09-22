@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.9.0
+
+ - Collapsing switch cases with the same bodies (even if they're not next to each other) (#1070).
+ - Fix evaluation of optional chain expressions (#1062)
+ - Fix mangling collision in ESM exports (#1063)
+ - Fix issue with mutating function objects after a second pass (#1047)
+ - Fix for inlining object spread `{ ...obj }` (#1071)
+ - Typescript typings fix (#1069)
+
 ## v5.8.0
 
  - Fixed shadowing variables while moving code in some cases (#1065)

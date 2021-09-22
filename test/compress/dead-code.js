@@ -1253,3 +1253,157 @@ issue_718: {
         export {y}
     }
 }
+
+issue_1029_1: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function asyncFn() {
+          let promise;
+          return promise = (async () => {
+            await true;
+            console.log(promise);
+          })()
+        }
+        asyncFn({});
+    }
+    expect: {
+        function asyncFn() {
+            let promise;
+            return promise = (async () => {
+                await true;
+                console.log(promise);
+            })();
+        }
+        asyncFn({});
+    }
+}
+
+issue_1029_2: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function asyncFn() {
+          let promise;
+          return promise = (async () => {
+            console.log(promise);
+          })()
+        }
+        asyncFn({});
+    }
+    expect: {
+        function asyncFn() {
+            let promise;
+            return promise = (async () => {
+                console.log(promise);
+            })();
+        }
+        asyncFn({});
+    }
+}
+
+issue_1029_3: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function genFn() {
+            let gen;
+            return gen = function*() {
+                console.log(gen);
+            }();
+        }
+        genFn({}).next();
+    }
+    expect: {
+        function genFn() {
+            let gen;
+            return gen = function* () {
+                console.log(gen);
+            }();
+        }
+        genFn({}).next();
+    }
+}
+
+issue_1029_4: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function fn() {
+            let val
+            return val = function() {
+                console.log(val);
+                return {};
+            }();
+        }
+        fn();
+    }
+    expect: {
+        function fn() {
+            let val
+            return function() {
+                console.log(val);
+                return {};
+            }();
+        }
+        fn();
+    }
+}
+
+issue_1029_5: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function fn() {
+            let val
+            return val = function() {
+                setTimeout(() => console.log(val));
+                return {};
+            }();
+        }
+        fn();
+    }
+    expect: {
+        function fn() {
+            let val
+            return val = function() {
+                setTimeout(() => console.log(val));
+                return {};
+            }();
+        }
+        fn();
+    }
+}
+
+issue_1029_6: {
+    options = {
+        dead_code: true,
+    }
+    input: {
+        function fn() {
+            let val
+            return val = function() {
+                setTimeout(() => {
+                    (() => console.log(val))();
+                })
+                return {};
+            }();
+        }
+        fn();
+    }
+    expect: {
+        function fn() {
+            let val
+            return val = function() {
+                setTimeout(() => console.log(val));
+                return {};
+            }();
+        }
+        fn();
+    }
+}

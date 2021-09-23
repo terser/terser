@@ -921,3 +921,34 @@ issue_333_toplevel: {
         export { _setToString };
     }
 }
+
+export_object_property_mangle: {
+    module = true
+    options = {
+        reduce_vars: false,
+    }
+    mangle = true
+    input: {
+        const n = null;
+        export const o = { o: n };
+    }
+    expect: {
+        const n = null;
+        export const o = {o: n};
+    }
+}
+
+export_object_property_mangle_2: {
+    module = true
+    mangle = true
+    input: {
+        const n = null;
+        const o = { o: n };
+        export { o };
+    }
+    expect: {
+        const o = null;
+        const n = {o: o};
+        export {n as o};
+    }
+}

@@ -947,8 +947,8 @@ export_object_property_mangle_2: {
         export { o };
     }
     expect: {
-        const o = null;
-        const n = {o: o};
-        export {n as o};
+        const n = null;
+        const o = {o: n};
+        export {o};
     }
 }

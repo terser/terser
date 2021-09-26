@@ -49,7 +49,6 @@
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.10.0",
-    "acorn": "^8.5.0",
     "astring": "^1.7.5",
     "eslint": "^7.32.0",
     "eslump": "^3.0.0",
@@ -59,6 +58,14 @@
     "rimraf": "^3.0.2",
     "rollup": "2.56.3",
     "semver": "^7.3.4"
+  },
+  "peerDependencies": {
+    "acorn": "^8.5.0"
+  },
+  "peerDependenciesMeta": {
+    "acorn": {
+      "optional": true
+    }
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",

@@ -1400,7 +1400,9 @@ issue_1029_6: {
         function fn() {
             let val
             return val = function() {
-                setTimeout(() => console.log(val));
+                setTimeout(() => {
+                    (() => console.log(val))();
+                })
                 return {};
             }();
         }

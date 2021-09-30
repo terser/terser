@@ -1,0 +1,76 @@
+name: CI pipeline
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+  build:
+    name: "Build ${{ matrix.os }} node${{ matrix.node-version }}"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        node-version: [ 10.x, 12.x, 14.x, 16.x ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Tooling setup
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Build and test validation
+
+      - name: Create logs directory
+        shell: sh
+        run: |
+          mkdir -p logs
+
+      - name: Install dependencies
+        shell: sh
+        run: |
+          npm ci --loglevel verbose 2>&1 | tee logs/install.log
+
+      - name: Build the app
+        shell: sh
+        run: |
+          npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
+        env:
+          TEST_NO_SANDBOX: 1
+          TERSER_TEST_ALL: 1
+
+      - if: matrix.node-version != '10.x'
+        name: Run compress tests
+        shell: sh
+        run: |
+          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
+
+      - if: matrix.node-version != '10.x'
+        name: Run mocha tests
+        shell: sh
+        run: |
+          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+
+      - if: matrix.node-version == '10.x'
+        name: Run all tests with Node 10.x
+        shell: sh
+        run: |
+          node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
+        env:
+          TEST_NO_SANDBOX: 1
+
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
+        name: Run functional tests on ${{ matrix.os }} with Node 12.x
+        run: |
+          ./test/functional.sh 2>&1 | tee logs/functional_tests.log
+
+      # Artifact publish to pipeline
+
+      - name: Upload logs as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
+          path: logs/

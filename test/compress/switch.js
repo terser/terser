@@ -3123,3 +3123,85 @@ issue_1083_4: {
     }
     expect_stdout: ["definitely", "maybe"]
 }
+
+issue_1083_5: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                default:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                default:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                case definitely_true:
+                    console.log("definitely");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "maybe"]
+}
+
+issue_1083_6: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                default:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                default:
+                    console.log("definitely");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "definitely"]
+}

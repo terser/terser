@@ -2594,6 +2594,42 @@ collapse_same_branches_not_in_a_row_ensure_no_side_effects: {
     }
     expect_stdout: ["2"]
 }
+
+collapse_same_branches_not_in_a_row_ensure_no_evaluate_elad: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        let i = 1;
+        switch (true) {
+            case 3 == i:
+                console.log(i);
+                break;
+            case 5 == i:
+                console.log(5);
+                break;
+            case 1 == i:
+                console.log(i);
+                break;
+        }
+    }
+    expect: {
+        let i = 1;
+        switch (true) {
+            case 3 == i:
+                console.log(i);
+                break;
+            case 5 == i:
+                console.log(5);
+                break;
+            case 1 == i:
+                console.log(i);
+        }
+    }
+    expect_stdout: ["1"]
+}
+
 collapse_same_branches_not_in_a_row_even_if_last_case_without_abort: {
     options = {
         switches: true,

@@ -1,0 +1,912 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$comment": "Generated with [Typescript JSON schema generator](https://marketplace.visualstudio.com/items?itemName=marcoq.vscode-typescript-to-json-schema)",
+	"$ref": "#/definitions/terserSchema",
+	"definitions": {
+		"terserSchema": {
+			"type": "object",
+			"properties": {
+				"ecma": {
+					"$ref": "#/definitions/ecma",
+					"description": "Pass `5`, `2015`, `2016`, etc to override `compress` and `format`'s `ecma` options."
+				},
+				"enclose": {
+					"type": [
+						"boolean",
+						"string"
+					],
+					"description": "Pass `true`, or a `string` in the format of `\"args[:values]\"`, where `args` and `values` are comma-separated argument names and values, respectively, to embed the output in a big function with the configurable arguments and values.",
+					"default": false
+				},
+				"parse": {
+					"$ref": "#/definitions/parse",
+					"description": "Pass an object if you wish to specify some additional parse options.",
+					"default": {}
+				},
+				"compress": {
+					"anyOf": [
+						{
+							"type": "boolean",
+							"const": false
+						},
+						{
+							"$ref": "#/definitions/compress"
+						}
+					],
+					"description": "Pass `false` to skip compressing entirely. Pass an object to specify custom compress options.",
+					"default": {}
+				},
+				"mangle": {
+					"anyOf": [
+						{
+							"type": "boolean",
+							"const": false
+						},
+						{
+							"$ref": "#/definitions/mangle"
+						}
+					],
+					"description": "Pass `false` to skip mangling names, or pass an object to specify {@link mangle} options.",
+					"default": true
+				},
+				"module": {
+					"type": "boolean",
+					"description": "Use when minifying an ES6 module. `\"use strict\"` is implied and names can be mangled on the top scope. If {@link compress} or {@link mangle} is enabled then the {@link terserSchema.topLevel} option will be enabled.",
+					"default": false
+				},
+				"format": {
+					"anyOf": [
+						{
+							"type": "null"
+						},
+						{
+							"$ref": "#/definitions/format"
+						}
+					],
+					"description": "Pass an object if you wish to specify additional {@link format} options. The defaults are optimized for best compression.",
+					"default": null
+				},
+				"output": {
+					"anyOf": [
+						{
+							"type": "null"
+						},
+						{
+							"$ref": "#/definitions/format"
+						}
+					]
+				},
+				"sourceMap": {
+					"anyOf": [
+						{
+							"type": "boolean",
+							"const": false
+						},
+						{
+							"$ref": "#/definitions/sourceMap"
+						}
+					],
+					"description": "Pass an object if you wish to specify {@link sourceMap} options",
+					"default": false
+				},
+				"topLevel": {
+					"type": "boolean",
+					"description": "Set to `true` if you wish to enable top level variable and function name mangling and to drop unused variables and functions.",
+					"default": false
+				},
+				"nameCache": {
+					"anyOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "object",
+							"additionalProperties": false
+						},
+						{}
+					],
+					"description": "pass an empty object `{}` or a previously used `nameCache` object if you wish to cache mangled variable and property names across multiple invocations of `minify()`."
+				},
+				"ie8": {
+					"type": "boolean",
+					"description": "Set to `true` to support IE8.",
+					"default": false
+				},
+				"name_classnames": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Pass `true` to prevent discarding or mangling of class names. Pass a regular expression to only keep class names matching that regex."
+				},
+				"keep_fnames": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Pass `true` to prevent discarding or mangling of function names. Pass a regular expression to only keep function names matching that regex. Useful for code relying on `Function.prototype.name`. If the top level minify option `keep_classnames` is `undefined` it will be overridden with the value of the top level minify option `keep_fnames`.",
+					"default": false
+				},
+				"safari10": {
+					"type": "boolean",
+					"description": "Pass `true` to work around Safari 10 / 11 bugs in loop scoping and `await`.",
+					"default": false
+				}
+			},
+			"required": [
+				"compress"
+			],
+			"additionalProperties": false
+		},
+		"ecma": {
+			"type": "number",
+			"enum": [
+				5,
+				2015,
+				2016,
+				2017,
+				2018,
+				2019,
+				2020
+			]
+		},
+		"parse": {
+			"type": "object",
+			"properties": {
+				"bare_returns": {
+					"type": "boolean",
+					"const": false,
+					"description": "Support top level `return` statements.",
+					"default": false
+				},
+				"html5_comments": {
+					"type": "boolean",
+					"const": true,
+					"default": true
+				},
+				"shebang": {
+					"type": "boolean",
+					"const": true,
+					"description": "Support `#!command` as the first line.",
+					"default": true
+				},
+				"spidermonkey": {
+					"type": "boolean",
+					"const": false,
+					"description": "Accept a Spidermonkey (Mozilla) AST.",
+					"default": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"compress": {
+			"type": "object",
+			"properties": {
+				"defaults": {
+					"type": "boolean",
+					"description": "Pass `false` to disable most default enabled `compress` transforms. Useful when you only want to enable a few `compress` options while disabling the rest.",
+					"default": true
+				},
+				"arrows": {
+					"type": "boolean",
+					"description": "Class and object literal methods are converted will also be converted to arrow expressions if the resultant code is shorter: `m(){return x}` becomes `m:()=>x`. To do this to regular ES5 functions which don't use `this` or `arguments`.",
+					"default": true
+				},
+				"arguments": {
+					"type": "boolean",
+					"description": "Replace `arguments[index]` with function parameter name whenever possible.",
+					"default": false
+				},
+				"booleans": {
+					"type": "boolean",
+					"description": "Various optimizations for boolean context, for example `!!a ? b : c → a ? b : c`.",
+					"default": true
+				},
+				"booleans_as_integers": {
+					"type": "boolean",
+					"description": "Turn booleans into 0 and 1, also makes comparisons with booleans use `==` and `!=` instead of `===` and `!==`.",
+					"default": false
+				},
+				"collapse_vars": {
+					"type": "boolean",
+					"description": "Collapse single-use non-constant variables, side effects permitting.",
+					"default": true
+				},
+				"comparisons": {
+					"type": "boolean",
+					"description": "Apply certain optimizations to binary nodes, e.g. `!(a <= b) → a > b` (only when {@link unsafe_comps}), attempts to negate binary nodes, e.g. `a = !b && !c && !d && !e → a=!(b||c||d||e)` etc.",
+					"default": true
+				},
+				"computed_props": {
+					"type": "boolean",
+					"description": "Transforms constant computed properties into regular ones: `{[\"computed\"]: 1}` is converted to `{computed: 1}`.",
+					"default": true
+				},
+				"conditionals": {
+					"type": "boolean",
+					"description": "Apply optimizations for `if`s and conditional expressions.",
+					"default": true
+				},
+				"dead_code": {
+					"type": "boolean",
+					"description": "Remove unreachable code.",
+					"default": true
+				},
+				"directives": {
+					"type": "boolean",
+					"description": "Remove redundant or non-standard directives.",
+					"default": true
+				},
+				"drop_console": {
+					"type": "boolean",
+					"description": "Pass `true` to discard calls to `console.*` functions. If you wish to drop a specific function call such as `console.info` and/or retain side effects from function arguments after dropping the function call then use {@link pure_funcs} instead.",
+					"default": false
+				},
+				"drop_debugger": {
+					"type": "boolean",
+					"description": "Remove `debugger;` statements.",
+					"default": true
+				},
+				"ecma": {
+					"$ref": "#/definitions/ecma",
+					"description": "Pass `2015` or greater to enable `compress` options that will transform ES5 code into smaller ES6+ equivalent forms.",
+					"default": 5
+				},
+				"evaluate": {
+					"type": "boolean",
+					"description": "Attempt to evaluate constant expressions.",
+					"default": true
+				},
+				"expression": {
+					"type": "boolean",
+					"description": "Pass `true` to preserve completion values from terminal statements without `return`, e.g. in bookmarklets.",
+					"default": false
+				},
+				"global_defs": {
+					"type": "object",
+					"additionalProperties": {
+						"type": [
+							"string",
+							"boolean"
+						]
+					},
+					"description": "Helps with conditional compilation.",
+					"default": {}
+				},
+				"hoist_funs": {
+					"type": "boolean",
+					"description": "Hoist function declarations.",
+					"default": false
+				},
+				"hoist_props": {
+					"type": "boolean",
+					"description": "Hoist properties from constant object and array literals into regular variables subject to a set of constraints.",
+					"default": true
+				},
+				"hoist_vars": {
+					"type": "boolean",
+					"const": false,
+					"description": "Hoist `var` declarations (this is `false` by default because it seems to increase the size of the output in general).",
+					"default": false
+				},
+				"if_return": {
+					"type": "boolean",
+					"description": "Optimizations for `if`/`return` and `if`/`continue`.",
+					"default": true
+				},
+				"inline": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "number",
+							"const": 0
+						},
+						{
+							"type": "number",
+							"const": 1
+						},
+						{
+							"type": "number",
+							"const": 2
+						},
+						{
+							"type": "number",
+							"const": 3
+						}
+					],
+					"description": "Inline calls to function with simple `return` statement:\r\n- `false` -- same as `0`\r\n- `0` -- Disabled inlining.\r\n- `1` -- Inline simple functions.\r\n- `2` -- Inline functions with arguments.\r\n- `3` -- Inline functions with arguments and variables.\r\n- `true` -- Same as `3`.",
+					"default": true
+				},
+				"join_vars": {
+					"type": "boolean",
+					"description": "Join consecutive `var` statements.",
+					"default": true
+				},
+				"keep_classnames": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Pass `true` to prevent the compressor from discarding class names. Pass a regular expression to only keep class names matching that regex.",
+					"default": false
+				},
+				"keep_fargs": {
+					"type": "boolean",
+					"description": "Prevents the compressor from discarding unused function arguments You need this for code which relies on `Function.length`.",
+					"default": true
+				},
+				"keep_fnames": {
+					"type": "boolean",
+					"description": "Pass `true` to prevent the compressor from discarding function names. Pass a regular expression to only keep function names matching that regex. Useful for code relying on `Function.prototype.name`.",
+					"default": false
+				},
+				"keep_infinity": {
+					"type": "boolean",
+					"description": "Pass `true` to prevent `Infinity` from being compressed into `1/0`, which may cause performance issues on Chrome.",
+					"default": false
+				},
+				"loops": {
+					"type": "boolean",
+					"description": "Optimizations for `do`, `while` and `for` loops when we can statically determine the condition.",
+					"default": true
+				},
+				"module": {
+					"type": "boolean",
+					"description": "Pass `true` when compressing an ES6 module. Strict mode is implied and the {@link toplevel} option as well.",
+					"default": false
+				},
+				"negate_iife": {
+					"type": "boolean",
+					"description": "Negate \"Immediately-Called Function Expressions\" where the return value is discarded, to avoid the parens that the code generator would insert.",
+					"default": true
+				},
+				"passes": {
+					"type": "number",
+					"description": "The maximum number of times to run compress. In some cases more than one pass leads to further compressed code. Keep in mind more passes will take more time.",
+					"default": 1
+				},
+				"properties": {
+					"type": "boolean",
+					"description": "Rewrite property access using the dot notation, for example `foo[\"bar\"] -> foo.bar`.",
+					"default": true
+				},
+				"pure_funcs": {
+					"anyOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					],
+					"description": "You can pass an array of names and Terser will assume that those functions do not produce side effects\r\n\r\nAn example case here, for instance `var q = Math.floor(a/b)` If variable `q` is not used elsewhere, Terser will drop it, but will still keep the `Math.floor(a/b)`, not knowing what it does You can pass `pure_funcs: [ 'Math.floor' ]` to let it know that this function won't produce any side effect, in which case the whole statement would get discarded The current implementation adds some overhead (compression will be slower).",
+					"default": null
+				},
+				"pure_getters": {
+					"anyOf": [
+						{
+							"type": "string",
+							"const": "strict"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"description": "If you pass `true` for this, Terser will assume that object property access (e.g. `foo.bar` or `foo[\"bar\"]`) doesn't have any side effects. Specify `\"strict\"` to treat `foo.bar` as side-effect-free only when `foo` is certain to not throw, i.e. not `null` or `undefined`.",
+					"default": "strict"
+				},
+				"reduce_vars": {
+					"type": "boolean",
+					"description": "Improve optimization on variables assigned with and used as constant values.",
+					"default": true
+				},
+				"reduce_funcs": {
+					"type": "boolean",
+					"description": "Inline single-use functions when possible. Depends on {@link reduce_vars} being enabled. Disabling this option sometimes improves performance of the output code.",
+					"default": true
+				},
+				"sequences": {
+					"type": [
+						"boolean",
+						"number"
+					],
+					"description": "Join consecutive simple statements using the comma operator May be set to a positive integer to specify the maximum number of consecutive comma sequences that will be generated. If this option is set to `true` then the default `sequences` limit is `200`. Set option to `false` or `0` to disable. The smallest `sequences` length is `2`. A `sequences` value of `1` is grandfathered to be equivalent to `true` and as such means `200`. On rare occasions the default sequences limit leads to very slow compress times in which case a value of `20` or less is recommended.",
+					"default": true
+				},
+				"side_effects": {
+					"type": "boolean",
+					"description": "Remove expressions which have no side effects and whose results aren't used.",
+					"default": true
+				},
+				"switches": {
+					"type": "boolean",
+					"description": "De-duplicate and remove unreachable `switch` branches.",
+					"default": true
+				},
+				"toplevel": {
+					"type": "boolean",
+					"description": "Drop unreferenced functions (`\"funcs\"`) and/or variables (`\"vars\"`) in the top level scope (`false` by default, `true` to drop both unreferenced functions and variables).",
+					"default": false
+				},
+				"top_retain": {
+					"anyOf": [
+						{
+							"type": "null"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						},
+						{
+							"type": "object",
+							"properties": {
+								"prototype": {},
+								"length": {
+									"type": "number"
+								},
+								"arguments": {},
+								"caller": {
+									"$ref": "#/definitions/interface-984912377-9814-11278-984912377-0-212312"
+								}
+							},
+							"required": [
+								"prototype",
+								"length",
+								"arguments",
+								"caller"
+							],
+							"additionalProperties": false
+						}
+					],
+					"description": "Prevent specific {@link toplevel} functions and variables from {@link unused} removal (can be array, comma-separated, RegExp or function. Implies `toplevel`)."
+				},
+				"typeofs": {
+					"type": "boolean",
+					"description": "Transforms `typeof foo == \"undefined\"` into `foo === void 0`",
+					"default": true
+				},
+				"unsafe": {
+					"type": "boolean",
+					"description": "Apply \"unsafe\" transformations ([details](https://github.com/terser/terser#the-unsafe-compress-option)).",
+					"default": false
+				},
+				"unsafe_arrows": {
+					"type": "boolean",
+					"description": "Convert ES5 style anonymous function expressions to arrow functions if the function body does not reference `this`.",
+					"default": false
+				},
+				"unsafe_comps": {
+					"type": "boolean",
+					"description": "Reverse `<` and `<=` to `>` and `>=` to allow improved compression. This might be unsafe when an at least one of two operands is an object with computed values due the use of methods like `get`, or `valueOf`. This could cause change in execution order after operands in the comparison are switching. Compression only works if both {@link comparisons} and {@link unsafe_comps} are both set to true.",
+					"default": false
+				},
+				"unsafe_Function": {
+					"type": "boolean",
+					"description": "Compress and mangle `Function(args, code)` when both `args` and `code` are string literals.",
+					"default": false
+				},
+				"unsafe_math": {
+					"type": "boolean",
+					"description": "Optimize numerical expressions like `2 * x * 3` into `6 * x`, which may give imprecise floating point results.",
+					"default": false
+				},
+				"unsafe_symbols": {
+					"type": "boolean",
+					"description": "Removes keys from native Symbol declarations, e.g `Symbol(\"kDog\")` becomes `Symbol()`.",
+					"default": false
+				},
+				"unsafe_methods": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Converts `{ m: function(){} }` to `{ m(){} }`. `ecma` must be set to `6` or greater to enable this transform. If {@link unsafe_methods} is a RegExp then key/value pairs with keys matching the RegExp will be converted to concise methods.",
+					"default": false
+				},
+				"unsafe_proto": {
+					"type": "boolean",
+					"description": "Optimize expressions like `Array.prototype.slice.call(a)` into `[].slice.call(a)`.",
+					"default": false
+				},
+				"unsafe_regexp": {
+					"type": "boolean",
+					"description": "Enable substitutions of variables with `RegExp` values the same way as if they are constants.",
+					"default": false
+				},
+				"unsafe_undefined": {
+					"type": "boolean",
+					"description": "Substitute `void 0` if there is a variable named `undefined` in scope (variable name will be mangled, typically reduced to a single character).",
+					"default": false
+				},
+				"unused": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"const": "keep_assign"
+						}
+					],
+					"description": "Drop unreferenced functions and variables (simple direct variable assignments do not count as references unless set to `\"keep_assign\"`).",
+					"default": true
+				}
+			},
+			"additionalProperties": false
+		},
+		"interface-984912377-9814-11278-984912377-0-212312": {
+			"type": "object",
+			"properties": {
+				"prototype": {},
+				"length": {
+					"type": "number"
+				},
+				"arguments": {},
+				"caller": {
+					"$ref": "#/definitions/interface-984912377-9814-11278-984912377-0-212312"
+				}
+			},
+			"required": [
+				"prototype",
+				"length",
+				"arguments",
+				"caller"
+			],
+			"additionalProperties": false
+		},
+		"mangle": {
+			"type": "object",
+			"properties": {
+				"eval": {
+					"type": "boolean",
+					"description": "Pass `true` to mangle names visible in scopes where `eval` or `with` are used.",
+					"default": false
+				},
+				"keep_classnames": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Pass `true` to not mangle class names. Pass a regular expression to only keep class names matching that regex.",
+					"default": false
+				},
+				"keep_fnames": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"format": "regex"
+						}
+					],
+					"description": "Pass `true` to not mangle function names. Pass a regular expression to only keep function names matching that regex. Useful for code relying on `Function.prototype.name`.",
+					"default": false
+				},
+				"module": {
+					"type": "boolean",
+					"description": "Pass `true` an ES6 modules, where the `toplevel` scope is not the global scope. Implies {@link toplevel}.",
+					"default": false
+				},
+				"nth_identifier": {
+					"description": "Pass an object with a `get(n)` function that converts an ordinal into the nth most favored (usually shortest) identifier. Optionally also provide `reset()`, `sort()`, and `consider(chars, delta)` to use character frequency analysis of the source code."
+				},
+				"reserved": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Pass an array of identifiers that should be excluded from mangling.",
+					"default": []
+				},
+				"toplevel": {
+					"type": "boolean",
+					"description": "Pass `true` to mangle names declared in the top level scope.",
+					"default": false
+				},
+				"safari10": {
+					"type": "boolean",
+					"description": "Pass `true` to work around the Safari 10 loop iterator",
+					"default": false
+				},
+				"properties": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "object",
+							"properties": {
+								"builtins": {
+									"type": "boolean",
+									"description": "Use `true` to allow the mangling of builtin DOM properties. Not recommended to override this setting.",
+									"default": false
+								},
+								"debug": {
+									"type": [
+										"boolean",
+										"string"
+									],
+									"description": "Mangle names with the original name still present. Pass an empty string `\"\"` to enable, or a non-empty string to set the debug suffix.",
+									"default": false
+								},
+								"keep_quoted": {
+									"anyOf": [
+										{
+											"type": "boolean"
+										},
+										{
+											"type": "string",
+											"const": "strict"
+										}
+									],
+									"description": "How quoting properties (`{\"prop\": ...}` and `obj[\"prop\"]`) controls what gets mangled.\r\n- `\"strict\"` (recommended) -- `obj.prop` is mangled.\r\n- `false` -- `obj[\"prop\"]` is mangled.\r\n- `true` -- `obj.prop` is mangled unless there is `obj[\"prop\"]` elsewhere in the code.",
+									"default": false
+								},
+								"nth_identifer": {
+									"description": "Pass an object with a `get(n)` function that converts an ordinal into the nth most favored (usually shortest) identifier. Optionally also provide `reset()`, `sort()`, and `consider(chars, delta)` to use character frequency analysis of the source code."
+								},
+								"regex": {
+									"anyOf": [
+										{
+											"type": "null"
+										},
+										{
+											"type": "string",
+											"format": "regex"
+										},
+										{
+											"type": "string"
+										}
+									],
+									"description": "Pass a [RegExp literal or pattern string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) to only mangle property matching the regular expression.",
+									"default": null
+								},
+								"reserved": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									},
+									"description": "Do not mangle property names listed in the `reserved` array.",
+									"default": []
+								},
+								"undeclared": {
+									"type": "boolean",
+									"description": "Mangle those names when they are accessed as properties of known top level variables but their declarations are never found in input code. May be useful when only minifying parts of a project.",
+									"default": false
+								}
+							},
+							"additionalProperties": false
+						}
+					],
+					"description": "A subcategory of the mangle option. Pass an object to specify custom {@link mangle} property options.",
+					"default": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"format": {
+			"type": "object",
+			"properties": {
+				"ascii_only": {
+					"type": "boolean",
+					"description": "Escape Unicode characters in strings and regexps (affects directives with non-ascii characters becoming invalid).",
+					"default": false
+				},
+				"beautify": {
+					"type": "boolean",
+					"description": "whether to beautify the output. When using the legacy `-b` CLI flag, this is set to true by default.",
+					"default": false
+				},
+				"braces": {
+					"type": "boolean",
+					"description": "Always insert braces in `if`, `for`, `do`, `while` or `with` statements, even if their body is a single statement.",
+					"default": false
+				},
+				"comments": {
+					"anyOf": [
+						{
+							"type": "boolean"
+						},
+						{
+							"type": "string",
+							"const": "some"
+						},
+						{
+							"type": "string",
+							"const": "all"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "object",
+							"properties": {
+								"prototype": {},
+								"length": {
+									"type": "number"
+								},
+								"arguments": {},
+								"caller": {
+									"$ref": "#/definitions/interface-984912377-9814-11278-984912377-0-212312"
+								}
+							},
+							"required": [
+								"prototype",
+								"length",
+								"arguments",
+								"caller"
+							],
+							"additionalProperties": false
+						}
+					],
+					"description": "By default it keeps JSDoc-style comments that contain \"@license\", \"@preserve\" or start with `!`, pass `true` or `\"all\"` to preserve all comments, `false` to omit comments in the output, a regular expression string (e.g. `/^!/`) or a function."
+				},
+				"ecma": {
+					"$ref": "#/definitions/ecma",
+					"description": "Set desired EcmaScript standard version for output. Set `ecma` to `2015` or greater to emit shorthand object properties - i.e.: `{a}` instead of `{a: a}`. The {@link ecma} option will only change the output in direct control of the beautifier. Non-compatible features in your input will still be output as is. For example: an `ecma` setting of `5` will **not** convert modern code to ES5.",
+					"default": 5
+				},
+				"indent_level": {
+					"type": "number",
+					"default": 4
+				},
+				"indent_start": {
+					"type": "number",
+					"description": "Prefix all lines by that many spaces.",
+					"default": 0
+				},
+				"inline_script": {
+					"type": "boolean",
+					"description": "Escape HTML comments and the slash in occurrences of `</script>` in strings.",
+					"default": true
+				},
+				"keep_numbers": {
+					"type": "boolean",
+					"description": "Keep number literals as it was in original code (disables optimizations like converting `1000000` into `1e6`).",
+					"default": false
+				},
+				"keep_quoted_props": {
+					"type": "boolean",
+					"description": "When turned on, prevents stripping quotes from property names in object literals.",
+					"default": false
+				},
+				"max_line_len": {
+					"type": "boolean",
+					"description": "Maximum line length (for minified code).",
+					"default": false
+				},
+				"preamble": {
+					"type": [
+						"null",
+						"string"
+					],
+					"description": "When passed it must be a string and it will be prepended to the output literally. The source map will adjust for this text. Can be used to insert a comment containing licensing information, for example.",
+					"default": null
+				},
+				"quote_keys": {
+					"type": "boolean",
+					"description": "Pass `true` to quote all keys in literal objects.",
+					"default": false
+				},
+				"quote_style": {
+					"type": "number",
+					"enum": [
+						0,
+						1,
+						2,
+						3
+					],
+					"description": "Preferred quote style for strings (affects quoted property names and directives as well):\r\n- `0` -- Prefers double quotes, switches to single quotes when there are more double quotes in the string itself. `0` is best for gzip size.\r\n- `1` -- Always use single quotes.\r\n- `2` -- Always use double quotes.\r\n- `3` -- Always use the original quotes.",
+					"default": 0
+				},
+				"preserve_annotations": {
+					"type": "boolean",
+					"description": "Preserve [Terser annotations](https://github.com/terser/terser#annotations) in the output.",
+					"default": false
+				},
+				"safari10": {
+					"type": "boolean",
+					"description": "Set this option to `true` to work around the [Safari 10/11 await bug](https://bugs.webkit.org/show_bug.cgi?id=176685).",
+					"default": false
+				},
+				"semicolons": {
+					"type": "boolean",
+					"description": "Separate statements with semicolons. If you pass `false` then whenever possible we will use a newline instead of a semicolon, leading to more readable output of minified code (size before gzip could be smaller; size after gzip insignificantly larger).",
+					"default": true
+				},
+				"shebang": {
+					"type": "boolean",
+					"description": "Preserve shebang `#!` in preamble (bash scripts).",
+					"default": true
+				},
+				"spidermonkey": {
+					"type": "boolean",
+					"description": "Produce a Spidermonkey (Mozilla) AST.",
+					"default": false
+				},
+				"webkit": {
+					"type": "boolean",
+					"description": "Enable workarounds for WebKit bugs. PhantomJS users should set this option to `true`.",
+					"default": false
+				},
+				"wrap_iife": {
+					"type": "boolean",
+					"description": "Pass `true` to wrap immediately invoked function expressions.",
+					"default": false
+				},
+				"wrap_func_args": {
+					"type": "boolean",
+					"description": "Pass `false` if you do not want to wrap function expressions that are passed as arguments, in parenthesis.",
+					"default": true
+				}
+			},
+			"additionalProperties": false
+		},
+		"sourceMap": {
+			"type": "object",
+			"properties": {
+				"filename": {
+					"type": "string"
+				},
+				"url": {
+					"type": "string"
+				},
+				"root": {
+					"type": "string",
+					"description": "You can also specify {@link sourceMap.root} property to be included in source map."
+				},
+				"content": {
+					"type": "string",
+					"description": "If you're compressing compiled JavaScript and have a source map for it, you can use {@link sourceMap.content}."
+				},
+				"asObject": {
+					"type": "boolean",
+					"description": "If you happen to need the source map as a raw object, set {@link sourceMap.asObject} to `true`.",
+					"default": false
+				}
+			},
+			"additionalProperties": false,
+			"description": "Note that the source map is not saved in a file, it's just returned in `result.map`. The value passed for {@link sourceMap.url} is only used to set `//# sourceMappingURL=out.js.map` in `result.code`. The value of filename is only used to set file attribute (see the [spec](https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k)) in source map file."
+		}
+	}
+}

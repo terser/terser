@@ -1211,6 +1211,7 @@ collapse_into_default_12: {
           case bar:
             bar();
           case qux:
+          case 'qux':
           default:
             other();
           case 'baz':
@@ -1283,6 +1284,7 @@ collapse_into_default_14: {
             bar();
           default:
           case qux:
+          case 'qux':
             other();
           case 'baz':
             baz();
@@ -1354,6 +1356,7 @@ collapse_into_default_16: {
             bar();
           case qux:
           default:
+          case 'qux':
             other();
           case 'baz':
             baz();
@@ -2687,6 +2690,8 @@ collapse_same_branches_as_default_not_in_a_row: {
     }
     expect: {
         switch (id(1)) {
+            case 1:
+            case 4:
             default:
                 console.log("PASS");
                 break;
@@ -2861,9 +2866,16 @@ trim_side_effect_free_branches_falling_into_default: {
         }
     }
     expect: {
-        if (2 !== id(1))
-            console.log("PASS default");
-        console.log("PASS 2")
+        switch (id(1)) {
+            case 0:
+                "no side effect"
+            case 1:
+                // Not here either
+            default:
+                console.log("PASS default")
+            case 2:
+                console.log("PASS 2")
+        }
     }
 }
 
@@ -2884,9 +2896,15 @@ trim_side_effect_free_branches_falling_into_default_2: {
         }
     }
     expect: {
-        if (2 !== id(1))
-            console.log("PASS default");
-        console.log("PASS 2")
+        switch (id(1)) {
+            default:
+            case 0:
+                "no side effect"
+            case 1:
+                console.log("PASS default")
+            case 2:
+                console.log("PASS 2")
+        }
     }
 }
 
@@ -2968,4 +2986,222 @@ turn_into_if_2: {
         console.log("PASS");
     }
     expect_stdout: "PASS"
+}
+
+issue_1083_1: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                default:
+                    console.log("PASS");
+                    break;
+                case maybe_true:
+                    console.log("FAIL");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                default:
+                    console.log("PASS");
+                    break;
+                case maybe_true:
+                    console.log("FAIL");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["PASS", "PASS"]
+}
+
+issue_1083_2: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                default:
+                    console.log("PASS");
+                    break;
+                case maybe_true:
+                    console.log("FAIL");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                default:
+                    console.log("PASS");
+                    break;
+                case maybe_true:
+                    console.log("FAIL");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["PASS", "PASS"]
+}
+
+issue_1083_3: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                default:
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            if (true === maybe_true) console.log("maybe");
+            else console.log("definitely");
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "maybe"]
+}
+
+issue_1083_4: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                case definitely_true:
+                default:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            if (true === maybe_true) console.log("maybe");
+            else console.log("definitely");
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "maybe"]
+}
+
+issue_1083_5: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                default:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                default:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                case definitely_true:
+                    console.log("definitely");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "maybe"]
+}
+
+issue_1083_6: {
+    options = {
+        switches: true,
+        dead_code: true
+    }
+    input: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                default:
+                    console.log("definitely");
+                    break;
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect: {
+        function test(definitely_true, maybe_true) {
+            switch (true) {
+                case definitely_true:
+                    console.log("definitely");
+                    break;
+                case maybe_true:
+                    console.log("maybe");
+                    break;
+                default:
+                    console.log("definitely");
+            }
+        }
+        test(true, false);
+        test(true, true);
+    }
+    expect_stdout: ["definitely", "definitely"]
 }

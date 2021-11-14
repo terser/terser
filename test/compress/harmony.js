@@ -303,6 +303,34 @@ export_from_statement: {
     expect_exact: 'export*from"a.js";export{A}from"a.js";export{A,B}from"a.js";export{C};'
 }
 
+import_assertions: {
+    input: {
+        import "hello" assert { key: 'value' };
+    }
+    expect_exact: 'import"hello"assert{key:"value"};'
+}
+
+import_assertions_with_spaces_in_obj: {
+    input: {
+        import "hello" assert { 'k e y': 'value' };
+    }
+    expect_exact: 'import"hello"assert{"k e y":"value"};'
+}
+
+export_from_assertions: {
+    input: {
+        export * from "hello" assert { key: 'value' };
+    }
+    expect_exact: 'export*from"hello"assert{key:"value"};'
+}
+
+export_named_from_assertions: {
+    input: {
+        export { x } from "hello" assert { key: 'value' };
+    }
+    expect_exact: 'export{x}from"hello"assert{key:"value"};'
+}
+
 import_statement_mangling: {
     mangle = { toplevel: true };
     input: {

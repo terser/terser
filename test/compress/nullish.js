@@ -145,3 +145,33 @@ nullish_coalescing_parens: {
         "PASS",
     ]
 }
+
+delete_nullish: {
+    input: {
+        delete obj?.key;
+        const other = { key: true };
+        delete other?.key;
+    }
+    expect: {
+        delete obj?.key;
+        const other = { key: true };
+        delete other?.key;
+    }
+}
+
+delete_nullish_2: {
+    options = {
+        defaults: true,
+        evaluate: true,
+        passes: 3,
+    }
+    input: {
+        delete null?.key;
+        delete null?.deep.key;
+        delete null.deep?.key;
+        delete null?.deep?.key;
+    }
+    expect: {
+        delete null.deep?.key;
+    }
+}

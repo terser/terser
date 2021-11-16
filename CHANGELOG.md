@@ -1,5 +1,18 @@
 # Changelog
 
+## v5.10.0
+
+ - Massive optimization to max_line_len (#1109)
+ - Basic support for import assertions
+ - Marked ES2022 Object.hasOwn as a pure function
+ - Fix `delete optional?.property`
+ - New CI/CD pipeline with github actions (#1057)
+ - Fix reordering of switch branches (#1092), (#1084)
+ - Fix error when creating a class property called `get`
+ - Acorn dependency is now an optional peerDependency
+ - Fix mangling collision with exported variables (#1072)
+ - Fix an issue with `return someVariable = (async () => { ... })()` (#1073)
+
 ## v5.9.0
 
  - Collapsing switch cases with the same bodies (even if they're not next to each other) (#1070).

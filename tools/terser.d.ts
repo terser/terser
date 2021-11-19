@@ -146,6 +146,7 @@ export interface FormatOptions {
     ie8?: boolean;
     indent_level?: number;
     indent_start?: number;
+    indent_space?: string;
     inline_script?: boolean;
     keep_quoted_props?: boolean;
     max_line_len?: number | false;

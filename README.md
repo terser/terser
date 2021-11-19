@@ -998,6 +998,9 @@ as "output options".
 
 - `indent_start` (default `0`) -- prefix all lines by that many spaces
 
+- `indent_space` (default ` `) -- use custom indent character. For example `\t`
+   to use tabs instead of spaces.  Be sure to adapt `indent_level` accordingly.
+
 - `inline_script` (default `true`) -- escape HTML comments and the slash in
   occurrences of `</script>` in strings
 

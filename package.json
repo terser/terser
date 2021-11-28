@@ -43,6 +43,7 @@
     "main.js"
   ],
   "dependencies": {
+    "acorn": "^8.5.0",
     "commander": "^2.20.0",
     "source-map": "~0.7.2",
     "source-map-support": "~0.5.20"
@@ -58,14 +59,6 @@
     "rimraf": "^3.0.2",
     "rollup": "2.56.3",
     "semver": "^7.3.4"
-  },
-  "peerDependencies": {
-    "acorn": "^8.5.0"
-  },
-  "peerDependenciesMeta": {
-    "acorn": {
-      "optional": true
-    }
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",

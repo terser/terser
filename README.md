@@ -60,6 +60,12 @@ in sequence and apply any compression options.  The files are parsed in the
 same global scope, that is, a reference from a file to some
 variable/function declared in another file will be matched properly.
 
+Command line arguments that take options (like --parse, --compress, --mangle and
+--format) can take in a comma-separated list of default option overrides. For
+instance:
+
+    terser input.js --compress ecma=2015,computed_props=false
+
 If no input file is specified, Terser will read from STDIN.
 
 If you wish to pass your options before the input files, separate the two with

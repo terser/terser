@@ -104,6 +104,10 @@ object_spread: {
 }
 
 object_spread_constant: {
+    options = {
+        evaluate: false,
+    }
+
     input: {
         id({
             ...null,
@@ -114,6 +118,15 @@ object_spread_constant: {
             ...~"foo",
             .../baz/,
             ...-/baz2/,
+
+            // Several unary prefixes
+            ...!!0,
+            ...~!-+0,
+            ...void !1,
+            ...!~"foo",
+            ...+!/foo/,
+            ...!!!!!!!null,
+            ...!~void +-42,
 
             ..."bar",
         });

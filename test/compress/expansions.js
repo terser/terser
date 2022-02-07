@@ -112,6 +112,7 @@ object_spread_constant: {
             ...void 0,
             ...!0,
             ...~"foo",
+            .../baz/,
 
             ..."bar",
         });

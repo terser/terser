@@ -100,7 +100,7 @@ async function run_compress_tests() {
         log_start_file(file);
         async function test_case(test) {
             log_test(test.name);
-            var output_options = test.beautify || {};
+            var output_options = test.beautify || test.format || {};
             var expect;
             if (test.expect) {
                 expect = make_code(as_toplevel(test.expect, test.mangle), output_options);

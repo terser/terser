@@ -189,3 +189,16 @@ issue_3271: {
     }
     expect_stdout: "[ 195, 169 ]"
 }
+
+issue_1147: {
+    format = {
+        ecma: 2015,
+        ascii_only: true,
+        safari10: false
+    }
+    input: {
+        console.log(/📞/.test("📞"))
+    }
+    expect_exact: 'console.log(/\\ud83d\\udcde/.test("\\u{1f4de}"));'
+    expect_stdout: "true"
+}

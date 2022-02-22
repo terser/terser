@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.11.0
+
+ - Unicode code point escapes (`\u{abcde}`) are not emitted inside RegExp literals anymore (#1147)
+ - acorn is now a regular dependency
+
 ## v5.10.0
 
  - Massive optimization to max_line_len (#1109)

@@ -5,7 +5,7 @@
   [![Travis Build][travis-image]][travis-url]
   [![Opencollective financial contributors][opencollective-contributors]][opencollective-url]
 
-A JavaScript parser and mangler/compressor toolkit for ES6+.
+A JavaScript mangler/compressor toolkit for ES6+.
 
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
 

@@ -127,8 +127,8 @@ a double dash to prevent input files being used as option arguments:
                                 as JSON to STDOUT respectively.
     --comments [filter]         Preserve copyright comments in the output. By
                                 default this works like Google Closure, keeping
-                                JSDoc-style comments that contain "@license" or
-                                "@preserve". You can optionally pass one of the
+                                JSDoc-style comments that contain e.g. "@license",
+                                or start with "!". You can optionally pass one of the
                                 following arguments to this flag:
                                 - "all" to keep all comments
                                 - `false` to omit comments in the output
@@ -989,8 +989,8 @@ as "output options".
   statement.
 
 - `comments` (default `"some"`) -- by default it keeps JSDoc-style comments
-  that contain "@license", "@preserve" or start with `!`, pass `true` or
-  `"all"` to preserve all comments, `false` to omit comments in the output,
+  that contain "@license", "@copyright", "@preserve" or start with `!`, pass `true`
+  or `"all"` to preserve all comments, `false` to omit comments in the output,
   a regular expression string (e.g. `/^!/`) or a function.
 
 - `ecma` (default `5`) -- set desired EcmaScript standard version for output.
@@ -1062,9 +1062,9 @@ as "output options".
 ### Keeping copyright notices or other comments
 
 You can pass `--comments` to retain certain comments in the output.  By
-default it will keep JSDoc-style comments that contain "@preserve",
-"@license" or "@cc_on" (conditional compilation for IE).  You can pass
-`--comments all` to keep all the comments, or a valid JavaScript regexp to
+default it will keep comments starting with "!" and JSDoc-style comments that
+contain "@preserve", "@copyright", "@license" or "@cc_on" (conditional compilation for IE).
+You can pass `--comments all` to keep all the comments, or a valid JavaScript regexp to
 keep only comments that match this regexp.  For example `--comments /^!/`
 will keep comments like `/*! Copyright Notice */`.
 

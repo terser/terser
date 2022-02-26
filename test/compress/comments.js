@@ -29,6 +29,7 @@ preserve_comments_by_default: {
         /**! foo */
         /*! foo */
         /* lost */
+        /* @copyright …info… */
     }
     expect_exact: [
         "var foo={};",
@@ -36,6 +37,7 @@ preserve_comments_by_default: {
         "// @lic",
         "/**! foo */",
         "/*! foo */",
+        "/* @copyright …info… */",
     ]
 }
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.12.0
+
+ - `TERSER_DEBUG_DIR` environment variable
+ - @copyright comments are now preserved with the comments="some" option (#1153)
+
 ## v5.11.0
 
  - Unicode code point escapes (`\u{abcde}`) are not emitted inside RegExp literals anymore (#1147)

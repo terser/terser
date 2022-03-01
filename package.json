@@ -104,6 +104,8 @@
       "describe": false,
       "it": false,
       "require": false,
+      "before": false,
+      "after": false,
       "global": false,
       "process": false
     },

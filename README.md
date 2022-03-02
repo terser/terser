@@ -1318,6 +1318,22 @@ $ yarn
 
 In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will help you write good issues.
 
+## Obtaining the source code given to Terser
+
+Because users often don't control the call to `await minify()` or its arguments, Terser provides a `TERSER_DEBUG_DIR` environment variable to make terser output some debug logs. If you're using a bundler or a project that includes a bundler and are not sure what went wrong with your code, pass that variable like so:
+
+```
+$ TERSER_DEBUG_DIR=/path/to/logs command-that-uses-terser
+$ ls /path/to/logs
+terser-debug-123456.log
+```
+
+If you're not sure how to set an environment variable on your shell (the above example works in bash), you can try using cross-env:
+
+```
+> npx cross-env TERSER_DEBUG_DIR=/path/to/logs command-that-uses-terser
+```
+
 # README.md Patrons:
 
 *note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.

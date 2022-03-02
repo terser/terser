@@ -1,6 +1,7 @@
 import assert from "assert";
 import { exec } from "child_process";
 import fs from "fs";
+import rimraf from "rimraf";
 import { assertCodeWithInlineMapEquals } from "./utils.js";
 
 function read(path) {
@@ -61,18 +62,18 @@ describe("bin/terser", function() {
             done();
         });
     });
-    it("Should not load source map before finish reading from STDIN", function(done) {
-        var mapFile = "tmp/input.js.map";
+    before(() => {
         try {
             fs.mkdirSync("./tmp");
         } catch (e) {
             if (e.code != "EEXIST") throw e;
         }
-        try {
-            fs.unlinkSync(mapFile);
-        } catch (e) {
-            if (e.code != "ENOENT") throw e;
-        }
+    });
+    after(() => {
+        rimraf.sync("./tmp");
+    });
+    it("Should not load source map before finish reading from STDIN", function(done) {
+        var mapFile = "tmp/input.js.map";
         var command = [
             tersercmd,
             "--source-map", "content=" + mapFile,
@@ -89,6 +90,29 @@ describe("bin/terser", function() {
             fs.writeFileSync(mapFile, read("test/input/source-maps/input.js.map"));
             child.stdin.end(read("test/input/source-maps/input.js"));
         }, 1000);
+    });
+    it("Should log its options into a file when given an env variable", (done) => {
+        const command = [tersercmd, "tmp/input2.js", "-mc unused=false"].join(" ");
+
+        fs.writeFileSync("tmp/input2.js", "hello(1 + 1)");
+
+        const dir = "tmp/debug-input";
+
+        exec(command, { env: { TERSER_DEBUG_DIR: dir }}, (err, stdout) => {
+            if (err) throw err;
+
+            assert(stdout.includes("hello(2)"), "make sure output isn't changed");
+
+            const inputLogs = fs.readdirSync(dir);
+            assert(inputLogs.length == 1);
+
+            const logFileContents = fs.readFileSync(dir + "/" + inputLogs.pop(), "utf-8");
+
+            assert(logFileContents.includes('"unused": false'), "includes the options");
+            assert(logFileContents.includes("input2.js: ```\nhello(1 + 1)\n```"), "includes the input");
+
+            done();
+        });
     });
     it("Should work with --keep-fnames (mangle only)", function(done) {
         var command = tersercmd + ' test/input/issue-1431/sample.js --keep-fnames -m';

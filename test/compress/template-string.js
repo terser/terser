@@ -940,3 +940,10 @@ special_chars_in_string: {
         var template=`foo \`;\n\`\${any} ${any} bar`;
     }
 }
+
+template_string_new_parens: {
+    input: {
+        new Thing()``
+    }
+    expect_exact: "(new Thing)``;"
+}

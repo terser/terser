@@ -249,3 +249,16 @@ inline_identity_dont_lose_this_when_arg: {
     }
 }
 
+inline_identity_with_scope_conflict: {
+    options = { defaults: true, toplevel: true }
+    input: {
+        function identity(a, _b, _c, _d)  {
+            return a;
+        }
+        console.log(identity(a));
+    }
+
+    expect: {
+        console.log(a);
+    }
+}

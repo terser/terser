@@ -486,31 +486,3 @@ inline_using_correct_arguments: {
         (function(s, t) { return s.run("123") })(a);
     }
 }
-
-inline_identity_fn: {
-    options = { defaults: true, toplevel: true }
-    input: {
-        function identity(a, _b)  {
-            return a;
-        }
-        console.log(identity(c));
-    }
-
-    expect: {
-        console.log(c);
-    }
-}
-
-inline_identity_with_scope_conflict: {
-    options = { defaults: true, toplevel: true }
-    input: {
-        function identity(a, _b)  {
-            return a;
-        }
-        console.log(identity(a));
-    }
-
-    expect: {
-        console.log(a);
-    }
-}

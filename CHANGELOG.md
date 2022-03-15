@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.12.1
+
+ - Fixed an issue with function definitions inside blocks (#1155)
+ - Fixed parens of `new` in some situations (closes #1159)
+
 ## v5.12.0
 
  - `TERSER_DEBUG_DIR` environment variable

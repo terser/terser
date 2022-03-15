@@ -183,6 +183,61 @@ issue_1672_if_strict: {
     expect_stdout: true
 }
 
+issue_t1155_function_in_block: {
+    options = { unused: false }
+    mangle = {}
+    input: {
+        function f1() {
+            if ("aaaaaaa") {
+                function f2() {
+                    return 1;
+                }
+        
+                const var1 = "bbbbbbb";
+            }
+        }
+    }
+    expect: {
+        function f1() {
+            if ("aaaaaaa") {
+                function a() {
+                    return 1;
+                }
+        
+                const b = "bbbbbbb";
+            }
+        }
+    }
+}
+
+issue_t1155_function_in_other_block: {
+    options = { unused: false }
+    mangle = {}
+    input: {
+        function f1() {
+            if ("aaaaaaaaaannnnnnn") {
+                function f2() {
+                    return 1;
+                }
+            }
+            if ("aaaaaaaaaannnnnnn") {
+                const f2 = "aaaaaaaaaannnnnnn";
+            }
+        }
+    }
+    expect: {
+        function f1() {
+            if ("aaaaaaaaaannnnnnn")
+                function a() {
+                    return 1;
+                }
+            if ("aaaaaaaaaannnnnnn") {
+                const n = "aaaaaaaaaannnnnnn";
+            }
+        }
+    }
+}
+
 issue_2946_else_const: {
     input: {
         if (1) {

@@ -4,7 +4,7 @@
   "homepage": "https://terser.org",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
-  "version": "5.12.0",
+  "version": "5.12.1",
   "engines": {
     "node": ">=10"
   },

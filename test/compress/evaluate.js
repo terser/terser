@@ -289,17 +289,17 @@ pow_with_number_constants: {
     }
     input: {
         var a = 5 ** NaN;
-        /* NaN exponent results to NaN */
+        // NaN exponent results to NaN
         var b = 42 ** +0;
-        /* +0 exponent results to NaN */
+        // +0 exponent results to NaN
         var c = 42 ** -0;
-        /* -0 exponent results to NaN */
+        // -0 exponent results to NaN
         var d = NaN ** 1;
-        /* NaN with non-zero exponent is NaN */
+        // NaN with non-zero exponent is NaN
         var e = 2 ** Infinity;
-        /* abs(base) > 1 with Infinity as exponent is Infinity */
+        // abs(base) > 1 with Infinity as exponent is Infinity
         var f = 2 ** -Infinity;
-        /* abs(base) > 1 with -Infinity as exponent is +0 */
+        // abs(base) > 1 with -Infinity as exponent is +0
         var g = (-7) ** (0.5);
         var h = 2324334 ** 34343443;
         var i = (-2324334) ** 34343443;
@@ -1850,4 +1850,100 @@ regexp_property_eval: {
         console.log(false);
         console.log(false);
     }
+}
+
+issue_t790_strings_larger_than_refs: {
+    options = { defaults: true, sequences: false }
+    input: {
+        const string = "aaa";
+
+        aa(string);
+        aa(string);
+        aa(string);
+        aa(string);
+    }
+    expect: {
+        const string = "aaa";
+
+        aa("aaa");
+        aa("aaa");
+        aa("aaa");
+        aa("aaa");
+    }
+}
+
+issue_t790_strings_larger_than_refs_mangle: {
+    options = { defaults: true, sequences: false }
+    mangle = { module: true }
+    input: {
+        const aaaaa = "aaa";
+
+        aa(aaaaa);
+        aa(aaaaa);
+        aa(aaaaa);
+        aa(aaaaa);
+    }
+    expect: {
+        const a = "aaa";
+
+        aa(a);
+        aa(a);
+        aa(a);
+        aa(a);
+    }
+}
+
+issue_t790_strings_smaller_than_refs: {
+    options = { defaults: true, sequences: false }
+    input: {
+        const _string_ = "str";
+
+        id(_string_);
+        id(_string_);
+        id(_string_);
+        id(_string_);
+    }
+    expect: {
+        const _string_ = "str";
+
+        id("str");
+        id("str");
+        id("str");
+        id("str");
+    }
+}
+
+issue_t790_complex_expression_smaller: {
+    options = { defaults: true, toplevel: true, sequences: false }
+    mangle = { toplevel: true }
+    input: {
+        const $read$ = "oooo";
+        const $only$ = "llll";
+        const $readonly$ = $read$ + $only$;
+
+        console.log($read$);
+        console.log($read$);
+        console.log($only$);
+        console.log($only$);
+        console.log($readonly$);
+        console.log($readonly$);
+    }
+    expect: {
+        const o = "oooo", l = "llll", c = o + l;
+
+        console.log(o);
+        console.log(o);
+        console.log(l);
+        console.log(l);
+        console.log(c);
+        console.log(c);
+    }
+    expect_stdout: [
+        "oooo",
+        "oooo",
+        "llll",
+        "llll",
+        "oooollll",
+        "oooollll",
+    ]
 }

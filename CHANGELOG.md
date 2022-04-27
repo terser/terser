@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.13.0
+
+ - All calls to eval() were removed (#1171, #1184)
+ - `source-map` was updated to 0.8.0-beta.0 (#1164)
+ - NavigatorUAData was added to domprops to avoid property mangling (#1166)
+
 ## v5.12.1
 
  - Fixed an issue with function definitions inside blocks (#1155)

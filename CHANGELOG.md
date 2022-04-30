@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.13.1
+ - Removed self-assignments (`varname=varname`) (closes #1081)
+ - Separated inlining code (for inlining things into references, or removing IIFEs)
+ - Allow multiple identifiers with the same name in `var` destructuring (eg `var { a, a } = x`) (#1176)
+
 ## v5.13.0
 
  - All calls to eval() were removed (#1171, #1184)

@@ -236,3 +236,18 @@ op_equals_right_global_var: {
         x = g() &   x;
     }
 }
+
+spurious_assignment: {
+    options = {}
+    input: {
+        var x = "PASS";
+        x = x;
+        console.log(x);
+    }
+    expect: {
+        var x = "PASS";
+        x;
+        console.log(x);
+    }
+    expect_stdout: "PASS"
+}

@@ -43,6 +43,7 @@
     "main.js"
   ],
   "dependencies": {
+    "@jridgewell/trace-mapping": "^0.3.5",
     "acorn": "^8.5.0",
     "commander": "^2.20.0",
     "source-map": "~0.8.0-beta.0",

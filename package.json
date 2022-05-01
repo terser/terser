@@ -19,7 +19,8 @@
     ".": [
       {
         "import": "./main.js",
-        "require": "./dist/bundle.min.js"
+        "require": "./dist/bundle.min.js",
+        "types": "tools/terser.d.ts"
       },
       "./dist/bundle.min.js"
     ],

@@ -3,10 +3,10 @@
 
 "use strict";
 
-var createHash = require("crypto").createHash;
-var fetch = require("./fetch");
-var fork = require("child_process").fork;
-var zlib = require("zlib");
+import { createHash } from "crypto";
+import fetch from "./fetch.cjs";
+import { fork } from "child_process";
+import zlib from "zlib";
 var args = process.argv.slice(2);
 if (!args.length) {
     args.push("-mc");

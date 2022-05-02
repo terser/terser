@@ -18,6 +18,7 @@
   "exports": {
     ".": [
       {
+        "types": "./tools/terser.d.ts",
         "import": "./main.js",
         "require": "./dist/bundle.min.js"
       },

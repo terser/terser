@@ -6,6 +6,7 @@ export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
 
 export interface ParseOptions {
     bare_returns?: boolean;
+    /** @deprecated legacy option. Currently, all supported EcmaScript is valid to parse. */
     ecma?: ECMA;
     html5_comments?: boolean;
     shebang?: boolean;

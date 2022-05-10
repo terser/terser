@@ -44,10 +44,9 @@
     "main.js"
   ],
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.5",
+    "@jridgewell/source-map": "^0.3.2",
     "acorn": "^8.5.0",
     "commander": "^2.20.0",
-    "source-map": "~0.8.0-beta.0",
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {
@@ -60,7 +59,8 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^3.0.2",
     "rollup": "2.56.3",
-    "semver": "^7.3.4"
+    "semver": "^7.3.4",
+    "source-map": "~0.8.0-beta.0"
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",

@@ -1,6 +1,6 @@
 /// <reference lib="es2015" />
 
-import { RawSourceMap } from 'source-map';
+import { SectionedSourceMapInput, EncodedSourceMap, DecodedSourceMap } from '@jridgewell/source-map';
 
 export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
 
@@ -193,12 +193,13 @@ export interface MinifyOptions {
 
 export interface MinifyOutput {
     code?: string;
-    map?: RawSourceMap | string;
+    map?: EncodedSourceMap | string;
+    decoded_map?: DecodedSourceMap | null;
 }
 
 export interface SourceMapOptions {
     /** Source map object, 'inline' or source map file content */
-    content?: RawSourceMap | string;
+    content?: SectionedSourceMapInput | string;
     includeSources?: boolean;
     filename?: string;
     root?: string;

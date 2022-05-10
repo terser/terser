@@ -46,7 +46,7 @@
   "dependencies": {
     "@jridgewell/source-map": "^0.3.2",
     "acorn": "^8.5.0",
-    "commander": "^2.20.0",
+    "commander": "^9.0.0",
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {

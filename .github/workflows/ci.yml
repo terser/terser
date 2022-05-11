@@ -2,8 +2,7 @@ name: CI pipeline
 
 on: [ push, pull_request, workflow_dispatch ]
 
-permissions:
-  contents: read
+permissions: read-all
 
 jobs:
   build:

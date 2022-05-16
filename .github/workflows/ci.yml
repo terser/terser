@@ -2,6 +2,8 @@ name: CI pipeline
 
 on: [ push, pull_request, workflow_dispatch ]
 
+permissions: read-all
+
 jobs:
   build:
     name: "Build ${{ matrix.os }} node${{ matrix.node-version }}"

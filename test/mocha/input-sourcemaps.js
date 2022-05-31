@@ -2,7 +2,7 @@ import assert from "assert";
 import { minify } from "../../main.js";
 import source_map from "source-map"
 
-const { SourceMapConsumer } = source_map
+const { SourceMapConsumer, SourceMapGenerator } = source_map
 
 describe("input sourcemaps", function() {
     var transpilemap, map;
@@ -64,5 +64,53 @@ describe("input sourcemaps", function() {
         map.allGeneratedPositionsFor({source: "index.js", line: 1, column: 1}).forEach(function(pos) {
             assert.ok(pos.line <= 2, msg);
         })
+    });
+
+    it("Should preserve unmapped segments in output source map", async function() {
+        var generator = new SourceMapGenerator();
+
+        generator.addMapping({
+            source: "source.ts",
+            generated: {line: 1, column: 0},
+            original: {line: 1, column: 0},
+        });
+        generator.addMapping({
+            source: null,
+            generated: {line: 1, column: 37},
+            original: null,
+        });
+
+        generator.addMapping({
+            source: "source.ts",
+            generated: {line: 1, column: 50},
+            original: {line: 2, column: 0},
+        });
+
+        generator.setSourceContent("source.ts",
+            `function say(msg) {console.log(msg)};say('hello');\nprocess.exit(1);`)
+
+        // Everything except the "say('hello');" part is mapped to "source.ts". The "say"
+        // function call is not mapped to any original source location. e.g. this can
+        // happen when a code transformer inserts generated code in between existing code.
+        var inputFile = "function say(msg) {console.log(msg)};say('hello');process.exit(1);";
+        var result = await minify(inputFile, {
+            sourceMap: {
+                content: JSON.parse(generator.toString()),
+                url: 'inline'
+            }
+        });
+
+        var transformedMap = await new SourceMapConsumer(result.map);
+        var hasMappedSource = true;
+
+        for (let i = 0; i < result.code.length; i++) {
+            var info = transformedMap.originalPositionFor({line: 1, column: i});
+            hasMappedSource = hasMappedSource && !!info.source;
+        }
+
+        assert.equal(hasMappedSource, false, "Expected transformed source map to preserve the " +
+            "mapping without original source location");
+
+        assert.doesNotThrow(() => SourceMapGenerator.fromSourceMap(transformedMap));
     });
 });

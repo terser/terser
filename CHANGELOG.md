@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.14.0
+ - Switched to @jridgewell/source-map for sourcemap generation (#1190, #1181)
+ - Fixed source maps with non-terminated segments (#1106)
+ - Enabled typescript types to be imported from the package (#1194)
+ - Extra DOM props have been added (#1191)
+ - Delete the AST while generating code, as a means to save RAM
+
 ## v5.13.1
  - Removed self-assignments (`varname=varname`) (closes #1081)
  - Separated inlining code (for inlining things into references, or removing IIFEs)

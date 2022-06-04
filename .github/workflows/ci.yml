@@ -72,7 +72,7 @@ jobs:
       # Artifact publish to pipeline
 
       - name: Upload logs as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
           path: logs/

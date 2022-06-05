@@ -947,3 +947,14 @@ template_string_new_parens: {
     }
     expect_exact: "(new Thing)``;"
 }
+
+template_string_nested: {
+    input: {
+        console.log(`${`${2,0}`} ${1}`)
+        console.log(`${String.raw`${2,0}\n`} ${1}`)
+    }
+    expect_stdout: [
+        "0 1",
+        "0\\n 1",
+    ]
+}

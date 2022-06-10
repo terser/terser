@@ -145,6 +145,7 @@ export interface FormatOptions {
     }) => boolean );
     ecma?: ECMA;
     ie8?: boolean;
+    keep_numbers?: boolean;
     indent_level?: number;
     indent_start?: number;
     inline_script?: boolean;

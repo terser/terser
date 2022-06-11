@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.14.1
+ - keep_numbers option added to TypeScript defs (#1208)
+ - Fixed parsing of nested template strings (#1204)
+
 ## v5.14.0
  - Switched to @jridgewell/source-map for sourcemap generation (#1190, #1181)
  - Fixed source maps with non-terminated segments (#1106)

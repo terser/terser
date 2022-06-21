@@ -100,7 +100,7 @@ describe("sourcemaps", function() {
             version: 3,
             sources: ["0"],
             names: ["wat"],
-            mappings: "CAAU,IACNA,IAAI",
+            mappings: "CAAU,CAAC,GACPA,IAAI",
         });
     });
     it("Should mark class literals", async function() {
@@ -239,7 +239,7 @@ describe("sourcemaps", function() {
             if (result.error) throw result.error;
             var code = result.code;
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};\n" +
-                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
+                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BLENBQUsifQ==");
         });
         it("Should not append source map to output js when sourceMapInline is not enabled", async function() {
             var result = await minify("var a = function(foo) { return foo; };");
@@ -306,7 +306,7 @@ describe("sourcemaps", function() {
             if (result.error) throw result.error;
             var code = result.code;
             assertCodeWithInlineMapEquals(code, "var a=function(n){return n};\n" +
-                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BIn0=");
+                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIjAiXSwibmFtZXMiOlsiYSIsImZvbyJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBSUEsRUFBSSxTQUFTQyxHQUFPLE9BQU9BLENBQUsifQ==");
         });
     });
 

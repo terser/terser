@@ -1,5 +1,9 @@
 # Changelog
 
+## v4.8.1
+
+ - Security fix for RegExps that should not be evaluated (regexp DDOS)
+
 ## v4.8.0
 
  - Support for numeric separators (`million = 1_000_000`) was added.

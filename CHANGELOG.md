@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.14.2
+
+ - Security fix for RegExps that should not be evaluated (regexp DDOS)
+ - Source maps improvements (#1211)
+ - Performance improvements in long property access evaluation (#1213)
+
 ## v5.14.1
  - keep_numbers option added to TypeScript defs (#1208)
  - Fixed parsing of nested template strings (#1204)
@@ -205,6 +211,13 @@ Hotfix release, fixes package.json "engines" syntax
  - BREAKING: There are no more warnings being emitted
  - Module is now distributed as a dual package - You can `import` and `require()` too.
  - Inline improvements were made
+
+
+-----
+
+## v4.8.1 (backport)
+
+ - Security fix for RegExps that should not be evaluated (regexp DDOS)
 
 ## v4.8.0
 

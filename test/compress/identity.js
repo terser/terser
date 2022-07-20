@@ -249,3 +249,18 @@ inline_identity_dont_lose_this_when_arg: {
     }
 }
 
+inline_trivial_fns_unless_arg_is_expansion: {
+    options = {
+        toplevel: true,
+        inline: true,
+    }
+    input: {
+        function n (n) {
+            return n;
+        }
+        (function(...o) {
+            const c=n(...o);console.log(c)
+        })("PASS");
+    }
+    expect_stdout: "PASS"
+}

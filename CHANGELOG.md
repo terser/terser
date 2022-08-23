@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.15.0
+ - Basic support for ES2022 class static initializer blocks.
+ - Add `AudioWorkletNode` constructor options to domprops list (#1230)
+ - Make identity function inliner not inline `id(...expandedArgs)`
+
 ## v5.14.2
 
  - Security fix for RegExps that should not be evaluated (regexp DDOS)

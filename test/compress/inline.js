@@ -238,6 +238,40 @@ inline_into_scope_conflict_enclosed_2: {
     ]
 }
 
+issue_1267_inline_breaks_compare_identity: {
+    options = {
+        toplevel: true
+    }
+    input: {
+        class ClassA {
+        }
+        class ClassB {
+            MyA = ClassA;
+        };
+
+        console.log(new ClassB().MyA == new ClassB().MyA)
+    }
+    expect_stdout: ["true"]
+}
+
+issue_1267_inline_breaks_compare_identity_2: {
+    options = {
+        toplevel: true
+    }
+    input: {
+        class ClassA {
+        }
+        const objA = {
+            prop: ClassA
+        }
+        const objB = {
+            prop: ClassA
+        }
+
+        console.log(objA.prop === objB.prop)
+    }
+    expect_stdout: ["true"]
+}
 
 noinline_annotation: {
     options = {

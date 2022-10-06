@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.15.1
+
+ - Fixed missing parentheses around optional chains
+ - Avoid bare `let` or `const` as the bodies of `if` statements (#1253)
+ - Small internal fixes (#1271)
+ - Avoid inlining a class twice and creating two equivalent but `!==` classes.
+
 ## v5.15.0
  - Basic support for ES2022 class static initializer blocks.
  - Add `AudioWorkletNode` constructor options to domprops list (#1230)

@@ -14,12 +14,12 @@ jobs:
         node-version: [ 10.x, 12.x, 14.x, 16.x ]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Tooling setup
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -72,7 +72,7 @@ jobs:
       # Artifact publish to pipeline
 
       - name: Upload logs as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
           path: logs/

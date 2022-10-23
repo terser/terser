@@ -344,15 +344,6 @@ optional_chaining_private_fields: {
     // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
 }
 
-tolerate_out_of_class_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
-    input: {
-        Bar.#foo = "bad"
-    }
-    expect_exact: 'Bar.#foo="bad";'
-}
-
 private_properties_can_be_mangled: {
     no_mozilla_ast = true;
     node_version = ">=12"
@@ -454,4 +445,41 @@ nested_private_properties_can_be_mangled: {
         }
         new X().log();
     }
+}
+
+allow_private_field_with_in_operator : {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    mangle = {
+        properties: true
+    }
+    input: {
+        class A {
+            #p;
+            isA (input) {
+                #p in input; 
+                #p in this;
+                return #p in this; 
+            }
+        }
+    }
+    expect:{class A{#i;i(i){p in i;p in this;return p in this}}}
+}
+
+allow_subscript_private_field: {
+    no_mozilla_ast = true;
+    node_version = ">=12"
+    mangle = {
+        properties: true
+    }
+    input: {
+        class A {
+            #p;
+            isA (input) {
+                console.log(input.#p);
+                return this.#p; 
+            }
+        }
+    }
+    expect: {class A{#s;i(s){console.log(s.#s);return this.#s}}}
 }

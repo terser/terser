@@ -347,3 +347,50 @@ invalid_privatename_in_object: {
         col: 12
     })
 }
+
+private_field_out_of_class_field: {
+    input: `
+        function test() {
+            return this.#p;
+        }
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Private field must be declared in an enclosing class",
+        line: 3,
+        col: 24
+    })
+}
+
+private_field_out_of_class_field_in_operator: {
+    input: `
+        function test(input) {
+            #p in input;
+            return 10;
+        }
+    `
+    expect_error:({
+        name: "SyntaxError",
+        message: "Private field must be declared in an enclosing class",
+        line: 3,
+        col: 12
+    })
+}
+
+invaild__in_operator_expression_in_class_field: {
+    input: `
+        class A {
+            #p;
+            isA () { 
+                #p + 10;
+                return this.#p;
+            } 
+        }
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected privatename token",
+        line: 5,
+        col: 19
+    })
+}

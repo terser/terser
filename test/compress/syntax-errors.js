@@ -332,3 +332,18 @@ big_int_scientific_format: {
         col: 8
     })
 }
+
+invalid_privatename_in_object: {
+    input: `
+        const myObject = {
+            foo: 'bar',
+            #something: 5,
+        }
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        message: "private fields are not allowed in an object",
+        line: 4,
+        col: 12
+    })
+}

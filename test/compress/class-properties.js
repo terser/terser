@@ -449,7 +449,7 @@ nested_private_properties_can_be_mangled: {
 
 allow_private_field_with_in_operator : {
     no_mozilla_ast = true;
-    node_version = ">=12"
+    node_version = ">=16"
     mangle = {
         properties: true
     }
@@ -463,23 +463,28 @@ allow_private_field_with_in_operator : {
             }
         }
     }
-    expect:{class A{#i;i(i){p in i;p in this;return p in this}}}
+    expect:{class A{#i;i(i){#i in i;#i in this;return #i in this}}}
 }
 
 allow_subscript_private_field: {
     no_mozilla_ast = true;
-    node_version = ">=12"
-    mangle = {
-        properties: true
-    }
+    node_version = ">=16"
+    options = { defaults: true }
     input: {
         class A {
             #p;
+            constructor(p) {
+                this.#p = p;
+            }
             isA (input) {
+                console.log(#p in this && "PASS");
                 console.log(input.#p);
-                return this.#p; 
             }
         }
+        new A("FAIL").isA(new A("PASS"))
     }
-    expect: {class A{#s;i(s){console.log(s.#s);return this.#s}}}
+    expect_stdout: [
+        "PASS",
+        "PASS"
+    ]
 }

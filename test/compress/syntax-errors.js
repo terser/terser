@@ -356,7 +356,7 @@ private_field_out_of_class_field: {
     `
     expect_error: ({
         name: "SyntaxError",
-        message: "Private field must be declared in an enclosing class",
+        message: "Private field must be used in an enclosing class",
         line: 3,
         col: 24
     })
@@ -371,7 +371,7 @@ private_field_out_of_class_field_in_operator: {
     `
     expect_error:({
         name: "SyntaxError",
-        message: "Private field must be declared in an enclosing class",
+        message: "Private field must be used in an enclosing class",
         line: 3,
         col: 12
     })
@@ -381,15 +381,15 @@ invaild__in_operator_expression_in_class_field: {
     input: `
         class A {
             #p;
-            isA () { 
+            isA () {
                 #p + 10;
                 return this.#p;
-            } 
+            }
         }
     `
     expect_error: ({
         name: "SyntaxError",
-        message: "Unexpected privatename token",
+        message: "Unexpected token operator «+», expected operator «in»",
         line: 5,
         col: 19
     })

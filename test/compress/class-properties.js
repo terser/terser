@@ -344,15 +344,6 @@ optional_chaining_private_fields: {
     // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
 }
 
-tolerate_out_of_class_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
-    input: {
-        Bar.#foo = "bad"
-    }
-    expect_exact: 'Bar.#foo="bad";'
-}
-
 private_properties_can_be_mangled: {
     no_mozilla_ast = true;
     node_version = ">=12"
@@ -454,4 +445,46 @@ nested_private_properties_can_be_mangled: {
         }
         new X().log();
     }
+}
+
+allow_private_field_with_in_operator : {
+    no_mozilla_ast = true;
+    node_version = ">=16"
+    mangle = {
+        properties: true
+    }
+    input: {
+        class A {
+            #p;
+            isA (input) {
+                #p in input; 
+                #p in this;
+                return #p in this; 
+            }
+        }
+    }
+    expect:{class A{#i;i(i){#i in i;#i in this;return #i in this}}}
+}
+
+allow_subscript_private_field: {
+    no_mozilla_ast = true;
+    node_version = ">=16"
+    options = { defaults: true }
+    input: {
+        class A {
+            #p;
+            constructor(p) {
+                this.#p = p;
+            }
+            isA (input) {
+                console.log(#p in this && "PASS");
+                console.log(input.#p);
+            }
+        }
+        new A("FAIL").isA(new A("PASS"))
+    }
+    expect_stdout: [
+        "PASS",
+        "PASS"
+    ]
 }

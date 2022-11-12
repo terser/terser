@@ -7,7 +7,7 @@
 
 A JavaScript mangler/compressor toolkit for ES6+.
 
-*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
+*note*: <s>You can support this project on patreon: [link]</s> **The Terser Patreon is shutting down in favor of opencollective**. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
 
 Terser recommends you use RollupJS to bundle your modules, as that produces smaller code overall.
 
@@ -1336,7 +1336,7 @@ If you're not sure how to set an environment variable on your shell (the above e
 
 # README.md Patrons:
 
-*note*: You can support this project on patreon: <a target="_blank" rel="nofollow" href="https://www.patreon.com/fabiosantoscode"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" alt="patron" width="100px" height="auto"></a>. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
+*note*: <s>You can support this project on patreon: [link]</s> **The Terser Patreon is shutting down in favor of opencollective**. Check out [PATRONS.md](https://github.com/terser/terser/blob/master/PATRONS.md) for our first-tier patrons.
 
 These are the second-tier patrons. Great thanks for your support!
 

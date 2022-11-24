@@ -1,1 +1,13 @@
-{"version":3,"sources":["input2.js"],"names":["require","foo","hello","x","apply","_toConsumableArray","y","z"],"mappings":"kLAAcA,QAAQ,OAAfC,aAAAA,kBACSD,QAAQ,SAAjBE,gBAAAA,MAEPD,IAAIE,EAAJC,MAAAH,IAAAI,mBAASJ,IAAIK,EAAEJ,MAAMK","sourcesContent":["const {foo} = require(\"bar\");\nconst {hello} = require(\"world\");\n\nfoo.x(...foo.y(hello.z));\n"]}
+{
+  "version": 3,
+  "file": "input.js",
+  "sourceRoot": "",
+  "sources": [
+    "input.tsx"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;;;;AAAA,SAAe,aAAa;;QAC1B,IAAI,KAAK,GAAG,eAAe,CAAC;QAC5B,OAAO,KAAK,CAAC;IACf,CAAC;CAAA;AAED,aAAa,EAAE,CAAC,IAAI,CAAC,CAAC,CAAC,EAAE,CAAC,OAAO,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,CAAC",
+  "sourcesContent": [
+    "async function somePromiseFn(): Promise<string> {\n  let value = 'promise-value';\n  return value; \n}\n\nsomePromiseFn().then(d => console.info(d));"
+  ]
+}

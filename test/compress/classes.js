@@ -200,3 +200,121 @@ private_class_accessors: {
     }
     // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
 }
+
+class_static_blocks: {
+    node_version = ">=16"
+    input: {
+        class A {
+            static {
+                this.hello = 'PASS'
+            }
+            print() {
+                console.log(A.hello)
+            }
+        }
+        new A().print();
+        console.log(A.hello + "2");
+    }
+    expect: {
+        class A {
+            static {
+                this.hello = 'PASS'
+            }
+            print() {
+                console.log(A.hello)
+            }
+        }
+        new A().print();
+        console.log(A.hello + "2");
+    }
+    expect_stdout: ["PASS", "PASS2"]
+}
+
+class_static_blocks_empty: {
+    node_version = ">=16"
+    options = { toplevel: true, defaults: true }
+    input: {
+        class EmptyBlock {
+            static {
+                1 + 1
+            }
+        }
+    }
+    expect: { }
+}
+
+class_static_not_empty_blocks: {
+    node_version = ">=16"
+    options = { toplevel: true, defaults: true }
+    input: {
+        class EmptyBlock {
+            static {
+                this.PASS = "PASS"
+                console.log(this.PASS)
+            }
+        }
+        console.log(EmptyBlock.PASS)
+    }
+    expect_stdout: ["PASS", "PASS"]
+}
+
+class_static_block_pinned: {
+    node_version = ">=16"
+    options = { toplevel: true, defaults: true }
+    input: {
+        const x = "PASS"
+        class X {
+            static {
+                console.log(x)
+            }
+        }
+
+        alert(X)
+    }
+    expect: {
+        class X {
+            static {
+                console.log("PASS")
+            }
+        }
+
+        alert(X)
+    }
+}
+
+class_static_block_hoisting: {
+    node_version = ">=16"
+    options = { toplevel: true, defaults: true }
+    input: {
+        var y = "PASS";
+
+        class A {
+          static field = "FAIL";
+          static {
+            var y = this.field;
+          }
+        }
+
+        console.log(y);
+    }
+    expect_stdout: "PASS"
+}
+
+class_static_block_scope_2: {
+    node_version = ">=16"
+    options = { toplevel: true, defaults: true }
+    input: {
+        var y = "PASS";
+        class A {
+            static {
+                var y = "FAIL";
+            }
+
+            static {
+                console.log(y)
+            }
+        }
+        console.log(y);
+    }
+    expect_stdout: ["PASS", "PASS"]
+}

@@ -12,7 +12,7 @@
  * a >= (a = parseInt('100')) → 99 >= 100 → false
  */
 
-tranformation_sort_order_equal: {
+transformation_sort_order_equal: {
     options = {
         comparisons: true,
     }
@@ -21,7 +21,7 @@ tranformation_sort_order_equal: {
     expect: { (a = parseInt('100')) == a }
 }
 
-tranformation_sort_order_unequal: {
+transformation_sort_order_unequal: {
     options = {
         comparisons: true,
     }
@@ -30,7 +30,7 @@ tranformation_sort_order_unequal: {
     expect: { (a = parseInt('100')) != a }
 }
 
-tranformation_sort_order_lesser_or_equal: {
+transformation_sort_order_lesser_or_equal: {
     options = {
         comparisons: true,
     }
@@ -38,7 +38,7 @@ tranformation_sort_order_lesser_or_equal: {
     input: { (a = parseInt('100')) <= a }
     expect: { (a = parseInt('100')) <= a }
 }
-tranformation_sort_order_greater_or_equal: {
+transformation_sort_order_greater_or_equal: {
     options = {
         comparisons: true,
     }

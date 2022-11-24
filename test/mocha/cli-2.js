@@ -21,7 +21,7 @@ describe("bin/terser (2)", function() {
 
             assert.strictEqual(stdout, [
                 '"use strict";var foo=function foo(x){return"foo "+x};console.log(foo("bar"));',
-                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbImZvbyIsIngiLCJjb25zb2xlIiwibG9nIl0sIm1hcHBpbmdzIjoiYUFBQSxJQUFJQSxJQUFNLFNBQU5BLElBQU1DLEdBQUEsTUFBSyxPQUFTQSxHQUN4QkMsUUFBUUMsSUFBSUgsSUFBSSJ9",
+                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJmb28iLCJ4IiwiY29uc29sZSIsImxvZyJdLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm1hcHBpbmdzIjoiYUFBQSxJQUFJQSxJQUFNLFNBQU5BLElBQU1DLEdBQUEsTUFBSyxPQUFTQSxDQUFkLEVBQ1ZDLFFBQVFDLElBQUlILElBQUkifQ==",
                 ""
             ].join("\n"));
             done();
@@ -46,7 +46,7 @@ describe("bin/terser (2)", function() {
 
             assert.strictEqual(stdout, [
                 'function foo(){return function(){console.log("PASS")}}foo()();',
-                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInRlc3QvaW5wdXQvaXNzdWUtMjMxMC9pbnB1dC5qcyJdLCJuYW1lcyI6WyJmb28iLCJjb25zb2xlIiwibG9nIiwiZiJdLCJtYXBwaW5ncyI6IkFBQUEsU0FBU0EsTUFDTCxPQUFPLFdBQ0hDLFFBQVFDLElBQUksU0FLUkYsS0FDUkcifQ==",
+                "//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJmb28iLCJjb25zb2xlIiwibG9nIiwiZiJdLCJzb3VyY2VzIjpbInRlc3QvaW5wdXQvaXNzdWUtMjMxMC9pbnB1dC5qcyJdLCJtYXBwaW5ncyI6IkFBQUEsU0FBU0EsTUFDTCxPQUFPLFdBQ0hDLFFBQVFDLElBQUksT0FDaEIsQ0FDSixDQUdZRixLQUNSRyJ9",
                 ""
             ].join("\n"));
             done();

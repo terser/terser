@@ -1,5 +1,45 @@
 # Changelog
 
+## v5.15.1
+
+ - Fixed missing parentheses around optional chains
+ - Avoid bare `let` or `const` as the bodies of `if` statements (#1253)
+ - Small internal fixes (#1271)
+ - Avoid inlining a class twice and creating two equivalent but `!==` classes.
+
+## v5.15.0
+ - Basic support for ES2022 class static initializer blocks.
+ - Add `AudioWorkletNode` constructor options to domprops list (#1230)
+ - Make identity function inliner not inline `id(...expandedArgs)`
+
+## v5.14.2
+
+ - Security fix for RegExps that should not be evaluated (regexp DDOS)
+ - Source maps improvements (#1211)
+ - Performance improvements in long property access evaluation (#1213)
+
+## v5.14.1
+ - keep_numbers option added to TypeScript defs (#1208)
+ - Fixed parsing of nested template strings (#1204)
+
+## v5.14.0
+ - Switched to @jridgewell/source-map for sourcemap generation (#1190, #1181)
+ - Fixed source maps with non-terminated segments (#1106)
+ - Enabled typescript types to be imported from the package (#1194)
+ - Extra DOM props have been added (#1191)
+ - Delete the AST while generating code, as a means to save RAM
+
+## v5.13.1
+ - Removed self-assignments (`varname=varname`) (closes #1081)
+ - Separated inlining code (for inlining things into references, or removing IIFEs)
+ - Allow multiple identifiers with the same name in `var` destructuring (eg `var { a, a } = x`) (#1176)
+
+## v5.13.0
+
+ - All calls to eval() were removed (#1171, #1184)
+ - `source-map` was updated to 0.8.0-beta.0 (#1164)
+ - NavigatorUAData was added to domprops to avoid property mangling (#1166)
+
 ## v5.12.1
 
  - Fixed an issue with function definitions inside blocks (#1155)
@@ -183,6 +223,13 @@ Hotfix release, fixes package.json "engines" syntax
  - BREAKING: There are no more warnings being emitted
  - Module is now distributed as a dual package - You can `import` and `require()` too.
  - Inline improvements were made
+
+
+-----
+
+## v4.8.1 (backport)
+
+ - Security fix for RegExps that should not be evaluated (regexp DDOS)
 
 ## v4.8.0
 

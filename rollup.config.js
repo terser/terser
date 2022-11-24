@@ -5,7 +5,7 @@ export default () => {
             file: "dist/bundle.min.js",
             format: "umd",
             globals: {
-                "source-map": "sourceMap",
+                "@jridgewell/source-map": "sourceMap",
             },
             name: "Terser",
             sourcemap: false,

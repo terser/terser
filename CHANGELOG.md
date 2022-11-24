@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.16.1
+
+ - Disallow private fields in object bodies (#1011)
+ - Parse `#privatefield in object` (#1279)
+ - Compress `#privatefield in object`
+
 ## v5.15.1
 
  - Fixed missing parentheses around optional chains

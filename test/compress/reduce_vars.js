@@ -2606,16 +2606,16 @@ issue_1814_2: {
         unused: true,
     }
     input: {
-        const a = "32";
+        const aaaa = "32";
         !function() {
-            var b = a + 1;
+            var b = aaaa + 1;
             !function(a) {
                 console.log(b, a++);
             }(0);
         }();
     }
     expect: {
-        const a = "32";
+        const aaaa = "32";
         !function() {
             !function(a) {
                 console.log("321", a++);

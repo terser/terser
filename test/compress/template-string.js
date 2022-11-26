@@ -119,7 +119,7 @@ template_string_with_predefined_constants: {
         var barber = 'This is ${0/0}';
 
         var a = "4194304";
-        var b = "16777216"; // Potential for further concatentation
+        var b = "16777216"; // Potential for further concatenation
         var c = `${4**14}`; // Not worth converting
     }
 }

@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.16.1
+## v5.16.0
 
  - Disallow private fields in object bodies (#1011)
  - Parse `#privatefield in object` (#1279)

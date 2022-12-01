@@ -6111,14 +6111,47 @@ shadowed_variable_2: {
     }
     expect: {
         function test(e) {
-          const result = {};
-          const test = e.test;
-          {
-            result.discretized = random(test);
-            const e = random();
-            console.log(e);
-          }
-          return result;
+            const result = {};
+            const test = e.test;
+            {
+                result.discretized = random(test);
+                const e = random();
+                console.log(e);
+            }
+            return result;
         }
     }
+}
+
+shadowed_variable_3: {
+    options = {
+        pure_getters: true,
+        collapse_vars: true,
+        unused: true,
+    }
+    input: {
+        if(1) {
+            var object = 1
+            var object2 = "PASS"
+            let temp_variable = id(true) ? object2 : object
+            {
+                let object = temp_variable
+                console.log(object)
+                console.log(object)
+            }
+        }
+    }
+    expect: {
+        if(1) {
+            var object = 1
+            var object2 = "PASS"
+            let temp_variable = id(true) ? object2 : object
+            {
+                let object = temp_variable
+                console.log(object)
+                console.log(object)
+            }
+        }
+    }
+    expect_stdout: ["PASS", "PASS"]
 }

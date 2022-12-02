@@ -322,7 +322,7 @@ static_private_fields: {
 
 optional_chaining_private_fields: {
     no_mozilla_ast = true;
-    node_version = ">=12"
+    node_version = ">=16"
     input: {
         class A {
             #opt = undefined;
@@ -341,7 +341,7 @@ optional_chaining_private_fields: {
         }
         console.log(new A().toString())
     }
-    // expect_stdout: "PASS" // < tested in chrome, fails with nodejs 14 (current LTS)
+    expect_stdout: "PASS"
 }
 
 private_properties_can_be_mangled: {

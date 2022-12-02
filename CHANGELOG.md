@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.16.1
+
+ - Properly handle references in destructurings (`const { [reference]: val } = ...`)
+ - Allow parsing of `.#privatefield` in nested classes
+ - Do not evaluate operations that return large strings if that would make the output code larger
+ - Make `collapse_vars` handle block scope correctly
+ - Internal improvements: Typos (#1311), more tests, small-scale refactoring
+
 ## v5.16.0
 
  - Disallow private fields in object bodies (#1011)

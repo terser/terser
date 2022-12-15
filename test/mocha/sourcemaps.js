@@ -265,7 +265,7 @@ describe("sourcemaps", function() {
         // TODO skipped for 2 reasons:
         //  - atob/btoa fail with unicode characters
         //  - names output has changed and excludes unicode names
-        it.skip("Should work with unicode characters", async function() {
+        it("Should work with unicode characters", async function() {
             var code = [
                 "var tëst = '→unicøde←';",
                 "alert(tëst);",
@@ -281,7 +281,7 @@ describe("sourcemaps", function() {
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             var encoded = result.code.slice(result.code.lastIndexOf(",") + 1);
-            map = JSON.parse(to_ascii(encoded).toString());
+            map = JSON.parse(decodeURIComponent(escape(to_ascii(encoded))).toString());
             assert.strictEqual(map.sourcesContent.length, 1);
             assert.strictEqual(map.sourcesContent[0], code);
             result = await minify(result.code, {

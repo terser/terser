@@ -2,7 +2,7 @@
 
   [![NPM Version][npm-image]][npm-url]
   [![NPM Downloads][downloads-image]][downloads-url]
-  [![Travis Build][travis-image]][travis-url]
+  [![CI pipeline][ci-image]][ci-url]
   [![Opencollective financial contributors][opencollective-contributors]][opencollective-url]
 
 A JavaScript mangler/compressor toolkit for ES6+.
@@ -21,8 +21,8 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/maste
 [npm-url]: https://npmjs.org/package/terser
 [downloads-image]: https://img.shields.io/npm/dm/terser.svg
 [downloads-url]: https://npmjs.org/package/terser
-[travis-image]: https://app.travis-ci.com/terser/terser.svg?branch=master
-[travis-url]: https://app.travis-ci.com/github/terser/terser
+[ci-image]: https://github.com/terser/terser/actions/workflows/ci.yml/badge.svg
+[ci-url]: https://github.com/terser/terser/actions/workflows/ci.yml
 [opencollective-contributors]: https://opencollective.com/terser/tiers/badge.svg
 [opencollective-url]: https://opencollective.com/terser
 

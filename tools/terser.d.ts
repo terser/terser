@@ -204,6 +204,7 @@ export interface SourceMapOptions {
     includeSources?: boolean;
     filename?: string;
     root?: string;
+    asObject?: boolean;
     url?: string | 'inline';
 }
 

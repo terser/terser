@@ -1010,3 +1010,17 @@ export_multiple_named_default_string: {
     }
     expect_exact: 'export{default as"F-oo",default as"*"};export{Foo as"F-oo",Bar as"B-ar",star as"*","B-ax","B-ar"as"F-oo","*","*"as star,"*"as"s-tar",default as"F-oo",default as"*"}from"lel";'
 }
+
+export_namespace_as: {
+    input: {
+        export * as foo from "lel";
+    }
+    expect_exact: 'export*as foo from"lel";'
+}
+
+export_namespace_as_string: {
+    input: {
+        export * as "f-oo" from "lel";
+    }
+    expect_exact: 'export*as"f-oo"from"lel";'
+}

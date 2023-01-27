@@ -1021,6 +1021,7 @@ export_namespace_as: {
 export_namespace_as_string: {
     input: {
         export * as "f-oo" from "lel";
+        export * as "*" from "lel";
     }
-    expect_exact: 'export*as"f-oo"from"lel";'
+    expect_exact: 'export*as"f-oo"from"lel";export*as"*"from"lel";'
 }

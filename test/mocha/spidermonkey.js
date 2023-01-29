@@ -135,7 +135,7 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should correctly minify AST from from_moz_ast with default destructure", async () => {
         const code = "const { a = 1, b: [b = 2] = []} = {}";
-        const acornAst = acornParse(code, { locations: true });
+        const acornAst = acornParse(code, { locations: true, ecmaVersion: 2015 });
         const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
         const result = await minify(terserAst, {ecma: 2015});
         assert.strictEqual(
@@ -146,7 +146,7 @@ describe("spidermonkey export/import sanity test", function() {
 
     it("should correctly minify AST from from_moz_ast with default function parameter", async () => {
         const code = "function run(x = 2){}";
-        const acornAst = acornParse(code, { locations: true });
+        const acornAst = acornParse(code, { locations: true, ecmaVersion: 2020 });
         const terserAst = AST.AST_Node.from_mozilla_ast(acornAst);
         const result = await minify(terserAst);
         assert.strictEqual(

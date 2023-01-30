@@ -262,7 +262,7 @@ describe("sourcemaps", function() {
             if (result.error) throw result.error;
             assertCodeWithInlineMapEquals(result.code, read("./test/input/issue-505/output.js"));
         });
-        it.only("Should work with unicode characters", async function() {
+        it("Should work with unicode characters", async function() {
             var code = [
                 "var tëst = '→unicøde←';",
                 "alert(tëst);",

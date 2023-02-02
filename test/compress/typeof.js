@@ -230,7 +230,7 @@ issue_2728_3: {
         (function() {
             function arguments() {
             }
-            console.log("function");
+            console.log(typeof arguments);
         })();
     }
     expect_stdout: "function"

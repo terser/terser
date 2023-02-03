@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.16.3
+
+ - Ensure function definitions, don't assume the values of variables defined after them.
+
 ## v5.16.2
 
  - Fix sourcemaps with non-ascii characters (#1318)

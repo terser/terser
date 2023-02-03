@@ -2426,6 +2426,31 @@ catch_var: {
     expect_stdout: "true"
 }
 
+issue_1107: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        function foo() {
+            let bar = "PASS 2";
+
+            try {
+                const bar = "PASS 1";
+                console.log(bar);
+            } finally {
+                console.log(bar);
+            }
+        }
+
+        foo();
+    }
+    expect_stdout: [
+        "PASS 1",
+        "PASS 2"
+    ]
+}
+
 var_assign_1: {
     options = {
         evaluate: true,

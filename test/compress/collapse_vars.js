@@ -4420,6 +4420,22 @@ issue_2497: {
     }
 }
 
+issue_997: {
+    options = {
+        defaults: true,
+    }
+    input: {
+        function main(e) {
+            console.log(e.length);
+            let other = "12";
+            for (let e; e = 0;)
+                console.log(e);
+        }
+        main("foo");
+    }
+    expect_stdout: ["3"]
+}
+
 issue_2506: {
     options = {
         collapse_vars: true,

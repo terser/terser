@@ -758,7 +758,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   - `3` -- inline functions with arguments and variables
   - `true` -- same as `3`
 
-- `join_vars` (default: `true`) -- join consecutive `var` statements
+- `join_vars` (default: `true`) -- join consecutive `var`, `let` and `const` statements
 
 - `keep_classnames` (default: `false`) -- Pass `true` to prevent the compressor from
   discarding class names. Pass a regular expression to only keep class names matching

@@ -1240,7 +1240,7 @@ toplevel_off_loops_3: {
     }
 }
 
-defun_reference: {
+defun_reference_1: {
     options = {
         evaluate: true,
         reduce_funcs: true,
@@ -1269,13 +1269,36 @@ defun_reference: {
             }
             var a = h();
             var b = 2;
-            return a + 2;
+            return a + b;
             function h() {
                 y();
-                return 2;
+                return b;
             }
         }
     }
+}
+
+defun_reference_2: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        var first = log_on();
+        var on = true;
+        function log_on() {
+            console.log(on)
+        }
+    }
+    expect: {
+        (function () {
+            console.log(on)
+        })();
+        var on = true;
+    }
+    expect_stdout: "undefined"
 }
 
 defun_inline_1: {
@@ -2401,6 +2424,31 @@ catch_var: {
         }
     }
     expect_stdout: "true"
+}
+
+issue_1107: {
+    options = {
+        reduce_vars: true,
+        unused: true,
+    }
+    input: {
+        function foo() {
+            let bar = "PASS 2";
+
+            try {
+                const bar = "PASS 1";
+                console.log(bar);
+            } finally {
+                console.log(bar);
+            }
+        }
+
+        foo();
+    }
+    expect_stdout: [
+        "PASS 1",
+        "PASS 2"
+    ]
 }
 
 var_assign_1: {

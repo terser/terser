@@ -1,5 +1,19 @@
 # Changelog
 
+## v5.16.3
+
+ - Ensure function definitions, don't assume the values of variables defined after them.
+
+## v5.16.2
+
+ - Fix sourcemaps with non-ascii characters (#1318)
+ - Support string module name and export * as (#1336)
+ - Do not move `let` out of `for` initializers, as it can change scoping
+ - Fix a corner case that would generate the invalid syntax `if (something) let x` ("let" in braceless if body)
+ - Knowledge of more native object properties (#1330)
+ - Got rid of Travis (#1323)
+ - Added semi-secret `asObject` sourcemap option to typescript defs (#1321)
+
 ## v5.16.1
 
  - Properly handle references in destructurings (`const { [reference]: val } = ...`)

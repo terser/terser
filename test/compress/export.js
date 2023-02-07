@@ -952,3 +952,76 @@ export_object_property_mangle_2: {
         export {o};
     }
 }
+
+import_string: {
+    input: {
+        import { "F-oo" as Foo } from "lel";
+        import { "*" as Bar } from "lel";
+    }
+    expect_exact: 'import{"F-oo"as Foo}from"lel";import{"*"as Bar}from"lel";'
+}
+
+import_multiple_string: {
+    input: {
+        import { "F-oo" as Foo, "*" as Bar } from "lel";
+    }
+    expect_exact: 'import{"F-oo"as Foo,"*"as Bar}from"lel";'
+}
+
+export_named_string: {
+    input: {
+        export { Foo as "F-oo" };
+        export { Bar as "B-ar" } from "lel";
+        export { star as "*" } from "lel";
+        export { "B-ax" } from "lel";
+        export { "B-ar" as "F-oo" } from "lel";
+        export { "*" } from "lel";
+        export { "*" as star } from "lel";
+        export { "*" as "s-tar" } from "lel";
+    }
+    expect_exact: 'export{Foo as"F-oo"};export{Bar as"B-ar"}from"lel";export{star as"*"}from"lel";export{"B-ax"}from"lel";export{"B-ar"as"F-oo"}from"lel";export{"*"}from"lel";export{"*"as star}from"lel";export{"*"as"s-tar"}from"lel";'
+}
+
+export_default_string: {
+    input: {
+        export { default as "F-oo" };
+        export { default as "*" };
+        export { default as "B-ar" } from "lel";
+        export { default as "*" } from "lel";
+    }
+    expect_exact: 'export{default as"F-oo"};export{default as"*"};export{default as"B-ar"}from"lel";export{default as"*"}from"lel";'
+}
+
+export_multiple_named_default_string: {
+    input: {
+        export { default as "F-oo", default as "*" };
+        export {
+            Foo as "F-oo",
+            Bar as "B-ar",
+            star as "*",
+            "B-ax",
+            "B-ar" as "F-oo",
+            "*",
+            "*" as star,
+            "*" as "s-tar",
+            default as "F-oo",
+            default as "*",
+        } from "lel";
+    }
+    expect_exact: 'export{default as"F-oo",default as"*"};export{Foo as"F-oo",Bar as"B-ar",star as"*","B-ax","B-ar"as"F-oo","*","*"as star,"*"as"s-tar",default as"F-oo",default as"*"}from"lel";'
+}
+
+export_namespace_as: {
+    input: {
+        export * as foo from "lel";
+    }
+    expect_exact: 'export*as foo from"lel";'
+}
+
+export_namespace_as_string: {
+    input: {
+        export * as "f-oo" from "lel";
+        export * as "*" from "lel";
+    }
+    expect_exact: 'export*as"f-oo"from"lel";export*as"*"from"lel";'
+}

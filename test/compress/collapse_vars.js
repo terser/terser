@@ -6073,6 +6073,44 @@ do_not_place_chain_on_lhs_2: {
     }
 }
 
+optional_chain_call_argument_side_effect: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.(results);
+        })(id(null));
+    }
+    expect: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.(results);
+        })(id(null));
+    }
+    expect_stdout: "PASS"
+}
+
+optional_chain_call_prop_side_effect: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.[results];
+        })(id(null));
+    }
+    expect: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.[results];
+        })(id(null));
+    }
+    expect_stdout: "PASS"
+}
+
 shadowed_variable: {
     options = {
         pure_getters: true,

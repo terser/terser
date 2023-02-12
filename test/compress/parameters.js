@@ -184,6 +184,21 @@ default_arguments: {
     expect_exact: "function x(a=6){}function x(a=6+5){}function x({foo}={},[bar]=[1]){}"
 }
 
+keep_default_arg_when_undefined: {
+    options = {
+        keep_fargs: true,
+        evaluate: true,
+    }
+    input: {
+        function x(a = void 0) { }
+        console.log(x.length)
+    }
+    expect: {
+        function x(a = undefined) { }
+        console.log(x.length)
+    }
+}
+
 default_values_in_destructurings: {
     beautify = {
         ecma: 2015

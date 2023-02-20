@@ -315,3 +315,16 @@ issue_2857_6: {
     }
     expect_stdout: "true"
 }
+
+bigint_vs_number: {
+    options = {
+        comparisons: true,
+    }
+    input: {
+        if (-1 !== -1n) console.log("PASS");
+    }
+    expect: {
+        if (-1 !== -1n) console.log("PASS");
+    }
+    expect_stdout: "PASS"
+}

@@ -49,6 +49,24 @@ describe("minify", function() {
         assert.deepEqual(Object.keys(nameCache.props.props), ["$a_prop"]);
     });
 
+    it("Should be able to use a dotted property to reach nameCache", async function () {
+        const nameCache = {};
+
+        const options = {
+            nameCache,
+            toplevel: true,
+            mangle: {
+                properties: true
+            },
+            compress: false
+        };
+
+        await minify("const a_var = { a_prop: 'long' }", options);
+
+        assert.deepEqual(Object.keys(options.nameCache.vars.props), ["$a_var"]);
+        assert.deepEqual(Object.keys(options.nameCache.props.props), ["$a_prop"]);
+    });
+
     it("Should accept new `format` options as well as `output` options", async function() {
         const { code } = await minify("x(1,2);", { format: { beautify: true }});
         assert.strictEqual(code, "x(1, 2);");

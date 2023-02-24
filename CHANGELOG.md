@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.16.5
+
+ - Correctly handle AST transform functions that mutate children arrays
+ - Don't mutate the options object passed to Terser (#1342)
+ - Do not treat BigInt like a number
+
 ## v5.16.4
 
  - Keep `(defaultArg = undefined) => ...`, because default args don't count for function length

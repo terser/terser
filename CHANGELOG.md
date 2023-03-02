@@ -1,5 +1,20 @@
 # Changelog
 
+## v5.16.5
+
+ - Correctly handle AST transform functions that mutate children arrays
+ - Don't mutate the options object passed to Terser (#1342)
+ - Do not treat BigInt like a number
+
+## v5.16.4
+
+ - Keep `(defaultArg = undefined) => ...`, because default args don't count for function length
+ - Prevent inlining variables into `?.` optional chains
+ - Avoid removing unused arguments while transforming
+ - Optimize iterating AST node lists
+ - Make sure `catch` and `finally` aren't children of `try` in the AST
+ - Use modern unicode property escapes (`\p{...}`) to parse identifiers when available
+
 ## v5.16.3
 
  - Ensure function definitions, don't assume the values of variables defined after them.

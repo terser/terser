@@ -1301,6 +1301,33 @@ defun_reference_2: {
     expect_stdout: "undefined"
 }
 
+defun_reference_3: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var first = log_on();
+            var on = true;
+            function log_on() {
+                console.log(on)
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                console.log(on)
+            })();
+            var on = true;
+        }
+    }
+    expect_stdout: "undefined"
+}
+
 defun_inline_1: {
     options = {
         reduce_funcs: true,

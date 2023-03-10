@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.16.7
+
+ - Become less conservative with analyzing function definitions for `reduce_vars`
+ - Parse `import.meta` as a real AST node and not an `object.property`
+
 ## v5.16.5
 
  - Correctly handle AST transform functions that mutate children arrays

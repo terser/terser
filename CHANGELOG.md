@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.16.7
+## v5.16.6
 
  - Become less conservative with analyzing function definitions for `reduce_vars`
  - Parse `import.meta` as a real AST node and not an `object.property`

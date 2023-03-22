@@ -5,11 +5,13 @@ import_meta_basic: {
         import.meta
         import.meta.something
         import.meta?.something
+        import.meta.url.includes()
     }
     expect: {
         import.meta,
         import.meta.something,
-        import.meta?.something
+        import.meta?.something,
+        import.meta.url.includes()
     }
 }
 

@@ -1278,7 +1278,73 @@ defun_reference_1: {
     }
 }
 
-defun_reference_2: {
+defun_reference_indirection_1: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var first = indirection();
+            var on = true;
+            function indirection() {
+                log_on()
+            }
+            function log_on() {
+                console.log(on)
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                log_on();
+            })();
+            var on = true;
+            function log_on() {
+                console.log(on);
+            }
+        }
+    }
+    expect_stdout: "undefined"
+}
+
+defun_reference_indirection_2: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var first = indirection_2();
+            var on = true;
+            function log_on() {
+                console.log(on)
+            }
+            function indirection_2() {
+                log_on()
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                log_on();
+            })();
+            var on = true;
+            function log_on() {
+                console.log(on);
+            }
+        }
+    }
+    expect_stdout: "undefined"
+}
+
+defun_reference_used_before_def: {
     options = {
         toplevel: true,
         reduce_vars: true,
@@ -1301,7 +1367,7 @@ defun_reference_2: {
     expect_stdout: "undefined"
 }
 
-defun_reference_3: {
+defun_reference_fixed: {
     options = {
         toplevel: true,
         reduce_vars: true,
@@ -1310,8 +1376,8 @@ defun_reference_3: {
     }
     input: {
         if (id(true)) {
-            var first = log_on();
             var on = true;
+            var first = log_on();
             function log_on() {
                 console.log(on)
             }
@@ -1320,13 +1386,36 @@ defun_reference_3: {
     expect: {
         if (id(true)) {
             (function () {
-                console.log(on)
+                console.log(true)
             })();
-            var on = true;
         }
     }
-    expect_stdout: "undefined"
+    expect_stdout: "true"
 }
+
+defun_reference_fixed_let: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true,
+        passes: 3
+    }
+    input: {
+        let on = true;
+        function log_on() {
+            console.log(on)
+        }
+        var first = log_on();
+    }
+    expect: {
+        (function () {
+            console.log(true)
+        })();
+    }
+    expect_stdout: "true"
+}
+
 
 defun_inline_1: {
     options = {

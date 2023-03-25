@@ -152,6 +152,6 @@ issue_1725: {
     input: {
         ([].length === 0) % Infinity ? console.log("PASS") : console.log("FAIL");
     }
-    expect_exact: '(0===[].length)%(1/0)?console.log("PASS"):console.log("FAIL");'
+    expect_exact: '([].length===0)%(1/0)?console.log("PASS"):console.log("FAIL");'
     expect_stdout: "PASS"
 }

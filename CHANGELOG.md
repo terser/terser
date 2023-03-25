@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.16.8
+
+ - Become even less conservative around function definitions for `reduce_vars`
+ - Fix parsing context of `import.meta` expressions such that method calls are allowed
+
 ## v5.16.7
 
  - Become less conservative with analyzing function definitions for `reduce_vars`

@@ -1663,7 +1663,7 @@ issue_2516_1: {
         function foo() {
             function bar(x) {
                 var value = (4 - 1) * (x || never_called());
-                console.log(6 == value ? "PASS" : value);
+                console.log(value == 6 ? "PASS" : value);
             }
             Baz = function(x) {
                 bar.call(null, x);
@@ -1704,7 +1704,7 @@ issue_2516_2: {
         function foo() {
             function bar (x) {
                 var value = (4 - 1) * (x || never_called());
-                console.log(6 == value ? "PASS" : value);
+                console.log(value == 6 ? "PASS" : value);
             }
             Baz = function(x) {
                 bar.call(null, x);
@@ -2496,7 +2496,7 @@ issue_t161_top_retain_7: {
     }
     expect: {
         var y = 3;
-        console.log(2, y, 4, 2 * y, 8, 4 * y);
+        console.log(2, y, 4, 2 * y, 8, y * 4);
     }
     expect_stdout: "2 3 4 6 8 12"
 }

@@ -143,7 +143,7 @@ do_screw_try_catch_undefined: {
                 console.log("caught: "+o)
             }
             console.log("undefined is " + void 0);
-            return void 0===o
+            return o===void 0
         }
     }
     expect_stdout: true

@@ -473,7 +473,7 @@ collapse_vars_do_while: {
     expect: {
         function f1(y) {
             var c = 9;
-            do ; while (77 === c);
+            do ; while (c === 77);
         }
         function f2(y) {
             var c = 5 - y;
@@ -560,7 +560,7 @@ collapse_vars_do_while_drop_assign: {
     expect: {
         function f1(y) {
             var c = 9;
-            do ; while (77 === c);
+            do ; while (c === 77);
         }
         function f2(y) {
             var c = 5 - y;
@@ -2002,7 +2002,7 @@ var_side_effects_1: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            print('Foo:', 2 * x);
+            print('Foo:', x * 2);
         }
         foo(10);
     }
@@ -2025,7 +2025,7 @@ var_side_effects_2: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            var twice = 2 * x.y;
+            var twice = x.y * 2;
             print('Foo:', twice);
         }
         foo({ y: 10 });
@@ -2051,7 +2051,7 @@ var_side_effects_3: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            print('Foo:', 2 * x.y);
+            print('Foo:', x.y * 2);
         }
         foo({ y: 10 });
     }

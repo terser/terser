@@ -708,7 +708,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `comparisons` (default: `true`) -- apply certain optimizations to binary nodes,
   e.g. `!(a <= b) → a > b` (only when `unsafe_comps`), attempts to negate binary
-  nodes, e.g. `a = !b && !c && !d && !e → a=!(b||c||d||e)` etc.
+  nodes, e.g. `a = !b && !c && !d && !e → a=!(b||c||d||e)` etc. Note: `comparisons`
+  works best with `lhs_constants` enabled.
 
 - `computed_props` (default: `true`) -- Transforms constant computed properties
   into regular ones: `{["computed"]: 1}` is converted to `{computed: 1}`.
@@ -774,6 +775,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `keep_infinity` (default: `false`) -- Pass `true` to prevent `Infinity` from
   being compressed into `1/0`, which may cause performance issues on Chrome.
+
+- `lhs_constants` (default: `true`) -- Moves constant values to the left-hand side
+  of binary nodes. `foo == 42 → 42 == foo`
 
 - `loops` (default: `true`) -- optimizations for `do`, `while` and `for` loops
   when we can statically determine the condition.

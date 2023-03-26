@@ -418,7 +418,7 @@ hoist_class: {
         }
         var o_p = class Foo {
             constructor(value) {
-                this.value = 10 * value;
+                this.value = value * 10;
             }
         };
         console.log(o_p.name, true, run(o_p, 1), run(o_p, 2));
@@ -455,7 +455,7 @@ hoist_class_with_new: {
     expect: {
         var o_p = class Foo {
             constructor(value) {
-                this.value = 10 * value;
+                this.value = value * 10;
             }
         };
         console.log(o_p.name, true, new o_p(1).value, new o_p(2).value);
@@ -825,7 +825,7 @@ issue_2519: {
     }
     expect: {
         function testFunc() {
-            return 1 * ((6 + 5) / 2);
+            return ((6 + 5) / 2) * 1;
         }
         console.log(testFunc());
     }

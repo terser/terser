@@ -907,8 +907,8 @@ equality: {
         var b = `1${any}2` === `12`
     }
     expect: {
-        var a = "12" == `1${any}2`
-        var b = "12" == `1${any}2`
+        var a = `1${any}2` == "12"
+        var b = `1${any}2` == "12"
     }
 }
 

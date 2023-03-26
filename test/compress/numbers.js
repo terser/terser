@@ -30,7 +30,7 @@ comparisons: {
     }
     expect: {
         console.log(
-            42 == ~x,
+            ~x == 42,
             x % n == 42
         );
     }
@@ -60,7 +60,7 @@ evaluate_1: {
     expect: {
         console.log(
             x + 1 + 2,
-            1 * x * 2,
+            x * 1 * 2,
             +x + 1 + 2,
             1 + x + 2 + 3,
             3 | x,

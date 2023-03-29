@@ -182,11 +182,11 @@ static_means_execution: {
         let x = 0;
         // Does not get inlined as it contains an immediate side effect
         class WithStaticProps {
-            static prop = (x = 0 === x ? 1 : "FAIL")
+            static prop = (x = x === 0 ? 1 : "FAIL")
         }
         new class {};
         new class {
-            prop = (x = 1 === x ? "PASS" : "FAIL")
+            prop = (x = x === 1 ? "PASS" : "FAIL")
         };
         new WithStaticProps();
 

@@ -11,7 +11,7 @@ optional_chaining_boolean_expr: {
     }
     expect: {
         (function(option) {
-            if ("DIV" !== option.container?.tagName)
+            if (option.container?.tagName !== "DIV")
                 throw new Error("Invalid `container` and/or `viewer` option.");
         })()
     }

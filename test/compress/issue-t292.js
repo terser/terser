@@ -82,7 +82,7 @@ no_flatten_with_var_colliding_with_arg_value_inner_scope: {
         }
 
         console.log(function(test) {
-            var problem = 2 * test;
+            var problem = test * 2;
             return console.log(problem), g[problem];
         }(function(arg) {
             return problem(arg);

@@ -1270,7 +1270,7 @@ issue_2994: {
         }
         let aValue = 2, anotherValue = 3;
         for (let i = 0; i < 8; ++i)
-            console.log(f(4 & i, 2 & i, 1 & i));
+            console.log(f(i & 4, i & 2, i & 1));
     }
     expect_stdout: [
         "undefined",

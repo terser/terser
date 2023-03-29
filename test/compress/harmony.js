@@ -1906,7 +1906,7 @@ issue_t80: {
     }
     expect: {
         function foo(data = []) {
-            if (1 == arguments.length)
+            if (arguments.length == 1)
                 data = [data];
             return data;
         }

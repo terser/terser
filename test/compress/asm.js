@@ -12,6 +12,7 @@ asm_mixed: {
         join_vars: true,
         keep_fargs: true,
         keep_fnames: false,
+        lhs_constants: true,
         loops: true,
         negate_iife: true,
         properties: true,

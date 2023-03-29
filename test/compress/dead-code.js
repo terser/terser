@@ -1185,7 +1185,7 @@ issue_2860_1: {
     }
     expect: {
         console.log(function(a) {
-            return 1 ^ a;
+            return a ^ 1;
         }());
     }
     expect_stdout: "1"

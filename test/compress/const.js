@@ -98,7 +98,7 @@ issue_1396: {
             console.log(3);
             console.log(2);
             console.log(1);
-            console.log(1 & a);
+            console.log(a & 1);
         }
         function bar() {
             const s = "01234567890123456789";

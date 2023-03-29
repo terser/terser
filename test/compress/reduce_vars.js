@@ -761,11 +761,11 @@ multi_def_2: {
     }
     expect: {
         function f(){
-            if (16 == code)
+            if (code == 16)
                 var bitsLength = 2, bitsOffset = 3, what = len;
-            else if (17 == code)
+            else if (code == 17)
                 var bitsLength = 3, bitsOffset = 3, what = (len = 0);
-            else if (18 == code)
+            else if (code == 18)
                 var bitsLength = 7, bitsOffset = 11, what = (len = 0);
             var repeatLength = this.getBits(bitsLength) + bitsOffset;
         }
@@ -1926,7 +1926,7 @@ issue_1670_1: {
     expect: {
         (function() {
             var a;
-            void 0 === a ? console.log("PASS") : console.log("FAIL");
+            a === void 0 ? console.log("PASS") : console.log("FAIL");
         })();
     }
     expect_stdout: "PASS"
@@ -1992,7 +1992,7 @@ issue_1670_3: {
     expect: {
         (function() {
             var a;
-            void 0 === a ? console.log("PASS") : console.log("FAIL");
+            a === void 0 ? console.log("PASS") : console.log("FAIL");
         })();
     }
     expect_stdout: "PASS"
@@ -6023,7 +6023,7 @@ issue_2860_1: {
     }
     expect: {
         console.log(function(a) {
-            return 1 ^ a;
+            return a ^ 1;
         }());
     }
     expect_stdout: "1"

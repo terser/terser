@@ -38,10 +38,10 @@ collapse: {
     }
     expect: {
         function f1() {
-            return void 0 !== ('function' === typeof b ? b() : b) && c();
+            return (typeof b === 'function' ? b() : b) !== void 0 && c();
         }
         function f2(b) {
-            return 'stirng' == typeof ('function' === typeof (b = c()) ? b() : b) && d();
+            return 'stirng' == typeof (typeof (b = c()) === 'function' ? b() : b) && d();
         }
         function f3(c) {
             var a;

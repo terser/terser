@@ -45,10 +45,10 @@ conditional_to_nullish_coalescing_2: {
         const foo = id('something')
 
         console.log('negative cases')
-        null === foo || null === foo ? bar : foo;
-        void 0 === foo || void 0 === foo ? bar : foo;
-        null === foo || void 0 === foo ? foo : bar;
-        null === some_global || void 0 === some_global ? bar : some_global;
+        foo === null || foo === null ? bar : foo;
+        foo === void 0 || foo === void 0 ? bar : foo;
+        foo === null || foo === void 0 ? foo : bar;
+        some_global === null || some_global === void 0 ? bar : some_global;
 
         console.log('positive cases')
         foo ?? bar;

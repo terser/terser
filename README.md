@@ -26,15 +26,6 @@ Find the changelog in [CHANGELOG.md](https://github.com/terser/terser/blob/maste
 [opencollective-contributors]: https://opencollective.com/terser/tiers/badge.svg
 [opencollective-url]: https://opencollective.com/terser
 
-Important Note
---------------
-
-When debugging, make sure you enable the **"map scopes"** feature to map mangled variable names back to their original names.  
-Without this, all variable values will be `undefined`. See https://github.com/terser/terser/issues/1367 for more details.
-<br/><br/>
-
-![image](https://user-images.githubusercontent.com/27283110/230441652-ac5cf6b0-5dc5-4ffc-9d8b-bd02875484f4.png)
-
 Why choose terser?
 ------------------
 
@@ -1279,6 +1270,12 @@ are known to have an adverse effect on debugging with source maps. This is
 expected as code is optimized and mappings are often simply not possible as
 some code no longer exists. For highest fidelity in source map debugging
 disable the `compress` option and just use `mangle`.
+
+When debugging, make sure you enable the **"map scopes"** feature to map mangled variable names back to their original names.  
+Without this, all variable values will be `undefined`. See https://github.com/terser/terser/issues/1367 for more details.
+<br/><br/>
+
+![image](https://user-images.githubusercontent.com/27283110/230441652-ac5cf6b0-5dc5-4ffc-9d8b-bd02875484f4.png)
 
 ### Compiler assumptions
 

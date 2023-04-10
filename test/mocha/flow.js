@@ -5,9 +5,9 @@ import '../../main.js' // load node prototype stuff
 import { Type, World, NOPE, LiteralType, FunctionType } from '../../lib/flow/tools.js'
 
 let world = new World()
-beforeEach(() => { world = new World({ module: true }) })
+beforeEach(() => { world = new World() })
 
-const test_stat = (code, world_opts = { module: true }) => {
+const test_stat = (code, world_opts) => {
     let stat = parse(code)
     world = new World(world_opts)
     world.flow_test = true
@@ -17,7 +17,7 @@ const test_stat = (code, world_opts = { module: true }) => {
     return stat.flow_analysis(world)
 }
 
-const test_func_body = (code, world_opts = { module: true }) => {
+const test_func_body = (code, world_opts) => {
     let stat = parse(`function f(NUM) { ${code} } f(NUM)`)
     world = new World(world_opts)
     world.flow_test = true
@@ -27,15 +27,7 @@ const test_func_body = (code, world_opts = { module: true }) => {
     return stat.flow_analysis(world)
 }
 
-beforeEach(() => {
-    global.TERSER_FLOW_TEST = true
-})
-
-afterEach(() => {
-    delete global.TERSER_FLOW_TEST
-})
-
-describe.only('Flow analysis: statements', () => {
+describe('Flow analysis: statements', () => {
     it('can do conditions', () => {
         let type;
 
@@ -107,7 +99,7 @@ describe.only('Flow analysis: statements', () => {
     });
 });
 
-describe.only('Flow analysis: vars', () => {
+describe('Flow analysis: vars', () => {
     it('can define vars', () => {
         equal(test_stat(`x = 1; var x; x`), new LiteralType(1))
         equal(world.read_variable_ambient('x'), new LiteralType(1))
@@ -126,7 +118,7 @@ describe.only('Flow analysis: vars', () => {
     });
 });
 
-describe.only('Flow analysis: functions', () => {
+describe('Flow analysis: functions', () => {
     it('can do simple functions', () => {
         let type;
 
@@ -199,7 +191,7 @@ describe.only('Flow analysis: functions', () => {
     });
 });
 
-describe.only('Flow analysis: knowability', () => {
+describe('Flow analysis: knowability', () => {
     it('does it know all the usages of a function?', () => {
         let stat
         stat = test_stat(`
@@ -217,7 +209,7 @@ describe.only('Flow analysis: knowability', () => {
     });
 });
 
-describe.only('Flow analysis: new World()', () => {
+describe('Flow analysis: new World()', () => {
     it('can describe a variable before definition', () => {
         world.define('written_later')
         equal(world.read_variable('written_later'), new LiteralType(undefined))

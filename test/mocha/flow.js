@@ -2,7 +2,9 @@ import {deepStrictEqual as equal, notDeepStrictEqual as not_equal, throws } from
 import {parse} from '../../lib/parse.js'
 import '../../lib/flow/flow.js'
 import '../../main.js' // load node prototype stuff
-import { Type, World, NOPE, LiteralType, FunctionType } from '../../lib/flow/tools.js'
+import { World, NOPE } from '../../lib/flow/tools.js'
+import { Type, LiteralType, FunctionType} from "../../lib/flow/types.js"
+import { assert_properties } from './utils.js'
 
 let world = new World()
 beforeEach(() => { world = new World() })
@@ -56,7 +58,7 @@ describe('Flow analysis: statements', () => {
         equal(test_stat(`if (throw_) { NUM = 1 } else { NUM = 2 }`), NOPE);
         equal(test_stat(`if (1) { throw_ } else { NUM = 2 }`), NOPE);
         equal(test_stat(`if (0) { NUM = 1 } else { throw_ }`), NOPE);
-        
+
         not_equal(test_stat(`if (1) { NUM = 1 } else { throw_ }`), NOPE);
         not_equal(test_stat(`if (0) { throw_ } else { NUM = 2 }`), NOPE);
     });
@@ -108,12 +110,31 @@ describe('Flow analysis: vars', () => {
         equal(world.read_variable_ambient('x'), new Type(['number']))
     });
 
-    it('forbids weird vars', () => {
-        equal(test_stat('var x; function x() {}'), NOPE);
-        equal(test_stat('var arguments'), NOPE);
+    it('can define const, let', () => {
+        equal(test_stat(`const x = 1; x`), new LiteralType(1));
+        equal(world.read_variable_ambient('x'), new LiteralType(1));
+
+        equal(test_stat(`x; let x`), NOPE);
+        equal(test_stat(`const x = 1; x = 2`), NOPE);
     });
 
-    it('forbids reading globals', () => {
+    it('can count reads and writes', () => {
+        test_stat(`var x`)
+        assert_properties(world.get_binding('x'), { reads: 0, writes: 0 })
+
+        test_stat(`var x; x = 1`)
+        assert_properties(world.get_binding('x'), { reads: 0, writes: 1 })
+
+        test_stat(`var x; x`)
+        assert_properties(world.get_binding('x'), { reads: 1, writes: 0 })
+
+        test_stat(`var x; x = 1; x`)
+        assert_properties(world.get_binding('x'), { reads: 1, writes: 1 })
+    });
+
+    it('forbids weird vars and accessing globals', () => {
+        equal(test_stat('var x; function x() {}'), NOPE);
+        equal(test_stat('var arguments'), NOPE);
         equal(test_stat('unknown'), NOPE);
     });
 });
@@ -234,11 +255,39 @@ describe('Flow analysis: new World()', () => {
 
         const forked = world.fork()
         try {
-            forked.write_variable('nonlocal', new LiteralType(2))
+            forked.write_variable('nonlocal', new LiteralType(2), { is_definition: false} )
             equal(true, false, 'should throw!')
         } catch (e) {
             equal(e, NOPE)
         }
+    })
+})
+
+describe('Flow analysis: powering DCE', () => {
+    it('understands hoisting drama', () => {
+        equal(
+            test_stat(`
+                if (0) { fn() }
+
+                var DEBUG = 1234
+                function fn() { return DEBUG }
+                fn()
+            `),
+            new LiteralType(1234)
+        )
+        equal(world.read_variable_ambient('DEBUG'), new LiteralType(1234))
+
+        equal(
+            test_stat(`
+                if (1) { fn() }
+
+                var DEBUG = 1234
+                function fn() { return DEBUG }
+                fn()
+            `),
+            new LiteralType(1234)
+        )
+        equal(world.read_variable_ambient('DEBUG'), new Type(['undefined', 'number']))
     })
 })
 

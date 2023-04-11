@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.16.9
+ - Fix parentheses in output of optional chains (`a?.b`) (#1374)
+ - More documentation on source maps (#1368)
+ - New `lhs_constants` option, allowing to stop Terser from swapping comparison operands (#1361)
+
 ## v5.16.8
 
  - Become even less conservative around function definitions for `reduce_vars`

@@ -286,6 +286,16 @@ describe('Flow analysis: powering DCE', () => {
             function fn() { return DEBUG,42 }
             fn()
         `);
+
+        test_dce(`
+            var DEBUG = 1
+            function fn() { if (DEBUG) { return 42 } else { return -1 } }
+            fn()
+        `, `
+            var DEBUG = 1
+            function fn() { DEBUG; return 42 }
+            fn()
+        `);
     });
 });
 
@@ -314,7 +324,7 @@ const test_dce = (code, expected, world_opts) => {
 
     not_equal(type, NOPE);
 
-    const dropped = flow_drop_dead_code(stat);
+    const dropped = flow_drop_dead_code(world, stat);
 
     equal(dropped.print_to_string(), parse(expected).print_to_string());
 };

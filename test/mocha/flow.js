@@ -3,31 +3,12 @@ import {parse} from '../../lib/parse.js'
 import '../../lib/flow/flow.js'
 import '../../main.js' // load node prototype stuff
 import { World, NOPE } from '../../lib/flow/tools.js'
+import { flow_drop_dead_code } from '../../lib/flow/dce.js'
 import { Type, LiteralType, FunctionType} from "../../lib/flow/types.js"
 import { assert_properties } from './utils.js'
 
-let world = new World()
-beforeEach(() => { world = new World() })
-
-const test_stat = (code, world_opts) => {
-    let stat = parse(code)
-    world = new World(world_opts)
-    world.flow_test = true
-    world.define('LOG', new FunctionType(parse(`function LOG(l){}`).body[0], world))
-    world.define('NUM', new Type(['number']))
-    world.define('ONE', new LiteralType(1))
-    return stat.flow_analysis(world)
-}
-
-const test_func_body = (code, world_opts) => {
-    let stat = parse(`function f(NUM) { ${code} } f(NUM)`)
-    world = new World(world_opts)
-    world.flow_test = true
-    world.define('LOG', new FunctionType(parse(`function LOG(l){}`).body[0], world))
-    world.define('NUM', new Type(['number']))
-    world.define('ONE', new LiteralType(1))
-    return stat.flow_analysis(world)
-}
+let world = new World();
+beforeEach(() => { test_world() });
 
 describe('Flow analysis: statements', () => {
     it('can do conditions', () => {
@@ -103,11 +84,11 @@ describe('Flow analysis: statements', () => {
 
 describe('Flow analysis: vars', () => {
     it('can define vars', () => {
-        equal(test_stat(`x = 1; var x; x`), new LiteralType(1))
-        equal(world.read_variable_ambient('x'), new LiteralType(1))
+        equal(test_stat(`x = 1; var x; x`), new LiteralType(1));
+        equal(world.read_variable_ambient('x'), new LiteralType(1));
 
-        equal(test_stat(`x = 1; var x = 2; x`), new LiteralType(2))
-        equal(world.read_variable_ambient('x'), new Type(['number']))
+        equal(test_stat(`x = 1; var x = 2; x`), new LiteralType(2));
+        equal(world.read_variable_ambient('x'), new Type(['number']));
     });
 
     it('can define const, let', () => {
@@ -119,23 +100,23 @@ describe('Flow analysis: vars', () => {
     });
 
     it('can count reads and writes', () => {
-        test_stat(`var x`)
-        assert_properties(world.get_binding('x'), { reads: 0, writes: 0 })
+        test_stat(`var x`);
+        assert_properties(world.get_binding('x'), { reads: 0, writes: 0 });
 
-        test_stat(`var x; x = 1`)
-        assert_properties(world.get_binding('x'), { reads: 0, writes: 1 })
+        test_stat(`var x; x = 1`);
+        assert_properties(world.get_binding('x'), { reads: 0, writes: 1 });
 
-        test_stat(`var x; x`)
-        assert_properties(world.get_binding('x'), { reads: 1, writes: 0 })
+        test_stat(`var x; x`);
+        assert_properties(world.get_binding('x'), { reads: 1, writes: 0 });
 
-        test_stat(`var x; x = 1; x`)
-        assert_properties(world.get_binding('x'), { reads: 1, writes: 1 })
+        test_stat(`var x; x = 1; x`);
+        assert_properties(world.get_binding('x'), { reads: 1, writes: 1 });
     });
 
     it('allows block scope', () => {
-        equal(test_stat('var x = 1; { const x = 2; x }'), new LiteralType(2))
-        equal(test_stat('var x = 1; { const x = 2; x } x'), new LiteralType(1))
-    })
+        equal(test_stat('var x = 1; { const x = 2; x }'), new LiteralType(2));
+        equal(test_stat('var x = 1; { const x = 2; x } x'), new LiteralType(1));
+    });
 
     it('forbids weird vars and accessing globals', () => {
         equal(test_stat('var x; function x() {}'), NOPE);
@@ -198,9 +179,9 @@ describe('Flow analysis: functions', () => {
             f(10);
             function f(a) { return a + 1 }
             f(11);
-        `)
+        `);
 
-        equal(type, new Type(['number']))
+        equal(type, new Type(['number']));
     });
 
     it('deals with recursion, simple and mutual', () => {
@@ -239,80 +220,102 @@ describe('Flow analysis: knowability', () => {
 
 describe('Flow analysis: new World()', () => {
     it('can describe a variable before definition', () => {
-        world.define('written_later')
-        equal(world.read_variable('written_later'), new LiteralType(undefined))
-        world.write_variable('written_later', new LiteralType(10))
-        equal(world.read_variable_ambient('written_later'), new Type(['undefined', 'number']))
-        equal(world.read_variable('written_later'), new LiteralType(10))
-    })
+        world.define('written_later');
+        equal(world.read_variable('written_later'), new LiteralType(undefined));
+        world.write_variable('written_later', new LiteralType(10));
+        equal(world.read_variable_ambient('written_later'), new Type(['undefined', 'number']));
+        equal(world.read_variable('written_later'), new LiteralType(10));
+    });
 
     it('can ignore a variable\'s undefinedness during hoist', () => {
         world.define('hoisted_but_known')
         // it's hoisted but we don't read it now
-        world.write_variable('hoisted_but_known', new LiteralType(10))
+        world.write_variable('hoisted_but_known', new LiteralType(10));
         // now we can read it
-        equal(world.read_variable_ambient('hoisted_but_known'), new LiteralType(10))
-        equal(world.read_variable('hoisted_but_known'), new LiteralType(10))
-    })
+        equal(world.read_variable_ambient('hoisted_but_known'), new LiteralType(10));
+        equal(world.read_variable('hoisted_but_known'), new LiteralType(10));
+    });
 
     it('a world in a condition cannot change outer scopes', () => {
-        world.define('nonlocal', new LiteralType(1))
+        world.define('nonlocal', new LiteralType(1));
 
-        world = world.callee_world()
+        world = world.callee_world();
 
-        const forked = world.fork()
+        const forked = world.fork();
         try {
-            forked.write_variable('nonlocal', new LiteralType(2), { is_definition: false} )
-            equal(true, false, 'should throw!')
+            forked.write_variable('nonlocal', new LiteralType(2), { is_definition: false });
+            equal(true, false, 'should throw!');
         } catch (e) {
-            equal(e, NOPE)
+            equal(e, NOPE);
         }
-    })
-})
+    });
+});
 
 describe('Flow analysis: powering DCE', () => {
     it('understands hoisting drama', () => {
         equal(
             test_stat(`
                 if (0) { fn() }
-
                 var DEBUG = 1234
                 function fn() { return DEBUG }
                 fn()
             `),
             new LiteralType(1234)
-        )
-        equal(world.read_variable_ambient('DEBUG'), new LiteralType(1234))
+        );
+        equal(world.read_variable_ambient('DEBUG'), new LiteralType(1234));
 
         equal(
             test_stat(`
                 if (1) { fn() }
-
                 var DEBUG = 1234
                 function fn() { return DEBUG }
                 fn()
             `),
             new LiteralType(1234)
-        )
-        equal(world.read_variable_ambient('DEBUG'), new Type(['undefined', 'number']))
-    })
-})
+        );
+        equal(world.read_variable_ambient('DEBUG'), new Type(['undefined', 'number']));
+    });
 
-/*
+    it('can drop dead code', () => {
+        test_dce(`
+            var DEBUG = 1
+            function fn() { return DEBUG ? 42 : -1 }
+            fn()
+        `, `
+            var DEBUG = 1
+            function fn() { return DEBUG,42 }
+            fn()
+        `);
+    });
+});
 
-Milestone #1: can we make DEBUG known to be `false` within the function, even though current Terser thinks it was called before DEBUG was defined?
+const test_world = world_opts => {
+    world = new World(world_opts);
+    world.flow_test = true;
+    world.define('LOG', new FunctionType(parse(`function LOG(l){}`).body[0], world));
+    world.define('NUM', new Type(['number']));
+    world.define('ONE', new LiteralType(1));
+    return world;
+};
 
-if (false) { fn() }
+const test_stat = (code, world_opts) => {
+    const stat = parse(code);
+    return stat.flow_analysis(test_world(world_opts));
+};
 
-var DEBUG = true
+const test_func_body = (code, world_opts) => {
+    const stat = parse(`function f(NUM) { ${code} } f(NUM)`);
+    return stat.flow_analysis(test_world(world_opts));
+};
 
-function fn() {
-    if (DEBUG) {
-        // Should be known to be TRUE
-    }
-}
+const test_dce = (code, expected, world_opts) => {
+    const stat = parse(code);
+    const type = stat.flow_analysis(test_world(world_opts));
 
-fn()
+    not_equal(type, NOPE);
 
-*/
+    const dropped = flow_drop_dead_code(stat);
+
+    equal(dropped.print_to_string(), parse(expected).print_to_string());
+};
 

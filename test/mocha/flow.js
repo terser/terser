@@ -283,7 +283,7 @@ describe('Flow analysis: powering DCE', () => {
             fn()
         `, `
             var DEBUG = 1
-            function fn() { return DEBUG,42 }
+            function fn() { return 42 }
             fn()
         `);
 
@@ -293,8 +293,19 @@ describe('Flow analysis: powering DCE', () => {
             fn()
         `, `
             var DEBUG = 1
-            function fn() { DEBUG; return 42 }
+            function fn() { { return 42 } }
             fn()
+        `);
+
+        test_dce(`
+            var DEBUG = 1
+            var OTHER
+            if (DEBUG) { OTHER = 42 } else { OTHER = -1 }
+            OTHER
+        `, `
+            var OTHER
+            { OTHER = 42 }
+            OTHER
         `);
     });
 });
@@ -320,6 +331,7 @@ const test_func_body = (code, world_opts) => {
 
 const test_dce = (code, expected, world_opts) => {
     const stat = parse(code);
+    stat.figure_out_scope({ toplevel: true });
     const type = stat.flow_analysis(test_world(world_opts));
 
     not_equal(type, NOPE);

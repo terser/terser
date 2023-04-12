@@ -282,7 +282,6 @@ describe('Flow analysis: powering DCE', () => {
             function fn() { return DEBUG ? 42 : -1 }
             fn()
         `, `
-            var DEBUG = 1
             function fn() { return 42 }
             fn()
         `);
@@ -292,7 +291,6 @@ describe('Flow analysis: powering DCE', () => {
             function fn() { if (DEBUG) { return 42 } else { return -1 } }
             fn()
         `, `
-            var DEBUG = 1
             function fn() { { return 42 } }
             fn()
         `);

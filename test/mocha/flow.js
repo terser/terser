@@ -132,8 +132,15 @@ describe('Flow analysis: vars', () => {
         assert_properties(world.get_binding('x'), { reads: 1, writes: 1 })
     });
 
+    it('allows block scope', () => {
+        equal(test_stat('var x = 1; { const x = 2; x }'), new LiteralType(2))
+        equal(test_stat('var x = 1; { const x = 2; x } x'), new LiteralType(1))
+    })
+
     it('forbids weird vars and accessing globals', () => {
         equal(test_stat('var x; function x() {}'), NOPE);
+        equal(test_stat('let x; function x() {}'), NOPE);
+        equal(test_stat('var x; let x'), NOPE);
         equal(test_stat('var arguments'), NOPE);
         equal(test_stat('unknown'), NOPE);
     });

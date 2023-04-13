@@ -1188,6 +1188,7 @@ Annotations in Terser are a way to tell it to treat a certain function call diff
  * `/*@__INLINE__*/` - forces a function to be inlined somewhere.
  * `/*@__NOINLINE__*/` - Makes sure the called function is not inlined into the call site.
  * `/*@__PURE__*/` - Marks a function call as pure. That means, it can safely be dropped.
+ * `/*@__KEY__*/` - Marks a string literal as a property to also mangle it when mangling properties.
 
 You can use either a `@` sign at the start, or a `#`.
 
@@ -1201,6 +1202,9 @@ function_always_inlined_here()
 function_cant_be_inlined_into_here()
 
 const x = /*#__PURE__*/i_am_dropped_if_x_is_not_used()
+
+function lookup(object, key) { return object[key]; }
+lookup({ i_will_be_mangled_too: "bar" }, /*@__KEY__*/ "i_will_be_mangled_too");
 ```
 
 ### ESTree / SpiderMonkey AST

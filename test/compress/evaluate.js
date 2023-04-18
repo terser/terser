@@ -821,7 +821,7 @@ safe_array_string_length: {
     }
     expect: {
         const array_ref = [1, leak("side effect")]
-        console.log(4, 2, 2, [id("side eff")]);
+        console.log(4, 2, array_ref.length, [id("side eff")]);
     }
     expect_stdout: "4 2 2 [ 'side eff' ]"
 }

@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.17.1
+ - Fix evaluating `.length` when the source array might've been mutated
+
 ## v5.17.0
  - Drop vestigial `= undefined` default argument in IIFE calls (#1366)
  - Evaluate known arrays' `.length` property when statically determinable

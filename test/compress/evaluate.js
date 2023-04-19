@@ -805,6 +805,27 @@ unsafe_string_bad_index: {
     expect_stdout: true
 }
 
+safe_array_string_length: {
+    options = {
+        reduce_vars: true,
+        evaluate: true,
+    }
+    input: {
+        const array_ref = [1, leak("side effect")]
+        console.log(
+            "Hi!!".length,
+            [1, 2].length,
+            array_ref.length,
+            [id("side eff")]
+        );
+    }
+    expect: {
+        const array_ref = [1, leak("side effect")]
+        console.log(4, 2, array_ref.length, [id("side eff")]);
+    }
+    expect_stdout: "4 2 2 [ 'side eff' ]"
+}
+
 prototype_function: {
     options = {
         evaluate: true,

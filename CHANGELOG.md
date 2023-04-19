@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.17.1
+ - Fix evaluating `.length` when the source array might've been mutated
+
+## v5.17.0
+ - Drop vestigial `= undefined` default argument in IIFE calls (#1366)
+ - Evaluate known arrays' `.length` property when statically determinable
+ - Add `@__KEY__` annotation to mangle string literals (#1365)
+
 ## v5.16.9
  - Fix parentheses in output of optional chains (`a?.b`) (#1374)
  - More documentation on source maps (#1368)

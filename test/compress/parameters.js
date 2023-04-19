@@ -194,8 +194,21 @@ keep_default_arg_when_undefined: {
         console.log(x.length)
     }
     expect: {
-        function x(a = undefined) { }
+        function x(a = void 0) { }
         console.log(x.length)
+    }
+}
+
+drop_default_arg_when_undefined_and_iife: {
+    options = {
+        keep_fargs: true,
+        evaluate: true,
+    }
+    input: {
+        console.log((function x(a = void 0) { })())
+    }
+    expect: {
+        console.log((function x(a) { })())
     }
 }
 

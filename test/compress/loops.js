@@ -758,3 +758,14 @@ issue_2904: {
     }
     expect_stdout: "1"
 }
+
+issue_t1234: {
+    options = {}
+    input: {
+        for ({ x: 0 }.x of [1, 2]) console.log(123);
+    }
+    expect: {
+        for ({ x: 0 }.x of [1, 2]) console.log(123);
+    }
+    expect_stdout: ["123", "123"]
+}

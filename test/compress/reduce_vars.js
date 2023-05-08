@@ -1393,13 +1393,49 @@ defun_reference_fixed: {
     expect_stdout: "true"
 }
 
+issue_t1382: {
+    options = {
+        module: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true,
+    }
+    input: {
+        const qDev = false;
+
+        function assertEqual() {
+            if (qDev) {
+                throw new Error('SHOULD BE REMOVED')
+            }
+        }
+
+        export {assertEqual}
+
+        export class ReadWriteProxyHandler {
+            set() {
+                if (qDev) if (invokeCtx) {}
+            }
+        }
+    }
+    expect: {
+        function assertEqual(){
+            if(false) throw new Error("SHOULD BE REMOVED")
+        }
+
+        export{assertEqual};
+
+        export class ReadWriteProxyHandler{
+            set(){if(false)if(invokeCtx);}
+        }
+    }
+}
+
 defun_reference_fixed_let: {
     options = {
         toplevel: true,
         reduce_vars: true,
         unused: true,
         evaluate: true,
-        passes: 3
     }
     input: {
         let on = true;

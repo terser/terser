@@ -528,3 +528,28 @@ if_return_same_value: {
         function h() { return (foo || bar) ? x() : y() }
     }
 }
+
+issue_t833: {
+    options = {
+        if_return: true,
+    }
+    input: {
+        var a = id(1), object = {PASS: 1};
+        for (var p in object) {
+            if (a) {
+                test(); continue;
+                function test() {console.log(p)}
+            }
+        }
+    }
+    expect: {
+        var a = id(1), object = {PASS: 1};
+        for (var p in object)
+            if (a) {
+                test();
+                continue;
+                function test(){console.log(p)}
+            }
+    }
+    expect_stdout: "PASS"
+}

@@ -2774,6 +2774,62 @@ unused_class_with_static_props_side_effects: {
     expect_stdout: "PASS"
 }
 
+unused_class_with_static_props_this: {
+    node_version = ">=12"
+    options = {
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        let _classThis;
+        var Foo = class {
+            static _ = Foo = _classThis = this;
+        };
+        const x = Foo = _classThis;
+        leak(x);
+    }
+    expect: {
+        let _classThis;
+        (class {
+            static _ = _classThis = this;
+        });
+        const x = _classThis;
+        leak(x);
+    }
+}
+
+unused_class_with_static_props_this_2: {
+    node_version = ">=12"
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let Foo = (()=>{
+            let _classThis;
+            var Foo = class {
+                static _ = (()=>{
+                    Foo = _classThis = this;
+                })();
+                foo(){
+                    return "PASS";
+                }
+            };
+            return Foo = _classThis;
+        })();
+        console.log(new Foo().foo());
+    }
+    expect: {
+        let Foo = (()=>{
+            let _classThis;
+            (class{static _=(()=>{_classThis=this})();foo(){return "PASS"}});
+            return _classThis
+        })();
+        console.log((new Foo).foo());
+    }
+    expect_stdout: "PASS"
+}
+
 unused_class_with_static_props_side_effects_2: {
     node_version = ">=12"
     options = {

@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.17.2
+ - Be less conservative when detecting use-before-definition of `var` in hoisted functions.
+ - Support unusual (but perfectly valid) initializers of for-in and for-of loops.
+ - Fix issue where hoisted function would be dropped if it was after a `continue` statement
+
 ## v5.17.1
  - Fix evaluating `.length` when the source array might've been mutated
 

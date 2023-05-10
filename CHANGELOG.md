@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.17.3
+
+ - Fix issue with trimming a static class property's contents accessing the class as `this`.
+
 ## v5.17.2
  - Be less conservative when detecting use-before-definition of `var` in hoisted functions.
  - Support unusual (but perfectly valid) initializers of for-in and for-of loops.

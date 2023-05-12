@@ -1164,6 +1164,20 @@ lhs_prop_2: {
     }
 }
 
+lhs_prop_3: {
+    options = {
+        evaluate: true,
+        properties: true,
+        unsafe: true,
+    }
+    input: {
+        ({ prop: 'do not put me in the LHS!' })["prop"] = 1;
+    }
+    expect: {
+        ({ prop: 'do not put me in the LHS!' }).prop = 1;
+    }
+}
+
 literal_duplicate_key_side_effects: {
     options = {
         properties: true,

@@ -33,6 +33,45 @@ generator_yield_undefined: {
     expect_exact: "function*fn(){yield}"
 }
 
+yield_await_comment: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        inline: true,
+        evaluate: true,
+        unused: true
+    }
+    input: {
+        const apiWithComments = () =>
+            /**! @preserve 1 */
+            http.get("1");
+
+        const apiWithComments2 = () =>
+            /**! @preserve 2 */
+            http.get("2");
+
+        const apiWithComments3 = () =>
+            /**! @preserve 3 */
+            http.get("3");
+
+        export function* test() {
+            (yield apiWithComments()).data;
+        }
+        export async function test2() {
+            (await apiWithComments2(await apiWithComments3())).data;
+        }
+    }
+    expect_exact: [
+        "export function*test(){(",
+        "/**! @preserve 1 */",
+        "yield http.get(\"1\")).data}export async function test2(){(",
+        "/**! @preserve 3 */",
+        "await(await http.get(\"3\"),",
+        "/**! @preserve 2 */",
+        "http.get(\"2\"))).data}",
+    ]
+}
+
 yield_optimize_expression: {
     options = {
     }

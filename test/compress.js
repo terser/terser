@@ -91,11 +91,11 @@ function as_toplevel(input, mangle_options) {
     return toplevel;
 }
 
-const enable_js_sandbox =
-    !process.env.TEST_NO_SANDBOX && semver.satisfies(process.version, ">=16")
-
 async function run_compress_tests() {
     var failures = 0;
+    const enable_js_sandbox =
+        !process.env.TEST_NO_SANDBOX && semver.satisfies(process.version, ">=16")
+
     var dir = test_directory("compress");
     log_directory("compress");
     var files = find_test_files(dir);

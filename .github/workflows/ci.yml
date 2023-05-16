@@ -25,32 +25,27 @@ jobs:
 
       # Build and test validation
 
-      - name: Create logs directory
-        shell: sh
-        run: |
-          mkdir -p logs
-
       - name: Install dependencies
         shell: sh
         run: |
-          npm ci --loglevel verbose 2>&1 | tee logs/install.log
+          npm ci --loglevel verbose
 
       - name: Build the app
         shell: sh
         run: |
-          npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
+          npm run build --if-present --loglevel verbose
 
       - if: matrix.node-version != '10.x'
         name: Run compress tests
         shell: sh
         run: |
-          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:compress --loglevel verbose
 
       - if: matrix.node-version != '10.x'
         name: Run mocha tests
         shell: sh
         run: |
-          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+          npm run test:mocha --loglevel verbose
         env:
           TERSER_TEST_ALL: 1
 
@@ -58,18 +53,11 @@ jobs:
         name: Run all tests with Node 10.x
         shell: sh
         run: |
-          node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
-          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
+          node --require esm test/compress.js --loglevel verbose
+          npm run test:mocha -- --require esm --loglevel verbose
 
       - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
         name: Run functional tests on ${{ matrix.os }} with Node 12.x
         run: |
-          ./test/functional.sh 2>&1 | tee logs/functional_tests.log
+          ./test/functional.sh
 
-      # Artifact publish to pipeline
-
-      - name: Upload logs as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
-          path: logs/

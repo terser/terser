@@ -65,3 +65,9 @@ jobs:
         run: |
           ./test/functional.sh
 
+      # Fuzz tests
+
+      - name: Run fuzz tests (1500 iterations)
+        run: |
+          node --require esm ./test/ufuzz.js 500 --seed 1234
+

@@ -22,6 +22,7 @@ const __dirname = path.dirname(__filename);
 var MAX_GENERATED_TOPLEVELS_PER_RUN = 1;
 var MAX_GENERATION_RECURSION_DEPTH = 12;
 var INTERVAL_COUNT = 100;
+var RANDOM_SEED = Date.now();
 
 var STMT_ARG_TO_ID = Object.create(null);
 var STMTS_TO_USE = [];
@@ -80,6 +81,12 @@ for (var i = 2; i < process.argv.length; ++i) {
         STMT_SECOND_LEVEL_OVERRIDE = STMT_ARG_TO_ID[name];
         if (!(STMT_SECOND_LEVEL_OVERRIDE >= 0)) throw new Error('Unknown statement name; use -? to get a list');
         break;
+      case '--seed':
+        RANDOM_SEED = Number(process.argv[++i]);
+        if (isNaN(RANDOM_SEED)) {
+            throw new Error('invalid random seed ' + process.argv[i])
+        }
+        break;
       case '--no-catch-redef':
         catch_redef = false;
         break;
@@ -110,6 +117,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         println('<number>: generate this many cases (if used must be first arg)');
         println('-v: print every generated test case');
         println('-V: print every 100th generated test case');
+        println('--seed: initialize the random seed, for determinism');
         println('-t <int>: generate this many toplevels per run (more take longer)');
         println('-r <int>: maximum recursion depth for generator (higher takes longer)');
         println('-s1 <statement name>: force the first level statement to be this one (see list below)');
@@ -314,10 +322,19 @@ var funcs = 0;
 var called = Object.create(null);
 var labels = 10000;
 
-function rng(max) {
-    var r = randomBytes(2).readUInt16LE(0) / 65536;
-    return Math.floor(max * r);
+// LCG deterministic random number generator.
+// https://stackoverflow.com/a/72732727/1011311 (adapted)
+function makeRng(seed) {
+    var m = 2**35 - 31
+    var a = 185852
+    var s = seed % m
+    return function (max) {
+        const rand_float = ((s = s * a % m) / m);
+        return Math.floor(max * rand_float);
+    }
 }
+
+const rng = makeRng(RANDOM_SEED);
 
 function strictMode() {
     return use_strict && rng(4) == 0 ? '"use strict";' : '';
@@ -1046,7 +1063,7 @@ async function log_rename(options) {
     }
 }
 
-async function log(options) {
+async function log(options, round) {
     if (!ok) errorln('\n\n\n\n\n\n!!!!!!!!!!\n\n\n');
     errorln("//=============================================================");
     if (!ok) errorln("// !!!!!! Failed... round " + round);
@@ -1115,7 +1132,7 @@ async function main() {
                     ok = terser_code.name == original_result.name;
                 }
             }
-            if (verbose || (verbose_interval && !(round % INTERVAL_COUNT)) || !ok) await log(options);
+            if (verbose || (verbose_interval && !(round % INTERVAL_COUNT)) || !ok) await log(options, round);
             else if (typeof original_result != "string") {
                 println("//=============================================================");
                 println("// original code");

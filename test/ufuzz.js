@@ -1114,7 +1114,9 @@ var terser_code, terser_result, ok;
 
 async function main() {
     for (var round = 1; round <= num_iterations; round++) {
-        process.stdout.write(round + " of " + num_iterations + "\r");
+        if (!process.env.CI || round % 100 === 0 || round === 1) {
+            process.stdout.write(round + " of " + num_iterations + "\r");
+        }
 
         original_code = createTopLevelCode();
         original_result = sandbox.run_code(original_code);

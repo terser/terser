@@ -67,7 +67,8 @@ jobs:
 
       # Fuzz tests
 
-      - name: Run fuzz tests (Node 20.x only)
+      - if: matrix.node-version == '20.x'
+        name: Run fuzz tests (Node 20.x only)
         run: |
           node ./test/ufuzz.js 500 --seed 1234
 

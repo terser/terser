@@ -9,7 +9,7 @@ arrow_function_parens_2: {
     input: {
         (() => null)();
     }
-    expect_exact: "(()=>'I should fail')();"
+    expect_exact: "(()=>null)();"
 }
 
 typeof_arrow_functions: {

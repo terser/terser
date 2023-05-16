@@ -46,14 +46,22 @@ jobs:
         run: |
           npm run test:mocha
 
+      # Tests for node 10
+
       - if: matrix.node-version == '10.x'
-        name: Run all tests with Node 10.x
+        name: Run compress tests (Node 10.x only)
         run: |
           node --require esm test/compress.js
+
+      - if: matrix.node-version == '10.x'
+        name: Run mocha tests (Node 10.x only)
+        run: |
           npm run test:mocha -- --require esm
 
+      # Functional tests
+
       - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
-        name: Run functional tests on ${{ matrix.os }} with Node 12.x
+        name: Run functional tests (Ubuntu Node 12.x only)
         run: |
           ./test/functional.sh
 

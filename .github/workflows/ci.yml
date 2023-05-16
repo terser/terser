@@ -28,24 +28,24 @@ jobs:
       - name: Install dependencies
         shell: sh
         run: |
-          npm ci --loglevel verbose
+          npm ci
 
       - name: Build the app
         shell: sh
         run: |
-          npm run build --if-present --loglevel verbose
+          npm run build --if-present
 
       - if: matrix.node-version != '10.x'
         name: Run compress tests
         shell: sh
         run: |
-          npm run test:compress --loglevel verbose
+          npm run test:compress
 
       - if: matrix.node-version != '10.x'
         name: Run mocha tests
         shell: sh
         run: |
-          npm run test:mocha --loglevel verbose
+          npm run test:mocha
         env:
           TERSER_TEST_ALL: 1
 
@@ -53,8 +53,8 @@ jobs:
         name: Run all tests with Node 10.x
         shell: sh
         run: |
-          node --require esm test/compress.js --loglevel verbose
-          npm run test:mocha -- --require esm --loglevel verbose
+          node --require esm test/compress.js
+          npm run test:mocha -- --require esm
 
       - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
         name: Run functional tests on ${{ matrix.os }} with Node 12.x

@@ -16,6 +16,9 @@ import * as sandbox from "./sandbox.js";
 import { minify } from "../main.js";
 import { defaults } from "../lib/utils/index.js";
 
+const minify_catch_error = async (...args) =>
+    minify(...args).catch(error => ({ error }))
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -988,7 +991,7 @@ function errorln(msg) {
 }
 
 async function try_beautify(code, result, printfn) {
-    var beautified = await minify(code, {
+    var beautified = await minify_catch_error(code, {
         compress: false,
         mangle: false,
         output: {
@@ -1024,7 +1027,7 @@ async function log_suspects(minify_options, component) {
             var o = JSON.parse(JSON.stringify(options));
             o[name] = flip;
             m[component] = o;
-            var result = await minify(original_code, m);
+            var result = await minify_catch_error(original_code, m);
             if (result.error) {
                 errorln("Error testing options." + component + "." + name);
                 errorln(result.error.stack);
@@ -1049,7 +1052,7 @@ async function log_suspects(minify_options, component) {
 async function log_rename(options) {
     var m = JSON.parse(JSON.stringify(options));
     m.rename = false;
-    var result = await minify(original_code, m);
+    var result = await minify_catch_error(original_code, m);
     if (result.error) {
         errorln("Error testing options.rename");
         errorln(result.error.stack);
@@ -1123,7 +1126,7 @@ async function main() {
         const options_sets = (typeof original_result != "string" ? fallback_options : minify_options)
 
         for (const options of options_sets) {
-            terser_code = await minify(original_code, JSON.parse(options));
+            terser_code = await minify_catch_error(original_code, JSON.parse(options));
             if (!terser_code.error) {
                 terser_code = terser_code.code;
                 terser_result = sandbox.run_code(terser_code);

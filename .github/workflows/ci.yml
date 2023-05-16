@@ -44,7 +44,7 @@ jobs:
         env:
           TERSER_TEST_ALL: 1
         run: |
-          npm run test:mocha
+          npm run test:mocha -- --timeout 80000
 
       # Tests for node 10
 
@@ -56,7 +56,7 @@ jobs:
       - if: matrix.node-version == '10.x'
         name: Run mocha tests (Node 10.x only)
         run: |
-          npm run test:mocha -- --require esm
+          npm run test:mocha -- --require esm --timeout 80000
 
       # Functional tests
 

@@ -15,7 +15,6 @@ describe("EOF", function() {
             for (var i = input.length - 1; chopLimit > 0; chopLimit--, i--) {
                 var code = input.substr(0, i);
                 assert.throws(() => parse(code), Error, code);
-                assert(false) // make sure no test swallows this
             }
         }
 

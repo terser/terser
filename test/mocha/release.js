@@ -14,7 +14,7 @@ function run(command, args, done) {
 
 describe('release', () => {
     if (!process.env.TERSER_TEST_ALL
-        || !semver.satisfies(process.version, "12")
+        || !semver.satisfies(process.version, "16")
         || process.platform !== "linux"
     ) {
         return;

@@ -9,9 +9,10 @@ jobs:
     name: "Build ${{ matrix.os }} node${{ matrix.node-version }}"
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest ]
-        node-version: [ 10.x, 12.x, 14.x, 16.x ]
+        node-version: [ 10.x, 12.x, 14.x, 16.x, 20.x ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,54 +26,49 @@ jobs:
 
       # Build and test validation
 
-      - name: Create logs directory
-        shell: sh
-        run: |
-          mkdir -p logs
-
       - name: Install dependencies
-        shell: sh
         run: |
-          npm ci --loglevel verbose 2>&1 | tee logs/install.log
+          npm ci
 
       - name: Build the app
-        shell: sh
         run: |
-          npm run build --if-present --loglevel verbose 2>&1 | tee logs/build.log
-        env:
-          TEST_NO_SANDBOX: 1
-          TERSER_TEST_ALL: 1
+          npm run build --if-present
 
       - if: matrix.node-version != '10.x'
         name: Run compress tests
-        shell: sh
         run: |
-          npm run test:compress --loglevel verbose 2>&1 | tee logs/compress_test.log
+          npm run test:compress
 
       - if: matrix.node-version != '10.x'
         name: Run mocha tests
-        shell: sh
+        env:
+          TERSER_TEST_ALL: 1
         run: |
-          npm run test:mocha --loglevel verbose 2>&1 | tee logs/mocha_test.log
+          npm run test:mocha -- --timeout 80000
+
+      # Tests for node 10
 
       - if: matrix.node-version == '10.x'
-        name: Run all tests with Node 10.x
-        shell: sh
+        name: Run compress tests (Node 10.x only)
         run: |
-          node --require esm test/compress.js --loglevel verbose 2>&1 | tee logs/compress_test.log
-          npm run test:mocha -- --require esm --loglevel verbose 2>&1 | tee logs/mocha_test.log
-        env:
-          TEST_NO_SANDBOX: 1
+          node --require esm test/compress.js
+
+      - if: matrix.node-version == '10.x'
+        name: Run mocha tests (Node 10.x only)
+        run: |
+          npm run test:mocha -- --require esm --timeout 80000
+
+      # Functional tests
 
       - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
-        name: Run functional tests on ${{ matrix.os }} with Node 12.x
+        name: Run functional tests (Ubuntu Node 12.x only)
         run: |
-          ./test/functional.sh 2>&1 | tee logs/functional_tests.log
+          ./test/functional.sh
 
-      # Artifact publish to pipeline
+      # Fuzz tests
 
-      - name: Upload logs as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: "Logs ${{ matrix.os }} - nodejs ${{ matrix.node-version }}"
-          path: logs/
+      - if: matrix.node-version == '20.x'
+        name: Run fuzz tests (Node 20.x only)
+        run: |
+          node ./test/ufuzz.js 1000 --seed 1234
+

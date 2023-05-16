@@ -91,6 +91,9 @@ function as_toplevel(input, mangle_options) {
     return toplevel;
 }
 
+const enable_js_sandbox =
+    !process.env.TEST_NO_SANDBOX && semver.satisfies(process.version, ">=16")
+
 async function run_compress_tests() {
     var failures = 0;
     var dir = test_directory("compress");
@@ -257,7 +260,7 @@ async function run_compress_tests() {
             }
             if (test.expect_stdout
                 && (!test.node_version || semver.satisfies(process.version, test.node_version))
-                && !process.env.TEST_NO_SANDBOX
+                && enable_js_sandbox
             ) {
                 var stdout = sandbox.run_code(input_code, test.prepend_code);
                 if (test.expect_stdout === true) {

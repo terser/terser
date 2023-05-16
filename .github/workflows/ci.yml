@@ -27,32 +27,27 @@ jobs:
       # Build and test validation
 
       - name: Install dependencies
-        shell: sh
         run: |
           npm ci
 
       - name: Build the app
-        shell: sh
         run: |
           npm run build --if-present
 
       - if: matrix.node-version != '10.x'
         name: Run compress tests
-        shell: sh
         run: |
           npm run test:compress
 
       - if: matrix.node-version != '10.x'
         name: Run mocha tests
-        shell: sh
-        run: |
-          npm run test:mocha
         env:
           TERSER_TEST_ALL: 1
+        run: |
+          npm run test:mocha
 
       - if: matrix.node-version == '10.x'
         name: Run all tests with Node 10.x
-        shell: sh
         run: |
           node --require esm test/compress.js
           npm run test:mocha -- --require esm

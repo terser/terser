@@ -20,6 +20,7 @@ import { base54 } from "../lib/scope.js";
 import { string_template, defaults } from "../lib/utils/index.js";
 
 import * as sandbox from "./sandbox.js"
+import { World, flow_drop_dead_code } from '../lib/flow/flow.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -273,6 +274,7 @@ async function run_compress_tests() {
                     });
                     return false;
                 }
+
                 stdout = sandbox.run_code(output, test.prepend_code);
                 if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
                     log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
@@ -285,6 +287,27 @@ async function run_compress_tests() {
                     });
                     return false;
                 }
+
+                let flow_dce_code = parse(input_code);
+                flow_dce_code.figure_out_scope({ toplevel: true });
+                const type = flow_dce_code.flow_analysis(new World());
+
+                if (!type.is_nope) {
+                    flow_dce_code = flow_drop_dead_code(new World(), flow_dce_code);
+                    stdout = sandbox.run_code(flow_dce_code.print_to_string(), test.prepend_code);
+                    if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
+                        log("!!! failed output after flow analysis\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
+                            input: input_formatted,
+                            output: output,
+                            expected_type: typeof test.expect_stdout == "string" ? "STDOUT" : "ERROR",
+                            expected: test.expect_stdout,
+                            actual_type: typeof stdout == "string" ? "STDOUT" : "ERROR",
+                            actual: stdout,
+                        });
+                        return false;
+                    }
+                }
+
                 if (test.reminify && !await reminify(test, input_code, input_formatted)) {
                     return false;
                 }

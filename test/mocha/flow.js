@@ -1,14 +1,27 @@
-import {deepStrictEqual as equal, notDeepStrictEqual as not_equal, throws } from 'assert'
+import {deepStrictEqual as equal, notDeepStrictEqual as not_equal, strictEqual as is, fail } from 'assert'
 import {parse} from '../../lib/parse.js'
 import '../../lib/flow/flow.js'
 import '../../main.js' // load node prototype stuff
-import { World, NOPE } from '../../lib/flow/tools.js'
+import { World } from '../../lib/flow/tools.js'
 import { flow_drop_dead_code } from '../../lib/flow/dce.js'
-import { Type, LiteralType, FunctionType} from "../../lib/flow/types.js"
+import { Type, LiteralType, FunctionType, UnknownType} from "../../lib/flow/types.js"
 import { assert_properties } from './utils.js'
 
 let world = new World();
 beforeEach(() => { test_world() });
+
+const is_nope = (type, msg) => {
+    if (type.is_nope) return
+    fail(type, 'NOPE', msg, 'is NOPE', is_nope)
+}
+
+const is_not_nope = (type) => {
+    if (!type.is_nope) return
+    throw type
+}
+
+/** Code that causes a `throw new NOPE`. Used to test nope-propagation */
+const cause_nope = `arguments`;
 
 describe('Flow analysis: statements', () => {
     it('can do conditions', () => {
@@ -30,18 +43,18 @@ describe('Flow analysis: statements', () => {
     it('can do ternaries', () => {
         let type;
 
-        type = test_stat(`1 ? (NUM = 2) : (NUM = throw_)`);
+        type = test_stat(`1 ? (NUM = 2) : (NUM = ${cause_nope})`);
         equal(type.value, 2);
         equal(world.read_variable('NUM').value, 2);
     });
 
     it('can do conditions if they may throw', () => {
-        equal(test_stat(`if (throw_) { NUM = 1 } else { NUM = 2 }`), NOPE);
-        equal(test_stat(`if (1) { throw_ } else { NUM = 2 }`), NOPE);
-        equal(test_stat(`if (0) { NUM = 1 } else { throw_ }`), NOPE);
+        is_nope(test_stat(`if (${cause_nope}) { NUM = 1 } else { NUM = 2 }`));
+        is_nope(test_stat(`if (1) { ${cause_nope} } else { NUM = 2 }`));
+        is_nope(test_stat(`if (0) { NUM = 1 } else { ${cause_nope} }`));
 
-        not_equal(test_stat(`if (1) { NUM = 1 } else { throw_ }`), NOPE);
-        not_equal(test_stat(`if (0) { throw_ } else { NUM = 2 }`), NOPE);
+        is_not_nope(test_stat(`if (1) { NUM = 1 } else { ${cause_nope} }`));
+        is_not_nope(test_stat(`if (0) { ${cause_nope} } else { NUM = 2 }`));
     });
 
     it('can do conditions if they may return', () => {
@@ -49,8 +62,8 @@ describe('Flow analysis: statements', () => {
         equal(test_func_body(`if (0) { NUM = 1 } else { return 99 }`), new LiteralType(99));
         equal(test_func_body(`if (NUM) { return 99 } else { return 11 }`), new Type(['number']));
 
-        equal(test_func_body(`if (NUM) { return 99 } else { NUM = 2 }`), NOPE);
-        equal(test_func_body(`if (NUM) { NUM = 1 } else { return 99 }`), NOPE);
+        is_nope(test_func_body(`if (NUM) { return 99 } else { NUM = 2 }`));
+        is_nope(test_func_body(`if (NUM) { NUM = 1 } else { return 99 }`));
     });
 
     it('can do blocks', () => {
@@ -64,7 +77,7 @@ describe('Flow analysis: statements', () => {
         equal(type, new LiteralType(2));
         equal(world.read_variable('NUM').value, 2);
 
-        equal(test_stat(`{ throw_; NUM = 1 }`), NOPE);
+        is_nope(test_stat(`{ ${cause_nope}; NUM = 1 }`));
     });
 
     it('can do sequence (comma operator)', () => {
@@ -78,7 +91,7 @@ describe('Flow analysis: statements', () => {
         equal(type, new LiteralType(2));
         equal(world.read_variable('NUM').value, 2);
 
-        equal(test_stat(`( throw_, NUM = 1 )`), NOPE);
+        is_nope(test_stat(`( ${cause_nope}, NUM = 1 )`));
     });
 });
 
@@ -95,8 +108,8 @@ describe('Flow analysis: vars', () => {
         equal(test_stat(`const x = 1; x`), new LiteralType(1));
         equal(world.read_variable_ambient('x'), new LiteralType(1));
 
-        equal(test_stat(`x; let x`), NOPE);
-        equal(test_stat(`const x = 1; x = 2`), NOPE);
+        is_nope(test_stat(`x; let x`));
+        is_nope(test_stat(`const x = 1; x = 2`));
     });
 
     it('can count reads and writes', () => {
@@ -118,12 +131,11 @@ describe('Flow analysis: vars', () => {
         equal(test_stat('var x = 1; { const x = 2; x } x'), new LiteralType(1));
     });
 
-    it('forbids weird vars and accessing globals', () => {
-        equal(test_stat('var x; function x() {}'), NOPE);
-        equal(test_stat('let x; function x() {}'), NOPE);
-        equal(test_stat('var x; let x'), NOPE);
-        equal(test_stat('var arguments'), NOPE);
-        equal(test_stat('unknown'), NOPE);
+    it('bails on weird vars and accessing globals', () => {
+        is_nope(test_stat('var x; function x() {}'));
+        is_nope(test_stat('let x; function x() {}'));
+        is_nope(test_stat('var x; let x'));
+        is_nope(test_stat('var arguments'));
     });
 });
 
@@ -190,13 +202,13 @@ describe('Flow analysis: functions', () => {
         type = test_stat(`function f(x) { return x ? f(x - 1) : 42 } f(9)`);
         equal(type, new LiteralType(42));
 
-        equal(test_stat(`function f(x) { return x ? f(x - 1) : 42 } f(-9)`), NOPE);
+        is_nope(test_stat(`function f(x) { return x ? f(x - 1) : 42 } f(-9)`));
 
-        equal(test_stat(`
+        is_nope(test_stat(`
             function f(x) { return f_mut(x) }
             function f_mut(x) { return f(x) }
             f(9)
-        `), NOPE);
+        `));
     });
 });
 
@@ -246,8 +258,18 @@ describe('Flow analysis: new World()', () => {
             forked.write_variable('nonlocal', new LiteralType(2), { is_definition: false });
             equal(true, false, 'should throw!');
         } catch (e) {
-            equal(e, NOPE);
+            is_nope(e);
         }
+    });
+
+    it('can return global variables used', () => {
+        is(test_stat(`unknown_var`), UnknownType);
+
+        equal(test_stat(`(unknown_var, 1)`), new LiteralType(1));
+
+        is(test_stat(`if (NUM) { unknown_var } else { unknown_var }`), UnknownType);
+        is(test_stat(`if (NUM) { unknown_var } else { 1 }`), UnknownType);
+        is(test_stat(`if (NUM) { 1 } else { unknown_var }`), UnknownType);
     });
 });
 
@@ -279,31 +301,70 @@ describe('Flow analysis: powering DCE', () => {
     it('can drop dead code', () => {
         test_dce(`
             var DEBUG = 1
-            function fn() { return DEBUG ? 42 : -1 }
+            function fn() { return DEBUG ? 42 : 9999 }
             fn()
         `, `
-            function fn() { return 42 }
+            function fn() { return DEBUG, 42 }
             fn()
         `);
 
         test_dce(`
             var DEBUG = 1
-            function fn() { if (DEBUG) { return 42 } else { return -1 } }
+            function fn() { if (DEBUG) { return 42 } else { return 9999 } }
             fn()
         `, `
-            function fn() { { return 42 } }
+            function fn() { {DEBUG;{ return 42 }} }
             fn()
         `);
 
         test_dce(`
             var DEBUG = 1
             var OTHER
-            if (DEBUG) { OTHER = 42 } else { OTHER = -1 }
+            if (DEBUG) { OTHER = 42 } else { OTHER = 9999 }
             OTHER
         `, `
             var OTHER
-            { OTHER = 42 }
+            {DEBUG; { OTHER = 42 }}
             OTHER
+        `);
+
+        test_dce(`
+            function fn(DEBUG) { if (DEBUG) { return 42 } else { return 9999 } }
+            fn(1)
+        `, `
+            function fn(DEBUG) { {DEBUG; { return 42 }} }
+            fn(1)
+        `);
+    });
+
+    it('dce not possible', () => {
+        // Both branches taken
+        test_dce(`
+            function fn(DEBUG) { if (DEBUG) { return 42 } else { return 9999 } }
+            fn(1)
+            fn(0)
+        `, `
+            function fn(DEBUG) { if (DEBUG) { return 42 } else { return 9999 } }
+            fn(1)
+            fn(0)
+        `);
+
+        test_dce(`
+            function fn(NUM) { if (NUM) { return 42 } else { return 9999 } }
+            fn(NUM)
+            fn(1)
+        `, `
+            function fn(NUM) { if (NUM) { return 42 } else { return 9999 } }
+            fn(NUM)
+            fn(1)
+        `);
+
+        test_dce(`
+            function fn() { if (NUM) { return 42 } else { return 9999 } }
+            fn()
+        `, `
+            function fn() { if (NUM) { return 42 } else { return 9999 } }
+            fn()
         `);
     });
 });
@@ -332,7 +393,7 @@ const test_dce = (code, expected, world_opts) => {
     stat.figure_out_scope({ toplevel: true });
     const type = stat.flow_analysis(test_world(world_opts));
 
-    not_equal(type, NOPE);
+    is_not_nope(type);
 
     const dropped = flow_drop_dead_code(world, stat);
 

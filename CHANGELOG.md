@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.17.4
+
+ - Fix crash when trying to negate a class (`!class{}`)
+ - Avoid outputting comments between `yield`/`await` and its argument
+ - Fix detection of left-hand-side of assignment, to avoid optimizing it like any other expression in some edge cases
+
 ## v5.17.3
 
  - Fix issue with trimming a static class property's contents accessing the class as `this`.

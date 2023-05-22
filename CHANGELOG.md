@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.17.5
+ - Take into account the non-deferred bits of a class, such as static properties, while dropping unused code.
+
 ## v5.17.4
 
  - Fix crash when trying to negate a class (`!class{}`)

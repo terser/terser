@@ -3095,3 +3095,116 @@ unused_null_conditional_chain_5: {
             obj.side_effect().null?.maybe_call?.(3);
     }
 }
+
+issue_t1392: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+
+        SubClass
+    }
+    expect: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_2: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_3: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_4: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_5: {
+    options = { unused: true, side_effects: true };
+    input: {
+        (function test() {
+            class RelatedClass {}
+            class BaseClass {}
+        
+            class SubClass extends BaseClass {
+              static field = new RelatedClass;
+            }
+        
+            const subclassUser = {
+              oneUse: SubClass,
+              otherUse() {
+                return new SubClass
+              }
+            };
+        })()
+    }
+    expect: {
+        (function(){
+            class RelatedClass{}
+            class BaseClass{}
+            new RelatedClass()
+        })();
+    }
+    expect_stdout: true
+}

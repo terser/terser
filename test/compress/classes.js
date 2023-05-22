@@ -118,8 +118,6 @@ pure_prop_assignment_for_classes: {
 }
 
 private_class_methods: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             #method() {
@@ -158,8 +156,6 @@ private_class_methods: {
 }
 
 private_class_accessors: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             #accessorInternal = "FAIL"

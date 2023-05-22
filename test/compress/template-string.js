@@ -535,7 +535,6 @@ tagged_template_with_invalid_escape: {
         "\\u",
         "\\u",
     ]
-    node_version: ">=10"
 }
 
 tagged_call_with_invalid_escape_2: {
@@ -560,7 +559,6 @@ tagged_call_with_invalid_escape_2: {
         "\\4321\\u\\x",
         "\\4321\\u\\x",
     ]
-    node_version: ">=10"
 }
 
 es2018_revision_of_template_escapes_1: {
@@ -572,7 +570,6 @@ es2018_revision_of_template_escapes_1: {
     }
     expect_exact: "console.log(String.raw\`\\unicode \\xerces \\1234567890\`);"
     expect_stdout: "\\unicode \\xerces \\1234567890"
-    node_version: ">=10"
 }
 
 tagged_call_with_invalid_escape: {
@@ -587,7 +584,6 @@ tagged_call_with_invalid_escape: {
     expect_stdout: [
         "\\4321\\u\\x",
     ]
-    node_version: ">=10"
 }
 
 invalid_unicode_escape_in_regular_string: {
@@ -740,7 +736,6 @@ tagged_template_with_ill_formed_unicode_escape: {
     }
     expect_exact: "console.log(String.raw`\\u{-1}`);";
     expect_stdout: "\\u{-1}"
-    node_version: ">=10"
 }
 
 tagged_template_with_comment: {
@@ -753,7 +748,6 @@ tagged_template_with_comment: {
         "\\u",
         "\\x"
     ]
-    node_version: ">=10"
 }
 
 tagged_template_valid_strict_legacy_octal: {
@@ -763,7 +757,6 @@ tagged_template_valid_strict_legacy_octal: {
     }
     expect_exact: '"use strict";console.log(String.raw`\\u\\x\\567`);'
     expect_stdout: "\\u\\x\\567"
-    node_version: ">=10"
 }
 
 tagged_template_function_inline_1: {

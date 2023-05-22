@@ -58,7 +58,6 @@ big_int_bad_digits_for_base: {
 }
 
 big_int_math: {
-    node_version = ">= 12"
     options = {
         defaults: true
     }

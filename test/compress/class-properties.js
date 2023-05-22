@@ -1,6 +1,4 @@
 basic_class_properties: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             static foo
@@ -25,8 +23,6 @@ basic_class_properties: {
 }
 
 computed_class_properties: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         const x = "FOO"
         const y = "BAR"
@@ -42,8 +38,6 @@ computed_class_properties: {
 }
 
 static_class_properties_side_effects: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             foo = console.log("PASS2")
@@ -58,8 +52,6 @@ static_class_properties_side_effects: {
 }
 
 class_expression_properties_side_effects: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         side_effects: true,
         unused: true,
@@ -84,8 +76,6 @@ class_expression_properties_side_effects: {
 }
 
 class_expression_not_constant: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         collapse_vars: true,
         join_vars: true,
@@ -111,8 +101,6 @@ class_expression_not_constant: {
 }
 
 class_expression_constant: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         collapse_vars: true,
         join_vars: true,
@@ -135,8 +123,6 @@ class_expression_constant: {
 }
 
 static_property_side_effects: {
-    no_mozilla_ast = true;
-    node_version = ">=12";
     options = {
         toplevel: true,
         unused: true,
@@ -155,8 +141,6 @@ static_property_side_effects: {
 }
 
 static_means_execution: {
-    no_mozilla_ast = true
-    node_version = ">=12"
     options = {
         toplevel: true,
         reduce_vars: true,
@@ -196,8 +180,6 @@ static_means_execution: {
 }
 
 mangle_class_properties: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     mangle = {
         properties: {}
     }
@@ -222,8 +204,6 @@ mangle_class_properties: {
 }
 
 mangle_class_properties_keep_quoted: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     mangle = {
         properties: {
             keep_quoted: true
@@ -250,8 +230,6 @@ mangle_class_properties_keep_quoted: {
 }
 
 private_class_properties: {
-    no_mozilla_ast = true;
-    node_version = ">=12";
     options = {
         ecma: 2015
     }
@@ -279,8 +257,6 @@ private_class_properties: {
 }
 
 same_name_public_private: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             static foo
@@ -304,8 +280,6 @@ same_name_public_private: {
 }
 
 static_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             static #a = "P";
@@ -321,8 +295,6 @@ static_private_fields: {
 }
 
 optional_chaining_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=16"
     input: {
         class A {
             #opt = undefined;
@@ -345,8 +317,6 @@ optional_chaining_private_fields: {
 }
 
 private_properties_can_be_mangled: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     mangle = {
         properties: true
     }
@@ -385,8 +355,6 @@ private_properties_can_be_mangled: {
 }
 
 nested_private_properties_can_be_mangled: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     mangle = {
         properties: true
     }
@@ -448,8 +416,6 @@ nested_private_properties_can_be_mangled: {
 }
 
 allow_private_field_with_in_operator : {
-    no_mozilla_ast = true;
-    node_version = ">=16"
     mangle = {
         properties: true
     }
@@ -467,8 +433,6 @@ allow_private_field_with_in_operator : {
 }
 
 allow_subscript_private_field: {
-    no_mozilla_ast = true;
-    node_version = ">=16"
     options = { defaults: true }
     input: {
         class A {

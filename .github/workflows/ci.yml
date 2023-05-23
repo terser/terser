@@ -1,6 +1,9 @@
 name: CI pipeline
 
-on: [ push, pull_request, workflow_dispatch ]
+on:
+  push:
+    branches: [master]
+  pull_request:
 
 permissions: read-all
 
@@ -60,8 +63,8 @@ jobs:
 
       # Functional tests
 
-      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '12.x'
-        name: Run functional tests (Ubuntu Node 12.x only)
+      - if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.x'
+        name: Run functional tests (Ubuntu Node 16.x only)
         run: |
           ./test/functional.sh
 

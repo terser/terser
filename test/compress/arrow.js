@@ -690,7 +690,6 @@ issue_3092b: {
         console.log(obj.gen("pass").next().value);
     }
     expect_stdout: "PASS"
-    node_version: ">=8"
 }
 
 object_parens: {

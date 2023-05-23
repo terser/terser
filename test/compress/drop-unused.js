@@ -1663,7 +1663,7 @@ issue_2516_1: {
         function foo() {
             function bar(x) {
                 var value = (4 - 1) * (x || never_called());
-                console.log(6 == value ? "PASS" : value);
+                console.log(value == 6 ? "PASS" : value);
             }
             Baz = function(x) {
                 bar.call(null, x);
@@ -1704,7 +1704,7 @@ issue_2516_2: {
         function foo() {
             function bar (x) {
                 var value = (4 - 1) * (x || never_called());
-                console.log(6 == value ? "PASS" : value);
+                console.log(value == 6 ? "PASS" : value);
             }
             Baz = function(x) {
                 bar.call(null, x);
@@ -2496,7 +2496,7 @@ issue_t161_top_retain_7: {
     }
     expect: {
         var y = 3;
-        console.log(2, y, 4, 2 * y, 8, 4 * y);
+        console.log(2, y, 4, 2 * y, 8, y * 4);
     }
     expect_stdout: "2 3 4 6 8 12"
 }
@@ -2760,7 +2760,6 @@ unused_seq_elements: {
 }
 
 unused_class_with_static_props_side_effects: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2774,8 +2773,61 @@ unused_class_with_static_props_side_effects: {
     expect_stdout: "PASS"
 }
 
+unused_class_with_static_props_this: {
+    options = {
+        toplevel: true,
+        unused: true
+    }
+    input: {
+        let _classThis;
+        var Foo = class {
+            static _ = Foo = _classThis = this;
+        };
+        const x = Foo = _classThis;
+        leak(x);
+    }
+    expect: {
+        let _classThis;
+        (class {
+            static _ = _classThis = this;
+        });
+        const x = _classThis;
+        leak(x);
+    }
+}
+
+unused_class_with_static_props_this_2: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        let Foo = (()=>{
+            let _classThis;
+            var Foo = class {
+                static _ = (()=>{
+                    Foo = _classThis = this;
+                })();
+                foo(){
+                    return "PASS";
+                }
+            };
+            return Foo = _classThis;
+        })();
+        console.log(new Foo().foo());
+    }
+    expect: {
+        let Foo = (()=>{
+            let _classThis;
+            (class{static _=(()=>{_classThis=this})();foo(){return "PASS"}});
+            return _classThis
+        })();
+        console.log((new Foo).foo());
+    }
+    expect_stdout: "PASS"
+}
+
 unused_class_with_static_props_side_effects_2: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2793,7 +2845,6 @@ unused_class_with_static_props_side_effects_2: {
 }
 
 unused_class_which_extends_might_throw: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2812,7 +2863,6 @@ unused_class_which_extends_might_throw: {
 }
 
 unused_class_which_might_throw: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2831,7 +2881,6 @@ unused_class_which_might_throw: {
 }
 
 unused_class_which_might_throw_2: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2850,7 +2899,6 @@ unused_class_which_might_throw_2: {
 }
 
 unused_class_which_might_throw_3: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2869,7 +2917,6 @@ unused_class_which_might_throw_3: {
 }
 
 unused_class_which_might_throw_4: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2888,7 +2935,6 @@ unused_class_which_might_throw_4: {
 }
 
 variable_refs_outside_unused_class: {
-    node_version = ">=12"
     options = {
         toplevel: true,
         unused: true
@@ -3038,4 +3084,117 @@ unused_null_conditional_chain_5: {
             obj.side_effect().null?.(2),
             obj.side_effect().null?.maybe_call?.(3);
     }
+}
+
+issue_t1392: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+
+        SubClass
+    }
+    expect: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_2: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_3: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_4: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_5: {
+    options = { unused: true, side_effects: true };
+    input: {
+        (function test() {
+            class RelatedClass {}
+            class BaseClass {}
+        
+            class SubClass extends BaseClass {
+              static field = new RelatedClass;
+            }
+        
+            const subclassUser = {
+              oneUse: SubClass,
+              otherUse() {
+                return new SubClass
+              }
+            };
+        })()
+    }
+    expect: {
+        (function(){
+            class RelatedClass{}
+            class BaseClass{}
+            new RelatedClass()
+        })();
+    }
+    expect_stdout: true
 }

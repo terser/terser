@@ -73,7 +73,7 @@ export function run_code(code, prepend_code = '') {
             "!function() {",
             prepend_code + code,
             "}();",
-        ].join("\n"), global, { timeout: 5000 });
+        ].join("\n"), global, { timeout: process.env.CI ? 20000 : 5000 });
         return stdout;
     } catch (ex) {
         return ex;

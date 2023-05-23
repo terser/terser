@@ -1025,6 +1025,19 @@ shorthand_keywords: {
     expect_stdout: true
 }
 
+shorthand_safari: {
+    beautify = {
+        ecma: 2015,
+        safari10: true,
+    }
+    input: {
+        var ä = "PASS";
+        console.log({ ä });
+    }
+    expect_exact: 'var ä="PASS";console.log({"ä":ä});'
+    expect_stdout: true
+}
+
 array_literal_with_spread_1: {
     options = {
         properties: true,
@@ -1906,7 +1919,7 @@ issue_t80: {
     }
     expect: {
         function foo(data = []) {
-            if (1 == arguments.length)
+            if (arguments.length == 1)
                 data = [data];
             return data;
         }

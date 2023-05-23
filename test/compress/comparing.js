@@ -116,6 +116,7 @@ self_comparison_2: {
 issue_2857_1: {
     options = {
         comparisons: true,
+        lhs_constants: true,
     }
     input: {
         function f1(a) {
@@ -166,6 +167,7 @@ issue_2857_1: {
 issue_2857_2: {
     options = {
         comparisons: true,
+        lhs_constants: true,
     }
     input: {
         function f(a, p) {
@@ -196,6 +198,7 @@ issue_2857_2: {
 issue_2857_3: {
     options = {
         comparisons: true,
+        lhs_constants: true,
     }
     input: {
         function f(a, p) {
@@ -226,6 +229,7 @@ issue_2857_3: {
 issue_2857_4: {
     options = {
         comparisons: true,
+        lhs_constants: true,
     }
     input: {
         function f(a, p) {
@@ -256,6 +260,7 @@ issue_2857_4: {
 issue_2857_5: {
     options = {
         comparisons: true,
+        lhs_constants: true,
     }
     input: {
         function f(a, p) {
@@ -286,6 +291,7 @@ issue_2857_5: {
 issue_2857_6: {
     options = {
         comparisons: true,
+        lhs_constants: true,
         pure_getters: "strict",
         reduce_vars: true,
     }
@@ -314,4 +320,17 @@ issue_2857_6: {
         }));
     }
     expect_stdout: "true"
+}
+
+bigint_vs_number: {
+    options = {
+        comparisons: true,
+    }
+    input: {
+        if (-1 !== -1n) console.log("PASS");
+    }
+    expect: {
+        if (-1 !== -1n) console.log("PASS");
+    }
+    expect_stdout: "PASS"
 }

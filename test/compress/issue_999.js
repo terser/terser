@@ -1,6 +1,4 @@
 switch_case_and_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         switches: true,
         dead_code: true,

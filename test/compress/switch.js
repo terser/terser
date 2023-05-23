@@ -266,7 +266,7 @@ drop_default_1: {
         }
     }
     expect: {
-        if ("bar" === foo) baz();
+        if (foo === "bar") baz();
     }
 }
 
@@ -283,7 +283,7 @@ drop_default_2: {
         }
     }
     expect: {
-        if ("bar" === foo) baz();
+        if (foo === "bar") baz();
     }
 }
 
@@ -301,7 +301,7 @@ keep_default: {
         }
     }
     expect: {
-        if ('bar' === foo) baz();
+        if (foo === 'bar') baz();
         something();
     }
 }
@@ -532,7 +532,7 @@ remove_switch_8: {
     }
     expect: {
         console.log(function (foo) {
-            if (1 === foo) return 1;
+            if (foo === 1) return 1;
         }(1));
     }
 }
@@ -559,7 +559,7 @@ remove_switch_9: {
         }
     }
     expect: {
-        if (1 === foo) doSomethting();
+        if (foo === 1) doSomethting();
     }
 }
 
@@ -1627,7 +1627,7 @@ drop_case: {
         }
     }
     expect: {
-        if ('bar' === foo) baz();
+        if (foo === 'bar') baz();
     }
 }
 
@@ -1689,7 +1689,7 @@ if_else: {
         }
     }
     expect: {
-        if ('bar' === foo) bar();
+        if (foo === 'bar') bar();
         else other();
     }
 }
@@ -1708,7 +1708,7 @@ if_else2: {
         }
     }
     expect: {
-        if ('bar' === foo) bar();
+        if (foo === 'bar') bar();
         other();
     }
 }
@@ -1728,7 +1728,7 @@ if_else3: {
         }
     }
     expect: {
-        if ('bar' === foo) bar();
+        if (foo === 'bar') bar();
         else other();
     }
 }
@@ -1747,7 +1747,7 @@ if_else4: {
         }
     }
     expect: {
-        if ('bar' !== foo) other();
+        if (foo !== 'bar') other();
         bar();
     }
 }
@@ -1812,7 +1812,7 @@ if_else7: {
         }
     }
     expect: {
-        if ('bar' === foo);
+        if (foo === 'bar');
         else other();
     }
 }
@@ -2215,7 +2215,7 @@ issue_1705_1: {
     }
     expect: {
         var a = 0;
-        if (0 !== a) console.log("FAIL");
+        if (a !== 0) console.log("FAIL");
     }
     expect_stdout: true
 }
@@ -2794,7 +2794,7 @@ trim_empty_last_branches: {
         }
     }
     expect: {
-        if (1 === id(1)) console.log("PASS")
+        if (id(1) === 1) console.log("PASS")
     }
     expect_stdout: "PASS"
 }
@@ -2843,7 +2843,7 @@ trim_empty_last_branches_3: {
         }
     }
     expect: {
-        if (1 === id(1)) console.log("PASS")
+        if (id(1) === 1) console.log("PASS")
     }
     expect_stdout: "PASS"
 }

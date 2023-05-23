@@ -473,7 +473,7 @@ collapse_vars_do_while: {
     expect: {
         function f1(y) {
             var c = 9;
-            do ; while (77 === c);
+            do ; while (c === 77);
         }
         function f2(y) {
             var c = 5 - y;
@@ -560,7 +560,7 @@ collapse_vars_do_while_drop_assign: {
     expect: {
         function f1(y) {
             var c = 9;
-            do ; while (77 === c);
+            do ; while (c === 77);
         }
         function f2(y) {
             var c = 5 - y;
@@ -2002,7 +2002,7 @@ var_side_effects_1: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            print('Foo:', 2 * x);
+            print('Foo:', x * 2);
         }
         foo(10);
     }
@@ -2025,7 +2025,7 @@ var_side_effects_2: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            var twice = 2 * x.y;
+            var twice = x.y * 2;
             print('Foo:', twice);
         }
         foo({ y: 10 });
@@ -2051,7 +2051,7 @@ var_side_effects_3: {
     expect: {
         var print = console.log.bind(console);
         function foo(x) {
-            print('Foo:', 2 * x.y);
+            print('Foo:', x.y * 2);
         }
         foo({ y: 10 });
     }
@@ -6071,6 +6071,44 @@ do_not_place_chain_on_lhs_2: {
         a = b?.c;
         a.d = e;
     }
+}
+
+optional_chain_call_argument_side_effect: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.(results);
+        })(id(null));
+    }
+    expect: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.(results);
+        })(id(null));
+    }
+    expect_stdout: "PASS"
+}
+
+optional_chain_call_prop_side_effect: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.[results];
+        })(id(null));
+    }
+    expect: {
+        ((this_is_null) => {
+            const results = console.log("PASS");
+            this_is_null?.[results];
+        })(id(null));
+    }
+    expect_stdout: "PASS"
 }
 
 shadowed_variable: {

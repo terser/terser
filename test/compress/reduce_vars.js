@@ -761,11 +761,11 @@ multi_def_2: {
     }
     expect: {
         function f(){
-            if (16 == code)
+            if (code == 16)
                 var bitsLength = 2, bitsOffset = 3, what = len;
-            else if (17 == code)
+            else if (code == 17)
                 var bitsLength = 3, bitsOffset = 3, what = (len = 0);
-            else if (18 == code)
+            else if (code == 18)
                 var bitsLength = 7, bitsOffset = 11, what = (len = 0);
             var repeatLength = this.getBits(bitsLength) + bitsOffset;
         }
@@ -1278,7 +1278,73 @@ defun_reference_1: {
     }
 }
 
-defun_reference_2: {
+defun_reference_indirection_1: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var first = indirection();
+            var on = true;
+            function indirection() {
+                log_on()
+            }
+            function log_on() {
+                console.log(on)
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                log_on();
+            })();
+            var on = true;
+            function log_on() {
+                console.log(on);
+            }
+        }
+    }
+    expect_stdout: "undefined"
+}
+
+defun_reference_indirection_2: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var first = indirection_2();
+            var on = true;
+            function log_on() {
+                console.log(on)
+            }
+            function indirection_2() {
+                log_on()
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                log_on();
+            })();
+            var on = true;
+            function log_on() {
+                console.log(on);
+            }
+        }
+    }
+    expect_stdout: "undefined"
+}
+
+defun_reference_used_before_def: {
     options = {
         toplevel: true,
         reduce_vars: true,
@@ -1300,6 +1366,92 @@ defun_reference_2: {
     }
     expect_stdout: "undefined"
 }
+
+defun_reference_fixed: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var on = true;
+            var first = log_on();
+            function log_on() {
+                console.log(on)
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            (function () {
+                console.log(true)
+            })();
+        }
+    }
+    expect_stdout: "true"
+}
+
+issue_t1382: {
+    options = {
+        module: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true,
+    }
+    input: {
+        const qDev = false;
+
+        function assertEqual() {
+            if (qDev) {
+                throw new Error('SHOULD BE REMOVED')
+            }
+        }
+
+        export {assertEqual}
+
+        export class ReadWriteProxyHandler {
+            set() {
+                if (qDev) if (invokeCtx) {}
+            }
+        }
+    }
+    expect: {
+        function assertEqual(){
+            if(false) throw new Error("SHOULD BE REMOVED")
+        }
+
+        export{assertEqual};
+
+        export class ReadWriteProxyHandler{
+            set(){if(false)if(invokeCtx);}
+        }
+    }
+}
+
+defun_reference_fixed_let: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true,
+    }
+    input: {
+        let on = true;
+        function log_on() {
+            console.log(on)
+        }
+        var first = log_on();
+    }
+    expect: {
+        (function () {
+            console.log(true)
+        })();
+    }
+    expect_stdout: "true"
+}
+
 
 defun_inline_1: {
     options = {
@@ -1810,7 +1962,7 @@ issue_1670_1: {
     expect: {
         (function() {
             var a;
-            void 0 === a ? console.log("PASS") : console.log("FAIL");
+            a === void 0 ? console.log("PASS") : console.log("FAIL");
         })();
     }
     expect_stdout: "PASS"
@@ -1876,7 +2028,7 @@ issue_1670_3: {
     expect: {
         (function() {
             var a;
-            void 0 === a ? console.log("PASS") : console.log("FAIL");
+            a === void 0 ? console.log("PASS") : console.log("FAIL");
         })();
     }
     expect_stdout: "PASS"
@@ -5907,7 +6059,7 @@ issue_2860_1: {
     }
     expect: {
         console.log(function(a) {
-            return 1 ^ a;
+            return a ^ 1;
         }());
     }
     expect_stdout: "1"
@@ -7139,7 +7291,6 @@ issue_443: {
 }
 
 reduce_class_with_side_effects_in_extends: {
-    node_version = ">=12"
     options = {
         unused: true,
         reduce_vars: true,
@@ -7156,7 +7307,6 @@ reduce_class_with_side_effects_in_extends: {
 }
 
 reduce_class_with_side_effects_in_properties: {
-    node_version = ">=12"
     options = {
         unused: true,
         reduce_vars: true,

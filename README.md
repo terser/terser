@@ -708,7 +708,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `comparisons` (default: `true`) -- apply certain optimizations to binary nodes,
   e.g. `!(a <= b) → a > b` (only when `unsafe_comps`), attempts to negate binary
-  nodes, e.g. `a = !b && !c && !d && !e → a=!(b||c||d||e)` etc.
+  nodes, e.g. `a = !b && !c && !d && !e → a=!(b||c||d||e)` etc. Note: `comparisons`
+  works best with `lhs_constants` enabled.
 
 - `computed_props` (default: `true`) -- Transforms constant computed properties
   into regular ones: `{["computed"]: 1}` is converted to `{computed: 1}`.
@@ -774,6 +775,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 
 - `keep_infinity` (default: `false`) -- Pass `true` to prevent `Infinity` from
   being compressed into `1/0`, which may cause performance issues on Chrome.
+
+- `lhs_constants` (default: `true`) -- Moves constant values to the left-hand side
+  of binary nodes. `foo == 42 → 42 == foo`
 
 - `loops` (default: `true`) -- optimizations for `do`, `while` and `for` loops
   when we can statically determine the condition.
@@ -1184,6 +1188,7 @@ Annotations in Terser are a way to tell it to treat a certain function call diff
  * `/*@__INLINE__*/` - forces a function to be inlined somewhere.
  * `/*@__NOINLINE__*/` - Makes sure the called function is not inlined into the call site.
  * `/*@__PURE__*/` - Marks a function call as pure. That means, it can safely be dropped.
+ * `/*@__KEY__*/` - Marks a string literal as a property to also mangle it when mangling properties.
 
 You can use either a `@` sign at the start, or a `#`.
 
@@ -1197,6 +1202,9 @@ function_always_inlined_here()
 function_cant_be_inlined_into_here()
 
 const x = /*#__PURE__*/i_am_dropped_if_x_is_not_used()
+
+function lookup(object, key) { return object[key]; }
+lookup({ i_will_be_mangled_too: "bar" }, /*@__KEY__*/ "i_will_be_mangled_too");
 ```
 
 ### ESTree / SpiderMonkey AST
@@ -1266,6 +1274,12 @@ are known to have an adverse effect on debugging with source maps. This is
 expected as code is optimized and mappings are often simply not possible as
 some code no longer exists. For highest fidelity in source map debugging
 disable the `compress` option and just use `mangle`.
+
+When debugging, make sure you enable the **"map scopes"** feature to map mangled variable names back to their original names.  
+Without this, all variable values will be `undefined`. See https://github.com/terser/terser/issues/1367 for more details.
+<br/><br/>
+
+![image](https://user-images.githubusercontent.com/27283110/230441652-ac5cf6b0-5dc5-4ffc-9d8b-bd02875484f4.png)
 
 ### Compiler assumptions
 

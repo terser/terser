@@ -185,7 +185,6 @@ lift_sequences_6: {
         console.log(a);
     }
     expect_stdout: "3"
-    node_version = ">=15"
 }
 
 for_sequences: {

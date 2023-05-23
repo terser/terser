@@ -102,7 +102,6 @@ parameterless_catch: {
     }
     expect_exact: 'try{unknown()}catch{console.log("PASS")}'
     expect_stdout: "PASS"
-    node_version: ">=10"
 }
 
 parent_scope_of_catch_block_is_not_the_try_block: {

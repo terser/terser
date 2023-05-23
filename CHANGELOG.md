@@ -1,5 +1,66 @@
 # Changelog
 
+## v5.17.6
+ - Fixes to mozilla AST input and output, for class properties, private properties and static blocks
+ - Fix outputting a shorthand property in quotes when safari10 and ecma=2015 options are enabled
+ - `configurable` and `enumerable`, used in Object.defineProperty, added to domprops (#1393)
+
+## v5.17.5
+ - Take into account the non-deferred bits of a class, such as static properties, while dropping unused code.
+
+## v5.17.4
+
+ - Fix crash when trying to negate a class (`!class{}`)
+ - Avoid outputting comments between `yield`/`await` and its argument
+ - Fix detection of left-hand-side of assignment, to avoid optimizing it like any other expression in some edge cases
+
+## v5.17.3
+
+ - Fix issue with trimming a static class property's contents accessing the class as `this`.
+
+## v5.17.2
+ - Be less conservative when detecting use-before-definition of `var` in hoisted functions.
+ - Support unusual (but perfectly valid) initializers of for-in and for-of loops.
+ - Fix issue where hoisted function would be dropped if it was after a `continue` statement
+
+## v5.17.1
+ - Fix evaluating `.length` when the source array might've been mutated
+
+## v5.17.0
+ - Drop vestigial `= undefined` default argument in IIFE calls (#1366)
+ - Evaluate known arrays' `.length` property when statically determinable
+ - Add `@__KEY__` annotation to mangle string literals (#1365)
+
+## v5.16.9
+ - Fix parentheses in output of optional chains (`a?.b`) (#1374)
+ - More documentation on source maps (#1368)
+ - New `lhs_constants` option, allowing to stop Terser from swapping comparison operands (#1361)
+
+## v5.16.8
+
+ - Become even less conservative around function definitions for `reduce_vars`
+ - Fix parsing context of `import.meta` expressions such that method calls are allowed
+
+## v5.16.6
+
+ - Become less conservative with analyzing function definitions for `reduce_vars`
+ - Parse `import.meta` as a real AST node and not an `object.property`
+
+## v5.16.5
+
+ - Correctly handle AST transform functions that mutate children arrays
+ - Don't mutate the options object passed to Terser (#1342)
+ - Do not treat BigInt like a number
+
+## v5.16.4
+
+ - Keep `(defaultArg = undefined) => ...`, because default args don't count for function length
+ - Prevent inlining variables into `?.` optional chains
+ - Avoid removing unused arguments while transforming
+ - Optimize iterating AST node lists
+ - Make sure `catch` and `finally` aren't children of `try` in the AST
+ - Use modern unicode property escapes (`\p{...}`) to parse identifiers when available
+
 ## v5.16.3
 
  - Ensure function definitions, don't assume the values of variables defined after them.

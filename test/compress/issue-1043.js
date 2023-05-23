@@ -18,7 +18,7 @@ issue_1043: {
 
     expect: {
         function* range(start = 0, end = null, step = 1) {
-            if (null == end) {
+            if (end == null) {
                 end = start;
                 start = 0;
             }

@@ -50,16 +50,15 @@
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {
-    "@ls-lint/ls-lint": "^1.10.0",
+    "@ls-lint/ls-lint": "^1.11.2",
     "astring": "^1.8.5",
     "eslint": "^7.32.0",
     "eslump": "^3.0.0",
     "esm": "^3.2.25",
     "mocha": "^9.2.0",
     "pre-commit": "^1.2.2",
-    "rimraf": "^3.0.2",
-    "rollup": "2.56.3",
-    "semver": "^7.3.4",
+    "rollup": "^2.56.3",
+    "semver": "^7.5.1",
     "source-map": "~0.8.0-beta.0"
   },
   "scripts": {
@@ -69,7 +68,7 @@
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "ls-lint": "ls-lint",
-    "build": "rimraf dist/bundle* && rollup --config --silent",
+    "build": "rollup --config --silent",
     "prepare": "npm run build",
     "postversion": "echo 'Remember to update the changelog!'"
   },

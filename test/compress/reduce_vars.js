@@ -7291,7 +7291,6 @@ issue_443: {
 }
 
 reduce_class_with_side_effects_in_extends: {
-    node_version = ">=12"
     options = {
         unused: true,
         reduce_vars: true,
@@ -7308,7 +7307,6 @@ reduce_class_with_side_effects_in_extends: {
 }
 
 reduce_class_with_side_effects_in_properties: {
-    node_version = ">=12"
     options = {
         unused: true,
         reduce_vars: true,

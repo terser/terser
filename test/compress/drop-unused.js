@@ -2760,7 +2760,6 @@ unused_seq_elements: {
 }
 
 unused_class_with_static_props_side_effects: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2775,7 +2774,6 @@ unused_class_with_static_props_side_effects: {
 }
 
 unused_class_with_static_props_this: {
-    node_version = ">=12"
     options = {
         toplevel: true,
         unused: true
@@ -2799,7 +2797,6 @@ unused_class_with_static_props_this: {
 }
 
 unused_class_with_static_props_this_2: {
-    node_version = ">=12"
     options = {
         toplevel: true,
         unused: true,
@@ -2831,7 +2828,6 @@ unused_class_with_static_props_this_2: {
 }
 
 unused_class_with_static_props_side_effects_2: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2849,7 +2845,6 @@ unused_class_with_static_props_side_effects_2: {
 }
 
 unused_class_which_extends_might_throw: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2868,7 +2863,6 @@ unused_class_which_extends_might_throw: {
 }
 
 unused_class_which_might_throw: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2887,7 +2881,6 @@ unused_class_which_might_throw: {
 }
 
 unused_class_which_might_throw_2: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2906,7 +2899,6 @@ unused_class_which_might_throw_2: {
 }
 
 unused_class_which_might_throw_3: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2925,7 +2917,6 @@ unused_class_which_might_throw_3: {
 }
 
 unused_class_which_might_throw_4: {
-    node_version = ">=12"
     options = {
         toplevel: true
     }
@@ -2944,7 +2935,6 @@ unused_class_which_might_throw_4: {
 }
 
 variable_refs_outside_unused_class: {
-    node_version = ">=12"
     options = {
         toplevel: true,
         unused: true
@@ -3094,4 +3084,117 @@ unused_null_conditional_chain_5: {
             obj.side_effect().null?.(2),
             obj.side_effect().null?.maybe_call?.(3);
     }
+}
+
+issue_t1392: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+
+        SubClass
+    }
+    expect: {
+        class RelatedClass {}
+        class BaseClass {}
+        
+        class SubClass extends BaseClass {
+            static field = new RelatedClass;
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_2: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static {
+                new BaseClass()
+            }
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_3: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()] = 1
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_4: {
+    options = { unused: true, side_effects: true };
+    input: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+
+        SubClass
+    }
+    expect: {
+        class BaseClass {}
+        class SubClass {
+            static [new BaseClass()]() {}
+        }
+    }
+    expect_stdout: true
+}
+
+issue_t1392_5: {
+    options = { unused: true, side_effects: true };
+    input: {
+        (function test() {
+            class RelatedClass {}
+            class BaseClass {}
+        
+            class SubClass extends BaseClass {
+              static field = new RelatedClass;
+            }
+        
+            const subclassUser = {
+              oneUse: SubClass,
+              otherUse() {
+                return new SubClass
+              }
+            };
+        })()
+    }
+    expect: {
+        (function(){
+            class RelatedClass{}
+            class BaseClass{}
+            new RelatedClass()
+        })();
+    }
+    expect_stdout: true
 }

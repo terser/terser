@@ -179,7 +179,6 @@ async_inline: {
         "top",
         "async_top",
     ]
-    node_version: ">=8"
 }
 
 async_identifiers: {

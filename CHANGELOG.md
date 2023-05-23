@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.17.6
+ - Fixes to mozilla AST input and output, for class properties, private properties and static blocks
+ - Fix outputting a shorthand property in quotes when safari10 and ecma=2015 options are enabled
+ - `configurable` and `enumerable`, used in Object.defineProperty, added to domprops (#1393)
+
 ## v5.17.5
  - Take into account the non-deferred bits of a class, such as static properties, while dropping unused code.
 

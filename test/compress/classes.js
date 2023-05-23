@@ -21,10 +21,16 @@ class_recursive_refs: {
         class c {
             [c] = 42;
         }
+
+        class d {
+            dee = d;
+        }
+
+        class e {
+            static eee = e;
+        }
     }
-    expect: {
-        
-    }
+    expect: { }
 }
 
 class_duplication: {
@@ -112,8 +118,6 @@ pure_prop_assignment_for_classes: {
 }
 
 private_class_methods: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             #method() {
@@ -152,8 +156,6 @@ private_class_methods: {
 }
 
 private_class_accessors: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     input: {
         class A {
             #accessorInternal = "FAIL"
@@ -262,24 +264,25 @@ class_static_block_pinned: {
     node_version = ">=16"
     options = { toplevel: true, defaults: true }
     input: {
-        const x = "PASS"
+        const x = "PASS";
         class X {
             static {
-                console.log(x)
+                console.log(x);
             }
         }
 
-        alert(X)
+        console.log(X);
     }
     expect: {
         class X {
             static {
-                console.log("PASS")
+                console.log("PASS");
             }
         }
 
-        alert(X)
+        console.log(X);
     }
+    expect_stdout: true
 }
 
 class_static_block_hoisting: {

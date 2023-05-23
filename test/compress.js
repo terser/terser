@@ -28,6 +28,7 @@ var tests_dir = __dirname;
 var failed_files = {};
 var minify_options = JSON.parse(fs.readFileSync(path.join(__dirname, "ufuzz.json"), 'utf-8')).map(JSON.stringify);
 
+const already_logged = new Set()
 run_compress_tests().catch(e => {
     console.error(e);
     process.exit(1);
@@ -43,21 +44,21 @@ function tmpl() {
     return string_template.apply(this, arguments);
 }
 
-function log() {
-    var txt = tmpl.apply(this, arguments);
+function log(test, ...args) {
+    if (test) log_test(test);
+    var txt = tmpl.apply(this, args);
     console.log("%s", txt);
 }
 
 function log_directory(dir) {
-    log("*** Entering [{dir}]", { dir: dir });
+    log(null, "*** Entering [{dir}]", { dir: dir });
 }
 
-function log_start_file(file) {
-    log("--- {file}", { file: file });
-}
-
-function log_test(name) {
-    log("    Running test [{name}]", { name: name });
+function log_test(test) {
+    if (already_logged.has(test)) return
+    already_logged.add(test)
+    log(null, "--- Running test [{name}]", { name: test.name });
+    log(null, "    {file}", { file: test.file });
 }
 
 function find_test_files(dir) {
@@ -92,17 +93,16 @@ function as_toplevel(input, mangle_options) {
 }
 
 async function run_compress_tests() {
-    var failures = 0;
+    var test_failures = 0;
+    var test_cases = 0;
     const enable_js_sandbox =
         !process.env.TEST_NO_SANDBOX && semver.satisfies(process.version, ">=16")
 
     var dir = test_directory("compress");
-    log_directory("compress");
+    log_directory("test/compress");
     var files = find_test_files(dir);
     async function test_file(file) {
-        log_start_file(file);
         async function test_case(test) {
-            log_test(test.name);
             var output_options = test.beautify || test.format || {};
             var expect;
             if (test.expect) {
@@ -111,7 +111,7 @@ async function run_compress_tests() {
                 expect = test.expect_exact;
             }
             if (test.expect_error && (test.expect || test.expect_exact || test.expect_stdout)) {
-                log("!!! Test cannot have an `expect_error` with other expect clauses\n", {});
+                log(test, "!!! Test cannot have an `expect_error` with other expect clauses\n", {});
                 return false;
             }
             if (test.input instanceof AST.AST_SimpleStatement
@@ -121,7 +121,7 @@ async function run_compress_tests() {
                         var input = parse(test.input.body.segments[0].value);
                     } catch (ex) {
                         if (!test.expect_error) {
-                            log("!!! Test is missing an `expect_error` clause\n", {});
+                            log(test, "!!! Test is missing an `expect_error` clause\n", {});
                             return false;
                         }
                         if (test.expect_error instanceof AST.AST_SimpleStatement
@@ -132,7 +132,7 @@ async function run_compress_tests() {
                             for (var prop in expect_error) {
                                 if (prop == "name" || HOP(expect_error, prop)) {
                                     if (expect_error[prop] != ex_normalized[prop]) {
-                                        log("!!! Failed `expect_error` property `{prop}`:\n\n---expect_error---\n{expect_error}\n\n---ACTUAL exception--\n{actual_ex}\n\n", {
+                                        log(test, "!!! Failed `expect_error` property `{prop}`:\n\n---expect_error---\n{expect_error}\n\n---ACTUAL exception--\n{actual_ex}\n\n", {
                                             prop: prop,
                                             expect_error: JSON.stringify(expect_error, null, 2),
                                             actual_ex: JSON.stringify(ex_normalized, null, 2),
@@ -143,7 +143,7 @@ async function run_compress_tests() {
                             }
                             return true;
                         }
-                        log("!!! Test `expect_error` clause must be an object literal\n---expect_error---\n{expect_error}\n\n", {
+                        log(test, "!!! Test `expect_error` clause must be an object literal\n---expect_error---\n{expect_error}\n\n", {
                             expect_error: test.expect_error.print_to_string(),
                         });
                         return false;
@@ -151,13 +151,13 @@ async function run_compress_tests() {
                     var input_code = make_code(input, output_options);
                     var input_formatted = test.input.body.segments[0].value;
                 } else {
-                    log("!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {
+                    log(test, "!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {
                         input: test.input.body.print_to_string(),
                     });
                     return false;
                 }
             } else if (test.expect_error) {
-                log("!!! Test cannot have an `expect_error` clause without a template string `input`\n", {});
+                log(test, "!!! Test cannot have an `expect_error` clause without a template string `input`\n", {});
                 return false;
             } else {
                 var input = as_toplevel(test.input, test.mangle);
@@ -172,26 +172,34 @@ async function run_compress_tests() {
             try {
                 parse(input_code);
             } catch (ex) {
-                log("!!! Cannot parse input\n---INPUT---\n{input}\n--PARSE ERROR--\n{error}\n\n", {
+                log(test, "!!! Cannot parse input\n---INPUT---\n{input}\n--PARSE ERROR--\n{error}\n\n", {
                     input: input_formatted,
                     error: ex,
                 });
                 return false;
             }
             if (!test.no_mozilla_ast) {
-                var ast = input.to_mozilla_ast();
-                var mozilla_options = {
-                    ecma: output_options.ecma,
-                    ascii_only: output_options.ascii_only,
-                    comments: false,
-                };
-                var ast_as_string = AST.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
-                var input_string = input.print_to_string(mozilla_options);
-                if (input_string !== ast_as_string) {
-                    log("!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
-                        input: input_string,
-                        output: ast_as_string,
+                try {
+                    var ast = input.to_mozilla_ast();
+                    var mozilla_options = {
+                        ecma: output_options.ecma,
+                        ascii_only: output_options.ascii_only,
+                        comments: false,
+                    };
+                    var ast_as_string = AST.AST_Node.from_mozilla_ast(ast).print_to_string(mozilla_options);
+                    var input_string = input.print_to_string(mozilla_options);
+                    if (input_string !== ast_as_string) {
+                        log(test, "!!! Mozilla AST I/O corrupted input\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n\n", {
+                            input: input_string,
+                            output: ast_as_string,
+                        });
+                        return false;
+                    }
+                } catch (moz_ast_error) {
+                    log(test, "!!! Mozilla AST I/O crashed\n---INPUT---\n{input}", {
+                        input: input_formatted,
                     });
+                    console.error(moz_ast_error);
                     return false;
                 }
             }
@@ -241,7 +249,7 @@ async function run_compress_tests() {
                 // Do not verify generated `output` against `expect` or `expect_exact`.
                 // Rely on the pending `expect_stdout` check below.
             } else if (expect != output && !process.env.TEST_NO_COMPARE) {
-                log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED---\n{expected}\n\n", {
+                log(test, "!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED---\n{expected}\n\n", {
                     input: input_formatted,
                     output: output,
                     expected: expect
@@ -251,7 +259,7 @@ async function run_compress_tests() {
             try {
                 parse(output);
             } catch (ex) {
-                log("!!! Test matched expected result but cannot parse output\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n--REPARSE ERROR--\n{error}\n\n", {
+                log(test, "!!! Test matched expected result but cannot parse output\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n--REPARSE ERROR--\n{error}\n\n", {
                     input: input_formatted,
                     output: output,
                     error: ex.stack,
@@ -267,7 +275,7 @@ async function run_compress_tests() {
                     test.expect_stdout = stdout;
                 }
                 if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
-                    log("!!! Invalid input or expected stdout\n---INPUT---\n{input}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
+                    log(test, "!!! Invalid input or expected stdout\n---INPUT---\n{input}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
                         input: input_formatted,
                         expected_type: typeof test.expect_stdout == "string" ? "STDOUT" : "ERROR",
                         expected: test.expect_stdout,
@@ -278,7 +286,7 @@ async function run_compress_tests() {
                 }
                 stdout = sandbox.run_code(output, test.prepend_code);
                 if (!sandbox.same_stdout(test.expect_stdout, stdout)) {
-                    log("!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
+                    log(test, "!!! failed\n---INPUT---\n{input}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
                         input: input_formatted,
                         output: output,
                         expected_type: typeof test.expect_stdout == "string" ? "STDOUT" : "ERROR",
@@ -298,8 +306,9 @@ async function run_compress_tests() {
         let { GREP } = process.env;
         for (var i in tests) if (tests.hasOwnProperty(i)) {
             if (GREP && !i.includes(GREP)) continue;
+            test_cases++;
             if (!await test_case(tests[i])) {
-                failures++;
+                test_failures++;
                 failed_files[file] = 1;
                 if (process.env.TEST_FAIL_FAST) return false;
             }
@@ -311,10 +320,12 @@ async function run_compress_tests() {
             break;
         }
     }
-    if (failures) {
-        console.error("\n!!! Failed " + failures + " test cases.");
+    if (test_failures) {
+        console.error("\n!!! Failed " + test_failures + " test cases.");
         console.error("!!! " + Object.keys(failed_files).join(", "));
         process.exit(1);
+    } else {
+        console.log("\nPassed " + test_cases + " test cases.");
     }
 }
 
@@ -340,7 +351,7 @@ function parse_test(file) {
             if (name in tests) {
                 throw new Error('Duplicated test name "' + name + '" in ' + file);
             }
-            tests[name] = get_one_test(name, node.body);
+            tests[name] = get_one_test(file, name, node.body);
             return true;
         }
         if (node instanceof AST.AST_Directive) return true;
@@ -389,8 +400,9 @@ function parse_test(file) {
         throw new Error("Should be string or array of strings");
     }
 
-    function get_one_test(name, block) {
+    function get_one_test(file, name, block) {
         var test = {
+            file: file.replace(/.+\/(test\/compress\/\w+\.js)/, "$1") + ':' + block.start.line,
             name: name,
             options: {},
             reminify: true,
@@ -496,7 +508,7 @@ async function reminify(test, input_code, input_formatted) {
         var options_formatted = JSON.stringify(options, null, 4);
         var result = await minify(input_code, options);
         if (result.error) {
-            log("!!! failed input reminify\n---INPUT---\n{input}\n--ERROR---\n{error}\n\n", {
+            log(test, "!!! failed input reminify\n---INPUT---\n{input}\n--ERROR---\n{error}\n\n", {
                 input: input_formatted,
                 error: result.error.stack,
             });
@@ -507,7 +519,7 @@ async function reminify(test, input_code, input_formatted) {
                 stdout = expect_stdout;
             }
             if (!sandbox.same_stdout(expect_stdout, stdout)) {
-                log("!!! failed running reminified input\n---INPUT---\n{input}\n---OPTIONS---\n{options}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
+                log(test, "!!! failed running reminified input\n---INPUT---\n{input}\n---OPTIONS---\n{options}\n---OUTPUT---\n{output}\n---EXPECTED {expected_type}---\n{expected}\n---ACTUAL {actual_type}---\n{actual}\n\n", {
                     input: input_formatted,
                     options: options_formatted,
                     output: result.code,

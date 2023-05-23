@@ -1,6 +1,4 @@
 ternary_and_private_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         conditionals: true,
     }
@@ -28,8 +26,6 @@ ternary_and_private_fields: {
 }
 
 ternary_and_private_public_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         conditionals: true,
     }
@@ -57,8 +53,6 @@ ternary_and_private_public_fields: {
 }
 
 ternary_and_private_methods: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         conditionals: true,
     }
@@ -86,8 +80,6 @@ ternary_and_private_methods: {
 }
 
 ternary_and_private_static_fields: {
-    no_mozilla_ast = true;
-    node_version = ">=12"
     options = {
         conditionals: true,
     }

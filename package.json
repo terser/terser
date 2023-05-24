@@ -4,7 +4,7 @@
   "homepage": "https://terser.org",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
-  "version": "5.17.5",
+  "version": "5.17.6",
   "engines": {
     "node": ">=10"
   },
@@ -44,22 +44,21 @@
     "main.js"
   ],
   "dependencies": {
-    "@jridgewell/source-map": "^0.3.2",
-    "acorn": "^8.5.0",
+    "@jridgewell/source-map": "^0.3.3",
+    "acorn": "^8.8.2",
     "commander": "^2.20.0",
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {
-    "@ls-lint/ls-lint": "^1.10.0",
-    "astring": "^1.7.5",
+    "@ls-lint/ls-lint": "^1.11.2",
+    "astring": "^1.8.5",
     "eslint": "^7.32.0",
     "eslump": "^3.0.0",
     "esm": "^3.2.25",
     "mocha": "^9.2.0",
     "pre-commit": "^1.2.2",
-    "rimraf": "^3.0.2",
-    "rollup": "2.56.3",
-    "semver": "^7.3.4",
+    "rollup": "^2.56.3",
+    "semver": "^7.5.1",
     "source-map": "~0.8.0-beta.0"
   },
   "scripts": {
@@ -69,7 +68,7 @@
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "ls-lint": "ls-lint",
-    "build": "rimraf dist/bundle* && rollup --config --silent",
+    "build": "rollup --config --silent",
     "prepare": "npm run build",
     "postversion": "echo 'Remember to update the changelog!'"
   },

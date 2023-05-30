@@ -4768,6 +4768,7 @@ export var domprops = [
     "indexOf",
     "indexedDB",
     "indicate",
+    "inert",
     "inertiaDestinationX",
     "inertiaDestinationY",
     "info",

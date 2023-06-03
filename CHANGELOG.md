@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.17.7
+ - Update some dependencies
+ - Add consistent sorting for `v` RegExp flag
+ - Add `inert` DOM attribute to domprops
+
 ## v5.17.6
  - Fixes to mozilla AST input and output, for class properties, private properties and static blocks
  - Fix outputting a shorthand property in quotes when safari10 and ecma=2015 options are enabled

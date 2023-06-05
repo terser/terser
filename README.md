@@ -106,6 +106,7 @@ a double dash to prevent input files being used as option arguments:
                                                `strict` disables quoted properties
                                                being automatically reserved.
                                 `regex`  Only mangle matched property names.
+                                `only_annotated` Only mangle properties defined with /*@__PROPMANGLE__*/.
                                 `reserved`  List of names that should not be mangled.
     -f, --format [options]      Specify format options.
                                 `preamble`  Preamble to prepend to the output. You

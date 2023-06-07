@@ -1,7 +1,6 @@
 mangleprop_annotation: {
     options = {
-        defaults: false,
-        inline: false,
+        toplevel: true,
     };
     mangle = {
         properties: {
@@ -10,20 +9,20 @@ mangleprop_annotation: {
     };
     input: {
         class Foo {
-            /*@__MANGLEPROP__*/ prop = "prop"
-            /*@__MANGLEPROP__*/ static static_prop = "static_prop"
-            /*@__MANGLEPROP__*/ meth() {return "meth"}
-            /*@__MANGLEPROP__*/ async meth2() {}
-            /*@__MANGLEPROP__*/ async *meth3() {}
-            /*@__MANGLEPROP__*/ *gen() { return "gen" }
+            /*@__MANGLE_PROP__*/ prop = "prop"
+            /*@__MANGLE_PROP__*/ static static_prop = "static_prop"
+            /*@__MANGLE_PROP__*/ meth() {return "meth"}
+            /*@__MANGLE_PROP__*/ async meth2() {}
+            /*@__MANGLE_PROP__*/ async *meth3() {}
+            /*@__MANGLE_PROP__*/ *gen() { return "gen" }
         }
 
         const foo = {
-            /*@__MANGLEPROP__*/ prop: "prop",
-            /*@__MANGLEPROP__*/ meth() {return "meth"},
-            /*@__MANGLEPROP__*/ async meth2() {},
-            /*@__MANGLEPROP__*/ async *meth3() {},
-            /*@__MANGLEPROP__*/ *gen() { return "gen" },
+            /*@__MANGLE_PROP__*/ prop: "prop",
+            /*@__MANGLE_PROP__*/ meth() {return "meth"},
+            /*@__MANGLE_PROP__*/ async meth2() {},
+            /*@__MANGLE_PROP__*/ async *meth3() {},
+            /*@__MANGLE_PROP__*/ *gen() { return "gen" },
         }
 
         console.log(new Foo().prop, foo.prop);
@@ -39,8 +38,7 @@ mangleprop_annotation: {
 
 mangleprop_annotation_partial: {
     options = {
-        defaults: false,
-        inline: false,
+        toplevel: true,
     };
     mangle = {
         properties: {
@@ -49,14 +47,14 @@ mangleprop_annotation_partial: {
     };
     input: {
         class Foo {
-            /*@__MANGLEPROP__*/ manglethis = "manglethis"
+            /*@__MANGLE_PROP__*/ manglethis = "manglethis"
             manglethistoo = "manglethistoo"
             dontmanglethis = "dontmanglethis"
         }
 
         const foo = {
             manglethis: "manglethis",
-            /*@__MANGLEPROP__*/ manglethistoo: "manglethistoo",
+            /*@__MANGLE_PROP__*/ manglethistoo: "manglethistoo",
             dontmanglethis: "dontmanglethis"
         }
 
@@ -66,14 +64,14 @@ mangleprop_annotation_partial: {
     }
     expect: {
         class Foo {
-            /*@__MANGLEPROP__*/ o = "manglethis"
+            /*@__MANGLE_PROP__*/ o = "manglethis"
             t = "manglethistoo"
             dontmanglethis = "dontmanglethis"
         }
 
         const foo = {
             o: "manglethis",
-            /*@__MANGLEPROP__*/ t: "manglethistoo",
+            /*@__MANGLE_PROP__*/ t: "manglethistoo",
             dontmanglethis: "dontmanglethis"
         }
 
@@ -90,8 +88,7 @@ mangleprop_annotation_partial: {
 
 mangleprop_annotation_wrongregex: {
     options = {
-        defaults: false,
-        inline: false,
+        toplevel: true,
     };
     mangle = {
         properties: {
@@ -100,7 +97,7 @@ mangleprop_annotation_wrongregex: {
     };
     input: {
         class Foo {
-            /*@__MANGLEPROP__*/ manglethis = "manglethis"
+            /*@__MANGLE_PROP__*/ manglethis = "manglethis"
             manglethistoo = "manglethistoo"
             dontmanglethis = "dontmanglethis"
             matchedbyregex = "matchedbyregex"
@@ -108,7 +105,7 @@ mangleprop_annotation_wrongregex: {
 
         const foo = {
             manglethis: "manglethis",
-            /*@__MANGLEPROP__*/ manglethistoo: "manglethistoo",
+            /*@__MANGLE_PROP__*/ manglethistoo: "manglethistoo",
             dontmanglethis: "dontmanglethis",
             matchedbyregex: "matchedbyregex",
         }
@@ -120,7 +117,7 @@ mangleprop_annotation_wrongregex: {
     }
     expect: {
         class Foo {
-            /*@__MANGLEPROP__*/ o = "manglethis"
+            /*@__MANGLE_PROP__*/ o = "manglethis"
             t = "manglethistoo"
             dontmanglethis = "dontmanglethis"
             l = "matchedbyregex"
@@ -128,7 +125,7 @@ mangleprop_annotation_wrongregex: {
 
         const foo = {
             o: "manglethis",
-            /*@__MANGLEPROP__*/ t: "manglethistoo",
+            /*@__MANGLE_PROP__*/ t: "manglethistoo",
             dontmanglethis: "dontmanglethis",
             l: "matchedbyregex",
         }
@@ -144,4 +141,40 @@ mangleprop_annotation_wrongregex: {
         "dontmanglethis dontmanglethis",
         "matchedbyregex matchedbyregex",
     ]
+}
+
+mangleprop_annotation_and_key: {
+    options = {
+        toplevel: true,
+    };
+    mangle = {
+        properties: { only_annotated: true },
+    };
+    input: {
+        const object = {
+            /**@__MANGLE_PROP__*/someprop: "ppppppppp",
+            o: 'o',
+        }
+
+        "someprop" in object;
+        /*@__KEY__*/"someprop" in object;
+        object.hasOwnProperty("someprop");
+        object.hasOwnProperty(/*@__KEY__*/"someprop");
+
+        console.log(Object.values(object));
+    }
+    expect: {
+        const object = {
+            p: "ppppppppp",
+            o: 'o',
+        }
+
+        "p" in object;
+        /*@__KEY__*/"p" in object;
+        object.hasOwnProperty("someprop");
+        object.hasOwnProperty(/*@__KEY__*/"p");
+
+        console.log(Object.values(object));
+    }
+    expect_stdout: true
 }

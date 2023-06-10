@@ -106,6 +106,7 @@ a double dash to prevent input files being used as option arguments:
                                                `strict` disables quoted properties
                                                being automatically reserved.
                                 `regex`  Only mangle matched property names.
+                                `only_annotated` Only mangle properties defined with /*@__MANGLE_PROP__*/.
                                 `reserved`  List of names that should not be mangled.
     -f, --format [options]      Specify format options.
                                 `preamble`  Preamble to prepend to the output. You
@@ -1189,6 +1190,7 @@ Annotations in Terser are a way to tell it to treat a certain function call diff
  * `/*@__NOINLINE__*/` - Makes sure the called function is not inlined into the call site.
  * `/*@__PURE__*/` - Marks a function call as pure. That means, it can safely be dropped.
  * `/*@__KEY__*/` - Marks a string literal as a property to also mangle it when mangling properties.
+ * `/*@__MANGLE_PROP__*/` - Opts-in an object property (or class field) for mangling, when the property mangler is enabled.
 
 You can use either a `@` sign at the start, or a `#`.
 

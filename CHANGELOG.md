@@ -1,5 +1,8 @@
 # Changelog
 
+## v7.18.0
+ - Add new `/*@__MANGLE_PROP__*/` annotation, to mark properties that should be mangled.
+
 ## v5.17.7
  - Update some dependencies
  - Add consistent sorting for `v` RegExp flag

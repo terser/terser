@@ -52,7 +52,9 @@ From NPM for programmatic use:
 
 <!-- CLI_USAGE:START -->
 
-    terser [input files] [options]
+```
+terser [input files] [options]
+```
 
 Terser can take multiple input files.  It's recommended that you pass the
 input files first, then pass the options.  Terser will parse input files

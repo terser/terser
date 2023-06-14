@@ -676,6 +676,10 @@ If you're using the `X-SourceMap` header instead, you can just omit `sourceMap.u
 
 If you happen to need the source map as a raw object, set `sourceMap.asObject` to `true`.
 
+<!-- API_REFERENCE:END -->
+
+<!-- OPTIONS:START -->
+
 ## Parse options
 
 - `bare_returns` (default `false`) -- support top level `return` statements
@@ -1065,7 +1069,7 @@ as "output options".
   [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 
 
-<!-- API_REFERENCE:END -->
+<!-- OPTIONS:END -->
 
 
 # Miscellaneous

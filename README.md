@@ -1064,7 +1064,13 @@ as "output options".
   function expressions that are passed as arguments, in parenthesis. See
   [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 
+
+<!-- API_REFERENCE:END -->
+
+
 # Miscellaneous
+
+<!-- MISCELLANEOUS:START -->
 
 ### Keeping copyright notices or other comments
 
@@ -1330,19 +1336,27 @@ $ rm -rf node_modules yarn.lock
 $ yarn
 ```
 
-<!-- API_REFERENCE:END -->
+<!-- MISCELLANEOUS:END -->
 
 # Reporting issues
 
-In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will help you write good issues.
+<!-- REPORTING_ISSUES:START -->
+
+## A minimal, reproducible example
+
+You're expected to provide a [minimal reproducible example] of input code that will demonstrate your issue.
+
+To get to this example, you can remove bits of your code and stop if your issue ceases to reproduce.
 
 ## Obtaining the source code given to Terser
 
-Because users often don't control the call to `await minify()` or its arguments, Terser provides a `TERSER_DEBUG_DIR` environment variable to make terser output some debug logs. If you're using a bundler or a project that includes a bundler and are not sure what went wrong with your code, pass that variable like so:
+Because users often don't control the call to `await minify()` or its arguments, Terser provides a `TERSER_DEBUG_DIR` environment variable to make terser output some debug logs.
 
-```
-$ TERSER_DEBUG_DIR=/path/to/logs command-that-uses-terser
-$ ls /path/to/logs
+These logs will contain the input code and options of each `minify()` call.
+
+```bash
+TERSER_DEBUG_DIR=/tmp/terser-log-dir command-that-uses-terser
+ls /tmp/terser-log-dir
 terser-debug-123456.log
 ```
 
@@ -1351,6 +1365,12 @@ If you're not sure how to set an environment variable on your shell (the above e
 ```
 > npx cross-env TERSER_DEBUG_DIR=/path/to/logs command-that-uses-terser
 ```
+
+## Stack traces
+
+In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will help you write good issues.
+
+<!-- REPORTING_ISSUES:END -->
 
 # README.md Patrons:
 

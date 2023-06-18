@@ -1367,7 +1367,7 @@ defun_reference_used_before_def: {
     expect_stdout: "undefined"
 }
 
-defun_reference_fixed: {
+defun_reference_fixed_var: {
     options = {
         toplevel: true,
         reduce_vars: true,

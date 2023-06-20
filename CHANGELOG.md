@@ -1,5 +1,8 @@
 # Changelog
 
+## v7.18.1
+ - Fix major performance issue caused by hoisted defuns' scopes bugfix.
+
 ## v7.18.0
  - Add new `/*@__MANGLE_PROP__*/` annotation, to mark properties that should be mangled.
 

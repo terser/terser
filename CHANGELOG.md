@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.18.2
+ - Stop using recursion in hoisted defuns fix.
+
 ## v5.18.1
  - Fix major performance issue caused by hoisted defuns' scopes bugfix.
 

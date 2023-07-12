@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.19.0
+ - Allow `/*@__MANGLE_PROP__*/` annotation in `object.property`, in addition to property declarations.
+
 ## v5.18.2
  - Stop using recursion in hoisted defuns fix.
 

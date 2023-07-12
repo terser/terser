@@ -178,3 +178,47 @@ mangleprop_annotation_and_key: {
     }
     expect_stdout: true
 }
+
+mangleprop_annotation_in_propassign: {
+    options = {
+        toplevel: true,
+    };
+    mangle = {
+        properties: { only_annotated: true },
+    };
+    input: {
+        /*@__MANGLE_PROP__*/ this.keepthis.manglethis = "manglethis";
+        /*@__MANGLE_PROP__*/ this.keepthis.manglethis = "manglethis";
+        (/*@__MANGLE_PROP__*/ this.manglethis_).keepthis_ = "manglethis_";
+        (/*@__MANGLE_PROP__*/ this.manglethis_).keepthis_ = "manglethis_";
+        /*@__MANGLE_PROP__*/ this.keepthis__["manglethis__"] = "manglethis__";
+        /*@__MANGLE_PROP__*/ this.keepthis__["manglethis__"] = "manglethis__";
+        (/*@__MANGLE_PROP__*/ this["manglethis___"]).keepthis___ = "manglethis___";
+        (/*@__MANGLE_PROP__*/ this["manglethis___"]).keepthis___ = "manglethis___";
+    }
+    expect: {
+        this.keepthis.h = "manglethis";
+        this.keepthis.h = "manglethis";
+        this.i.keepthis_ = "manglethis_";
+        this.i.keepthis_ = "manglethis_";
+        this.keepthis__["t"] = "manglethis__";
+        this.keepthis__["t"] = "manglethis__";
+        this["_"].keepthis___ = "manglethis___";
+        this["_"].keepthis___ = "manglethis___";
+    }
+}
+
+mangleprop_annotation_in_prop: {
+    options = {
+        toplevel: true,
+    };
+    mangle = {
+        properties: { only_annotated: true },
+    };
+    input: {
+        /*@__MANGLE_PROP__*/ this.keepthis.manglethis;
+    }
+    expect: {
+        this.keepthis.h;
+    }
+}

@@ -3198,3 +3198,22 @@ issue_t1392_5: {
     }
     expect_stdout: true
 }
+
+issue_t1412_1: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        var unused_var;
+        class C { static { unused_var = 1234; } }
+    }
+    expect: { }
+}
+
+issue_t1412_2: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        class C { static { side_eff(); } }
+    }
+    expect: {
+        class C { static { side_eff(); } }
+    }
+}

@@ -159,6 +159,8 @@ describe("sourcemaps", function() {
         const code = `class Foo {
             property = 6
             method () {}
+            async async_method() {}
+            static static_method() {}
             404() {}
             "quoted method name" () {}
             get getter(){}
@@ -171,6 +173,8 @@ describe("sourcemaps", function() {
             test() {
                 this.property;
                 this.method;
+                this.async_method;
+                this.static_method;
                 this[404];
                 this["quoted method name"];
                 this.getter;
@@ -189,6 +193,8 @@ describe("sourcemaps", function() {
             "Foo",
             "property",
             "method",
+            "async_method",
+            "static_method",
             "getter",
             "setter",
             "private",

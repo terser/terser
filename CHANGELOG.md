@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.19.1
+ - Better avoid outputting `</script>` and HTML comments.
+ - Fix unused variables in class static blocks not being dropped correctly.
+ - Fix sourcemap names of methods that are `async` or `static`
+
 ## v5.19.0
  - Allow `/*@__MANGLE_PROP__*/` annotation in `object.property`, in addition to property declarations.
 

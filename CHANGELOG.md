@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.19.2
+ - fix performance hit from avoiding HTML comments in the output
+
 ## v5.19.1
  - Better avoid outputting `</script>` and HTML comments.
  - Fix unused variables in class static blocks not being dropped correctly.

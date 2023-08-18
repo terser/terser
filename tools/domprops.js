@@ -6570,6 +6570,7 @@ export var domprops = [
     "rotationAngle",
     "rotationRate",
     "round",
+    "roundRect",
     "row-gap",
     "rowGap",
     "rowIndex",

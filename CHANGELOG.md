@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.19.3
+ - Fix side effect detection of `optional?.chains`.
+ - Add roundRect to domprops.js (#1426)
+
 ## v5.19.2
  - fix performance hit from avoiding HTML comments in the output
 

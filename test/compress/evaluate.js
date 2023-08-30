@@ -1821,7 +1821,7 @@ null_conditional_chain_eval_2: {
         null.deep?.maybe_call?.(3)
     }
     expect: {
-        null.deep?.unused
+        null.deep
         null.deep?.[side_effect()]
         null.deep?.unused.but_might_throw
         null.deep?.call(1)

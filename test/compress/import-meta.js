@@ -10,7 +10,7 @@ import_meta_basic: {
     expect: {
         import.meta,
         import.meta.something,
-        import.meta?.something,
+        import.meta,
         import.meta.url.includes()
     }
 }

@@ -3011,7 +3011,7 @@ unused_null_conditional_chain_3: {
     }
     expect: {
         // TODO: Elminate everything after ?.
-        (side_effect(), null)?.unused,
+        side_effect(),
             (side_effect(), null)?.[side_effect()],
             (side_effect(), null)?.unused.i_will_throw,
             (side_effect(), null)?.call(1),
@@ -3043,7 +3043,7 @@ unused_null_conditional_chain_4: {
         function nullish() {
             return side_effect(), null;
         }
-        nullish()?.unused,
+        nullish(),
             nullish()?.[side_effect()],
             nullish()?.unused.i_will_throw,
             nullish()?.call(1),
@@ -3077,7 +3077,7 @@ unused_null_conditional_chain_5: {
             side_effect: () => (side_effect(), {null: null})
         }
         // TODO: Elminate everything after ?.
-        obj.side_effect().null?.unused,
+        obj.side_effect().null,
             obj.side_effect().null?.[side_effect()],
             obj.side_effect().null?.unused.i_will_throw,
             obj.side_effect().null?.call(1),

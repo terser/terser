@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.19.4
+ - Prevent creating very deeply nested ternaries from a long list of `if..return`
+ - Prevent inlining classes into other functions, to avoid constructors being compared.
+
 ## v5.19.3
  - Fix side effect detection of `optional?.chains`.
  - Add roundRect to domprops.js (#1426)

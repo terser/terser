@@ -273,6 +273,35 @@ issue_1267_inline_breaks_compare_identity_2: {
     expect_stdout: ["true"]
 }
 
+issue_1431_constructor_identity: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        reduce_funcs: true,
+        inline: true,
+        unused: true,
+    }
+    input: {
+        let Class = class {};
+
+        function sameConstructor() {
+            return new Class()
+        }
+
+        console.log(sameConstructor().constructor === sameConstructor().constructor)
+    }
+    expect: {
+        let Class = class {};
+
+        function sameConstructor() {
+            return new Class()
+        }
+
+        console.log(sameConstructor().constructor === sameConstructor().constructor)
+    }
+    expect_stdout: ["true"]
+}
+
 noinline_annotation: {
     options = {
         reduce_vars: true,

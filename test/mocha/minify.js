@@ -172,10 +172,10 @@ describe("minify", function() {
             compressed += result.code;
         });
         assert.strictEqual(compressed, [
-            '"xxxyy";var x={g:1};',
-            '"xxyyy";var p={h:2,i:3},r=4;',
-            "console.log(x.g,p.h,p.i,r);",
-            "console.log(x.h===undefined,p.g===undefined);"
+            '"xxxyy";var x={h:1};',
+            '"xxyyy";var p={i:2,j:3},r=4;',
+            "console.log(x.h,p.i,p.j,r);",
+            "console.log(x.i===undefined,p.h===undefined);"
         ].join(""));
         assert.strictEqual(run_code(compressed), run_code(original));
     });
@@ -282,7 +282,7 @@ describe("minify", function() {
                 }
             });
             if (result.error) throw result.error;
-            assert.strictEqual(result.code, "var g={};g.keep=g.g;");
+            assert.strictEqual(result.code, "var g={};g.keep=g.v;");
         });
     });
 

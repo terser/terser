@@ -18,7 +18,7 @@ jobs:
         node-version: [ 10.x, 12.x, 14.x, 16.x, 20.x ]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Tooling setup
 

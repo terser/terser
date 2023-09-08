@@ -170,18 +170,18 @@ computed_inline_string_keep_quoted_no_computed_props: {
         };
         let static_class = class {
             static i = 'bar';
-            static g() {}
-            static get p() {}
+            static p() {}
+            static get u() {}
         };
         let instance_class = class {
-            u = 'bar';
-            j() {}
-            get h() {}
+            j = 'bar';
+            h() {}
+            get m() {}
         };
         global._sub;
         global?._optional_sub;
         global?.deep._deep_optional_sub;
-        let { m: destructure } = global;
+        let { q: destructure } = global;
     }
 }
 
@@ -265,16 +265,16 @@ computed_inline_string_keep_quoted_computed_props: {
         let static_class = class {
             static o = "bar";
             static i() {}
-            static get g() {}
+            static get p() {}
         };
         let instance_class = class {
-            p = "bar";
-            u() {}
-            get j() {}
+            u = "bar";
+            j() {}
+            get h() {}
         };
         global._sub;
         global?._optional_sub;
         global?.deep._deep_optional_sub;
-        let { h: destructure } = global;
+        let { m: destructure } = global;
     }
 }

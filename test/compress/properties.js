@@ -1029,7 +1029,7 @@ issue_2256: {
     }
     expect: {
         var g = {};
-        g.keep = g.g;
+        g.keep = g.v;
     }
 }
 

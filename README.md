@@ -417,7 +417,7 @@ Or,
 import { minify } from "terser";
 ```
 
-Browser loading is also supported:
+Browser loading is also supported. It exposes a global variable `Terser` containing a `.minify` property:
 ```html
 <script src="https://cdn.jsdelivr.net/npm/source-map@0.7.3/dist/source-map.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/terser/dist/bundle.min.js"></script>

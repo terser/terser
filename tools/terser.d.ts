@@ -4,6 +4,9 @@ import { SectionedSourceMapInput, EncodedSourceMap, DecodedSourceMap } from '@jr
 
 export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
 
+export type ConsoleProperty = keyof typeof console;
+type DropConsoleOption = boolean | ConsoleProperty[];
+
 export interface ParseOptions {
     bare_returns?: boolean;
     /** @deprecated legacy option. Currently, all supported EcmaScript is valid to parse. */
@@ -24,7 +27,7 @@ export interface CompressOptions {
     dead_code?: boolean;
     defaults?: boolean;
     directives?: boolean;
-    drop_console?: boolean;
+    drop_console?: DropConsoleOption;
     drop_debugger?: boolean;
     ecma?: ECMA;
     evaluate?: boolean;

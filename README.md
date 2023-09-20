@@ -729,9 +729,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `directives` (default: `true`) -- remove redundant or non-standard directives
 
 - `drop_console` (default: `false`) -- Pass `true` to discard calls to
-  `console.*` functions. If you wish to drop a specific function call
-  such as `console.info` and/or retain side effects from function arguments
-  after dropping the function call then use `pure_funcs` instead.
+  `console.*` functions. If you only want to discard a portion of console, 
+   you can pass an array like this `['log', 'info']`, which will only discard `console.log`、 `console.info`.
 
 - `drop_debugger` (default: `true`) -- remove `debugger;` statements
 

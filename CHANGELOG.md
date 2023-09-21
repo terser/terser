@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.20.0
+ - Passing `minify()` zero files will now throw a clean exception (#1450)
+ - `drop_console` supports passing in an array of `console.*` method names (#1445)
+ - New DOM properties from the WebGPU API have been added for use in the property mangler (#1436)
+ - Internal code simplification (#1437)
+
 ## v5.19.4
  - Prevent creating very deeply nested ternaries from a long list of `if..return`
  - Prevent inlining classes into other functions, to avoid constructors being compared.

@@ -3217,3 +3217,91 @@ issue_t1412_2: {
         class C { static { side_eff(); } }
     }
 }
+
+issue_t1447_var: {
+    options = { unused: true, inline: true, reduce_vars: true }
+    input: {
+        var dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+    expect: {
+        var dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+}
+
+issue_t1447_const: {
+    options = { unused: true, inline: true, reduce_vars: true }
+    input: {
+        const dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+    expect: {
+        const dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+}
+
+issue_t1447_export_var: {
+    options = { unused: true, inline: true, reduce_vars: true }
+    input: {
+        export var dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+    expect: {
+        export var dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+}
+
+issue_t1447_export_const: {
+    options = { unused: true, inline: true, reduce_vars: true }
+    input: {
+        export const dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+    expect: {
+        export const dropped_func = () => {
+            console.log("PASS")
+        }
+
+        export const kept_func = () => {
+            dropped_func()
+        }
+    }
+}

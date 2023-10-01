@@ -692,6 +692,13 @@ issue_3092b: {
     expect_stdout: "PASS"
 }
 
+ternary_precedence: {
+    input: {
+        const Comp= () => (()=> [1,2,3,4].find((n => n > 3))) ? 1 : 2;
+    }
+    expect_exact: "const Comp=()=>(()=>[1,2,3,4].find((n=>n>3)))?1:2;"
+}
+
 object_parens: {
     input: {
         () => ({});

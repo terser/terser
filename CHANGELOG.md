@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.20.1
+ - Do not inline functions that would be retained in the toplevel (as this would cause code duplication).
+ - Fix precedence of arrow function and ternary operator when formatting output.
+
 ## v5.20.0
  - Passing `minify()` zero files will now throw a clean exception (#1450)
  - `drop_console` supports passing in an array of `console.*` method names (#1445)

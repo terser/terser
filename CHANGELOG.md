@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.20.1
+## v5.21.0
  - Do not inline functions that would be retained in the toplevel (as this would cause code duplication).
  - Fix precedence of arrow function and ternary operator when formatting output.
 

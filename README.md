@@ -154,7 +154,8 @@ a double dash to prevent input files being used as option arguments:
     --keep-fnames               Do not mangle/drop function names.  Useful for
                                 code relying on Function.prototype.name.
     --module                    Input is an ES6 module. If `compress` or `mangle` is
-                                enabled then the `toplevel` option will be enabled.
+                                enabled then the `toplevel` option, as well as strict mode,
+                                will be enabled.
     --name-cache <file>         File to hold mangled name mappings.
     --safari10                  Support non-standard Safari 10/11.
                                 Equivalent to setting `safari10: true` in `minify()`
@@ -912,7 +913,7 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   [compress option](#compress-options).
 
 - `module` (default `false`) -- Pass `true` an ES6 modules, where the toplevel
-  scope is not the global scope. Implies `toplevel`.
+  scope is not the global scope. Implies `toplevel` and assumes input code is strict mode JS.
 
 - `nth_identifier` (default: an internal mangler that weights based on character
   frequency analysis) -- Pass an object with a `get(n)` function that converts an

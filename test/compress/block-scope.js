@@ -275,6 +275,19 @@ issue_334: {
     expect_stdout: "Hello World!";
 }
 
+issue_1043_function_block_scope: {
+    options = { module: true }
+    mangle = { module: true }
+    reminify = false
+    input: {
+        if (true) {
+            function asd () {}
+        }
+        const asd = 123;
+    }
+    expect_stdout: true
+}
+
 issue_508: {
     options = {
         defaults: true,

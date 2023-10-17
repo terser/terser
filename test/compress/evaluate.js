@@ -1790,6 +1790,27 @@ issue_399: {
     }
 }
 
+issue_t1458: {
+    options = {
+        unsafe: true,
+        pure_getters: true
+    }
+    input: {
+        global.z = null
+        var a = z?.j.toString();
+        var b = z?.toString();
+        var c = z?.[0].toString();
+        global.z = [null]
+        var d = z[0]?.toString();
+        global.z = () => null
+        var e = z()?.toString();
+        var f = z()?.x.toString();
+        var g = z()?.x.toString().x;
+        console.log(typeof a, typeof b, typeof c, typeof d, typeof e, typeof f, typeof g);
+    }
+    expect_stdout: "undefined undefined undefined undefined undefined undefined undefined"
+}
+
 null_conditional_chain_eval: {
     options = {
         evaluate: true,

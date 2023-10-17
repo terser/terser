@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.22.0
+ - Do not `unsafe`ly shorten expressions like a?.toString() when they're conditional.
+ - Avoid running drop_unused in nodes that aren't scopes. Fixes a rare crash.
+ - When 'module' is enabled, assume strict mode when figuring out scopes.
+
 ## v5.21.0
  - Do not inline functions that would be retained in the toplevel (as this would cause code duplication).
  - Fix precedence of arrow function and ternary operator when formatting output.

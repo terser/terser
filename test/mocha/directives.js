@@ -248,11 +248,13 @@ describe("Directives", function() {
     it("Should test EXPECT_DIRECTIVE RegExp", async function() {
         [
             [ "", true ],
+            [ ";", true ],
+            [ "1", false ],
             [ "'test';", true ],
             [ "'test';;", true ],
             [ "'tests';\n", true ],
             [ "'tests'", false ],
-            [ "'tests';   \n\t", true ],
+            [ "'tests';   \n", true ],
             [ "'tests';\n\n", true ],
             [ "\n\n\"use strict\";\n\n", true ],
         ].forEach(function(test) {

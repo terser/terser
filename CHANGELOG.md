@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.23.0
+ - When top_retain will keep a variable assignment around, inline the assignee when it's shorter than the name (#1434)
+ - Remove empty class `static {}` blocks.
+
 ## v5.22.0
  - Do not `unsafe`ly shorten expressions like a?.toString() when they're conditional.
  - Avoid running drop_unused in nodes that aren't scopes. Fixes a rare crash.

@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.24.0
+ - Improve formatting performance in V8 by keeping a small work string and a large output string
+
 ## v5.23.0
  - When top_retain will keep a variable assignment around, inline the assignee when it's shorter than the name (#1434)
  - Remove empty class `static {}` blocks.

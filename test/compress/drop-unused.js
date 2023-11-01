@@ -2496,7 +2496,7 @@ issue_t161_top_retain_7: {
     }
     expect: {
         var y = 3;
-        console.log(2, y, 4, 2 * y, 8, y * 4);
+        console.log(2, 3, 4, 6, 8, 12);
     }
     expect_stdout: "2 3 4 6 8 12"
 }
@@ -2517,7 +2517,7 @@ issue_t161_top_retain_8: {
     }
     expect: {
         var y = 3;
-        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, y, 4);
+        console.log(2, 3, 4, 6, 8, 12, 2, 3, 4);
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4"
 }
@@ -2538,7 +2538,7 @@ issue_t161_top_retain_9: {
     }
     expect: {
         var y = 3;
-        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, y, 4);
+        console.log(2, 3, 4, 6, 8, 12, 2, 3, 4);
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4"
 }
@@ -2560,7 +2560,7 @@ issue_t161_top_retain_10: {
     expect: {
         function f() { return x; }
         var x = 2, y = 3;
-        console.log(x, y, 4, x * y, 4 * x, 4 * y, f(), y, 4);
+        console.log(x, 3, 4, 3 * x, 4 * x, 12, f(), 3, 4);
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4"
 }
@@ -2582,7 +2582,7 @@ issue_t161_top_retain_11: {
     expect: {
         function g() { return y; }
         var x = 2, y = 3;
-        console.log(x, y, 4, x * y, 4 * x, 4 * y, x, g(), 4);
+        console.log(2, y, 4, 2 * y, 8, 4 * y, 2, g(), 4);
     }
     expect_stdout: "2 3 4 6 8 12 2 3 4"
 }
@@ -2662,13 +2662,13 @@ issue_t161_top_retain_14: {
             }
         }
         let x = 2, z = 4;
-        console.log(x, 3, z, 3 * x, x * z, 3 * z, x, 3, z, new Alpha().num(), new class {
+        console.log(x, 3, 4, 3 * x, 4 * x, 12, x, 3, 4, new Alpha().num(), new class {
             num() {
                 return 3;
             }
         }().num(), new class {
             num() {
-                return z;
+                return 4;
             }
         }().num());
     }
@@ -2710,13 +2710,13 @@ issue_t161_top_retain_15: {
             }
         }
         let n = 2, u = 4;
-        console.log(n, 3, u, 3 * n, n * u, 3 * u, n, 3, u, new Alpha().num(), new class {
+        console.log(n, 3, 4, 3 * n, 4 * n, 12, n, 3, 4, new Alpha().num(), new class {
             num() {
                 return 3;
             }
         }().num(), new class {
             num() {
-                return u;
+                return 4;
             }
         }().num());
     }

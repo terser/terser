@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.25.0
+ - Regex properties added to reserved property mangler (#1471)
+ - `pure_new` option added to drop unused `new` expressions.
+
 ## v5.24.0
  - Improve formatting performance in V8 by keeping a small work string and a large output string
 

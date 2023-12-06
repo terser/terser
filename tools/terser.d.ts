@@ -50,6 +50,7 @@ export interface CompressOptions {
     passes?: number;
     properties?: boolean;
     pure_funcs?: string[];
+    pure_new?: boolean;
     pure_getters?: boolean | 'strict';
     reduce_funcs?: boolean;
     reduce_vars?: boolean;

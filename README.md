@@ -820,6 +820,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   Specify `"strict"` to treat `foo.bar` as side-effect-free only when
   `foo` is certain to not throw, i.e. not `null` or `undefined`.
 
+- `pure_new` (default: `false`) -- Set to `true` to assume `new X()` never has
+  side effects.
+
 - `reduce_vars` (default: `true`) -- Improve optimization on variables assigned with and
   used as constant values.
 

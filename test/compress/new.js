@@ -116,3 +116,22 @@ dot_parenthesis_2: {
     expect_exact: "console.log(typeof new function(){Math.random()}.constructor);"
     expect_stdout: "function"
 }
+
+new_pure: {
+    options = {
+        pure_new: true,
+        defaults: true,
+    }
+    input: {
+        new function() {};
+        (new function() {
+            this.pass = () => console.log("PASS");
+        }).pass();
+    }
+    expect: {
+        (new function() {
+            this.pass = () => console.log("PASS");
+        }).pass();
+    }
+    expect_stdout: "PASS"
+}

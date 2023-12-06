@@ -467,3 +467,13 @@ async_generator_object_literal_method: {
     }
     expect_exact: "foo({baz:4,async*bar(){yield await Promise.resolve(3)},qux:qux});"
 }
+
+await_empty_seq: {
+    bad_input: `"use strict"; await()`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid parenthesized expression",
+        line: 1,
+        col: 21,
+    })
+}

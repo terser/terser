@@ -42,7 +42,7 @@ big_int_octal: {
 }
 
 big_int_no_e: {
-    input: `1e3n`
+    bad_input: `1e3n`
     expect_error: ({
         name: "SyntaxError",
         message: "Invalid or unexpected token"
@@ -50,7 +50,7 @@ big_int_no_e: {
 }
 
 big_int_bad_digits_for_base: {
-    input: `0o9n`
+    bad_input: `0o9n`
     expect_error: ({
         name: "SyntaxError",
         message: "Invalid or unexpected token"

@@ -1,20 +1,17 @@
 basic_syntax_error: {
-    input: `
-        // notice the code is within a template string
-        // as opposed to a block so that the test can
-        // survive a parse error
+    bad_input: `
         var x = 5--;
     `
     expect_error: ({
         name: "SyntaxError",
         message: "Invalid use of -- operator",
-        line: 5,
+        line: 2,
         col: 17,
     })
 }
 
 invalid_template_string_example: {
-    input: `
+    bad_input: `
         console.log(\`foo \${100 + 23}
     `
     expect_error: ({

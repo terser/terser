@@ -288,7 +288,7 @@ numeric_separators: {
 }
 
 numeric_separator_trailing_underscore: {
-    input: `const trailing = 1000_`
+    bad_input: `const trailing = 1000_`
     expect_error: ({
         name: "SyntaxError",
         message: "Numeric separators are not allowed at the end of numeric literals"
@@ -296,7 +296,7 @@ numeric_separator_trailing_underscore: {
 }
 
 numeric_separator_double_underscore: {
-    input: `const double = 1__000`
+    bad_input: `const double = 1__000`
     expect_error: ({
         name: "SyntaxError",
         message: "Only one underscore is allowed as numeric separator"

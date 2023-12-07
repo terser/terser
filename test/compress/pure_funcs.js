@@ -299,7 +299,6 @@ issue_2629_1: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -318,7 +317,6 @@ issue_2629_2: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -343,7 +341,6 @@ issue_2629_3: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -406,7 +403,6 @@ issue_2638: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -424,7 +420,6 @@ issue_2705_1: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -443,7 +438,6 @@ issue_2705_2: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -468,7 +462,6 @@ issue_2705_3: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -488,8 +481,7 @@ issue_2705_3: {
         (/*@__PURE__*/ new n.x(1).y(2).z(3));
     }
     expect_exact: [
-        "new/*@__PURE__*/h.x(1).y(2).z(3);",
-        "new/*@__PURE__*/i.x(1).y(2).z(3);",
+        "new/*@__PURE__*/h.x(1).y(2).z(3);new/*@__PURE__*/i.x(1).y(2).z(3);",
         "/*@__PURE__*/new j.x(1).y(2).z(3);",
         "/*@__PURE__*/new k.x(1).y(2).z(3);",
         "/*@__PURE__*/new l.x(1).y(2).z(3);",
@@ -531,7 +523,6 @@ issue_2705_6: {
         side_effects: true,
     }
     beautify = {
-        comments: "all",
         preserve_annotations: true,
     }
     input: {
@@ -539,8 +530,7 @@ issue_2705_6: {
         /* */ new (/*@__PURE__*/ (a() || b()))(c(), d());
     }
     expect_exact: [
-        "/*@__PURE__*/x(),y();",
-        "new(/*@__PURE__*/a()||b())(c(),d());",
+        "/*@__PURE__*/x(),y();new(/*@__PURE__*/a()||b())(c(),d());",
     ]
 }
 
@@ -548,16 +538,52 @@ issue_526_1: {
     options = {
         side_effects: true,
     }
-    beautify = {
-        comments: "all",
-    }
     input: {
         /*@__PURE__*/new (g() || h())(x(), y());
         /* */ new (/*@__PURE__*/ (a() || b()))(c(), d());
     }
+    expect_exact: "x(),y();new(a()||b())(c(),d());"
+}
+
+issue_t672: {
+    options = {
+        defaults: true,
+        side_effects: false,
+    }
+    beautify = {
+        preserve_annotations: true,
+    }
+    input: {
+        function f () {
+            /*#__PURE__*/a();
+            /*#__PURE__*/b();
+        }
+    }
     expect_exact: [
-        "x(),y();",
-        "new(a()||b())(c(),d());",
+        "function f(){",
+        "/*#__PURE__*/a(),",
+        "/*#__PURE__*/b()}"
+    ]
+}
+
+issue_t672_2: {
+    options = {
+        defaults: true,
+        side_effects: false,
+    }
+    beautify = {
+        preserve_annotations: true,
+    }
+    input: {
+        function f () {
+            /*#__PURE__*/a();
+            /*#__PURE__*/b();
+        }
+    }
+    expect_exact: [
+        "function f(){",
+        "/*#__PURE__*/a(),",
+        "/*#__PURE__*/b()}"
     ]
 }
 

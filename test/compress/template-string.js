@@ -590,7 +590,7 @@ invalid_unicode_escape_in_regular_string: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log("FAIL\\u")
     `
     expect_error: ({
@@ -605,7 +605,7 @@ invalid_escape_in_template_string_1: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log(\`\\unicode \\xerces\ \\1234567890\`);
     `
     expect_error: ({
@@ -620,7 +620,7 @@ invalid_escape_in_template_string_2: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log(\`\\u\`.charCodeAt(0));
     `
     expect_error: ({
@@ -635,7 +635,7 @@ invalid_escape_in_template_string_3: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log("FAIL\\041" + \`\\041\`);
     `
     expect_error: ({
@@ -650,7 +650,7 @@ invalid_escape_in_template_string_4: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log("FAIL\\x21" + \`\\x\`);
     `
     expect_error: ({
@@ -665,7 +665,7 @@ invalid_escape_in_template_string_5: {
     options = {
         defaults: true,
     }
-    input: `
+    bad_input: `
         console.log("FAIL\\x21" + \`\\xERROR\`);
     `
     expect_error: ({
@@ -677,7 +677,7 @@ invalid_escape_in_template_string_5: {
 }
 
 invalid_hex_character_pattern: {
-    input: `
+    bad_input: `
         console.log('\\u{-1}')
     `
     expect_error: ({
@@ -689,7 +689,7 @@ invalid_hex_character_pattern: {
 }
 
 invalid_unicode_patterns: {
-    input: `
+    bad_input: `
         "\\u{110000}"
     `
     expect_error: ({
@@ -699,7 +699,7 @@ invalid_unicode_patterns: {
 }
 
 invalid_unicode_patterns_2: {
-    input: `
+    bad_input: `
         "\\u{100000061}"
     `
     expect_error: ({
@@ -709,7 +709,7 @@ invalid_unicode_patterns_2: {
 }
 
 invalid_unicode_patterns_3: {
-    input: `
+    bad_input: `
         "\\u{fffffffffff}"
     `
     expect_error: ({
@@ -719,7 +719,7 @@ invalid_unicode_patterns_3: {
 }
 
 untagged_template_with_ill_formed_unicode_escape: {
-    input: `
+    bad_input: `
         console.log(\`\\u{-1}\`)
     `
     expect_error: ({

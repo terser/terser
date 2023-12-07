@@ -78,16 +78,42 @@ function test_directory(dir) {
     return path.resolve(tests_dir, dir);
 }
 
-function as_toplevel(input, mangle_options) {
-    if (!(input instanceof AST.AST_BlockStatement))
-        throw new Error("Unsupported input syntax");
-    for (var i = 0; i < input.body.length; i++) {
-        var stat = input.body[i];
-        if (stat instanceof AST.AST_SimpleStatement && stat.body instanceof AST.AST_String)
-            input.body[i] = new AST.AST_Directive(stat.body);
-        else break;
+function as_template_string_code(ast) {
+    if (
+        ast instanceof AST.AST_SimpleStatement
+        && ast.body instanceof AST.AST_TemplateString
+        && ast.body.segments.length === 1
+    ) {
+        return ast.body.segments[0].value;
     }
-    var toplevel = new AST.AST_Toplevel(input);
+}
+
+function as_toplevel(test, input, mangle_options) {
+    var toplevel, tpl_input;
+    if (input instanceof AST.AST_BlockStatement) {
+        for (var i = 0; i < input.body.length; i++) {
+            var stat = input.body[i];
+            if (stat instanceof AST.AST_SimpleStatement && stat.body instanceof AST.AST_String)
+                input.body[i] = new AST.AST_Directive(stat.body);
+            else break;
+        }
+        var toplevel = new AST.AST_Toplevel(input);
+    } else if (
+        (tpl_input = as_template_string_code(input))
+    ) {
+        try {
+            var toplevel = parse(tpl_input);
+        } catch (error) {
+            log(test, "!!! Cannot parse input\n---INPUT---\n{input}\n--PARSE ERROR--\n{error}\n\n", {
+                input: tpl_input,
+                error,
+            });
+            return null;
+        }
+    } else {
+        log(test, "Unsupported input syntax");
+        return null;
+    }
     toplevel.figure_out_scope(mangle_options);
     return toplevel;
 }
@@ -106,7 +132,9 @@ async function run_compress_tests() {
             var output_options = test.beautify || test.format || {};
             var expect;
             if (test.expect) {
-                expect = make_code(as_toplevel(test.expect, test.mangle), output_options);
+                let toplevel = as_toplevel(test, test.expect, test.mangle);
+                if (!toplevel) return false;
+                expect = make_code(toplevel, output_options);
             } else {
                 expect = test.expect_exact;
             }
@@ -114,53 +142,47 @@ async function run_compress_tests() {
                 log(test, "!!! Test cannot have an `expect_error` with other expect clauses\n", {});
                 return false;
             }
-            if (test.input instanceof AST.AST_SimpleStatement
-                && test.input.body instanceof AST.AST_TemplateString) {
-                if (test.input.body.segments.length == 1) {
-                    try {
-                        var input = parse(test.input.body.segments[0].value);
-                    } catch (ex) {
-                        if (!test.expect_error) {
-                            log(test, "!!! Test is missing an `expect_error` clause\n", {});
-                            return false;
-                        }
-                        if (test.expect_error instanceof AST.AST_SimpleStatement
-                        && test.expect_error.body instanceof AST.AST_Object) {
-                            var expect_error = eval("(" + test.expect_error.body.print_to_string() + ")");
-                            var ex_normalized = JSON.parse(JSON.stringify(ex));
-                            ex_normalized.name = ex.name;
-                            for (var prop in expect_error) {
-                                if (prop == "name" || HOP(expect_error, prop)) {
-                                    if (expect_error[prop] != ex_normalized[prop]) {
-                                        log(test, "!!! Failed `expect_error` property `{prop}`:\n\n---expect_error---\n{expect_error}\n\n---ACTUAL exception--\n{actual_ex}\n\n", {
-                                            prop: prop,
-                                            expect_error: JSON.stringify(expect_error, null, 2),
-                                            actual_ex: JSON.stringify(ex_normalized, null, 2),
-                                        });
-                                        return false;
-                                    }
-                                }
-                            }
-                            return true;
-                        }
-                        log(test, "!!! Test `expect_error` clause must be an object literal\n---expect_error---\n{expect_error}\n\n", {
-                            expect_error: test.expect_error.print_to_string(),
-                        });
+            var bad_input = as_template_string_code(test.bad_input);
+            if (bad_input != null) {
+                try {
+                    var input = parse(bad_input);
+                } catch (ex) {
+                    if (!test.expect_error) {
+                        log(test, "!!! Test is missing an `expect_error` clause\n", {});
                         return false;
                     }
-                    var input_code = make_code(input, output_options);
-                    var input_formatted = test.input.body.segments[0].value;
-                } else {
-                    log(test, "!!! Test input template string cannot use unescaped ${} expressions\n---INPUT---\n{input}\n\n", {
-                        input: test.input.body.print_to_string(),
+                    if (test.expect_error instanceof AST.AST_SimpleStatement
+                    && test.expect_error.body instanceof AST.AST_Object) {
+                        var expect_error = eval("(" + test.expect_error.body.print_to_string() + ")");
+                        var ex_normalized = JSON.parse(JSON.stringify(ex));
+                        ex_normalized.name = ex.name;
+                        for (var prop in expect_error) {
+                            if (prop == "name" || HOP(expect_error, prop)) {
+                                if (expect_error[prop] != ex_normalized[prop]) {
+                                    log(test, "!!! Failed `expect_error` property `{prop}`:\n\n---expect_error---\n{expect_error}\n\n---ACTUAL exception--\n{actual_ex}\n\n", {
+                                        prop: prop,
+                                        expect_error: JSON.stringify(expect_error, null, 2),
+                                        actual_ex: JSON.stringify(ex_normalized, null, 2),
+                                    });
+                                    return false;
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                    log(test, "!!! Test `expect_error` clause must be an object literal\n---expect_error---\n{expect_error}\n\n", {
+                        expect_error: test.expect_error.print_to_string(),
                     });
                     return false;
                 }
+                var input_code = make_code(input, output_options);
+                var input_formatted = bad_input;
             } else if (test.expect_error) {
-                log(test, "!!! Test cannot have an `expect_error` clause without a template string `input`\n", {});
+                log(test, "!!! Test cannot have an `expect_error` clause without a template string `bad_input`\n", {});
                 return false;
             } else {
-                var input = as_toplevel(test.input, test.mangle);
+                var input = as_toplevel(test, test.input, test.mangle);
+                if (!input) return false;
                 var input_code = make_code(input, output_options);
                 var input_formatted = make_code(test.input, {
                     ecma: 2015,
@@ -422,6 +444,7 @@ function parse_test(file) {
                 assert.ok(
                     [
                         "input",
+                        "bad_input",
                         "prepend_code",
                         "expect",
                         "expect_error",
@@ -476,6 +499,8 @@ function parse_test(file) {
 }
 
 function make_code(ast, options) {
+    var code_verbatim = as_template_string_code(ast);
+    if (code_verbatim != null) return code_verbatim;
     var stream = OutputStream(options);
     ast.print(stream);
     return stream.get();

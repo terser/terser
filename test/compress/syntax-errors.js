@@ -1,6 +1,6 @@
 
 missing_loop_body: {
-    input: `
+    bad_input: `
         for (;;)
     `
     expect_error: ({
@@ -12,7 +12,7 @@ missing_loop_body: {
 }
 
 decrement_constant_number: {
-    input: `
+    bad_input: `
         5--
     `
     expect_error: ({
@@ -24,7 +24,7 @@ decrement_constant_number: {
 }
 
 assign_to_call: {
-    input: `
+    bad_input: `
         Math.random() /= 2
     `
     expect_error: ({
@@ -36,7 +36,7 @@ assign_to_call: {
 }
 
 increment_this: {
-    input: `
+    bad_input: `
         ++this
     `
     expect_error: ({
@@ -48,7 +48,7 @@ increment_this: {
 }
 
 increment_null: {
-    input: `
+    bad_input: `
         ++null
     `
     expect_error: ({
@@ -60,7 +60,7 @@ increment_null: {
 }
 
 invalid_dot: {
-    input: `
+    bad_input: `
         a.=
     `
     expect_error: ({
@@ -72,7 +72,7 @@ invalid_dot: {
 }
 
 invalid_percent: {
-    input: `
+    bad_input: `
         %.a;
     `
     expect_error: ({
@@ -84,7 +84,7 @@ invalid_percent: {
 }
 
 invalid_divide: {
-    input: `
+    bad_input: `
         a./()
     `
     expect_error: ({
@@ -96,7 +96,7 @@ invalid_divide: {
 }
 
 invalid_object_key: {
-    input: `
+    bad_input: `
         x({%: 1})
     `
     expect_error: ({
@@ -108,7 +108,7 @@ invalid_object_key: {
 }
 
 invalid_const: {
-    input: `
+    bad_input: `
         const a
     `
     expect_error: ({
@@ -120,7 +120,7 @@ invalid_const: {
 }
 
 invalid_delete: {
-    input: `
+    bad_input: `
         function f(x) {
             delete 42;
             delete (0, x);
@@ -145,7 +145,7 @@ invalid_delete: {
 }
 
 invalid_arguments: {
-    input: `
+    bad_input: `
         function x() {
             "use strict"
             function a(arguments) { }
@@ -160,7 +160,7 @@ invalid_arguments: {
 }
 
 invalid_eval: {
-    input: `
+    bad_input: `
         function x() {
             "use strict"
             function eval() { }
@@ -175,7 +175,7 @@ invalid_eval: {
 }
 
 invalid_iife: {
-    input: `
+    bad_input: `
         function x() {
             "use strict"
             !function arguments() {
@@ -192,7 +192,7 @@ invalid_iife: {
 }
 
 invalid_catch_eval: {
-    input: `
+    bad_input: `
         function x() {
             "use strict"
             try {
@@ -211,7 +211,7 @@ invalid_catch_eval: {
 }
 
 invalid_var_eval: {
-    input: `
+    bad_input: `
         function x() {
             "use strict"
             var eval
@@ -226,7 +226,7 @@ invalid_var_eval: {
 }
 
 invalid_else: {
-    input: `
+    bad_input: `
         if (0) else 1
     `
     expect_error: ({
@@ -238,7 +238,7 @@ invalid_else: {
 }
 
 invalid_return: {
-    input: `
+    bad_input: `
         return 42
     `
     expect_error: ({
@@ -250,7 +250,7 @@ invalid_return: {
 }
 
 export_anonymous_class: {
-    input: `
+    bad_input: `
         export class {}
     `
     expect_error: ({
@@ -262,7 +262,7 @@ export_anonymous_class: {
 }
 
 export_anonymous_function: {
-    input: `
+    bad_input: `
         export function () {}
     `
     expect_error: ({
@@ -274,7 +274,7 @@ export_anonymous_function: {
 }
 
 spread_in_sequence: {
-    input: `
+    bad_input: `
         (a, ...b)
     `
     expect_error: ({
@@ -286,7 +286,7 @@ spread_in_sequence: {
 }
 
 invalid_for_in: {
-    input: `
+    bad_input: `
         for (1, 2, a in b) { }
     `
     expect_error: ({
@@ -298,7 +298,7 @@ invalid_for_in: {
 }
 
 invalid_for_in_var: {
-    input: `
+    bad_input: `
         for (var a, b in c) { }
     `
     expect_error: ({
@@ -310,7 +310,7 @@ invalid_for_in_var: {
 }
 
 big_int_decimal: {
-    input: `
+    bad_input: `
         .23n
     `
     expect_error: ({
@@ -322,7 +322,7 @@ big_int_decimal: {
 }
 
 big_int_scientific_format: {
-    input: `
+    bad_input: `
         1e3n
     `
     expect_error: ({
@@ -334,7 +334,7 @@ big_int_scientific_format: {
 }
 
 invalid_privatename_in_object: {
-    input: `
+    bad_input: `
         const myObject = {
             foo: 'bar',
             #something: 5,
@@ -349,7 +349,7 @@ invalid_privatename_in_object: {
 }
 
 private_field_out_of_class_field: {
-    input: `
+    bad_input: `
         function test() {
             return this.#p;
         }
@@ -363,7 +363,7 @@ private_field_out_of_class_field: {
 }
 
 private_field_out_of_class_field_in_operator: {
-    input: `
+    bad_input: `
         function test(input) {
             #p in input;
             return 10;
@@ -378,7 +378,7 @@ private_field_out_of_class_field_in_operator: {
 }
 
 invaild__in_operator_expression_in_class_field: {
-    input: `
+    bad_input: `
         class A {
             #p;
             isA () {

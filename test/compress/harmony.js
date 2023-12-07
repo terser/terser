@@ -167,6 +167,7 @@ classes_extending_classes_out_of_pure_iifes: {
     options = {
         toplevel: true,
         unused: true,
+        side_effects: true,
     }
     input: {
         let Base = /*@__PURE__*/ (() => {

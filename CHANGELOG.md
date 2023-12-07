@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.26.0
+ - Do not take the `/*#__PURE__*/` annotation into account when the `side_effects` compress option is off.
+ - The `preserve_annotations` option now automatically opts annotation comments in, instead of requiring the `comments` option to be configured for this.
+ - Refuse to parse empty parenthesized expressions (`()`)
+
 ## v5.25.0
  - Regex properties added to reserved property mangler (#1471)
  - `pure_new` option added to drop unused `new` expressions.

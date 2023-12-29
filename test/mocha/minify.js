@@ -2,7 +2,7 @@ import assert from "assert";
 import { readFileSync } from "fs";
 import { run_code } from "../sandbox.js";
 import { for_each_async } from "./utils.js";
-import { minify } from "../../main.js";
+import { minify, minify_sync } from "../../main.js";
 
 function read(path) {
     return readFileSync(path, "utf8");
@@ -13,6 +13,12 @@ describe("minify", function() {
         var js = "function foo(bar) { if (bar) return 3; else return 7; var u = not_called(); }";
         var result = await minify(js);
         assert.strictEqual(result.code, "function foo(n){return n?3:7}");
+    });
+
+    it("Should have a sync version", function() {
+        var js = "console.log(1 + 1);";
+        var result = minify_sync(js);
+        assert.strictEqual(result.code, "console.log(2);");
     });
 
     it("Should skip inherited keys from `files`", async function() {
@@ -311,6 +317,16 @@ describe("minify", function() {
                     url: "inline"
                 }
             })).code + "\n";
+            assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));
+        });
+        it("Should process inline source map (minify_sync)", function() {
+            var code = minify_sync(read("./test/input/issue-520/input.js"), {
+                compress: { toplevel: true },
+                sourceMap: {
+                    content: "inline",
+                    url: "inline"
+                }
+            }).code + "\n";
             assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));
         });
         it("Should fail with multiple input and inline source map", async function() {

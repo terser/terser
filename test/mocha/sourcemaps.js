@@ -3,7 +3,7 @@ import { readFileSync } from "fs";
 import source_map_module from "source-map";
 import { assertCodeWithInlineMapEquals } from "./utils.js";
 import { to_ascii } from "../../lib/minify.js";
-import { minify } from "../../main.js";
+import { minify, minify_sync } from "../../main.js";
 
 const { SourceMapConsumer } = source_map_module;
 
@@ -141,6 +141,22 @@ describe("sourcemaps", function() {
     it("Should return source map as object when asObject is given", async function() {
         var code = "console.log(42);";
         var result = await minify(code, {
+            sourceMap: {
+                asObject: true,
+            },
+        });
+        if (result.error) throw result.error;
+        assert.strictEqual(result.code, code);
+        assert.deepStrictEqual(result.map, {
+            version: 3,
+            sources: ["0"],
+            names: ["console","log"],
+            mappings: "AAAAA,QAAQC,IAAI",
+        });
+    });
+    it("Should return source map as object when asObject is given (minify_sync)", function() {
+        var code = "console.log(42);";
+        var result = minify_sync(code, {
             sourceMap: {
                 asObject: true,
             },

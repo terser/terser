@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.27.0
+ - Created `minify_sync()` alternative to `minify()` since there's no async code left.
+
 ## v5.26.0
  - Do not take the `/*#__PURE__*/` annotation into account when the `side_effects` compress option is off.
  - The `preserve_annotations` option now automatically opts annotation comments in, instead of requiring the `comments` option to be configured for this.

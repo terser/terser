@@ -95,7 +95,7 @@ const draw_scopes = toplevel => {
 
         const scope =
             node instanceof AST.AST_Scope ? node :
-            node.is_block_scope() ? node.block_scope : null;
+            node.has_block_scope() ? node.block_scope : null;
 
         if (scope) {
             const save_current_scope = current_scope;

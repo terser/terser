@@ -86,3 +86,29 @@ default_assign_scope_reassign_2: {
     }
     expect_stdout: "PASS"
 }
+
+// https://github.com/mishoo/UglifyJS/issues/2662
+/* TODO The binding for `var x` starts existing only at `x = 2`. Until then, reading `x` will read the argument. Probably there's no fix for this.
+issue_2662: {
+    input: {
+        console.log((function(x, f = () => x) {
+            var x;
+            var y = x;
+            x = 2;
+            return [x, y, f()];
+        })(1));
+    }
+    expect_stdout: "[ 2, 1, 1 ]"
+}
+*/
+
+issue_2662_2: {
+    input: {
+        console.log((function(x, f = () => x) {
+            var y = x;
+            x = 2;
+            return [x, y, f()];
+        })(1));
+    }
+    expect_stdout: "[ 2, 1, 2 ]"
+}

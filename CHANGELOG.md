@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.27.1
+ - Fixed case where `collapse_vars` inlines `await` expressions into non-async functions.
+
 ## v5.27.0
  - Created `minify_sync()` alternative to `minify()` since there's no async code left.
 

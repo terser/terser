@@ -2124,6 +2124,20 @@ iife_2: {
     }
 }
 
+iife_async: {
+    options = { unused: true, collapse_vars: true }
+    input: {
+        (async function(s) {
+            return ((s, a) => s + a)(s, await new Promise(() => {}))
+        })();
+    }
+    expect: {
+        (async function(s) {
+            return ((s, a) => s + a)(void 0, await new Promise(() => {}))
+        })();
+    }
+}
+
 var_defs: {
     options = {
         booleans: true,

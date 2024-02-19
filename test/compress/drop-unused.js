@@ -3218,6 +3218,95 @@ issue_t1412_2: {
     }
 }
 
+class_used_within_itself: {
+    options = {
+        toplevel: true,
+        unused: true,
+        side_effects: true,
+        pure_getters: true,
+    };
+    input: {
+        class C {
+            static [C.name] = 1;
+        }
+    }
+    expect: { }
+}
+
+class_used_within_itself_2: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        class Class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(this);
+        }
+    }
+    expect: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        class Class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(this);
+        }
+    }
+    expect_stdout: [ 'P', 'A', 'S', 'S' ]
+}
+
+class_used_within_itself_3: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            class Wrapper {
+                static _ = ((cls) => (_Wrapper = cls))(this);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+    expect: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            class Wrapper {
+                static _ = ((cls) => (_Wrapper = cls))(this);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+}
+
+
 issue_t1447_var: {
     options = { unused: true, inline: true, reduce_vars: true }
     input: {

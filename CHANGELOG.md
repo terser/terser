@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.27.2
+ - Recognise `this` as a reference to the surrounding class in `drop_unused`. Closes #1472
+
 ## v5.27.1
  - Fixed case where `collapse_vars` inlines `await` expressions into non-async functions.
 

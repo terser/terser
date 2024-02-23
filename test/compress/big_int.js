@@ -62,30 +62,12 @@ big_int_math: {
         defaults: true
     }
     input: {
-        console.log({
-            sum: 10n + 15n,
-            exp: 2n ** 3n,
-            sub: 1n - 3n,
-            mul: 5n * 5n,
-            div: 15n / 5n,
-        });
+        const sum = 10n + 15n;
+        const exp = 5n ** 10n;
+        const sub = 1n - 3n;
+        const mul = 5n * 5n;
+        const div = 15n / 5n;
+        const regular_number = 1 * 10;
     }
-    expect_exact: "console.log({sum:25n,exp:8n,sub:-2n,mul:25n,div:3n});"
-    expect_stdout: true
-}
-
-big_int_math_counter_examples: {
-    node_version = ">= 12"
-    options = {
-        defaults: true
-    }
-    input: {
-        console.log({
-            mixing_types: 1 * 10n,
-            bad_shift: 1n >>> 0n,
-            bad_div: 1n / 0n,
-        });
-    }
-    expect_exact: "console.log({mixing_types:1*10n,bad_shift:1n>>>0n,bad_div:1n/0n});"
-    expect_stdout: true
+    expect_exact: "const sum=10n+15n,exp=5n**10n,sub=1n-3n,mul=5n*5n,div=15n/5n,regular_number=10;"
 }

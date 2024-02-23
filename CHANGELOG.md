@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.28.0
+ - Optimise redundant or shrinkable bitwise operations (`|`, `^`, `&`, `>>`, `<<`)
+ - Evaluate some `BigInt` math operations
+
 ## v5.27.2
  - Recognise `this` as a reference to the surrounding class in `drop_unused`. Closes #1472
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.28.1
+(hotfix release)
+ - Reverts v5.28.0
+
 ## v5.28.0
  - Optimise redundant or shrinkable bitwise operations (`|`, `^`, `&`, `>>`, `<<`)
  - Evaluate some `BigInt` math operations

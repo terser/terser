@@ -278,6 +278,16 @@ bitwise_2: {
     }
 }
 
+bitwise_regression: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        console.log((id(0xff00ff) | id(0x00ff00)) & 0x3fff)
+    }
+    expect_stdout: "16383"
+}
+
 unary_prefix: {
     options = {
         evaluate: true,

@@ -3306,6 +3306,67 @@ class_used_within_itself_3: {
     }
 }
 
+class_used_within_itself_4: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        let c;
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    class r {
+                        static #t = (c = n(this, [], e));
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    }
+                })();
+                x = 1;
+                constructor() {
+                    
+                }
+            })();
+
+        console.log(c.ok);
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS", "true"]
+}
+
+
+class_used_within_itself_5: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        class X {
+            static prop = "X"
+            static Y = class Y extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    expect: {
+        class X {
+            static prop = "X"
+            static Y = class extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: "X"
+}
 
 issue_t1447_var: {
     options = { unused: true, inline: true, reduce_vars: true }

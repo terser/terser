@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.29.0
+ - Re-releases previously reverted 5.28.0
+ - Fix crash while optimizing some bitwise ops
+ - (internal) Remove needless wrapper for from_moz (#1499)
+
 ## v5.28.1
 (hotfix release)
  - Reverts v5.28.0

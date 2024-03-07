@@ -224,8 +224,8 @@ bitwise: {
         const test11_2 = !(bar & 7)
         const test11_2_rev = !(bar & 7)
         if (a & b) c()
-        const test12 = !(7 & ~bar)
-        const test12_rev = !!(7 & ~bar)
+        const test12 = !!(7 & ~bar)
+        const test12_rev = !(7 & ~bar)
 
         const test13 = bar | 0;
         const test13_2 = ~bar;

@@ -3334,9 +3334,7 @@ class_used_within_itself_4: {
                     }
                 })();
                 x = 1;
-                constructor() {
-                    
-                }
+                constructor() { }
             })();
 
         console.log(c.ok);
@@ -3345,8 +3343,44 @@ class_used_within_itself_4: {
     expect_stdout: ["PASS", "true"]
 }
 
-
 class_used_within_itself_5: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        let c;
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    (class {
+                        static #t = (c = n(this, [], e));
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    })
+                })();
+                x = 1;
+                constructor() { }
+            })();
+
+        console.log(c.ok);
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS", "true"]
+}
+
+class_used_within_itself_6: {
     options = { toplevel: true, unused: true, side_effects: true };
     input: {
         class X {
@@ -3366,6 +3400,397 @@ class_used_within_itself_5: {
     }
     node_version = ">=20.0.0"
     expect_stdout: "X"
+}
+
+class_used_within_itself_7: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        class X {
+            static prop = "X"
+            static Y = class Y extends this { }
+        }
+    }
+    expect: { }
+    node_version = ">=20.0.0"
+    expect_stdout: true
+}
+
+class_used_within_itself_var: {
+    options = {
+        toplevel: true,
+        unused: true,
+        side_effects: true,
+        pure_getters: true,
+    };
+    input: {
+        var C = class {
+            static [C.name] = 1;
+        }
+    }
+    expect: { }
+}
+
+class_used_within_itself_2_var: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        var Class = class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(this);
+        }
+    }
+    expect: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        (class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(this);
+        });
+    }
+    expect_stdout: [ 'P', 'A', 'S', 'S' ]
+}
+
+class_used_within_itself_3_var: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            var Wrapper = class {
+                static _ = ((cls) => (_Wrapper = cls))(Wrapper);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+    expect: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            var Wrapper = class {
+                static _ = ((cls) => (_Wrapper = cls))(Wrapper);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+}
+
+class_used_within_itself_4_var: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    var r = class {
+                        static #t = n(this, [], e);
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    }
+                })();
+                x = 1;
+                constructor() { }
+            })();
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS"]
+}
+
+class_used_within_itself_5_var: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        let c;
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    var r = class {
+                        static #t = (c = n(this, [], e));
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    }
+                })();
+                x = 1;
+                constructor() { }
+            })();
+
+        console.log(c.ok);
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS", "true"]
+}
+
+class_used_within_itself_6_var: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        var X = class {
+            static prop = "X"
+            static Y = class Y extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    expect: {
+        var X = class {
+            static prop = "X"
+            static Y = class extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: "X"
+}
+
+class_used_within_itself_var_expname: {
+    options = {
+        toplevel: true,
+        unused: true,
+        side_effects: true,
+        pure_getters: true,
+    };
+    input: {
+        var C = class C {
+            static [C.name] = 1;
+        }
+    }
+    expect: { }
+}
+
+class_used_within_itself_2_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        var Class = class Class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(Class);
+        }
+    }
+    expect: {
+        globalThis.useThis = function(obj) {
+            obj.prototype.method()
+        }
+
+        const List = ['P', 'A', 'S', 'S'];
+        var Class = class Class {
+            method(t) {
+                List.forEach(letter => console.log(letter));
+            }
+            static prop = useThis(Class);
+        }
+    }
+    expect_stdout: [ 'P', 'A', 'S', 'S' ]
+}
+
+class_used_within_itself_3_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            var Wrapper = class Wrapper {
+                static _ = ((cls) => (_Wrapper = cls))(Wrapper);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+    expect: {
+        const importedfn = () => console.log("------------");
+
+        const cls = (() => {
+            var ErrorBoundary = importedfn;
+
+            let _Wrapper;
+            var Wrapper = class Wrapper {
+                static _ = ((cls) => (_Wrapper = cls))(Wrapper);
+                render() {
+                    ErrorBoundary("foobar");
+                }
+            }
+
+            return _Wrapper;
+        })();
+
+        new cls().render();
+    }
+}
+
+class_used_within_itself_4_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        let c;
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    var r = class r {
+                        static #t = (c = n(this, [], e));
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    }
+                })();
+                x = 1;
+                constructor() { }
+            })();
+
+        console.log(c.ok);
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS", "true"]
+}
+
+class_used_within_itself_5_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        let List = [1];
+        let c;
+        globalThis.n = t => new t(1);
+        (e = [
+            ((r = 'x-button'),
+            (t, e) => {
+                let { addInitializer: n } = e;
+                return n(function () {
+                    customElements.define(r, this);
+                });
+            }),
+        ]),
+            new (class {
+                static #t = (() => {
+                    var r = class r {
+                        static #t = (c = n(r, [], e));
+                        constructor(t) {
+                            this.ok = List.includes(t);
+                            if (this.ok) {
+                                console.log("PASS");
+                            }
+                        }
+                    }
+                })();
+                x = 1;
+                constructor() { }
+            })();
+
+        console.log(c.ok);
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: ["PASS", "true"]
+}
+
+class_used_within_itself_6_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        var X = class X {
+            static prop = "X"
+            static Y = class Y extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    expect: {
+        var X = class {
+            static prop = "X"
+            static Y = class extends this { }
+        }
+
+        console.log(X.Y.prop)
+    }
+    node_version = ">=20.0.0"
+    expect_stdout: "X"
+}
+
+class_used_within_itself_7_var_expname: {
+    options = { toplevel: true, unused: true, side_effects: true };
+    input: {
+        var X = class X {
+            static prop = "X"
+            static Y = class Y extends X { }
+        }
+    }
+    expect: { }
+    node_version = ">=20.0.0"
+    expect_stdout: true
 }
 
 issue_t1447_var: {

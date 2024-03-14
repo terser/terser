@@ -495,7 +495,8 @@ do_not_repeat_when_variable_larger_than_inlined_node: {
     options = {
         toplevel: true,
         reduce_vars: true,
-        inline: true
+        inline: true,
+        unused: true,
     }
 
     mangle = {
@@ -520,6 +521,48 @@ do_not_repeat_when_variable_larger_than_inlined_node: {
         pass(s);
         pass(s);
         pass(s);
+    }
+}
+
+do_not_repeat_when_variable_larger_than_inlined_node_2: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        evaluate: true,
+        unused: true,
+        inline: true
+    }
+
+    input: {
+        const a=0.1, b=0.2, c=a+b;
+        console.log(c);
+    }
+
+    expect: {
+        const c=0.1+0.2;
+        console.log(c);
+    }
+}
+
+do_not_repeat_when_variable_larger_than_inlined_node_3: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        evaluate: true,
+        unused: true,
+        inline: true
+    }
+
+    input: {
+        const a = "string";
+        const b = "string";
+        const c = a + b;
+        console.log(c, c);
+    }
+
+    expect: {
+        const c = "stringstring";
+        console.log(c, c);
     }
 }
 

@@ -186,6 +186,20 @@ convert_computed_props_to_regular_ones: {
     ]
 }
 
+convert_computed_props_and_keep_quotes: {
+    options = {
+        booleans: true,
+        computed_props: true,
+        evaluate: true,
+    }
+    format = { quote_keys: true }
+    input: {
+        console.log({ [11]: 22, 33: 44 });
+    }
+    expect_exact: 'console.log({"11":22,"33":44});'
+    expect_stdout: "{ '11': 22, '33': 44 }"
+}
+
 computed_property_names_evaluated_1: {
     options = {
         evaluate: true

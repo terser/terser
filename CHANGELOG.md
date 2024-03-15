@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.29.2
+ - Make sure 'computed_props' creates string keys
+ - Take into account the evaluated size when inlining
+
 ## v5.29.1
  - fix optimisation of all-bits mask check
 

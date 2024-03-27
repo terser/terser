@@ -103,7 +103,31 @@ object_spread: {
     ]
 }
 
-object_spread_nullish_undefined: {
+object_spread_constant: {
+    input: {
+        id({
+            ...null,
+            ...undefined,
+            ...true,
+            ...void 0,
+            ...!0,
+            ...~"foo",
+            .../baz/,
+            ...-/baz2/,
+
+            ..."bar",
+        });
+    }
+
+    expect: {
+        id({
+            ..."bar"
+        })
+    }
+}
+
+// https://github.com/terser/terser/pull/1071
+object_spread_inline_after_dropping_undefined: {
     input: {
         let o = { ...undefined, ...{a: true} }
         id(o);
@@ -114,8 +138,7 @@ object_spread_nullish_undefined: {
         id(o)
     }
 }
-
-object_spread_nullish_null: {
+object_spread_inline_after_dropping_null: {
     input: {
         let o = { ...null, ...{a: true} }
         id(o);

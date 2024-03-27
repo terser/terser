@@ -1,6 +1,6 @@
 # Changelog
 
-## v5.20.0
+## v5.30.0
  - Improve removal of classes referring to themselves
 
 ## v5.29.2

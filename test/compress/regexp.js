@@ -63,6 +63,19 @@ unsafe_nul_byte: {
     }
 }
 
+double_escape: {
+    format = {
+        ascii_only: true
+    }
+    input: {
+        /\🏳0\🌈️\☺/
+    }
+    expect: {
+        /\ud83c\udff30\ud83c\udf08\ufe0f\u263a/
+    }
+    expect_stdout: true
+}
+
 inline_script: {
     options = {}
     beautify = {

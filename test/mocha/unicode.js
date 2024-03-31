@@ -78,6 +78,14 @@ describe("Unicode", function() {
         assert.strictEqual(ast.print_to_string(), 'console.log("\\udbff");');
     });
 
+    it("Should not strip quotes for object property name when there is unallowed character", async function() {
+        await for_each_async([undefined, 2022], async function(ecma) {
+            var code = 'console.log({"hello・world":123});';
+            var result = await minify(code, { ecma });
+            assert.strictEqual(result.code, 'console.log({"hello・world":123});');
+        })
+    });
+
     it("Should not unescape unpaired surrogates", async function() {
         this.timeout(20000);
         var code = [];

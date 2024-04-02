@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.30.2
+ - Avoid optimizations inside computed keys, because they can cause js-engine-specific bugs.
+
 ## v5.30.1
  - Removed useless `\` escapes for non-ascii characters
  - Make modern identifier characters quoted for older environments (#1512)

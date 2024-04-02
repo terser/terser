@@ -1348,9 +1348,10 @@ collapse_vars_object: {
     }
     expect: {
         function f0(x, y) {
+            var z = x + y;
             return {
                 get b() { return 7; },
-                r: x + y
+                r: z,
             };
         }
         function f1(x, y) {

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.30.1
+ - Removed useless `\` escapes for non-ascii characters
+ - Make modern identifier characters quoted for older environments (#1512)
+
 ## v5.30.0
  - Improve removal of classes referring to themselves
 

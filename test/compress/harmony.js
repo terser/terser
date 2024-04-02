@@ -979,9 +979,11 @@ issue_2349b: {
         }, "blah"));
     }
     expect: {
-        console.log([ {
-            blah: 42
-        } ].map(({["blah"]: l}) => l));
+        console.log((
+            a = "blah",
+            [{ blah: 42 }].map(({[a]: l}) => l)
+        ));
+        var a;
     }
     expect_stdout: [
         "[ 42 ]",

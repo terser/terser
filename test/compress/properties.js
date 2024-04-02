@@ -1352,6 +1352,46 @@ computed_property: {
     ]
 }
 
+skip_computed_properties: {
+    options = {
+        evaluate: true,
+        inline: true,
+    }
+    input: {
+        export class A {
+            [(() => class {})()] = 1;
+        }
+    }
+    expect: {
+        export class A {
+            [(() => class {})()] = 1;
+        }
+    }
+}
+
+skip_computed_properties_2: {
+    options = {
+        toplevel: true,
+        evaluate: true,
+        inline: true,
+        reduce_vars: true,
+        unused: true,
+        collapse_vars: true,
+    }
+    input: {
+        function f(o) {
+            return {[o.key]: o};
+        }
+        var obj = {key: 'xyz'.slice(1, -1)};
+        console.log(f(obj));
+    }
+    expect: {
+        var obj = {key: 'xyz'.slice(1, -1)};
+        console.log((o=obj, {[o.key]: o}));
+        var o;
+    }
+}
+
 new_this: {
     options = {
         properties: true,

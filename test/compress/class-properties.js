@@ -452,3 +452,125 @@ allow_subscript_private_field: {
         "PASS"
     ]
 }
+
+parens_in: {
+    input: {
+        class X {
+            static {
+                console.log(!(#x in this));
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(!(#x in this))}}"
+}
+
+parens_in_2: {
+    input: {
+        class X {
+            static {
+                console.log((#x in this) + 1);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log((#x in this)+1)}}"
+}
+
+parens_in_3: {
+    input: {
+        class X {
+            static {
+                console.log(#x in (this + 1));
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this+1)}}"
+}
+
+parens_in_4: {
+    input: {
+        class X {
+            static {
+                console.log(#x in this + 1);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this+1)}}"
+}
+
+parens_in_5: {
+    input: {
+        class X {
+            static {
+                console.log((#x in this) | 1);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this|1)}}"
+}
+
+parens_in_6: {
+    input: {
+        class X {
+            static {
+                console.log(#x in (this | 1));
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in(this|1))}}"
+}
+
+parens_in_7: {
+    input: {
+        class X {
+            static {
+                console.log(#x in this | 1);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this|1)}}"
+}
+
+parens_in_8: {
+    input: {
+        class X {
+            static {
+                console.log((#x in this) in this);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this in this)}}"
+}
+
+parens_in_9: {
+    input: {
+        class X {
+            static {
+                console.log(#x in (this in this));
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in(this in this))}}"
+}
+
+parens_in_10: {
+    input: {
+        class X {
+            static {
+                console.log(#x in this in this);
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this in this)}}"
+}
+
+parens_in_11: {
+    input: {
+        class X {
+            static {
+                console.log(this in (#x in this));
+            }
+        }
+    }
+    expect_exact: "class X{static{console.log(this in(#x in this))}}"
+}
+

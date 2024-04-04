@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.30.3
+ - Fix precedence of `#private in ...` operator
+
 ## v5.30.2
  - Avoid optimizations inside computed keys, because they can cause js-engine-specific bugs.
 

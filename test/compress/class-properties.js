@@ -574,3 +574,55 @@ parens_in_11: {
     expect_exact: "class X{static{console.log(this in(#x in this))}}"
 }
 
+privatein_precedence: {
+    input: {
+        class X {
+            static { console.log(this && #x in this); }
+        }
+    }
+    expect_exact: "class X{static{console.log(this&&#x in this)}}"
+}
+
+privatein_precedence_2: {
+    input: {
+        class X {
+            static { console.log(1 === #x in this); }
+        }
+    }
+    expect_exact: "class X{static{console.log(1===#x in this)}}"
+}
+
+privatein_precedence_3: {
+    input: {
+        class X {
+            static { console.log(#x in this in 1); }
+        }
+    }
+    expect_exact: "class X{static{console.log(#x in this in 1)}}"
+}
+
+privatein_precedence_bad_1: {
+    bad_input: `
+        class X {
+            static { console.log(1 << #x in this); }
+        }
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        line: 3,
+        col: 38,
+    })
+}
+
+privatein_precedence_bad_2: {
+    bad_input: `
+        class X {
+            static { console.log(1 in #x in this); }
+        }
+    `
+    expect_error: ({
+        name: "SyntaxError",
+        line: 3,
+        col: 38,
+    })
+}

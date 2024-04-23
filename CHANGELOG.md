@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.30.4
+ - Fix parsing `#private in ...` when next to other operators
+
 ## v5.30.3
  - Fix precedence of `#private in ...` operator
 

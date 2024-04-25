@@ -5,4 +5,3 @@ tmp/
 dist/
 coverage/
 .tmp/
-bin/.backup-package.json

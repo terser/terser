@@ -69,7 +69,8 @@
     "lint-fix": "eslint --fix lib",
     "ls-lint": "ls-lint",
     "build": "rollup --config --silent",
-    "prepublishOnly": "npm run build && node bin/publish.mjs pre",
+    "prepare": "npm run build",
+    "prepublishOnly": "node bin/publish.mjs pre",
     "postpublish": "node bin/publish.mjs post",
     "postversion": "echo 'Remember to update the changelog!'"
   },

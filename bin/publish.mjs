@@ -6,7 +6,7 @@ const publishHookType = process.argv[2]
 
 const __dirname = fileURLToPath(import.meta.url)
 const packageJsonPath = path.resolve(__dirname, "../../package.json")
-const backupPath = path.resolve(__dirname, "../../.backup-package.json")
+const backupPath = path.resolve(__dirname, "../.backup-package.json")
 
 const readFile = (path) => fs.readFileSync(path, "utf-8")
 const writeFile = (path, content) => fs.writeFileSync(path, content, "utf-8")

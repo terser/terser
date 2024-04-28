@@ -140,8 +140,8 @@ mangle_properties: {
         a["foo"] = "bar";
         a.color = "red";
         x = {"bar": 10};
-        a.run(x.bar, a.foo);
-        a['run']({color: "blue", foo: "baz"});
+        a.doRun(x.bar, a.foo);
+        a['doRun']({color: "blue", foo: "baz"});
     }
     expect: {
         a["o"]="bar";a.color="red";x={l:10};a.u(x.l,a.o);a["u"]({color:"blue",o:"baz"});

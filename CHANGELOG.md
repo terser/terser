@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.31.0
+ - Sync up property mangler exceptions with current contents of Firefox and Chrome environments
+ - Add more webcomponent properties to property mangler exceptions (#1525)
+ - Drop non-nullish constants in `...spreads` in objects (#1141)
+
 ## v5.30.4
  - Fix parsing `#private in ...` when next to other operators
 

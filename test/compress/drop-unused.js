@@ -1139,12 +1139,12 @@ delete_assign_1: {
         console.log(delete (a = 0 / 0));
     }
     expect: {
-        console.log((void 0, !0));
-        console.log((void 0, !0));
-        console.log((1 / 0, !0));
-        console.log((1 / 0, !0));
-        console.log((NaN, !0));
-        console.log((0 / 0, !0));
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
     }
     expect_stdout: true
 }
@@ -1167,12 +1167,12 @@ delete_assign_2: {
         console.log(delete (a = 0 / 0));
     }
     expect: {
-        console.log((void 0, !0));
-        console.log((void 0, !0));
-        console.log((Infinity, !0));
-        console.log((1 / 0, !0));
-        console.log((NaN, !0));
-        console.log((0 / 0, !0));
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
+        console.log(!0);
     }
     expect_stdout: true
 }
@@ -2757,6 +2757,44 @@ unused_seq_elements: {
         console.log("just-make-sure-it-is-compilable") && (a++, b++);
     }
     expect_stdout: "just-make-sure-it-is-compilable"
+}
+
+unused_assignments_caused_duplication: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        evaluate: true,
+        unused: true,
+    }
+    input: {
+        var R, fn = (R = "do not duplicate me", function(){ return useVar(R) });
+
+        leak(fn);
+    }
+    expect: {
+        var fn = function(){ return useVar("do not duplicate me") };
+
+        leak(fn);
+    }
+}
+
+unused_assignments_caused_duplication_preserve_this: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        evaluate: true,
+        unused: true,
+    }
+    input: {
+        var R, call = (R = "do preserve `this`", foo.bar)();
+
+        leak(call);
+    }
+    expect: {
+        var call = ("do preserve `this`", foo.bar)();
+
+        leak(call);
+    }
 }
 
 unused_class_with_static_props_side_effects: {

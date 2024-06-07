@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.31.1
+ - Allow drop-unused to drop the whole assignment (not just the assigned name) in more situations, in order to avoid duplication of long strings.
+
 ## v5.31.0
  - Sync up property mangler exceptions with current contents of Firefox and Chrome environments
  - Add more webcomponent properties to property mangler exceptions (#1525)

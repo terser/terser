@@ -8225,6 +8225,7 @@ export var domprops = [
     "uint32",
     "uint8",
     "uint8Clamped",
+    "unadjustedMovement",
     "unclippedDepth",
     "unconfigure",
     "undefined",

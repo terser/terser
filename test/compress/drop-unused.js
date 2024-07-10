@@ -927,7 +927,7 @@ issue_1583: {
     }
     expect: {
         function m(t) {
-            (function(e) {
+            (function() {
                 (function() {
                     return (function(a) {
                         return a;
@@ -1587,7 +1587,7 @@ issue_2226_2: {
         }(1, 2));
     }
     expect: {
-        console.log(function(a, b) {
+        console.log(function(a) {
             return a += 2;
         }(1));
     }
@@ -1607,7 +1607,7 @@ issue_2226_3: {
         }(1, 2));
     }
     expect: {
-        console.log(function(a, b) {
+        console.log(function(a) {
             return a += 2;
         }(1));
     }
@@ -2354,7 +2354,7 @@ issue_3192: {
         (function(a) {
             console.log(a = "foo", arguments[0]);
         })("bar");
-        (function(a) {
+        (function() {
             "use strict";
             console.log("foo", arguments[0]);
         })("bar");

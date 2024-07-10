@@ -1697,7 +1697,7 @@ defun_label: {
     }
     expect: {
         !function() {
-            console.log(function(a) {
+            console.log(function() {
                 L: {
                     if (2) break L;
                     return 1;
@@ -1814,7 +1814,7 @@ iife_func_side_effects: {
         function z() {
             console.log("z");
         }
-        (function(a, b, c) {
+        (function(a, b) {
             return function() {
                 console.log("FAIL");
             } + b();
@@ -1881,7 +1881,7 @@ issue_1595_3: {
         })(2);
     }
     expect: {
-        (function(a) {
+        (function() {
             return g(3);
         })();
     }
@@ -5197,7 +5197,7 @@ escape_yield: {
     }
     expect: {
         function foo() {}
-        var gen = function*(s) {
+        var gen = function*() {
             for (;;) yield foo;
         }();
         (function() {
@@ -5776,7 +5776,7 @@ duplicate_lambda_defun_name_2: {
         }());
     }
     expect: {
-        console.log(function(a) {
+        console.log(function() {
             return function() {}.length;
         }());
     }

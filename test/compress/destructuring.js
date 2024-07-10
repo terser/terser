@@ -808,7 +808,7 @@ issue_3205_5: {
         })();
     }
     expect: {
-        !function(g) {
+        !function() {
             var {a: x} = {
                 a: "PASS"
             };

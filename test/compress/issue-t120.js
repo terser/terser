@@ -185,7 +185,7 @@ pr_152_regression: {
         console.log(result);
     }
     expect: {
-        (function(root, factory) {
+        (function(root) {
             var CryptoJS;
             root.CryptoJS = CryptoJS = CryptoJS || function(Math) {
                 var C = {

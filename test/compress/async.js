@@ -163,7 +163,7 @@ async_inline: {
     }
     expect: {
         !async function(){await 3}();
-        !async function(x){await console.log(4)}();
+        !async function(){await console.log(4)}();
 
         function invoke(x, y){return x(y)}
         invoke(async function(){return await 1});

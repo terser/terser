@@ -158,7 +158,7 @@ inline_identity_async: {
     }
     expect: {
         (async () => await 1)();
-        (async x => await console.log(2))();
+        (async () => await console.log(2))();
     }
     expect_stdout: "2"
     node_version: ">=8"

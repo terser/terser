@@ -588,7 +588,7 @@ inline_using_correct_arguments: {
     expect: {
         s = a, t = "foo", s.run(t);
         var s, t;
-        (function(s, t) { return s.run("bar") })(a);
-        (function(s, t) { return s.run("123") })(a);
+        (function(s) { return s.run("bar") })(a);
+        (function(s) { return s.run("123") })(a);
     }
 }

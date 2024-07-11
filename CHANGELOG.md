@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.31.2
+ - drop_unused: scan variables in self-referential class declarations that contain side effects.
+ - Don't add parens to arrow function when it's the default for an argument (#1540)
+ - Update domprops (#1538)
+
 ## v5.31.1
  - Allow drop-unused to drop the whole assignment (not just the assigned name) in more situations, in order to avoid duplication of long strings.
 

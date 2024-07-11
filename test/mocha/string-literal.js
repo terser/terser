@@ -64,19 +64,11 @@ describe("String literals", function() {
     });
 
     it("Should not unescape unpaired surrogates", async function() {
-        var code = [];
-        for (var i = 0; i <= 0xF; i++) {
-            code.push("\\u000" + i.toString(16));
-        }
-        for (;i <= 0xFF; i++) {
-            code.push("\\u00" + i.toString(16));
-        }
-        for (;i <= 0xFFF; i++) {
-            code.push("\\u0" + i.toString(16));
-        }
-        for (; i <= 0xFFFF; i++) {
-            code.push("\\u" + i.toString(16));
-        }
+        var code = [], i = 0;
+        for (; i <= 0x000F; i++) code.push("\\u000" + i.toString(16));
+        for (; i <= 0x00FF; i++) code.push("\\u00" + i.toString(16));
+        for (; i <= 0x0FFF; i++) code.push("\\u0" + i.toString(16));
+        for (; i <= 0xFFFF; i++) code.push("\\u" + i.toString(16));
         code = '"' + code.join() + '"';
         var normal = await minify(code, {
             compress: false,
@@ -92,7 +84,7 @@ describe("String literals", function() {
             compress: false,
             mangle: false,
             output: {
-                ascii_only: false
+                ascii_only: true
             }
         });
         if (ascii.error) throw ascii.error;

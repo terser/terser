@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.31.3
+ - drop_unused: drop unused parameters from IIFEs in some more situations.
+
 ## v5.31.2
  - drop_unused: scan variables in self-referential class declarations that contain side effects.
  - Don't add parens to arrow function when it's the default for an argument (#1540)

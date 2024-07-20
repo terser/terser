@@ -1344,6 +1344,70 @@ defun_reference_indirection_2: {
     expect_stdout: "undefined"
 }
 
+defun_reference_indirection_after_def_1: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var on = true;
+            function log_on() {
+                console.log(on)
+            }
+            indirection_2();
+            function indirection_2() {
+                log_on()
+            }
+        }
+    }
+    expect: {
+        if (id(true)) {
+            function log_on() {
+                console.log(true);
+            }
+            (function () {
+                log_on();
+            })();
+        }
+    }
+    expect_stdout: "true"
+}
+
+defun_reference_indirection_after_def_2: {
+    options = {
+        toplevel: true,
+        reduce_vars: true,
+        unused: true,
+        evaluate: true
+    }
+    input: {
+        if (id(true)) {
+            var on = true;
+            function log_on() {
+                console.log(on)
+            }
+            function indirection_2() {
+                log_on()
+            }
+            indirection_2();
+        }
+    }
+    expect: {
+        if (id(true)) {
+            function log_on() {
+                console.log(true);
+            }
+            (function () {
+                log_on();
+            })();
+        }
+    }
+    expect_stdout: "true"
+}
+
 defun_reference_used_before_def: {
     options = {
         toplevel: true,

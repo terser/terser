@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.31.4
+ - drop_unused: drop classes which only have side effects in the `extends` part
+
 ## v5.31.3
  - drop_unused: drop unused parameters from IIFEs in some more situations.
 

@@ -26,6 +26,7 @@ var MAX_GENERATED_TOPLEVELS_PER_RUN = 1;
 var MAX_GENERATION_RECURSION_DEPTH = 12;
 var INTERVAL_COUNT = 100;
 var RANDOM_SEED = Date.now();
+var ONLY = null;
 
 var STMT_ARG_TO_ID = Object.create(null);
 var STMTS_TO_USE = [];
@@ -90,6 +91,12 @@ for (var i = 2; i < process.argv.length; ++i) {
             throw new Error('invalid random seed ' + process.argv[i])
         }
         break;
+      case '--only':
+        ONLY = Number(process.argv[++i]);
+        if (isNaN(ONLY)) {
+            throw new Error('invalid round number ' + process.argv[i])
+        }
+        break;
       case '--no-catch-redef':
         catch_redef = false;
         break;
@@ -120,7 +127,8 @@ for (var i = 2; i < process.argv.length; ++i) {
         println('<number>: generate this many cases (if used must be first arg)');
         println('-v: print every generated test case');
         println('-V: print every 100th generated test case');
-        println('--seed: initialize the random seed, for determinism');
+        println('--seed <int>: initialize the random seed, for determinism');
+        println('--only <int>: only eval code in a specific round number');
         println('-t <int>: generate this many toplevels per run (more take longer)');
         println('-r <int>: maximum recursion depth for generator (higher takes longer)');
         println('-s1 <statement name>: force the first level statement to be this one (see list below)');
@@ -1122,6 +1130,9 @@ async function main() {
         }
 
         original_code = createTopLevelCode();
+
+        if (ONLY != null && round !== ONLY) continue;
+
         original_result = sandbox.run_code(original_code);
         const options_sets = (typeof original_result != "string" ? fallback_options : minify_options)
 

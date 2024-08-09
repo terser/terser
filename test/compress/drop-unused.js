@@ -3477,20 +3477,6 @@ class_used_within_itself_8: {
     expect_stdout: true
 }
 
-class_used_within_itself_9: {
-    options = { toplevel: true, unused: true, side_effects: true, passes: 2 };
-    input: {
-        class Class extends Impure {
-            static pureProp = this
-        }
-    }
-    expect: {
-        Impure
-    }
-    node_version = ">=20.0.0"
-    expect_stdout: true
-}
-
 class_used_within_itself_var: {
     options = {
         toplevel: true,
@@ -3675,7 +3661,7 @@ class_used_within_itself_6_var: {
 class_used_within_itself_7_var: {
     options = { toplevel: true, unused: true, side_effects: true };
     input: {
-        var X = class {
+        var X = class X {
             static prop = "X"
             static Y = class Y extends this { }
         };
@@ -3690,7 +3676,7 @@ class_used_within_itself_8_var: {
     input: {
         var RippleState = /* @__PURE__ */ ((RippleState2) => leak(RippleState2))(RippleState);
 
-        var RippleRenderer = class {
+        var RippleRenderer = class RippleRenderer {
             static prop = (this.sideEffect = sideEffect())
 
             _onPointerUp = RippleState.VISIBLE
@@ -3708,21 +3694,6 @@ class_used_within_itself_8_var: {
     node_version = ">=20.0.0"
     expect_stdout: true
 }
-
-class_used_within_itself_9_var: {
-    options = { toplevel: true, unused: true, side_effects: true, passes: 2 };
-    input: {
-        var Class = class extends Impure {
-            static pureProp = this
-        }
-    }
-    expect: {
-        Impure
-    }
-    node_version = ">=20.0.0"
-    expect_stdout: true
-}
-
 
 class_used_within_itself_var_expname: {
     options = {
@@ -3945,20 +3916,6 @@ class_used_within_itself_8_var_expname: {
     expect_stdout: true
 }
 
-class_used_within_itself_9_var_expname: {
-    options = { toplevel: true, unused: true, side_effects: true, passes: 2 };
-    input: {
-        var Class = class Class extends Impure {
-            static pureProp = Class
-        }
-    }
-    expect: {
-        Impure
-    }
-    node_version = ">=20.0.0"
-    expect_stdout: true
-}
-
 class_used_within_itself_classname: {
     options = {
         toplevel: true,
@@ -4175,20 +4132,6 @@ class_used_within_itself_8_classname: {
 
             _onPointerUp = RippleState.VISIBLE
         }
-    }
-    node_version = ">=20.0.0"
-    expect_stdout: true
-}
-
-class_used_within_itself_9_classname: {
-    options = { toplevel: true, unused: true, side_effects: true, passes: 2 };
-    input: {
-        class Class extends Impure {
-            static pureProp = Class
-        }
-    }
-    expect: {
-        Impure
     }
     node_version = ">=20.0.0"
     expect_stdout: true

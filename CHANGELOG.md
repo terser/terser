@@ -1,6 +1,9 @@
 # Changelog
 
-## v5.31.4
+## v5.31.5
+ - Revert v5.31.4, which created mysterious issues #1548, #1549
+
+## v5.31.4 (reverted)
  - drop_unused: drop classes which only have side effects in the `extends` part
 
 ## v5.31.3

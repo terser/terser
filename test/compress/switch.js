@@ -3205,3 +3205,24 @@ issue_1083_6: {
     }
     expect_stdout: ["definitely", "definitely"]
 }
+
+side_effectful_case: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        var c = "FAIL";
+        switch (0) {
+          case c = "PASS", 0:
+        }
+        console.log(c);
+    }
+    expect: {
+        var c = "FAIL";
+        if (0 === (c="PASS", 0));
+        console.log(c);
+    }
+    expect_stdout: "PASS"
+}
+

@@ -1,5 +1,8 @@
 # Changelog
 
+## v5.31.6
+ - Retain side effects in a `case` when the expression is a sequence (comma) expression
+
 ## v5.31.5
  - Revert v5.31.4, which created mysterious issues #1548, #1549
 

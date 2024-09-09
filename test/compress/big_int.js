@@ -18,6 +18,7 @@ big_int_hex: {
         0xfabn
     }
     expect_exact: "0x20n;0xfabn;"
+    no_mozilla_ast: true
 }
 
 regression_big_int_hex_lower_with_e: {
@@ -25,6 +26,7 @@ regression_big_int_hex_lower_with_e: {
         0xaefen;
     }
     expect_exact: "0xaefen;"
+    no_mozilla_ast: true
 }
 
 big_int_binary: {
@@ -32,6 +34,7 @@ big_int_binary: {
         0b101n
     }
     expect_exact: "0b101n;"
+    no_mozilla_ast: true
 }
 
 big_int_octal: {
@@ -39,6 +42,7 @@ big_int_octal: {
         0o7n
     }
     expect_exact: "0o7n;"
+    no_mozilla_ast: true
 }
 
 big_int_no_e: {

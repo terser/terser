@@ -6,7 +6,7 @@ import { Imp3, Imp4 } from "lel";
 import Imp5, { Imp6 } from "lel";
 import { outer as Imp7, outer2 as Imp8 } from "lel";
 // TODO: import { "-" as Imp9, "*" as Imp10 } from "lel";
-// TODO: import("a.js");
+import("a.js");
 
 let A1, A2, A3, A4, A5
 let B1, B2, B3, B4, B5

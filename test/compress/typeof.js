@@ -12,16 +12,18 @@ typeof_evaluation: {
         f = typeof false;
         g = typeof function(){};
         h = typeof undefined;
+        i = typeof 1n;
     }
     expect: {
         a='number';
         b='string';
-        c=typeof[];
-        d=typeof{};
+        c='object';
+        d='object';
         e=typeof/./;
         f='boolean';
         g='function';
         h='undefined';
+        i='bigint';
     }
 }
 
@@ -294,4 +296,42 @@ issue_2728_6: {
         console.log(typeof arguments, arguments());
     }
     expect_stdout: "function undefined"
+}
+
+issue_250_1: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        typeofs: true,
+    }
+    input: {
+        const obj = {};
+        if (typeof obj !== "undefined") console.log(typeof obj)
+    }
+    expect: {
+        const obj = {};
+        if (true) console.log("object")
+    }
+    expect_stdout: "object"
+}
+
+issue_250_2: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        side_effects: true,
+        typeofs: true,
+        unused: true,
+        toplevel: true,
+        global_defs: {
+            window: {},
+            global: {},
+        }
+    }
+    input: {
+        var __window = typeof window !== 'undefined' && window;
+        if (typeof global === 'undefined' || global) { }
+        if (typeof global !== 'undefined' && global) { }
+    }
+    expect: {}
 }

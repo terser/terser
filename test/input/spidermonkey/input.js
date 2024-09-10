@@ -1,29 +1,46 @@
+// Import/export
 import "mod-name";
-import Foo from "bar";
-import * as Food from "food"
-import { Bar, Baz } from "lel";
-import Bar1, { Foo2 } from "lel";
-import { Bar2 as kex, Baz as food } from "lel";
+import Imp from "bar";
+import * as Imp2 from "food"
+import { Imp3, Imp4 } from "lel";
+import Imp5, { Imp6 } from "lel";
+import { outer as Imp7, outer2 as Imp8 } from "lel";
+// TODO: import { "-" as Imp9, "*" as Imp10 } from "lel";
+import("a.js");
+
+let A1, A2, A3, A4, A5
+let B1, B2, B3, B4, B5
+export default x;
+export const z = 4;
+export function fun() {}
+// TODO: export {A1 as "-", B1 as "*"};
+export {A2 as a, B2 as b};
+export {A3};
+export * from "a.js";
+export * as foo from "a.js";
+export {A} from "a.js";
+export {A4, B4} from "a.js";
+// TODO: export {A5 as "-", B5 as "*"} from "a.js";
 
 const x = 0b01;
 let y = 6;
 import.meta;
 console.log(import.meta.url);
+y ** 2;
+y **= 2;
 
-export default x;
-export const z = 4;
-export function fun() {}
-export * from "a.js";
-export {A} from "a.js";
-export {A1, B1} from "a.js";
-
-(a, [b], {c:foo = 3}, ...d) => null;
+(a, [b], {c:foo = 3}, d = 4, ...e) => null;
 () => {};
 
 async function f() { }
 function*gen() {
     yield 1;
     yield* 2;
+}
+async function*async_gen() {
+    yield 1;
+    yield* 2;
+    await 3;
 }
 
 class Class extends Object {
@@ -65,6 +82,8 @@ x = class {
     static #private_static_property = 6
     get #private_getter() {}
     set #private_setter(value) {}
+    #private_method() {}
+    static #private_static_method() {}
 
     static {
         this.#private_static_property = 7;
@@ -85,7 +104,9 @@ function f2 () {
 console.log([10, ...[], 20, ...[30, 40], 50]["length"]);
 var { w: w1, ...V } = { w: 7, x: 1, y: 2 };
 for (const x of y) {}
-async function f1() { await x; }
+async () => {
+    for await (const x of y) {}
+}
 
 const logicalExpression = 1 || 2;
 
@@ -180,3 +201,8 @@ hello?.foo?.["bar"]?.baz?.() ?? "default";
 a ||= b;
 a &&= b;
 a ??= b;
+
+// try..catch
+try { x() } catch(e) {}
+try { x() } catch(e) {} finally {}
+try { x() } catch {}

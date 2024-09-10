@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.32.0
+
+ - `import("module")` can now be input and output from ESTree AST (#1557)
+ - `BigInt` literals can now be input and output from ESTree AST (#1555)
+ - `typeof` an object or array (`typeof {}` and `typeof []`) can now be statically evaluated. (#1546)
+
 ## v5.31.6
  - Retain side effects in a `case` when the expression is a sequence (comma) expression
 

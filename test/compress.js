@@ -451,6 +451,7 @@ function parse_test(file) {
                         "expect_exact",
                         "expect_stdout",
                         "node_version",
+                        "no_mozilla_ast",
                         "reminify",
                     ].includes(label.name),
                     tmpl("Unsupported label {name} [{line},{col}]", {
@@ -487,6 +488,8 @@ function parse_test(file) {
                     }
                 } else if (label.name === "prepend_code") {
                     test[label.name] = read_string(stat);
+                } else if (label.name === "no_mozilla_ast") {
+                    test[label.name] = read_boolean(stat);
                 } else {
                     test[label.name] = stat;
                 }

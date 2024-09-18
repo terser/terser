@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.33.0
+
+ - `reduce_vars` improved when dealing with hoisted function definitions (#1544)
+
 ## v5.32.0
 
  - `import("module")` can now be input and output from ESTree AST (#1557)

@@ -5,7 +5,7 @@ import * as Imp2 from "food"
 import { Imp3, Imp4 } from "lel";
 import Imp5, { Imp6 } from "lel";
 import { outer as Imp7, outer2 as Imp8 } from "lel";
-// TODO: import { "-" as Imp9, "*" as Imp10 } from "lel";
+import { "-" as Imp9, "*" as Imp10 } from "lel";
 import("a.js");
 
 let A1, A2, A3, A4, A5
@@ -13,14 +13,16 @@ let B1, B2, B3, B4, B5
 export default x;
 export const z = 4;
 export function fun() {}
-// TODO: export {A1 as "-", B1 as "*"};
+export {A1 as "-", B1 as "*"};
 export {A2 as a, B2 as b};
 export {A3};
 export * from "a.js";
 export * as foo from "a.js";
 export {A} from "a.js";
 export {A4, B4} from "a.js";
-// TODO: export {A5 as "-", B5 as "*"} from "a.js";
+export {A5 as "-2", "*2" as B5, "*3"} from "a.js";
+export {A5 as "-3"};
+export * as "A5" from "a.js";
 
 const x = 0b01;
 let y = 6;

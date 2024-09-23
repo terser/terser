@@ -131,7 +131,7 @@ modified: {
             console.log(2);
         }
         function f2() {
-            3;
+            0;
             console.log(4);
             console.log(6);
             console.log(4);
@@ -665,7 +665,7 @@ passes: {
     }
     expect: {
         function f() {
-            3;
+            0;
             console.log(4);
             console.log(6);
             console.log(4);
@@ -1647,9 +1647,7 @@ defun_redefine: {
     }
     expect:  {
         function f() {
-            (function () {
-                return 3;
-            });
+            0;
             return 3 + 2;
         }
     }
@@ -1707,9 +1705,7 @@ func_modified: {
             }
 
             b.inject = [];
-            (function () {
-                return 4;
-            });
+            0;
             return 1 + 2 + 4;
         }
     }

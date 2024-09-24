@@ -46,3 +46,28 @@ unexpected_side_effects_dropping_console: {
         }
     }
 }
+
+unexpected_returned_value_dropping_console: {
+    options = {
+        drop_console: true,
+        evaluate: true,
+        reduce_vars: true,
+        side_effects: true,
+        unused: true,
+        toplevel: true,
+    }
+    input: {
+        const b = {
+            log: console.log.bind(console),
+        };
+
+        b.log("hi");
+    }
+    expect: {
+        const b={
+            log: function(){}.bind(),
+        };
+
+        b.log("hi");
+    }
+}

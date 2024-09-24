@@ -312,20 +312,20 @@ drop_assign: {
     }
     expect: {
         function f1() {
-            1;
+            0;
         }
         function f2() {
-            2;
+            0;
         }
         function f3(a) {
-            1;
+            0;
         }
         function f4() {
             return 1;
         }
         function f5() {
             return function() {
-                1;
+                0;
             };
         }
     }
@@ -428,10 +428,10 @@ drop_toplevel_vars: {
     expect: {
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
-        2;
+        0;
         function g() {}
         function h() {}
         console.log(3);
@@ -459,10 +459,10 @@ drop_toplevel_vars_fargs: {
     expect: {
         function f() {
             return function() {
-                2;
+                0;
             };
         }
-        2;
+        0;
         function g() {}
         function h() {}
         console.log(3);
@@ -487,7 +487,7 @@ drop_toplevel_all: {
         console.log(b = 3);
     }
     expect: {
-        2;
+        0;
         console.log(3);
     }
 }
@@ -513,7 +513,7 @@ drop_toplevel_retain: {
         var a;
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
         a = 2;
@@ -546,7 +546,7 @@ drop_toplevel_retain_array: {
         var a;
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
         a = 2;
@@ -575,7 +575,7 @@ drop_toplevel_retain_regex: {
         var a;
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
         a = 2;
@@ -605,7 +605,7 @@ drop_toplevel_all_retain: {
         var a;
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
         a = 2;
@@ -666,7 +666,7 @@ drop_toplevel_vars_retain: {
         var a;
         function f(d) {
             return function() {
-                2;
+                0;
             };
         }
         a = 2;

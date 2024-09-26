@@ -151,9 +151,9 @@ async function run_compress_tests_in_parallel() {
             try {
                 const test_result = await run_compress_tests([filename], true);
                 process.send({ test_result }); // request work
-            } catch (err) {
-                console.error(err);
-                process.send({}); // request work
+            } catch (error) {
+                console.error(error);
+                process.exit(1);
             }
         });
 
@@ -188,11 +188,12 @@ async function run_compress_tests_in_parallel() {
         }
     }
 
-    function start_worker() {
-        return new Promise((resolve, reject) => {
-            let fork = child_process.fork(__filename, [], {
-                stdio: [null, 'pipe', 'pipe', 'ipc'],
-            });
+    async function start_worker() {
+        let fork = child_process.fork(__filename, [], {
+            stdio: [null, 'pipe', 'pipe', 'ipc'],
+        });
+
+        let work_promise = new Promise((resolve, reject) => {
             let current_task
             let get_task = () => test_files_work
                 .find(task => task.filename === current_task)
@@ -210,7 +211,7 @@ async function run_compress_tests_in_parallel() {
                 if (current_task) {
                     fork.send(current_task);
                 } else {
-                    fork.kill();
+                    resolve();
                 }
             });
             fork.stdout.on('data', data => {
@@ -220,8 +221,14 @@ async function run_compress_tests_in_parallel() {
                 get_task().output.push(['stderr', data])
             });
             fork.on('error', reject);
-            fork.on('disconnect', resolve);
-        })
+            fork.on('disconnect', reject);
+        });
+
+        try {
+            return await work_promise;
+        } finally {
+            fork.kill();
+        }
     }
 
     const n_workers = Math.min(test_files.length, 2);
@@ -232,7 +239,13 @@ async function run_compress_tests_in_parallel() {
     log_directory("test/compress", " with " + n_workers + " workers");
 
     // Join all
-    await workers_promises;
+    try {
+        await workers_promises;
+    } catch (error) {
+        console.error('!!! Fatal error while running tests');
+        process.exitCode = 1;
+        return true;
+    }
 
     // Any lingering output?
     proxy_output();

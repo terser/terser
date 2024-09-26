@@ -2,6 +2,7 @@
 import "source-map-support/register.js";
 import path from "path";
 import fs from "fs";
+import child_process from "child_process";
 import assert from "assert";
 import semver from "semver";
 import { fileURLToPath } from "url";
@@ -29,7 +30,7 @@ var failed_files = {};
 var minify_options = JSON.parse(fs.readFileSync(path.join(__dirname, "ufuzz.json"), 'utf-8')).map(JSON.stringify);
 
 const already_logged = new Set()
-run_compress_tests().catch(e => {
+try_run_compress_tests_in_parallel().catch(e => {
     console.error(e);
     process.exit(1);
 });
@@ -50,8 +51,8 @@ function log(test, ...args) {
     console.log("%s", txt);
 }
 
-function log_directory(dir) {
-    log(null, "*** Entering [{dir}]", { dir: dir });
+function log_directory(dir, extra = '') {
+    log(null, "*** Entering [{dir}]{extra}", { dir, extra });
 }
 
 function log_test(test) {
@@ -61,7 +62,18 @@ function log_test(test) {
     log(null, "    {file}", { file: test.file });
 }
 
-function find_test_files(dir) {
+function log_test_result({ test_failures, failed_files, test_cases }) {
+    if (test_failures) {
+        console.error("\n!!! Failed " + test_failures + " test cases.");
+        console.error("!!! " + Object.keys(failed_files).join(", "));
+        process.exit(1);
+    } else {
+        console.log("\nPassed " + test_cases + " test cases.");
+    }
+}
+
+function find_test_files() {
+    var dir = test_directory("compress");
     var files = fs.readdirSync(dir).filter(function(name) {
         return /\.js$/i.test(name);
     });
@@ -118,15 +130,145 @@ function as_toplevel(test, input, mangle_options) {
     return toplevel;
 }
 
-async function run_compress_tests() {
+async function try_run_compress_tests_in_parallel() {
+    if (!await run_compress_tests_in_parallel()) {
+        run_compress_tests();
+    }
+}
+
+// If possible, use worker threads to run tests in parallel
+async function run_compress_tests_in_parallel() {
+    const test_files = find_test_files();
+    if (test_files.length < 2) {
+        return undefined; // Run this in series
+    }
+
+    if (process.send) {
+        // We are in the fork!
+
+        // do one test, ask for more, repeat
+        process.on('message', async (filename) => {
+            try {
+                const test_result = await run_compress_tests([filename], true);
+                process.send({ test_result }); // request work
+            } catch (err) {
+                console.error(err);
+                process.send({}); // request work
+            }
+        });
+
+        process.send({}); // request the first piece
+
+        return true;
+    }
+
+    const test_files_work = test_files.map(filename => ({
+        filename,
+        output: [],
+        test_result: null,
+        done: false,
+    }));
+
+    function proxy_output() {
+        const proxy = ([ stream, data ]) => {
+            process[stream].write(data);
+        };
+
+        for (const task of test_files_work) {
+            if (task.output.length) {
+                task.output.forEach(proxy);
+                task.output = []
+            }
+
+            if (!task.done) {
+                // This is the last task in series. Live-log it!
+                // task.output = { length: 0, push: proxy };
+                return;
+            }
+        }
+    }
+
+    function start_worker() {
+        return new Promise((resolve, reject) => {
+            let fork = child_process.fork(__filename, [], {
+                stdio: [null, 'pipe', 'pipe', 'ipc'],
+            });
+            let current_task
+            let get_task = () => test_files_work
+                .find(task => task.filename === current_task)
+
+            fork.on("message", ({ test_result }) => {
+                proxy_output();
+
+                // absent in the first message
+                if (test_result) {
+                    get_task().test_result = test_result;
+                    get_task().done = true;
+                }
+
+                current_task = test_files.shift();
+                if (current_task) {
+                    fork.send(current_task);
+                } else {
+                    fork.kill();
+                }
+            });
+            fork.stdout.on('data', data => {
+                get_task().output.push(['stdout', data])
+            });
+            fork.stderr.on('data', data => {
+                get_task().output.push(['stderr', data])
+            });
+            fork.on('error', reject);
+            fork.on('disconnect', resolve);
+        })
+    }
+
+    const n_workers = Math.min(test_files.length, 2);
+    const workers_promises = Promise.all(
+        Array.from({ length: n_workers }, start_worker),
+    );
+
+    log_directory("test/compress", " with " + n_workers + " workers");
+
+    // Join all
+    await workers_promises;
+
+    // Any lingering output?
+    proxy_output();
+
+    const joint_result = test_files_work
+        .map(t => t.test_result)
+        .reduce(
+            (a, b) => {
+                if (b) {
+                    a.test_cases += b.test_cases;
+                    a.test_failures += b.test_failures;
+                    Object.assign(a.failed_files, b.failed_files);
+                }
+                return a;
+            },
+            {
+                test_cases: 0,
+                test_failures: 0,
+                failed_files: {},
+            }
+        );
+
+    log_test_result(joint_result);
+
+    return true;
+}
+
+async function run_compress_tests(test_files, in_child_process) {
     var test_failures = 0;
     var test_cases = 0;
     const enable_js_sandbox =
         !process.env.TEST_NO_SANDBOX && semver.satisfies(process.version, ">=16")
 
     var dir = test_directory("compress");
-    log_directory("test/compress");
-    var files = find_test_files(dir);
+    if (!in_child_process) log_directory("test/compress");
+    var files = test_files || find_test_files();
     async function test_file(file) {
         async function test_case(test) {
             var output_options = test.beautify || test.format || {};
@@ -342,13 +484,12 @@ async function run_compress_tests() {
             break;
         }
     }
-    if (test_failures) {
-        console.error("\n!!! Failed " + test_failures + " test cases.");
-        console.error("!!! " + Object.keys(failed_files).join(", "));
-        process.exit(1);
-    } else {
-        console.log("\nPassed " + test_cases + " test cases.");
+    const result = { test_failures, test_cases, failed_files };
+    if (!in_child_process) {
+        log_test_result(result);
     }
+
+    return result;
 }
 
 function parse_test(file) {

@@ -216,9 +216,11 @@ async function run_compress_tests_in_parallel() {
             });
             fork.stdout.on('data', data => {
                 get_task().output.push(['stdout', data])
+                proxy_output();
             });
             fork.stderr.on('data', data => {
                 get_task().output.push(['stderr', data])
+                proxy_output();
             });
             fork.on('error', reject);
             fork.on('disconnect', reject);
@@ -243,12 +245,10 @@ async function run_compress_tests_in_parallel() {
         await workers_promises;
     } catch (error) {
         console.error('!!! Fatal error while running tests');
+
         process.exitCode = 1;
         return true;
     }
-
-    // Any lingering output?
-    proxy_output();
 
     const joint_result = test_files_work
         .map(t => t.test_result)

@@ -21,28 +21,25 @@ function strip_func_ids(text) {
     return text.toString().replace(/F[0-9]{6}N/g, "<F<>N>");
 }
 
-var FUNC_TOSTRING = [
-    "[ Array, Boolean, Error, Function, Number, Object, RegExp, String].forEach(function(f) {",
-    "    f.toString = Function.prototype.toString;",
-    "});",
-    "Function.prototype.toString = function() {",
-    "    var id = 100000;",
-    "    return function() {",
-    "        var n = this.name;",
-    "        if (!/^F[0-9]{6}N$/.test(n)) {",
-    '            n = "F" + ++id + "N";',
-].concat(Object.getOwnPropertyDescriptor(Function.prototype, "name").configurable ? [
-    '            Object.defineProperty(this, "name", {',
-    "                get: function() {",
-    "                    return n;",
-    "                }",
-    "            });",
-] : [], [
-    "        }",
-    '        return "function " + n + "() {...}";',
-    "    }",
-    "}();",
-]).join("\n");
+var FUNC_TOSTRING = `
+    [ Array, Boolean, Error, Function, Number, Object, RegExp, String].forEach(function(f) {
+        f.toString = Function.prototype.toString;
+    });
+    Function.prototype.toString = function() {
+        var id = 100000;
+        return function() {
+            var n = this.name;
+            if (!/^F[0-9]{6}N$/.test(n)) {
+                n = "F" + ++id + "N";
+                ${Object.getOwnPropertyDescriptor(Function.prototype, "name").configurable
+                    ? 'Object.defineProperty(this, "name", { get: () => n });'
+                    : ''
+                }
+            }
+            return "function " + n + "() {...}";
+        }
+    }();
+`
 
 export function run_code(code, prepend_code = '') {
     var stdout = "";
@@ -73,7 +70,7 @@ export function run_code(code, prepend_code = '') {
             "!function() {",
             prepend_code + code,
             "}();",
-        ].join("\n"), global, { timeout: process.env.CI ? 20000 : 5000 });
+        ].join("\n"), global);
         return stdout;
     } catch (ex) {
         return ex;

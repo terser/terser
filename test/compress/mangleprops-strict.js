@@ -164,24 +164,24 @@ computed_inline_string_keep_quoted_strict_no_computed_props: {
         let { ['_destructure']: quoted_destructure } = global;
 
         let obj = {
-            _: "bar",
-            l() {},
-            get o() {}
+            t: "bar",
+            _() {},
+            get l() {}
         };
         let static_class = class {
-            static i = 'bar';
-            static p() {}
-            static get u() {}
+            static o = 'bar';
+            static i() {}
+            static get p() {}
         };
         let instance_class = class {
-            j = 'bar';
-            h() {}
-            get m() {}
+            u = 'bar';
+            j() {}
+            get h() {}
         };
         global._sub;
         global?._optional_sub;
         global?.deep._deep_optional_sub;
-        let { q: destructure } = global;
+        let { m: destructure } = global;
     }
 }
 

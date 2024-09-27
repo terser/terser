@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.34.0
+
+ - internal: stop assigning properties to objects they don't belong in
+ - internal: run compress tests in parallel
+ - `drop_console`: emit an empty function if the return value of `console.METHOD(...)` may be called.
+
 ## v5.33.0
 
  - `reduce_vars` improved when dealing with hoisted function definitions (#1544)

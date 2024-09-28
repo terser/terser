@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.34.1
+
+ - bump the rollup devDependency to disable CVE warnings (Terser was not affected)
+
 ## v5.34.0
 
  - internal: stop assigning properties to objects they don't belong in

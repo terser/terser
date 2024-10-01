@@ -972,7 +972,7 @@ await minify(code, { mangle: { toplevel: true } }).code;
   - `false` -- `obj["prop"]` is mangled.
   - `true` -- `obj.prop` is mangled unless there is `obj["prop"]` elsewhere in the code.
 
-- `nth_identifer` (default: an internal mangler that weights based on character
+- `nth_identifier` (default: an internal mangler that weights based on character
   frequency analysis) -- Pass an object with a `get(n)` function that converts an
   ordinal into the nth most favored (usually shortest) identifier.
   Optionally also provide `reset()`, `sort()`, and `consider(chars, delta)` to

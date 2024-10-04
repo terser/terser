@@ -390,8 +390,8 @@ async function run_compress_tests(test_files, in_child_process) {
                 }
             }
             if (test.rename) {
-                input.figure_out_scope(test.mangle);
-                input.expand_names(test.mangle);
+                input.figure_out_scope(test.rename);
+                input.expand_names(test.rename);
             }
             var cmp = new Compressor(options, {
                 false_by_default: options.defaults === undefined ? true : !options.defaults,

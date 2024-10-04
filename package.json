@@ -44,9 +44,9 @@
     "main.js"
   ],
   "dependencies": {
-    "@jridgewell/source-map": "^0.3.3",
-    "acorn": "^8.8.2",
-    "commander": "^2.20.0",
+    "@jridgewell/source-map": "^0.3.2",
+    "acorn": "^8.5.0",
+    "commander": "^8.0.0",
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {
@@ -65,6 +65,7 @@
     "test": "node test/compress.js && mocha test/mocha",
     "test:compress": "node test/compress.js",
     "test:mocha": "mocha test/mocha",
+    "test:mocha:build": "npm run build && mocha test/mocha",
     "lint": "eslint lib",
     "lint-fix": "eslint --fix lib",
     "ls-lint": "ls-lint",

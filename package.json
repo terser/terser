@@ -45,13 +45,13 @@
   ],
   "dependencies": {
     "@jridgewell/source-map": "^0.3.3",
-    "acorn": "^8.8.2",
+    "acorn": "^8.12.1",
     "commander": "^2.20.0",
     "source-map-support": "~0.5.20"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.11.2",
-    "astring": "^1.8.5",
+    "astring": "^1.9.0",
     "eslint": "^7.32.0",
     "eslump": "^3.0.0",
     "esm": "^3.2.25",

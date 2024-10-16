@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.35.0
+
+ - Ensure parent directory exists when using --output on CLI (#1530)
+
 ## v5.34.1
 
  - bump the rollup devDependency to disable CVE warnings (Terser was not affected)

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.36.0
+
+ - Support import attributes `with` syntax
+
 ## v5.35.0
 
  - Ensure parent directory exists when using --output on CLI (#1530)

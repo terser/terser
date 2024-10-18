@@ -138,6 +138,9 @@ async function try_run_compress_tests_in_parallel() {
 
 // If possible, use worker threads to run tests in parallel
 async function run_compress_tests_in_parallel() {
+    if (process.env.TEST_NO_WORKER) {
+        return undefined;
+    }
     const test_files = find_test_files();
     if (test_files.length < 2) {
         return undefined; // Run this in series

@@ -304,32 +304,46 @@ export_from_statement: {
     expect_exact: 'export*from"a.js";export{A}from"a.js";export{A,B}from"a.js";export{C};'
 }
 
-import_assertions: {
+import_attributes: {
+    input: {
+        import "hello" with { key: 'value' };
+    }
+    expect_exact: 'import"hello"with{key:"value"};'
+}
+
+import_attributes_with_spaces_in_obj: {
+    input: {
+        import "hello" with { 'k e y': 'value' };
+    }
+    expect_exact: 'import"hello"with{"k e y":"value"};'
+}
+
+import_attributes_import_expr: {
+    input: {
+        import("hello", { key: "value" })
+    }
+    expect_exact: 'import("hello",{key:"value"});'
+}
+
+export_from_attributes: {
+    input: {
+        export * from "hello" with { key: 'value' };
+    }
+    expect_exact: 'export*from"hello"with{key:"value"};'
+}
+
+export_named_from_attributes: {
+    input: {
+        export { x } from "hello" with { key: 'value' };
+    }
+    expect_exact: 'export{x}from"hello"with{key:"value"};'
+}
+
+import_attributes_legacy_syntax: {
     input: {
         import "hello" assert { key: 'value' };
     }
-    expect_exact: 'import"hello"assert{key:"value"};'
-}
-
-import_assertions_with_spaces_in_obj: {
-    input: {
-        import "hello" assert { 'k e y': 'value' };
-    }
-    expect_exact: 'import"hello"assert{"k e y":"value"};'
-}
-
-export_from_assertions: {
-    input: {
-        export * from "hello" assert { key: 'value' };
-    }
-    expect_exact: 'export*from"hello"assert{key:"value"};'
-}
-
-export_named_from_assertions: {
-    input: {
-        export { x } from "hello" assert { key: 'value' };
-    }
-    expect_exact: 'export{x}from"hello"assert{key:"value"};'
+    expect_exact: 'import"hello"with{key:"value"};'
 }
 
 import_statement_mangling: {

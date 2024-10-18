@@ -266,4 +266,14 @@ describe("bin/terser", function() {
             done();
         });
     });
+    it("Should output even when parent directory doesn't exist", function(done) {
+        var outputFile = "tmp/does-not-exist/out.js";
+        var command = tersercmd + " test/input/defaults/input.js -o " + outputFile;
+
+        exec(command, function (err) {
+            if (err) throw err;
+            assert.strictEqual(fs.readFileSync(outputFile, "utf8"), "if(true){console.log(1+2)}")
+            done();
+        });
+    });
 });

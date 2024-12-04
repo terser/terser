@@ -21,7 +21,9 @@
       }
 
       function add(name) {
-        props[name] = true;
+        if (/^[a-z_$][a-z0-9_$]*$/i.test(name)) {
+            props[name] = true;
+        }
       }
 
       Object.getOwnPropertyNames(window).forEach(function(thing){

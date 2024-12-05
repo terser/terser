@@ -22,6 +22,17 @@ basic_class_properties: {
     expect_stdout: "PASS"
 }
 
+issue_t1574_class_properties_no_semicolon: {
+    input: {
+        class A {
+            a
+            ["b"]
+        }
+        console.log("a" in new A(), "b" in new A())
+    }
+    expect_stdout: "true true"
+}
+
 computed_class_properties: {
     input: {
         const x = "FOO"

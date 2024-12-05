@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.37.0
+
+ - Reserved object properties from chrome extensions (domprops)
+ - Fix semicolon insertion between a class property without a semicolon `a` and a computed class property `["prop"]`
+
 ## v5.36.0
 
  - Support import attributes `with` syntax

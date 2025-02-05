@@ -71,3 +71,19 @@ unexpected_returned_value_dropping_console: {
         b.log("hi");
     }
 }
+
+drop_console_with_array_option: {
+    options = {
+        drop_console: ["log"],
+    }
+    input: {
+        console.log("foo");
+        console.log.apply(console, arguments);
+        console.info("foo");
+    }
+    expect: {
+        void 0;
+        void 0;
+        console.info("foo");
+    }
+}

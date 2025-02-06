@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.38.0
+
+ - Remove `console` method-of-method calls (eg `console.log.apply()`) when `drop_console` option is used (#1585)
+ - Remove more object spreads, such as `{ ...void !0 }` (#1142)
+
 ## v5.37.0
 
  - Reserved object properties from chrome extensions (domprops)

@@ -1,4 +1,4 @@
-issue_t1321: {
+issue_t1371: {
     options = {
     }
     input: {
@@ -31,7 +31,7 @@ issue_t1321: {
     }
 }
 
-issue_t1321_call_parentheses: {
+issue_t1371_call_parentheses: {
     options = {
     }
     input: {

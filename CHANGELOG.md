@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.38.1
+
+ - Fix inlining non-call expressions into an `optional_call?.()`
+
 ## v5.38.0
 
  - Remove `console` method-of-method calls (eg `console.log.apply()`) when `drop_console` option is used (#1585)

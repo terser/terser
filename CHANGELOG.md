@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.38.2
+
+ - internal: Flatten inheritance tree for object/class members
+
 ## v5.38.1
 
  - Fix inlining non-call expressions into an `optional_call?.()`

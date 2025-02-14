@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.39.0
+
+ - Remove unnecessary `console.assert` calls (#1590)
+
 ## v5.38.2
 
  - internal: Flatten inheritance tree for object/class members

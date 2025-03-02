@@ -871,7 +871,8 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
   allow improved compression. This might be unsafe when an at least one of two
   operands is an object with computed values due the use of methods like `get`,
   or `valueOf`. This could cause change in execution order after operands in the
-  comparison are switching. Compression only works if both `comparisons` and
+  comparison are switching. Or if one of two operands is `NaN`, the result is always
+  `false`. Compression only works if both `comparisons` and
   `unsafe_comps` are both set to true.
 
 - `unsafe_Function` (default: `false`) -- compress and mangle `Function(args, code)`

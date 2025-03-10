@@ -143,6 +143,8 @@ var [,,zzz,,] = xxx; // Trailing comma after hole
 var {aa, bb} = {aa:1, bb:2};
 var {aa, bb: {cc, dd}} = {aa:1, bb: {cc:2, dd: 3}};
 
+var {aa, bb: {cc, dd}, ee: [ff, gg]} = {aa:1, bb: {cc:2, dd: 3}, ee: [4, 5]}
+
 for (const [x,y] in pairs);
 for (const [a] = 0;;);
 for (const {c} of cees);
@@ -206,3 +208,9 @@ a ??= b;
 try { x() } catch(e) {}
 try { x() } catch(e) {} finally {}
 try { x() } catch {}
+
+// condition and const
+if (a) {
+    const tmp = a;
+    tmp.b();
+}

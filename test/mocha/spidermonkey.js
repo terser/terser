@@ -122,6 +122,18 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
+    it("should be capable of minifying from acorn", async function() {
+        const code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
+        const moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2023 });
+        const from_ast_result = await minify(moz_ast, { ecma: 2020, module: true, parse: { spidermonkey: true } });
+        const terser_result = await minify(code, { ecma: 2020, module: true });
+
+        assert.strictEqual(
+            from_ast_result.code,
+            terser_result.code,
+        );
+    });
+
     it("should accept a spidermonkey AST w/ `parse.spidermonkey: true`", async function() {
         var moz_ast = acornParse("var a = 1 + 2", { sourceType: "module", ecmaVersion: 2023 });
         var result = await minify(moz_ast, {ecma: 2015, parse: {spidermonkey: true}});

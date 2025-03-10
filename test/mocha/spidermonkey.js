@@ -156,6 +156,21 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
+    it("should correctly minify spidermonkey AST with empty export declaration", async () => {
+        const code = "export {}";
+        const ast = acornParse(code, { sourceType: 'module', locations: true, ecmaVersion: 2015 });
+        const result = await minify(ast, { ecma: 2015, module: true, parse: { spidermonkey: true } });
+        assert.strictEqual(
+            result.code,
+            "export{};"
+        );
+        const vanilla = await minify(code, { ecma: 2015, module: true });
+        assert.strictEqual(
+            result.code,
+            vanilla.code
+        );
+    });
+
     it("should produce an AST compatible with astring", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);

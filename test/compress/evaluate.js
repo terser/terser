@@ -223,15 +223,15 @@ bitwise: {
         const test11_rev = !!(bar & 7)
         const test11_2 = !(bar & 7)
         const test11_2_rev = !(bar & 7)
-        if (a & b) c()
+        if ((a & b) !== 0) c()
         const test12 = !!(7 & ~bar)
         const test12_rev = !(7 & ~bar)
 
         const test13 = bar | 0;
         const test13_2 = ~bar;
-        const test13_3 = bar | baz;
+        const test13_3 = ~~(bar | baz);
 
-        const test14 = bar | baz;
+        const test14 = bar | baz | 0;
     }
 }
 

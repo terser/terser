@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.39.1
+
+ - Fix bitwise operations that could mix `BigInt` and `number`
+
 ## v5.39.0
 
  - Remove unnecessary `console.assert` calls (#1590)

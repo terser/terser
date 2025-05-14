@@ -158,7 +158,7 @@ or: {
     }
 }
 
-bitwise: {
+bitwise_1: {
     options = {
         evaluate: true,
         side_effects: true,
@@ -174,17 +174,26 @@ bitwise: {
         const test2_rev = ~0 & (bar & 1)
         const test3 = (bar & 1) ^ 0
         const test3_rev = 0 ^ (bar & 1)
-        const test4 = bar ^ -1
-        const test4_rev = -1 ^ bar
-        const test5 = ~(bar ^ baz)
+        const test4 = (bar ^ -1) | 0
+        const test4_rev = (-1 ^ bar) | 0
+        const test4_safe = bar ^ -1
+        const test4_rev_safe = -1 ^ bar
+        const test5 = (~(bar ^ baz)) | 0
+        const test5_safe = ~(bar ^ baz)
+
         const test6 = (bar | 1) | 0
         const test7 = (bar | 1) & 2
         const test7_rev = (1 | bar) & 2
         const test8 = (bar | 1) & 3
-        const test9 = any | ~0
-        const test9_rev = ~0 | any
-        const test10 = any & 0
-        const test10_rev = 0 & any
+        const test9 = (any | ~0) | 0
+        const test9_rev = (~0 | any) | 0
+        const test9_safe = any | ~0
+        const test9_rev_safe = ~0 | any
+        const test10 = (any & 0) | 0
+        const test10_rev = (0 & any) | 0
+        const test10_safe = any & 0
+        const test10_rev_safe = 0 & any
+
         const test11 = (bar & 7) !== 0
         const test11_rev = 0 !== (bar & 7)
         const test11_2 = (bar & 7) === 0
@@ -208,30 +217,39 @@ bitwise: {
         const test2_rev = bar & 1
         const test3 = bar & 1
         const test3_rev = bar & 1
-        const test4 = ~bar
-        const test4_rev = ~bar
-        const test5 = bar ^ ~baz
+        const test4 = 0 | ~bar
+        const test4_rev = 0 | ~bar
+        const test4_safe = bar ^ -1
+        const test4_rev_safe = -1 ^ bar
+        const test5 = bar ^ ~baz | 0
+        const test5_safe = bar ^ ~baz
+
         const test6 = 1 | bar
         const test7 = 2 & bar
         const test7_rev = 2 & bar
         const test8 = bar & 3 | 1
-        const test9 = -1
-        const test9_rev = -1
-        const test10 = 0
-        const test10_rev = 0
+        const test9 = any | -1
+        const test9_rev = -1 | any
+        const test9_safe = any | -1
+        const test9_rev_safe = -1 | any
+        const test10 = any & 0
+        const test10_rev = 0 & any
+        const test10_safe = any & 0
+        const test10_rev_safe = 0 & any
+
         const test11 = !!(bar & 7)
         const test11_rev = !!(bar & 7)
         const test11_2 = !(bar & 7)
         const test11_2_rev = !(bar & 7)
-        if (a & b) c()
+        if ((a & b) !== 0) c()
         const test12 = !!(7 & ~bar)
         const test12_rev = !(7 & ~bar)
 
         const test13 = bar | 0;
         const test13_2 = ~bar;
-        const test13_3 = bar | baz;
+        const test13_3 = ~~(bar | baz);
 
-        const test14 = bar | baz;
+        const test14 = bar | baz | 0;
     }
 }
 
@@ -249,15 +267,17 @@ bitwise_2: {
         const test1_rev = 1 & (bar | 0)
         const test2 = (bar & ~0) & 1
         const test2_rev = 1 & (bar & ~0)
-        const test3 = (bar ^ 0) ^ baz
+        const test3 = (bar ^ 0) ^ (baz | 0)
         const test5 = ~(bar ^ ~baz)
         const test5_2 = ~(~bar ^ baz)
         const test5_3 = ~bar ^ ~baz
 
-        const same = globalThis.same;
-        const test6 = same & same
-        const test6_2 = same | same
-        const test6_3 = same ^ same
+        const same = globalThis.same
+        const test6 = same | same
+        const test6_2 = same ^ same
+
+        const test_7 = (same & same) | 0
+        const test_7_2 = (same | same) | 0
     }
     expect: {
         const any = {};
@@ -266,15 +286,17 @@ bitwise_2: {
         const test1_rev = 1 & bar
         const test2 = bar & 1
         const test2_rev = 1 & bar
-        const test3 = bar ^ baz
+        const test3 = bar ^ (baz | 0)
         const test5 = bar ^ baz
         const test5_2 = bar ^ baz
         const test5_3 = bar ^ baz
 
-        const same = globalThis.same;
-        const test6 = 0|same
-        const test6_2 = 0|same
-        const test6_3 = 0
+        const same = globalThis.same
+        const test6 = same | same
+        const test6_2 = same ^ same
+
+        const test_7 = same | 0
+        const test_7_2 = same | 0
     }
 }
 

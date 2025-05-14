@@ -30,8 +30,8 @@ comparisons: {
     }
     expect: {
         console.log(
-            ~x == 42,
-            x % n == 42
+            ~x === 42,
+            x % n === 42
         );
     }
 }
@@ -161,9 +161,11 @@ issue_1710: {
     input: {
         var x = {};
         console.log((x += 1) + -x);
+        console.log((x = x + 1) + -x);
     }
     expect: {
         var x = {};
+        console.log((x += 1) + -x);
         console.log((x += 1) + -x);
     }
     expect_stdout: true

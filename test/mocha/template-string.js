@@ -10,7 +10,7 @@ describe("Template string", function() {
             "var foo = `Test 123 ${>}`",
             "var foo = `Blah ${;}`",
 
-            // Stress invalid template_substitution after expression
+            // Stress invalid template_cont after expression
             "var foo = `Blablabla ${123 456}`",
             "var foo = `Blub ${123;}`",
             "var foo = `Bleh ${a b}`"

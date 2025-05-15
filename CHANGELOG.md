@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.39.2
+
+ - Fix crash when parsing bare `yield` inside a template string.
+ - Update internally used acorn version requirement
+
 ## v5.39.1
 
  - Fix bitwise operations that could mix `BigInt` and `number`

@@ -677,6 +677,10 @@ function evaluate(code) {
 async function reminify(test, input_code, input_formatted) {
     if (process.env.TEST_NO_REMINIFY) return true;
     const { options: orig_options, expect_stdout } = test;
+
+    // Different compress options can lead to the same code
+    const seen_results = new Set();
+
     for (var i = 0; i < minify_options.length; i++) {
         var options = JSON.parse(minify_options[i]);
         options.keep_fnames = orig_options.keep_fnames;
@@ -698,7 +702,8 @@ async function reminify(test, input_code, input_formatted) {
                 error: result.error.stack,
             });
             return false;
-        } else if (!process.env.TEST_NO_SANDBOX) {
+        } else if (!seen_results.has(result.code)) {
+            seen_results.add(result.code);
             var stdout = sandbox.run_code(result.code, test.prepend_code);
             if (typeof expect_stdout != "string" && typeof stdout != "string" && expect_stdout.name == stdout.name) {
                 stdout = expect_stdout;

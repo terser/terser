@@ -122,6 +122,18 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
+    it("should be capable of minifying from acorn", async function() {
+        const code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
+        const moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2023 });
+        const from_ast_result = await minify(moz_ast, { ecma: 2020, module: true, parse: { spidermonkey: true } });
+        const terser_result = await minify(code, { ecma: 2020, module: true });
+
+        assert.strictEqual(
+            from_ast_result.code,
+            terser_result.code,
+        );
+    });
+
     it("should accept a spidermonkey AST w/ `parse.spidermonkey: true`", async function() {
         var moz_ast = acornParse("var a = 1 + 2", { sourceType: "module", ecmaVersion: 2023 });
         var result = await minify(moz_ast, {ecma: 2015, parse: {spidermonkey: true}});
@@ -142,6 +154,21 @@ describe("spidermonkey export/import sanity test", function() {
         assert.strictEqual(
             result.code,
             "const{a=1,b:[b=2]=[]}={};"
+        );
+    });
+
+    it("should correctly minify spidermonkey AST with condition and inlineable const variable declaration", async () => {
+        const code = "if (a) { const tmp = a; tmp.b(); }";
+        const ast = acornParse(code, { sourceType: 'module', locations: true, ecmaVersion: 2015 });
+        const result = await minify(ast, { ecma: 2015, module: true, parse: { spidermonkey: true } });
+        assert.strictEqual(
+            result.code,
+            "if(a){a.b()}"
+        );
+        const vanilla = await minify(code, { ecma: 2015, module: true });
+        assert.strictEqual(
+            result.code,
+            vanilla.code
         );
     });
 

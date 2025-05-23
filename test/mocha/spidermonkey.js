@@ -145,6 +145,21 @@ describe("spidermonkey export/import sanity test", function() {
         );
     });
 
+    it("should correctly minify spidermonkey AST with condition and inlineable const variable declaration", async () => {
+        const code = "if (a) { const tmp = a; tmp.b(); }";
+        const ast = acornParse(code, { sourceType: 'module', locations: true, ecmaVersion: 2015 });
+        const result = await minify(ast, { ecma: 2015, module: true, parse: { spidermonkey: true } });
+        assert.strictEqual(
+            result.code,
+            "if(a){a.b()}"
+        );
+        const vanilla = await minify(code, { ecma: 2015, module: true });
+        assert.strictEqual(
+            result.code,
+            vanilla.code
+        );
+    });
+
     it("should correctly minify AST from from_moz_ast with default function parameter", async () => {
         const code = "function run(x = 2){}";
         const acornAst = acornParse(code, { locations: true, ecmaVersion: 2023 });

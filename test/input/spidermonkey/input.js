@@ -165,6 +165,9 @@ var a = {
     get "five"() {
         return 5;
     },
+    get ""() {
+        return "";
+    },
     set one(value) {
         this._one = value;
     },
@@ -177,13 +180,20 @@ var a = {
     set "eleven"(value) {
         this._eleven = value;
     },
+    set ""(value) {
+        this[""] = value
+    },
     *"%"() {
         return 2;
     },
     *["%"]() {
         return 2;
     },
-    [a]() {}
+    a() {},
+    [a]() {},
+    "": a,
+    ""() { },
+    "a": a,
 };
 
 // RegExp literals

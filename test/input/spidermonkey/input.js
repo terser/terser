@@ -21,6 +21,7 @@ export * as foo from "a.js";
 export {A} from "a.js";
 export {A4, B4} from "a.js";
 // TODO: export {A5 as "-", B5 as "*"} from "a.js";
+export {};
 
 const x = 0b01;
 let y = 6;
@@ -164,6 +165,9 @@ var a = {
     get "five"() {
         return 5;
     },
+    get ""() {
+        return "";
+    },
     set one(value) {
         this._one = value;
     },
@@ -176,13 +180,20 @@ var a = {
     set "eleven"(value) {
         this._eleven = value;
     },
+    set ""(value) {
+        this[""] = value
+    },
     *"%"() {
         return 2;
     },
     *["%"]() {
         return 2;
     },
-    [a]() {}
+    a() {},
+    [a]() {},
+    "": a,
+    ""() { },
+    "a": a,
 };
 
 // RegExp literals

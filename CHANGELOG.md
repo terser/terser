@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.40.0
+
+ - Fix exporting AssignmentExpression (default assign pattern) to ESTree
+ - Fix ESTree output of object keys with quotes
+ - Fix handling of an ESTree empty `export {}` (#1601)
+ - Fix some `const` and `let` resulting from ESTree input (#1599)
+
 ## v5.39.2
 
  - Fix crash when parsing bare `yield` inside a template string.

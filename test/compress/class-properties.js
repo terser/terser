@@ -33,6 +33,33 @@ issue_t1574_class_properties_no_semicolon: {
     expect_stdout: "true true"
 }
 
+issue_t1574_class_properties_no_semicolon_2: {
+    options = { toplevel: true }
+    input: {
+        class A {
+            start
+            bare
+            1
+            2n
+            [3]
+            "str"
+            #private
+            end
+        }
+        console.log(
+            "start" in new A()
+            && "bare" in new A()
+            && "1" in new A()
+            && "2" in new A()
+            && "3" in new A()
+            && "str" in new A()
+            && "end" in new A()
+        )
+    }
+    expect_stdout: "true"
+}
+
+
 computed_class_properties: {
     input: {
         const x = "FOO"

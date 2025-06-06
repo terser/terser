@@ -1,5 +1,13 @@
 # Changelog
 
+## v5.41.0
+
+ - fixed semicolon insertion between class fields, when the field names are number literals
+ - `keep_numbers` format option now works for bigint
+ - internal: correctly mark accessors' is_generator property
+ - internal: do not read or assign quote properties without need
+ - internal: add missing equivalent_to comparison
+
 ## v5.40.0
 
  - Fix exporting AssignmentExpression (default assign pattern) to ESTree

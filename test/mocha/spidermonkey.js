@@ -237,7 +237,7 @@ function compare_estree_asts(actual, expected) {
 
         for (const [key, child] of Object.entries(node)) {
             // ESTree node
-            if (typeof child?.type === 'string') {
+            if (child && typeof child.type === 'string') {
                 out[key] = pojo_clone(child)
             } else if (Array.isArray(child)) {
                 out[key] = child.map(
@@ -282,7 +282,7 @@ function compare_estree_asts(actual, expected) {
             if (skip_keys.has(key)) {
                 continue;
             }
-            if (skip_node_keys?.[actual.type]?.has(key)) {
+            if (skip_node_keys[actual.type] && skip_node_keys[actual.type].has(key)) {
                 continue;
             }
             if (typeof expected[key] === "bigint") {
@@ -309,8 +309,8 @@ function compare_estree_asts(actual, expected) {
             if (
                 node1
                 && node2
-                && typeof node1?.type === 'string'
-                && typeof node2?.type === 'string'
+                && typeof node1.type === 'string'
+                && typeof node2.type === 'string'
             ) {
                 try {
                     deep_cmp(node1, node2);

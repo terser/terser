@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.42.0
+
+ - Improved performance in the parse step by adding a fast path for simple identifiers.
+ - Improved ESTree conversion
+
 ## v5.41.0
 
  - fixed semicolon insertion between class fields, when the field names are number literals

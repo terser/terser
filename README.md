@@ -1070,7 +1070,7 @@ as "output options".
   function expressions. See
   [#640](https://github.com/mishoo/UglifyJS2/issues/640) for more details.
 
-- `wrap_func_args` (default `true`) -- pass `false` if you do not want to wrap
+- `wrap_func_args` (default `false`) -- pass `true` in order to wrap
   function expressions that are passed as arguments, in parenthesis. See
   [OptimizeJS](https://github.com/nolanlawson/optimize-js) for more details.
 

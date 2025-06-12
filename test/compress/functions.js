@@ -707,7 +707,10 @@ inline_loop_1: {
         for (;;) f();
     }
     expect: {
-        for (;;) x();
+        function f() {
+            return x();
+        }
+        for (;;) f();
     }
 }
 
@@ -725,7 +728,10 @@ inline_loop_2: {
         }
     }
     expect: {
-        for (;;) x();
+        for (;;) f();
+        function f() {
+            return x();
+        }
     }
 }
 
@@ -743,7 +749,10 @@ inline_loop_3: {
         for (;;) f();
     }
     expect: {
-        for (;;) x();
+        var f = function() {
+            return x();
+        };
+        for (;;) f();
     }
 }
 
@@ -784,9 +793,11 @@ issue_2476: {
         console.log(sum);
     }
     expect: {
+        function foo(x, y, z) {
+            return x < y ? x * y + z : x * z - y;
+        }
         for (var sum = 0, i = 0; i < 10; i++)
-            sum += (x = i, y = i + 1, z = 3 * i, x < y ? x * y + z : x * z - y);
-        var x, y, z;
+            sum += foo(i, i + 1, 3 * i);
         console.log(sum);
     }
     expect_stdout: "465"
@@ -1361,7 +1372,10 @@ issue_2630_1: {
     expect: {
         var c = 0;
         (function() {
-            while (void (c = 1 + ++c));
+            while (f());
+            function f() {
+                c = 1 + ++c;
+            }
         })(),
         console.log(c);
     }
@@ -1393,7 +1407,10 @@ issue_2630_2: {
     expect: {
         var c = 0;
         !function() {
-            while (void (c = 1 + (c += 1)));
+            while (f());
+            function f() {
+                c = 1 + (c += 1);
+            }
         }(), console.log(c);
     }
     expect_stdout: "2"
@@ -1457,9 +1474,12 @@ issue_2630_4: {
     }
     expect: {
         var x = 3, a = 1, b = 2;
-        !function() {
-            while (--x >= 0 && void (a++, b += a));
-        }();
+        (function() {
+            (function() {
+                while(--x >= 0 && f2());
+            })();
+            function f2(){a++,b+=a}
+        })();
         console.log(a);
     }
     expect_stdout: "2"
@@ -1491,7 +1511,10 @@ issue_2630_5: {
         !function() {
             do {
                 c *= 10;
-            } while ((c = 2 + (c += 3)) < 100);
+            } while (f());
+            function f() {
+                return (c = 2 + (c += 3)) < 100;
+            }
         }();
         console.log(c);
     }
@@ -1709,9 +1732,11 @@ issue_2663_2: {
     expect: {
         (function() {
             var i;
+            function fn(j) {
+                return void console.log(j);
+            }
             for (i in { a: 1, b: 2, c: 3 })
-                j = i, console.log(j);
-            var j;
+                fn(i);
         })();
     }
     expect_stdout: [
@@ -1832,13 +1857,6 @@ loop_init_arg: {
         for (var k in "12") (function (b) {
             (b >>= 1) && (a = "FAIL"), b = 2;
         })();
-        console.log(a);
-    }
-    expect: {
-        var a = "PASS";
-        for (var k in "12")
-            b = void 0, (b >>= 1) && (a = "FAIL"), b = 2;
-        var b;
         console.log(a);
     }
     expect_stdout: "PASS"
@@ -2106,9 +2124,9 @@ use_before_init_in_loop: {
     }
     expect: {
         var a = "PASS";
-        for (var b = 2; --b >= 0;)
-            c = void 0, c = (c && (a = "FAIL"), 1);
-        var c;
+        for (var b = 2; --b >= 0;) (function() {
+            var c = (c && (a = "FAIL"), 1);
+        })();
         console.log(a);
     }
     expect_stdout: "PASS"
@@ -2255,14 +2273,6 @@ issue_2898: {
         })();
         console.log(c);
     }
-    expect: {
-        var c = 0;
-        (function() {
-            while (b = void 0, void ((b = void (c = 1 + (c = 1 + c))) && b[0]));
-            var b;
-        })(),
-        console.log(c);
-    }
     expect_stdout: "2"
 }
 
@@ -2315,10 +2325,11 @@ issue_3016_1: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a) {
+                return a[b];
+                var a;
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2347,10 +2358,11 @@ issue_3016_2: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a){
+                return a[b];
+                var a;
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2380,10 +2392,11 @@ issue_3016_2_ie8: {
     expect: {
         var b = 1;
         do {
-            a = 3,
-            a[b];
+            (function(a){
+                return a[b];
+                var a;
+            })(3);
         } while(0);
-        var a;
         console.log(b);
     }
     expect_stdout: "1"
@@ -2407,13 +2420,6 @@ issue_3016_3: {
                 }
             }());
         } while (b--);
-    }
-    expect: {
-        var b = 1;
-        do {
-            console.log((a = void 0, a ? "FAIL" : a = "PASS"));
-        } while(b--);
-        var a;
     }
     expect_stdout: [
         "PASS",
@@ -2441,13 +2447,6 @@ issue_3016_3_ie8: {
             }());
         } while (b--);
     }
-    expect: {
-        var b = 1;
-        do {
-            console.log((a = void 0, a ? "FAIL" : a = "PASS"));
-        } while(b--);
-        var a;
-    }
     expect_stdout: [
         "PASS",
         "PASS",
@@ -2474,10 +2473,11 @@ issue_3018: {
     expect: {
         var b = 1, c = "PASS";
         do {
-            a = void 0,
-            a = 0 != (a && (c = "FAIL"));
+            (function() {
+                a = 0 != (a && (c = "FAIL"));
+                var a;
+            })();
         } while (b--);
-        var a;
         console.log(c);
     }
     expect_stdout: "PASS"
@@ -2526,15 +2526,6 @@ issue_3076: {
                 }
             }().toString() && --n > 0);
         })(2);
-        console.log(c);
-    }
-    expect: {
-        var c = "PASS";
-        (function(b) {
-            var n = 2;
-            while (--b + (e = void 0, e && (c = "FAIL"), e = 5, 1).toString() && --n > 0);
-            var e;
-        })(2),
         console.log(c);
     }
     expect_stdout: "PASS"

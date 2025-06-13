@@ -77,7 +77,8 @@ describe("bin/terser", function() {
         var command = [
             tersercmd,
             "--source-map", "content=" + mapFile,
-            "--source-map", "url=inline"
+            "--source-map", "url=inline",
+            "-f", "wrap_func_args",
         ].join(" ");
 
         var child = exec(command, function(err, stdout) {

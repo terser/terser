@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.43.0
+
+ - Do not wrap callbacks in parentheses (`wrap_func_args` format option is now false by default)
+ - Do not inline functions into for loops (for performance reasons)
+
 ## v5.42.0
 
  - Improved performance in the parse step by adding a fast path for simple identifiers.

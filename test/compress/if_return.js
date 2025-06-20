@@ -553,3 +553,66 @@ issue_t833: {
     }
     expect_stdout: "PASS"
 }
+
+issue_t1606_1: {
+    options = {
+        inline: true,
+        sequences: true,
+        side_effects: true,
+        if_return: true,
+    }
+    input: {
+        (() => {
+            if (true) {
+                const fileName = "PASS";
+                ((fileName) => {
+                    console.log(fileName);
+                })(fileName);
+                return;
+            }
+        })()
+    }
+    expect: {
+        (() => {
+            if (true) {
+                const fileName = "PASS";
+                ((fileName) => {
+                    console.log(fileName);
+                })(fileName);
+            }
+        })()
+    }
+    expect_stdout: "PASS"
+}
+
+issue_t1606_2: {
+    options = {
+        inline: true,
+        sequences: true,
+        side_effects: true,
+        if_return: true,
+    }
+    input: {
+        (() => {
+            if (!true) ; else {
+                const fileName = "PASS";
+                ((fileName) => {
+                    console.log(fileName);
+                })(fileName);
+                return;
+            }
+        })()
+    }
+    expect: {
+        (() => {
+            if (!true) ; else {
+                const fileName = "PASS";
+                ((fileName) => {
+                    console.log(fileName);
+                })(fileName);
+            }
+        })()
+    }
+    expect_stdout: "PASS"
+}
+

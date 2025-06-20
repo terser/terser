@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.43.1
+
+ - Prevent niche optimizations that would move around block declarations
+ - Add `lhs_constants` to `CompressOptions` type (#1621)
+
 ## v5.43.0
 
  - Do not wrap callbacks in parentheses (`wrap_func_args` format option is now false by default)

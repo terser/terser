@@ -44,6 +44,7 @@ export interface CompressOptions {
     keep_fargs?: boolean;
     keep_fnames?: boolean | RegExp;
     keep_infinity?: boolean;
+    lhs_constants?: boolean;
     loops?: boolean;
     module?: boolean;
     negate_iife?: boolean;

@@ -44,21 +44,21 @@
     "main.js"
   ],
   "dependencies": {
-    "@jridgewell/source-map": "^0.3.6",
-    "acorn": "^8.15.0",
-    "commander": "^14.0.0",
+    "@jridgewell/source-map": "0.3.6",
+    "acorn": "8.15.0",
+    "commander": "14.0.0",
     "source-map-support": "~0.5.21"
   },
   "devDependencies": {
-    "@ls-lint/ls-lint": "^2.3.1",
-    "astring": "^1.9.0",
-    "eslint": "^9.29.0",
-    "eslump": "^3.0.0",
-    "esm": "^3.2.25",
-    "mocha": "^11.6.0",
-    "pre-commit": "^1.2.2",
-    "rollup": "^4.43.0",
-    "semver": "^7.7.2",
+    "@ls-lint/ls-lint": "2.3.1",
+    "astring": "1.9.0",
+    "eslint": "9.29.0",
+    "eslump": "3.0.0",
+    "esm": "3.2.25",
+    "mocha": "11.7.0",
+    "pre-commit": "1.2.2",
+    "rollup": "4.44.0",
+    "semver": "7.7.2",
     "source-map": "~0.8.0-beta.0"
   },
   "scripts": {

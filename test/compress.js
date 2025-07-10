@@ -398,12 +398,13 @@ async function run_compress_tests(test_files, in_child_process) {
             }
             var cmp = new Compressor(options, {
                 false_by_default: options.defaults === undefined ? true : !options.defaults,
-                mangle_options: test.mangle
+                mangle_options: test.mangle,
+                format_options: output_options
             });
             var output = cmp.compress(input);
             output.figure_out_scope(test.mangle);
             if (test.mangle) {
-                output.compute_char_frequency(test.mangle);
+                output.compute_char_frequency(test.mangle, output_options);
                 (function(cache) {
                     if (!cache) return;
                     if (!("props" in cache)) {

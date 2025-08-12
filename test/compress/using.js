@@ -240,3 +240,27 @@ await_using_and_using_in_same_scope: {
         async()=>{await z;using x=f();await using y=g();}
     }
 }
+
+unused_using_should_be_kept: {
+    options = {
+        unused: true,
+    }
+    input: {
+        using x = f();
+    }
+    expect: {
+        using x=f();
+    }
+}
+
+unused_await_using_should_be_kept: {
+    options = {
+        unused: true,
+    }
+    input: {
+        (async () => { await using x = f(); })();
+    }
+    expect: {
+        (async()=>{await using x = f();})();
+    }
+}

@@ -264,3 +264,130 @@ unused_await_using_should_be_kept: {
         (async()=>{await using x = f();})();
     }
 }
+
+using_is_not_a_simple_statement_with_conditionals: {
+    options = {
+        sequences: true,
+        conditionals: true,
+    }
+    input: {
+        (async (x) => {
+            if (x) {
+                var xx;
+                using x = f();
+            } else {
+                var yy;
+                await using y = g();
+            }
+        })();
+    }
+    expect: {
+        (async(x)=>{if(x){var xx;using x=f()}else{var yy;await using y=g()}})();
+    }
+}
+
+using_definition_transformer: {
+    options = {
+        if_return: true,
+    }
+    input: {
+        using r = ((x) => {
+            if (x) {
+                return;
+            }
+            return null;
+        })();
+    }
+    expect: {
+        using r=(x=>{if(!x)return null})();
+    }
+}
+
+using_should_not_merge_flow_with_if_return: {
+    options = {
+        if_return: true,
+    }
+    input: {
+        (function(x, y) {
+            if (x) {
+                using x = f();
+                return;
+            }
+        })();
+    }
+    expect: {
+        (function(x,y){if(x){using x=f();return}})();
+    }
+}
+
+using_should_not_merge_flow_with_conditionals_if_return: {
+    options = {
+        if_return: true,
+        conditionals: true,
+        evaluate: true
+    }
+    input: {
+        (function(x, y) {
+            if (x) {
+                using x = f();
+                return;
+            }
+            if (y) {
+                using y = g();
+                return y;
+            }
+        })();
+    }
+    expect: {
+        (function(x,y){if(x){using x=f();return}if(y){using y=g();return y}})();
+    }
+}
+
+multiple_using_can_be_joined_with_join_vars: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        using x = f();
+        using y = g();
+        using z = null;
+    }
+    expect: {
+        using x=f(),y=g(),z=null;
+    }
+}
+
+multiple_await_using_can_be_joined_with_join_vars: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        async () => {
+            await using x = f();
+            await using y = g();
+            await using z = null;
+        }
+    }
+    expect: {
+        async()=>{await using x=f(),y=g(),z=null;}
+    }
+}
+
+using_should_be_kept_with_defaults_unsafe: {
+    options = {
+        defaults: true,
+        unsafe: true,
+    }
+    input: {
+        const $dispose = Symbol.dispose;
+        const fn = () => { console.log("disposed"); }
+        using x = { one: 1, [$dispose]: fn };
+        console.log(x.one);
+    }
+    expect: {
+        const $dispose = Symbol.dispose,
+              fn = () => { console.log("disposed"); };
+        using x = { one: 1, [$dispose]: fn };
+        console.log(x.one);
+    }
+}

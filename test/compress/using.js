@@ -101,6 +101,16 @@ using_as_name_for_of_of_member_expr: {
     }
 }
 
+using_as_name_for_in: {
+    options = {}
+    input: {
+        for (using in f());
+    }
+    expect: {
+        for(using in f());
+    }
+}
+
 await_using_basic: {
     options = {}
     input: {

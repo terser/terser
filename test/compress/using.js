@@ -71,13 +71,46 @@ using_as_name_asi: {
     }
 }
 
-using_as_name_member_expr: {
+using_as_name_subscript_expr: {
     options = {}
     input: {
-        using [ obj ] = f();
+        function f() {
+            using[x];
+            using.x + using(x) ? using?.x : using`x`;
+        }
     }
     expect: {
-        using[obj]=f();
+        function f(){using[x];using.x+using(x)?using?.x:using`x`};
+    }
+}
+
+using_as_name_in: {
+    options = {}
+    input: {
+        function f() {
+            using in foo;
+        }
+    }
+    expect: {
+        function f() {
+            using in foo;
+        }
+    }
+}
+
+using_as_name_instanceof: {
+    options = {}
+    input: {
+        function f() {
+            using instanceof foo;
+            using in using instanceof using;
+        }
+    }
+    expect: {
+        function f() {
+            using instanceof foo;
+            using in using instanceof using;
+        }
     }
 }
 
@@ -105,9 +138,12 @@ using_as_name_for_in: {
     options = {}
     input: {
         for (using in f());
+        for (using.foo in []);
+        for (using().foo in []);
+        for (using``.foo in []);
     }
     expect: {
-        for(using in f());
+        for(using in f());for(using.foo in []);for(using().foo in []);for(using``.foo in []);
     }
 }
 
@@ -138,6 +174,34 @@ await_using_escaped_identifier: {
     }
     expect: {
         async()=>{await using a=null;}
+    }
+}
+
+await_using_identifier_starts_with_in: {
+    options = {}
+    input: {
+        async () => {
+            await using ina = null;
+            await using in\u0062 = null;
+            await using in𝒞 = null;
+        }
+    }
+    expect: {
+        async()=>{await using ina=null;await using inb=null;await using in𝒞=null;}
+    }
+}
+
+await_using_identifier_starts_with_instanceof: {
+    options = {}
+    input: {
+        async () => {
+            await using instanceofa = null;
+            await using instanceof\u0062 = null;
+            await using instanceof𝒞 = null;
+        }
+    }
+    expect: {
+        async()=>{await using instanceofa=null;await using instanceofb=null;await using instanceof𝒞=null;}
     }
 }
 
@@ -222,15 +286,44 @@ await_using_as_name_asi_multiline_comment: {
     }   
 }
 
-await_using_as_name_member_expr: {
+await_using_as_name_in: {
     options = {}
     input: {
-        async () => {
-            await using [ obj ];
+        async function f() {
+            await using in foo;
         }
     }
     expect: {
-        async()=>{await using[obj];}
+        async function f() {
+            await using in foo;
+        }
+    }
+}
+
+await_using_as_name_instanceof: {
+    options = {}
+    input: {
+        async function f() {
+            await using instanceof foo;
+        }
+    }
+    expect: {
+        async function f() {
+            await using instanceof foo;
+        }
+    }
+}
+
+await_using_as_name_subscript_expr: {
+    options = {}
+    input: {
+        async () => {
+            await using[x];
+            await using.x + await using(x) ? await using?.x : await using`x`;
+        }
+    }
+    expect: {
+        async()=>{await using[x];await using.x+await using(x)?await using?.x:await using`x`};
     }
 }
 

@@ -28,6 +28,15 @@ using_for: {
     }
 }
 
+using_for_in_bad: {
+    options = {}
+    bad_input: `for (using x in y);`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid using declaration in for..in loop",
+    })
+}
+
 using_for_of: {
     options = {}
     input: {
@@ -58,6 +67,15 @@ using_with_comments: {
     expect: {
         /* 1 */using/* 2 */x/* 3 */=/* 4 */f()/* 5 */;
     }
+}
+
+using_object_pattern_bad: {
+    options = {}
+    bad_input: `using { x } = y;`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected token: punc ({)",
+    })
 }
 
 using_as_name_asi: {
@@ -205,6 +223,15 @@ await_using_identifier_starts_with_instanceof: {
     }
 }
 
+await_using_object_pattern_bad: {
+    options = {}
+    bad_input: `async () => { await using { x } = y; }`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected token: punc ({)",
+    })
+}
+
 await_using_for: {
     options = {}
     input: {
@@ -213,6 +240,15 @@ await_using_for: {
     expect: {
         async()=>{for(await using x=y;;);}
     }
+}
+
+await_using_for_in_bad: {
+    options = {}
+    bad_input: `async () => { for (await using x in y); }`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Invalid using declaration in for..in loop",
+    })
 }
 
 await_using_for_of: {

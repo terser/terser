@@ -112,6 +112,14 @@ ID_continue_with_non_bmp_character: {
     expect_exact: 'var in\\u{1d4d0},instanceof\\u{1d4d1};'
 }
 
+non_id_continue_non_bmp_character: {
+    bad_input: `var in𝅘𝅥`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Name expected"
+    })
+}
+
 escape_non_escaped_identifier: {
     beautify = {ascii_only: true, ecma: 2015}
     input: {

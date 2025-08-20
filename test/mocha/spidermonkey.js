@@ -134,7 +134,7 @@ describe("spidermonkey export/import sanity test", function() {
     it("should be capable of importing from acorn", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code);
-        var moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2025 });
+        var moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2026 });
         var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
@@ -149,7 +149,7 @@ describe("spidermonkey export/import sanity test", function() {
     it("(temp): should be capable of importing from acorn (astring incompatible bits)", async function() {
         var code = fs.readFileSync("test/input/spidermonkey/input-no-astring.js", "utf-8");
         var terser_ast = parse(code);
-        var moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2025 });
+        var moz_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2026 });
         var from_moz_ast = AST.AST_Node.from_mozilla_ast(moz_ast);
         assert.strictEqual(
             from_moz_ast.print_to_string(),
@@ -162,7 +162,7 @@ describe("spidermonkey export/import sanity test", function() {
     })
 
     it("should accept a spidermonkey AST w/ `parse.spidermonkey: true`", async function() {
-        var moz_ast = acornParse("var a = 1 + 2", { sourceType: "module", ecmaVersion: 2025 });
+        var moz_ast = acornParse("var a = 1 + 2", { sourceType: "module", ecmaVersion: 2026 });
         var result = await minify(moz_ast, {ecma: 2015, parse: {spidermonkey: true}});
         assert.deepStrictEqual(result.code, "var a=3;");
     });
@@ -204,7 +204,7 @@ describe("spidermonkey export/import sanity test", function() {
         var terser_ast = parse(code);
         var moz_ast = terser_ast.to_mozilla_ast();
         var generated = astringGenerate(moz_ast);
-        var parsed = acornParse(generated, { sourceType: "module", ecmaVersion: 2025 });
+        var parsed = acornParse(generated, { sourceType: "module", ecmaVersion: 2026 });
         assert.strictEqual(
             AST.AST_Node.from_mozilla_ast(parsed).print_to_string(),
             terser_ast.print_to_string()
@@ -218,7 +218,7 @@ describe("spidermonkey export/import sanity test", function() {
     it("should generate the same AST that acorn does", async function () {
         var code = fs.readFileSync("test/input/spidermonkey/input.js", "utf-8");
         var terser_ast = parse(code).to_mozilla_ast();
-        var acorn_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2025 });
+        var acorn_ast = acornParse(code, { sourceType: "module", ecmaVersion: 2026 });
         compare_estree_asts(terser_ast, acorn_ast)
     });
 });

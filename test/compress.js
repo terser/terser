@@ -208,6 +208,8 @@ async function run_compress_tests_in_parallel() {
                 if (test_result) {
                     get_task().test_result = test_result;
                     get_task().done = true;
+                    // output might be held up by a task on another worker
+                    proxy_output();
                 }
 
                 current_task = test_files.shift();

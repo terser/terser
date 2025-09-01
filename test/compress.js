@@ -2,6 +2,7 @@
 import "source-map-support/register.js";
 import path from "path";
 import fs from "fs";
+import os from "os";
 import child_process from "child_process";
 import assert from "assert";
 import semver from "semver";
@@ -238,7 +239,14 @@ async function run_compress_tests_in_parallel() {
         }
     }
 
-    const n_workers = Math.min(test_files.length, 2);
+    let cpu_count = 1;
+    try {
+        cpu_count = os.availableParallelism
+            ? os.availableParallelism()
+            : os.cpus().length;
+    } catch (_) {}
+
+    const n_workers = Math.min(test_files.length, cpu_count);
     const workers_promises = Promise.all(
         Array.from({ length: n_workers }, start_worker),
     );

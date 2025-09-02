@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.44.0
+
+ - Support `using` and `await using` declarations (#1635)
+
 ## v5.43.1
 
  - Prevent niche optimizations that would move around block declarations

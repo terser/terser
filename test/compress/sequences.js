@@ -932,6 +932,24 @@ forin: {
     expect_stdout: "PASS"
 }
 
+forin_assignment: {
+    options = {
+        sequences: true,
+    }
+    input: {
+        var o = [], a = {};
+        o.push("PASS");
+        for (a.b in o)
+            console.log(o[a.b]);
+    }
+    expect: {
+        var o = [], a = {};
+        for (a.b in o.push("PASS"), o)
+            console.log(o[a.b]);
+    }
+    expect_stdout: "PASS"
+}
+
 call: {
     options = {
         sequences: true,

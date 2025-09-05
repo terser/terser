@@ -4,7 +4,7 @@
   "homepage": "https://terser.org",
   "author": "Mihai Bazon <mihai.bazon@gmail.com> (http://lisperator.net/)",
   "license": "BSD-2-Clause",
-  "version": "5.43.1",
+  "version": "5.44.0",
   "engines": {
     "node": ">=10"
   },
@@ -45,7 +45,7 @@
   ],
   "dependencies": {
     "@jridgewell/source-map": "^0.3.3",
-    "acorn": "^8.14.0",
+    "acorn": "^8.15.0",
     "commander": "^2.20.0",
     "source-map-support": "~0.5.20"
   },

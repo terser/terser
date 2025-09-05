@@ -664,3 +664,27 @@ privatein_precedence_bad_2: {
         col: 38,
     })
 }
+
+private_async_function_method_bad: {
+    bad_input: `class C { #async function f() {} }`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected token: keyword (function)",
+    })
+}
+
+private_static_block_bad: {
+    bad_input: `class C { #static {} }`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected token: punc ({)",
+    })
+}
+
+private_async_function_statement_bad: {
+    bad_input: `class C { static { #async function f() {} } }`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Unexpected token keyword «function», expected operator «in»",
+    })
+}

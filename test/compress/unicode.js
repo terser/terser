@@ -104,6 +104,22 @@ ID_continue_with_surrogate_pair: {
     expect_exact: 'var \\u{2f800}\\u{2f800}\\u{2f800}\\u{2f800}="\\u{100000}\\u{100000}\\u{100000}\\u{100000}\\u{100000}";'
 }
 
+ID_continue_with_non_bmp_character: {
+    beautify = {ascii_only: true, ecma: 2015}
+    input: {
+        var in𝓐, instanceof𝓑;
+    }
+    expect_exact: 'var in\\u{1d4d0},instanceof\\u{1d4d1};'
+}
+
+non_id_continue_non_bmp_character: {
+    bad_input: `var in𝅘𝅥`
+    expect_error: ({
+        name: "SyntaxError",
+        message: "Name expected"
+    })
+}
+
 escape_non_escaped_identifier: {
     beautify = {ascii_only: true, ecma: 2015}
     input: {

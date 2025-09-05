@@ -299,3 +299,16 @@ function uses_asm() {
     0.0;
 }
 
+// using declarations
+function using() {
+    using x1 = resource(), y1 = resource();
+    for (using x1 = resource(), y1 = resource(); ; );
+    for (using x1 of iterable()) {}
+}
+
+// await using declarations
+async function await_using() {
+    await using x2 = resource(), y2 = resource();
+    for (await using x2 = resource(), y2 = resource(); ; );
+    for (await using x2 of iterable()) {}
+}

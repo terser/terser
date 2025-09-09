@@ -85,6 +85,7 @@ export interface MangleOptions {
     eval?: boolean;
     keep_classnames?: boolean | RegExp;
     keep_fnames?: boolean | RegExp;
+    keep_imports?: boolean;
     module?: boolean;
     nth_identifier?: SimpleIdentifierMangler | WeightedIdentifierMangler;
     properties?: boolean | ManglePropertiesOptions;

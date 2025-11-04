@@ -3226,3 +3226,35 @@ side_effectful_case: {
     expect_stdout: "PASS"
 }
 
+regression_retain_var_in_eliminated_default: {
+    options = {
+        dead_code: true,
+        switches: true,
+    }
+    input: {
+        var a = 100;
+
+        (function () {
+            a++
+            a.toString()
+            switch (null) {
+              default: {
+                var a
+              }
+            }
+        })();
+
+        console.log(a);
+    }
+    expect: {
+        var a = 100;
+        (function () {
+            a++;
+            a.toString();
+            var a;
+            null;
+        })();
+        console.log(a);
+    }
+    expect_stdout: "100"
+}

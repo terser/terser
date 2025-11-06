@@ -310,6 +310,24 @@ bitwise_regression: {
     expect_stdout: "16383"
 }
 
+bitwise_regression_logical: {
+    options = {
+        evaluate: true,
+        side_effects: true,
+        booleans: true,
+        comparisons: true,
+    }
+    input: {
+        var c = "";
+
+        ("f" & "f" && (c += "FAIL")) ^ 1;
+        ("f" & "f" || (c += "PASS")) ^ 1;
+
+        console.log(c);
+    }
+    expect_stdout: "PASS"
+}
+
 unary_prefix: {
     options = {
         evaluate: true,

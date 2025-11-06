@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.44.1
+
+ - fix bitwise optimization changing the result of `&&`, `||`
+ - switches: make sure `var` is extracted from a deleted default case
+
 ## v5.44.0
 
  - Support `using` and `await using` declarations (#1635)

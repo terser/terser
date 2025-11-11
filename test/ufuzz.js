@@ -27,6 +27,7 @@ var MAX_GENERATION_RECURSION_DEPTH = 12;
 var INTERVAL_COUNT = 100;
 var RANDOM_SEED = Date.now();
 var ONLY = null;
+var SKIP = null;
 
 var STMT_ARG_TO_ID = Object.create(null);
 var STMTS_TO_USE = [];
@@ -97,6 +98,12 @@ for (var i = 2; i < process.argv.length; ++i) {
             throw new Error('invalid round number ' + process.argv[i])
         }
         break;
+      case '--skip':
+        SKIP = Number(process.argv[++i]);
+        if (isNaN(SKIP)) {
+            throw new Error('invalid round number ' + process.argv[i])
+        }
+        break;
       case '--no-catch-redef':
         catch_redef = false;
         break;
@@ -129,6 +136,7 @@ for (var i = 2; i < process.argv.length; ++i) {
         println('-V: print every 100th generated test case');
         println('--seed <int>: initialize the random seed, for determinism');
         println('--only <int>: only eval code in a specific round number');
+        println('--skip <int>: skip eval for this many round numbers');
         println('-t <int>: generate this many toplevels per run (more take longer)');
         println('-r <int>: maximum recursion depth for generator (higher takes longer)');
         println('-s1 <statement name>: force the first level statement to be this one (see list below)');
@@ -1077,35 +1085,40 @@ async function log_rename(options) {
 async function log(options, round) {
     if (!ok) errorln('\n\n\n\n\n\n!!!!!!!!!!\n\n\n');
     errorln("//=============================================================");
-    if (!ok) errorln("// !!!!!! Failed... round " + round);
-    errorln("// original code");
-    await try_beautify(original_code, original_result, errorln);
-    errorln();
-    errorln();
-    errorln("//-------------------------------------------------------------");
+    if (!ok) println("// !!!!!! Failed... round " + round);
+    if (!ok && ONLY !== round) println("// !!!!!! add --only " + round + " to the command to retry only this");
+    println("// original code");
+    await try_beautify(original_code, original_result, println);
+    println();
+    println();
+    println("//-------------------------------------------------------------");
     if (typeof terser_code == "string") {
-        errorln("// uglified code");
-        await try_beautify(terser_code, terser_result, errorln);
-        errorln();
-        errorln();
-        errorln("original result:");
-        errorln(typeof original_result == "string" ? original_result : original_result.stack);
-        errorln("uglified result:");
-        errorln(typeof terser_result == "string" ? terser_result : terser_result.stack);
+        println("// uglified code");
+        await try_beautify(terser_code, terser_result, println);
+        println();
+        println("/*");
+        println("original result:");
+        println(typeof original_result == "string" ? original_result : original_result.stack);
+        println("uglified result:");
+        println(typeof terser_result == "string" ? terser_result : terser_result.stack);
+        println("minify options:");
+        options = JSON.parse(options);
+        println(JSON.stringify(options, null, 2));
+        println("*/");
     } else {
-        errorln("// !!! terser failed !!!");
-        errorln(terser_code.stack);
+        println("// !!! terser failed !!!");
+        println(terser_code.stack);
         if (typeof original_result != "string") {
-            errorln();
-            errorln();
-            errorln("original stacktrace:");
-            errorln(original_result.stack);
+            println();
+            println();
+            println("original stacktrace:");
+            println(original_result.stack);
         }
+        println("minify options:");
+        options = JSON.parse(options);
+        println(JSON.stringify(options, null, 2));
     }
-    errorln("minify(options):");
-    options = JSON.parse(options);
-    errorln(JSON.stringify(options, null, 2));
-    errorln();
+    println();
     if (!ok && typeof terser_code == "string") {
         for (const key of Object.keys(default_options)) {
             await log_suspects(options);
@@ -1126,11 +1139,12 @@ var terser_code, terser_result, ok;
 async function main() {
     for (var round = 1; round <= num_iterations; round++) {
         if (!process.env.CI || round % 100 === 0 || round === 1) {
-            process.stdout.write(round + " of " + num_iterations + "\r");
+            process.stderr.write(round + " of " + num_iterations + "\r");
         }
 
         original_code = createTopLevelCode();
 
+        if (SKIP != null && round < SKIP) continue;
         if (ONLY != null && round !== ONLY) continue;
 
         original_result = sandbox.run_code(original_code);
@@ -1164,6 +1178,8 @@ async function main() {
                 process.exit(1);
             }
         }
+
+        if (ONLY) break;
     }
     println();
 }

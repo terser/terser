@@ -2,7 +2,7 @@
 
 import { SectionedSourceMapInput, EncodedSourceMap, DecodedSourceMap } from '@jridgewell/source-map';
 
-export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020;
+export type ECMA = 5 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025;
 
 export type ConsoleProperty = keyof typeof console;
 type DropConsoleOption = boolean | ConsoleProperty[];
@@ -30,6 +30,7 @@ export interface CompressOptions {
     drop_console?: DropConsoleOption;
     drop_debugger?: boolean;
     ecma?: ECMA;
+    builtins?: Array<ECMA>;
     evaluate?: boolean;
     expression?: boolean;
     global_defs?: object;

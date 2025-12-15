@@ -1570,7 +1570,7 @@ issue_2231_3: {
     options = {
         evaluate: true,
         unsafe: true,
-        builtins: [2015],
+        builtins: 2015,
     }
     input: {
         console.log(Object.keys({ foo: "bar" })[0]);

@@ -740,9 +740,9 @@ If you happen to need the source map as a raw object, set `sourceMap.asObject` t
 - `ecma` (default: `5`) -- Pass `2015` or greater to enable `compress` options that
   will transform ES5 code into smaller ES6+ equivalent forms.
 
-- `builtins` (default: `5`) -- Am EcmaScript version number (like `ecma`). Tells Terser which well-known functions, constants, methods and classes are available in the global object. Does nothing by itself, but is used by `builtins_pure` and `unsafe`.
+- `builtins_ecma` (default: `5`) -- An ES version number (like `ecma`). Tells Terser which well-known functions, constants, methods and classes are available in the global object. Does nothing by itself, but is used by `builtins_pure` and `unsafe`.
 
-- `builtins_pure` (default: `false`) -- Pass `true` to assume that functions matched by the `builtins` option (such as `Math.sin` or `unescape`) are pure and calls to them can be removed.
+- `builtins_pure` (default: `false`) -- Pass `true` to assume that functions matched by the `builtins_ecma` option (such as `Math.sin` or `unescape`) are pure and calls to them can be removed.
 
 - `evaluate` (default: `true`) -- attempt to evaluate constant expressions
 

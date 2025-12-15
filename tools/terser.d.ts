@@ -30,7 +30,7 @@ export interface CompressOptions {
     drop_console?: DropConsoleOption;
     drop_debugger?: boolean;
     ecma?: ECMA;
-    builtins?: ECMA;
+    builtins_ecma?: ECMA;
     builtins_pure?: boolean;
     evaluate?: boolean;
     expression?: boolean;

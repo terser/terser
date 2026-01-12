@@ -62,7 +62,8 @@
     "source-map": "~0.8.0-beta.0"
   },
   "overrides": {
-    "serialize-javascript": "6.0.2"
+    "serialize-javascript": "6.0.2",
+    "js-yaml": "4.1.1"
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",

@@ -6424,6 +6424,7 @@ export var domprops = [
     "objectStoreNames",
     "objectType",
     "observe",
+    "observedAttributes",
     "occlusionQuerySet",
     "of",
     "off",

@@ -49,7 +49,19 @@
         addObject(new Event("pointercancel"));
         addObject(new Event("pointerenter"));
         addObject(new Event("pointerleave"));
-      } catch(ex) {}
+      } catch(ex) {console.error(ex)}
+
+      try {
+        addObject(Temporal.Duration.from({ years: 1 }));
+        addObject(new Temporal.Instant());
+        addObject(Temporal.Now);
+        addObject(new Temporal.PlainDate(2021, 7, 1));
+        addObject(new Temporal.ZonedDateTime(0n, "America/New_York"));
+        addObject(new Temporal.PlainYearMonth(2021, 7));
+        addObject(new Temporal.PlainTime());
+        addObject(new Temporal.PlainMonthDay(7, 1));
+        addObject(new Temporal.PlainDateTime(2021, 7, 1));
+      } catch(ex) {console.error(ex)}
 
       var ta = document.createElement("textarea");
       ta.style.width = "100%";

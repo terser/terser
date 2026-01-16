@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.46.0
+
+ - Add "observedAttributes" domprop (#1652)
+ - More domprops (mostly `Temporal` related) suggested in #1652
+
+## v5.45.0
+
+ - Produce `void 0` instead of `undefined`, which is more safe
+
 ## v5.44.1
 
  - fix bitwise optimization changing the result of `&&`, `||`

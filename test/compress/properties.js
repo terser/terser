@@ -90,6 +90,15 @@ sub_properties: {
     }
 }
 
+remove_sequence_parens_in_sub: {
+    options = { }
+    input: {
+        foo = { [(1, 2)]: 3 };
+        foo[(1, 2)] = 3;
+    }
+    expect_exact: "foo={[(1,2)]:3};foo[1,2]=3;"
+}
+
 evaluate_array_length: {
     options = {
         evaluate: true,

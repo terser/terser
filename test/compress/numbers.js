@@ -304,3 +304,13 @@ numeric_separator_double_underscore: {
         message: "Only one underscore is allowed as numeric separator"
     })
 }
+
+large_numbers_converted_to_infinity: {
+    input: {
+        console.log(Infinity),console.log(1e500),console.log(-1e500);
+    }
+    expect: {
+        console.log(1/0),console.log(1/0),console.log(-1/0);
+    }
+    expect_stdout: true
+}

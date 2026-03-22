@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.46.1
+
+ - Fix extremely slow (seemed like a freeze) `evaluate` of method chains
+ - Parse extremely large floating-point number literals as `Infinity`
+ - Remove parens from comma expressions in computed property access (`foo[(1, 2)]`)
+
 ## v5.46.0
 
  - Add "observedAttributes" domprop (#1652)

@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.46.2
+
+ - `unused` option: delete computed keys of concise methods and getters/setters.
+ - `Error.cause` added to DOM properties list
+ - Don't consider `foo.bar` and `foo["bar"]` to be equivalent when property mangler is enabled with `keep_quoted=strict` option.
+
 ## v5.46.1
 
  - Fix extremely slow (seemed like a freeze) `evaluate` of method chains

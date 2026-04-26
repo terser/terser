@@ -4224,3 +4224,19 @@ issue_t1447_export_const: {
         }
     }
 }
+
+issue_t1676_usage_in_concise_method_key: {
+    options = {
+        toplevel: true,
+        unused: true,
+    }
+    mangle = {}
+    input: {
+        var Bt_mounted = "mounted"
+        var vMyDirective = {
+            [Bt_mounted]() {},
+        };
+    }
+    expect: {}
+    expect_stdout: true
+}

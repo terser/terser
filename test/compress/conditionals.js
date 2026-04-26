@@ -1387,3 +1387,37 @@ ifs_same_consequent: {
         (foo || bar || baz) ? x() : y();
     }
 }
+
+issue_1674_false_equivalency_of_props: {
+    options = {
+        conditionals: true,
+        evaluate: true,
+        unused: true,
+        properties: true,
+    }
+    mangle = {
+        properties: {
+            keep_quoted: "strict",
+            debug: true,
+        }
+    }
+    input: {
+        const foo = {
+            bar: () => console.log("PASS")
+        }
+
+        id(false)
+            ? foo["bar"]()
+            : foo.bar();
+    }
+    expect: {
+        const foo = {
+            _$bar$_: () => console.log("PASS")
+        }
+
+        id(false)
+            ? foo.bar()
+            : foo._$bar$_();
+    }
+    expect_stdout: ["PASS"]
+}

@@ -3797,6 +3797,7 @@ export var domprops = [
     "cast",
     "catch",
     "category",
+    "cause",
     "cbrt",
     "cd",
     "ceil",

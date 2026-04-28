@@ -265,6 +265,35 @@ keep_numbers: {
     expect_exact: "const exp=1000000000000;const negativeExp=0.00000001;const huge=1000000000001;const big=100000000001;const fractional=100.2300200;const numeric_separators=1_000_000_000_000;"
 }
 
+compress_without_keeping_numbers: {
+    options = {
+        module: true,
+        defaults: true
+    }
+    input: {
+        var ONE_SECOND = 1000;
+        var ONE_MINUTE = ONE_SECOND * 60;
+        console.log(ONE_SECOND, ONE_MINUTE);
+    }
+    expect_exact: "console.log(1e3,6e4);"
+}
+
+compress_with_keeping_numbers: {
+    format = {
+        keep_numbers: true
+    }
+    options = {
+        module: true,
+        defaults: true
+    }
+    input: {
+        var ONE_SECOND = 1000;
+        var ONE_MINUTE = ONE_SECOND * 60;
+        console.log(ONE_SECOND, ONE_MINUTE);
+    }
+    expect_exact: "console.log(1000,60000);"
+}
+
 keep_numbers_in_properties_as_is: {
     beautify = {
         keep_numbers: true

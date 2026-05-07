@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.47.1
+
+ - Fix crash when using `mangle.keep_fnames` with destructuring
+
 ## v5.47.0
 
  - Add `builtins_ecma` and `builtins_pure` options

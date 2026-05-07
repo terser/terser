@@ -1570,6 +1570,7 @@ issue_2231_3: {
     options = {
         evaluate: true,
         unsafe: true,
+        builtins_ecma: 2015,
     }
     input: {
         console.log(Object.keys({ foo: "bar" })[0]);

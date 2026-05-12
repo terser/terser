@@ -1,5 +1,14 @@
 # Changelog
 
+## v5.47.1
+
+ - Fix crash when using `mangle.keep_fnames` with destructuring
+
+## v5.47.0
+
+ - Add `builtins_ecma` and `builtins_pure` options
+ - Add Intl options to domprops (#1680)
+
 ## v5.46.2
 
  - `unused` option: delete computed keys of concise methods and getters/setters.

@@ -338,3 +338,45 @@ array_from: {
     }
     expect_stdout: "1 1 [] i []"
 }
+
+array_slice_no_args: {
+    options = {
+        unsafe: true,
+    }
+    input: {
+        var a = [ 1, 2, 3 ].slice();
+        var b = [ foo(), 2 ].slice();
+        var c = [ 1, , 3 ].slice();
+        var d = [ 1 ].slice().slice();
+        var e = [ 1 ].slice(0);
+        console.log(a, b, c, d, e);
+    }
+    expect: {
+        var a = [ 1, 2, 3 ];
+        var b = [ foo(), 2 ];
+        var c = [ 1, , 3 ];
+        var d = [ 1 ];
+        var e = [ 1 ].slice(0);
+        console.log(a, b, c, d, e);
+    }
+}
+
+array_slice_no_args_reduce_vars: {
+    options = {
+        collapse_vars: true,
+        passes: 2,
+        reduce_vars: true,
+        toplevel: true,
+        unsafe: true,
+        unused: true,
+    }
+    input: {
+        var x = [ 123 ];
+        var y = x.slice();
+        var z = y.slice();
+        foo(z);
+    }
+    expect: {
+        foo([ 123 ]);
+    }
+}

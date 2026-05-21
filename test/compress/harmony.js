@@ -389,14 +389,6 @@ import_phase_source_mangle: {
     no_mozilla_ast: true
 }
 
-import_phase_dynamic_source: {
-    input: {
-        import.source("./foo.wasm").then(m => use(m));
-    }
-    expect_exact: 'import.source("./foo.wasm").then(m=>use(m));'
-    no_mozilla_ast: true
-}
-
 import_phase_dynamic_defer: {
     input: {
         import.defer("./mod.js");

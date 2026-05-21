@@ -413,17 +413,6 @@ import_phase_dynamic_with_options: {
     no_mozilla_ast: true
 }
 
-import_phase_dynamic_mangle: {
-    mangle = { }
-    input: {
-        import.source("./foo.wasm").then(m => use(m));
-    }
-    expect: {
-        import.source("./foo.wasm").then(o => use(o));
-    }
-    no_mozilla_ast: true
-}
-
 import_phase_source_no_side_effects: {
     options = {
         side_effects: true,

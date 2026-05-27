@@ -346,6 +346,92 @@ import_attributes_legacy_syntax: {
     expect_exact: 'import"hello"with{key:"value"};'
 }
 
+import_phase_source_default: {
+    input: {
+        import source wasmModule from "./foo.wasm";
+        use(wasmModule);
+    }
+    expect_exact: 'import source wasmModule from"./foo.wasm";use(wasmModule);'
+    no_mozilla_ast: true
+}
+
+import_phase_defer_namespace: {
+    input: {
+        import defer * as ns from "./mod.js";
+        use(ns);
+    }
+    expect_exact: 'import defer*as ns from"./mod.js";use(ns);'
+    no_mozilla_ast: true
+}
+
+import_phase_back_compat_default: {
+    // `source` and `defer` are still valid default-import bindings when
+    // followed directly by `from` or `,`.
+    input: {
+        import source from "./a.js";
+        import defer, { x } from "./b.js";
+        use(source, defer, x);
+    }
+    expect_exact: 'import source from"./a.js";import defer,{x}from"./b.js";use(source,defer,x);'
+    no_mozilla_ast: true
+}
+
+import_phase_source_mangle: {
+    mangle = { toplevel: true }
+    input: {
+        import source wasmModule from "./foo.wasm";
+        use(wasmModule);
+    }
+    expect: {
+        import source o from "./foo.wasm";
+        use(o);
+    }
+    no_mozilla_ast: true
+}
+
+import_phase_dynamic_defer: {
+    input: {
+        import.defer("./mod.js");
+    }
+    expect_exact: 'import.defer("./mod.js");'
+    no_mozilla_ast: true
+}
+
+import_phase_dynamic_with_options: {
+    input: {
+        import.source("./foo.wasm", { with: { type: "webassembly" } });
+    }
+    expect_exact: 'import.source("./foo.wasm",{with:{type:"webassembly"}});'
+    no_mozilla_ast: true
+}
+
+import_phase_source_no_side_effects: {
+    options = {
+        side_effects: true,
+    }
+    input: {
+        import.source("./foo.wasm");
+        import.defer("./mod.js");
+    }
+    expect: {
+        import.defer("./mod.js");
+    }
+    no_mozilla_ast: true
+}
+
+import_phase_source_keeps_arg_side_effects: {
+    options = {
+        side_effects: true,
+    }
+    input: {
+        import.source(sideEffect());
+    }
+    expect: {
+        sideEffect();
+    }
+    no_mozilla_ast: true
+}
+
 import_statement_mangling: {
     mangle = { toplevel: true };
     input: {

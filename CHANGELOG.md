@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.48.0
+
+ - Support `import source ...` and `import defer ...` (#1682)
+
 ## v5.47.1
 
  - Fix crash when using `mangle.keep_fnames` with destructuring

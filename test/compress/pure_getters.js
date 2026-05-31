@@ -1236,3 +1236,49 @@ collapse_rhs_lhs: {
     }
     expect_stdout: "1 3"
 }
+
+optional_chaining_default: {
+    options = {
+        pure_getters: "strict",
+        side_effects: true,
+        toplevel: true,
+    }
+    input: {
+        this.foo?.bar;
+        a?.b;
+    }
+    expect: {
+        this.foo?.bar;
+        a?.b;
+    }
+}
+
+optional_chaining_false: {
+    options = {
+        pure_getters: false,
+        side_effects: true,
+        toplevel: true,
+    }
+    input: {
+        this.foo?.bar;
+        a?.b;
+    }
+    expect: {
+        this.foo?.bar;
+        a?.b;
+    }
+}
+
+optional_chaining_true: {
+    options = {
+        pure_getters: true,
+        side_effects: true,
+        toplevel: true,
+    }
+    input: {
+        this.foo?.bar;
+        a?.b;
+    }
+    expect: {
+    }
+}

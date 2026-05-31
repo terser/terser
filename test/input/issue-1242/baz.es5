@@ -1,4 +1,0 @@
-function baz(x) {
-    var half = x / 2;
-    return half;
-}

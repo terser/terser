@@ -1,2 +1,0 @@
-new function(){console.log(3)};
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6WyJjb25zb2xlIiwibG9nIl0sInNvdXJjZXMiOlsic3RkaW4iXSwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHsgY29uc3RydWN0b3IoKXtjb25zb2xlLmxvZygxKzIpO30gfSBuZXcgRm9vKCk7XG4iXSwibWFwcGluZ3MiOiJBQUErQyxJQUFyQyxXQUFnQkEsUUFBUUMsSUFBSSxFQUFLIn0=

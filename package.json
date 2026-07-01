@@ -9,7 +9,7 @@
     "node": ">=10"
   },
   "maintainers": [
-    "Fábio Santos <fabiosantosart@gmail.com>"
+    "F\u00e1bio Santos <fabiosantosart@gmail.com>"
   ],
   "repository": "https://github.com/terser/terser",
   "main": "dist/bundle.min.js",
@@ -154,5 +154,8 @@
     "lint-fix",
     "ls-lint",
     "test"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/terser/terser/issues"
+  }
 }

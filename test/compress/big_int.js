@@ -93,3 +93,16 @@ big_int_math_counter_examples: {
     expect_exact: "console.log({mixing_types:1*10n,bad_shift:1n>>>0n,bad_div:1n/0n});"
     expect_stdout: true
 }
+
+big_int_pow_guarded: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        // `2n ** 3n` has a small result and is still folded, but `2n ** -3n`
+        // throws at runtime (negative BigInt exponent) so it is left as-is
+        // instead of crashing the compressor.
+        console.log(2n ** 3n, 2n ** -3n);
+    }
+    expect_exact: "console.log(8n,2n**-3n);"
+}

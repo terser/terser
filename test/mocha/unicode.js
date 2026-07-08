@@ -83,7 +83,60 @@ describe("Unicode", function() {
             var code = 'console.log({"hello・world":123});';
             var result = await minify(code, { ecma });
             assert.strictEqual(result.code, 'console.log({"hello・world":123});');
-        })
+        });
+    });
+
+    describe("narrower ID_Start and ID_Continue (older unicode versions)", () => {
+        it("variable names", async function() {
+            var code = '\u02C6;';
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, '\u02C6;');
+
+            var code = '\\u02C6;'; // slash-escaped varname
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, '\u02C6;');
+        });
+        it("object properties", async function() {
+            var code = 'console.log({ \u02C6: 1 });';
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'console.log({\u02C6:1});');
+
+            var code = 'console.log({ \\u02C6: 1 });'; // slash-escaped prop name
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'console.log({\u02C6:1});');
+        });
+    });
+
+    describe("broader ID_Start and ID_Continue (newer unicode versions)", () => {
+        it("variable names", async function() {
+            var code = '\u{170e3};';
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, '\\u{170e3};');
+
+            var code = '\\u{170e3};'; // slash-escaped varname from a new unicode version
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, '\\u{170e3};');
+
+            // BASE CASE
+            var code = '\\u{41};'; // slash-escaped A
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'A;');
+        });
+
+        it("object properties", async function() {
+            var code = 'leak({ \u{170e3}: 1 });';
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'leak({"\u{170e3}":1});');
+
+            var code = 'leak({ \\u{170e3}: 1 });'; // slash-escaped prop name from a new unicode version
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'leak({"\u{170e3}":1});');
+
+            // BASE CASE
+            var code = 'leak({ "\\u{41}": 1 });'; // slash-escaped A
+            var result = await minify(code, { ecma: 2024 });
+            assert.strictEqual(result.code, 'leak({A:1});');
+        });
     });
 
     it("Should not unescape unpaired surrogates", async function() {

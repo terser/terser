@@ -8,7 +8,7 @@ export default () => {
                 "@jridgewell/source-map": "sourceMap",
             },
             name: "Terser",
-            sourcemap: false,
+            sourcemap: true,
             sourcemapExcludeSources: true,
             esModule: false,
             indent: false

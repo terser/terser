@@ -1,5 +1,11 @@
 # Changelog
 
+## v5.49.0
+
+- Add ResizeObserver `box` option to domprops
+- Do not evaluate exponentiation of BigInt
+- Parse identifiers from newer unicode versions, and escape them for older runtimes
+
 ## v5.48.0
 
  - Support `import source ...` and `import defer ...` (#1682)

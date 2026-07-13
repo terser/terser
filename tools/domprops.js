@@ -3698,6 +3698,7 @@ export var domprops = [
     "boundingWidth",
     "bounds",
     "boundsGeometry",
+    "box",
     "box-decoration-break",
     "box-shadow",
     "box-sizing",

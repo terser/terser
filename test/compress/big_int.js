@@ -68,13 +68,12 @@ big_int_math: {
     input: {
         console.log({
             sum: 10n + 15n,
-            exp: 2n ** 3n,
             sub: 1n - 3n,
             mul: 5n * 5n,
             div: 15n / 5n,
         });
     }
-    expect_exact: "console.log({sum:25n,exp:8n,sub:-2n,mul:25n,div:3n});"
+    expect_exact: "console.log({sum:25n,sub:-2n,mul:25n,div:3n});"
     expect_stdout: true
 }
 
@@ -91,5 +90,19 @@ big_int_math_counter_examples: {
         });
     }
     expect_exact: "console.log({mixing_types:1*10n,bad_shift:1n>>>0n,bad_div:1n/0n});"
+    expect_stdout: true
+}
+
+big_int_slow_math_counter_examples: {
+    node_version = ">= 12"
+    options = {
+        defaults: true
+    }
+    input: {
+        console.log({
+            slow: 999n ** 999n
+        });
+    }
+    expect_exact: "console.log({slow:999n**999n});"
     expect_stdout: true
 }

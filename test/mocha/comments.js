@@ -364,6 +364,63 @@ describe("comments", function() {
         });
     });
 
+    describe("preserve_annotations", function() {
+        var options = {
+            compress: false,
+            mangle: false,
+            format: { comments: false, preserve_annotations: true }
+        };
+
+        it("Should preserve comments that are an annotation", async function() {
+            await for_each_async([
+                ["/*#__PURE__*/ f();", "/*#__PURE__*/f();"],
+                ["/*@__PURE__*/ f();", "/*@__PURE__*/f();"],
+                ["/* @__PURE__ */ f();", "/* @__PURE__ */f();"],
+                ["/**@__PURE__*/ f();", "/**@__PURE__*/f();"],
+                ["//#__PURE__\nf();", "//#__PURE__\nf();"],
+                ["// @__PURE__\nf();", "// @__PURE__\nf();"],
+                ["var v = /*#__NOINLINE__*/ g();", "var v=/*#__NOINLINE__*/g();"],
+                ["var v = /*#__INLINE__*/ g();", "var v=/*#__INLINE__*/g();"],
+                ["/*@__PURE__*/ /*@__NOINLINE__*/ f();", "/*@__PURE__*/ /*@__NOINLINE__*/f();"],
+                ["/*@__PURE__ @__NOINLINE__*/ f();", "/*@__PURE__ @__NOINLINE__*/f();"],
+                // positions terser does not annotate itself, but other tools read
+                ["(/*@__PURE__*/ c)();", "/*@__PURE__*/c();"],
+                ["var C = /*#__PURE__*/ class extends B {};", "var C=/*#__PURE__*/class extends B{};"],
+                ["/*#__PURE__*/ var a = f();", "/*#__PURE__*/var a=f();"],
+                ["var y = /*#__PURE__*/ tag`x`;", "var y=/*#__PURE__*/tag`x`;"],
+            ], async function(test) {
+                var result = await minify(test[0], options);
+                assert.strictEqual(result.code, test[1], test[0]);
+            });
+        });
+
+        it("Should drop comments that merely mention an annotation", async function() {
+            await for_each_async([
+                // https://github.com/terser/terser/issues/1690
+                [
+                    "function f() {\n"
+                        + "  // keep g() out of line, see the #__NOINLINE__ note\n"
+                        + "  var value = /*#__NOINLINE__*/ g();\n"
+                        + "  return value;\n"
+                        + "}",
+                    "function f(){var value=/*#__NOINLINE__*/g();return value}"
+                ],
+                ["// this comment mentions @__PURE__ for docs\nf();", "f();"],
+                ["/**\n * see @__PURE__ docs\n */\nf();", "f();"],
+                ["// legacy: was /*#__PURE__*/ annotated\nf();", "f();"],
+                ["// docs about @__PURE__ annotations\nvar x = 1;", "var x=1;"],
+                ["f(); // trailing mentions @__PURE__", "f();"],
+                ["var o = { /* see docs about @__PURE__ */ key: 1 };", "var o={key:1};"],
+                ["f(/* mentions @__PURE__ here */ \"abc\");", 'f("abc");'],
+                // only the real annotation survives
+                ["// note about #__PURE__\n/*#__PURE__*/ f();", "/*#__PURE__*/f();"],
+            ], async function(test) {
+                var result = await minify(test[0], options);
+                assert.strictEqual(result.code, test[1], test[0]);
+            });
+        });
+    });
+
     describe("Huge number of comments.", function() {
         it("Should parse and compress code with thousands of consecutive comments", async function() {
             var js = "function lots_of_comments(x) { return 7 -";

@@ -181,6 +181,18 @@ async_inline: {
     ]
 }
 
+async_inlined: {
+    options = {
+        inline: true,
+    }
+    input: {
+        async function f() {
+            return await ((async () => 42)());
+        }
+    }
+    expect_exact: "async function f(){return await 42}"
+}
+
 async_identifiers: {
     input: {
         var async = function(x){ console.log("async", x); };

@@ -63,7 +63,7 @@
   },
   "overrides": {
     "serialize-javascript": "6.0.2",
-    "js-yaml": "4.2.0"
+    "js-yaml": "5.2.2"
   },
   "scripts": {
     "test": "node test/compress.js && mocha test/mocha",

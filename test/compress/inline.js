@@ -592,3 +592,86 @@ inline_using_correct_arguments: {
         (function(s) { return s.run("123") })(a);
     }
 }
+
+inline_constant_default_params: {
+    options = {
+        reduce_vars: true,
+        collapse_vars: true,
+        evaluate: true,
+        inline: true,
+        passes: 6,
+        toplevel: true,
+        unused: true,
+    }
+
+    input: {
+        function run (s, t = "bar") {
+            return s.run(t);
+        }
+
+        /*#__INLINE__*/ run(a, "foo");
+        /*#__INLINE__*/ run(a, undefined);
+        /*#__INLINE__*/ run(a);
+    }
+
+    expect: {
+        a.run("foo");
+        a.run("bar");
+        a.run("bar");
+    }
+}
+
+inline_default_param_dce_condition: {
+    options = {
+        reduce_vars: true,
+        collapse_vars: true,
+        evaluate: true,
+        inline: true,
+        passes: 2,
+        toplevel: true,
+        unused: true,
+        conditionals: true,
+    }
+
+    input: {
+        function test (flag = false) {
+            if (flag)
+                foo();
+            else
+                bar();
+        }
+
+        test();
+    }
+
+    expect: {
+       void bar();
+    }
+}
+
+inline_default_param_scope: {
+    options = {
+        reduce_vars: true,
+        collapse_vars: true,
+        evaluate: true,
+        inline: true,
+        passes: 6,
+        toplevel: true,
+        unused: true,
+        conditionals: true,
+    }
+
+    input: {
+        function withDefaults(a, b = 5 * a, c = b + "1", d = bar(c,b)) {
+        return { a, b, c, d };
+    }
+
+        foo(/*#__INLINE__*/ withDefaults(8));
+        foo(/*#__INLINE__*/ withDefaults(8, 9, 10));
+    }
+
+    expect: {
+       foo({ a: 8, b: 40, c: "401", d: bar("401", 40) });
+       foo({ a: 8, b: 9, c: 10, d: bar(10, 9) });
+    }
+}

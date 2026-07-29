@@ -135,3 +135,13 @@ new_pure: {
     }
     expect_stdout: "PASS"
 }
+
+new_prefixed_template_string: {
+    input: {
+        new (foo()`bar`)();
+        new (foo()`bar`);
+        new foo`bar`();
+        new foo`${bar()}`();
+    }
+    expect_exact: "new(foo()`bar`);new(foo()`bar`);new(foo`bar`);new(foo`${bar()}`);"
+}

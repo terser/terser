@@ -140,6 +140,8 @@ export interface ManglePropertiesOptions {
 
 export interface FormatOptions {
     ascii_only?: boolean;
+    /** Defaults to the value of `ascii_only` */
+    ascii_only_comments?: boolean;
     /** @deprecated Not implemented anymore */
     beautify?: boolean;
     braces?: boolean;

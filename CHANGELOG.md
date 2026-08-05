@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.49.1
+
+- Correctly parenthesize tagged template strings where the tag is `new something()`, which also has parentheses
+- Internally changed how `import()` expression is parsed, it is no longer treated as a function call.
+
 ## v5.49.0
 
 - Add ResizeObserver `box` option to domprops

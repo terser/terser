@@ -136,6 +136,7 @@ export interface ManglePropertiesOptions {
     nth_identifier?: SimpleIdentifierMangler | WeightedIdentifierMangler;
     regex?: RegExp | string;
     reserved?: string[];
+    undeclared: boolean;
 }
 
 export interface FormatOptions {

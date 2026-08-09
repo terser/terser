@@ -280,3 +280,12 @@ typescript_ambiguous_with_comparison_syntax: {
         ambiguous(1);
     }
 }
+
+typescript_dynamic_imports: {
+    parse = { experimental_typescript: true }
+    input: `
+        type T = import('./module.ts')
+        type TDot = import('./module.ts').Property
+    `
+    expect: {}
+}

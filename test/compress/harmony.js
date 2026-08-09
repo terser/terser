@@ -223,6 +223,20 @@ import_all_statement: {
     expect_exact: 'import*as Lel from"lel";'
 }
 
+import_no_mappings: {
+    input: {
+        import { } from"module";
+    }
+    expect_exact: 'import{}from"module";'
+    no_mozilla_ast = true // in ESTree this is just `import "module"`
+}
+import_no_mappings_2: {
+    input: {
+        import "module";
+    }
+    expect_exact: 'import"module";'
+}
+
 import_meta: {
     input: {
         import.meta;
@@ -352,7 +366,6 @@ import_phase_source_default: {
         use(wasmModule);
     }
     expect_exact: 'import source wasmModule from"./foo.wasm";use(wasmModule);'
-    no_mozilla_ast: true
 }
 
 import_phase_defer_namespace: {
@@ -361,7 +374,6 @@ import_phase_defer_namespace: {
         use(ns);
     }
     expect_exact: 'import defer*as ns from"./mod.js";use(ns);'
-    no_mozilla_ast: true
 }
 
 import_phase_back_compat_default: {
@@ -373,7 +385,6 @@ import_phase_back_compat_default: {
         use(source, defer, x);
     }
     expect_exact: 'import source from"./a.js";import defer,{x}from"./b.js";use(source,defer,x);'
-    no_mozilla_ast: true
 }
 
 import_phase_source_mangle: {
@@ -386,7 +397,6 @@ import_phase_source_mangle: {
         import source o from "./foo.wasm";
         use(o);
     }
-    no_mozilla_ast: true
 }
 
 import_phase_dynamic_defer: {
@@ -394,7 +404,6 @@ import_phase_dynamic_defer: {
         import.defer("./mod.js");
     }
     expect_exact: 'import.defer("./mod.js");'
-    no_mozilla_ast: true
 }
 
 import_phase_dynamic_with_options: {
@@ -402,7 +411,6 @@ import_phase_dynamic_with_options: {
         import.source("./foo.wasm", { with: { type: "webassembly" } });
     }
     expect_exact: 'import.source("./foo.wasm",{with:{type:"webassembly"}});'
-    no_mozilla_ast: true
 }
 
 import_phase_source_no_side_effects: {
@@ -416,7 +424,6 @@ import_phase_source_no_side_effects: {
     expect: {
         import.defer("./mod.js");
     }
-    no_mozilla_ast: true
 }
 
 import_phase_source_keeps_arg_side_effects: {
@@ -429,7 +436,6 @@ import_phase_source_keeps_arg_side_effects: {
     expect: {
         sideEffect();
     }
-    no_mozilla_ast: true
 }
 
 import_statement_mangling: {

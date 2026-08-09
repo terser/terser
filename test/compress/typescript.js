@@ -284,8 +284,124 @@ typescript_ambiguous_with_comparison_syntax: {
 typescript_dynamic_imports: {
     parse = { experimental_typescript: true }
     input: `
-        type T = import('./module.ts')
-        type TDot = import('./module.ts').Property
+        type T = import('module')
+        type TDot = import('module').Property
     `
     expect: {}
+}
+
+typescript_imports: {
+    parse = { experimental_typescript: true }
+    input: `
+        // fully typescript imports
+        import type Default from "module"
+        import type * as Star from "module"
+        import type { Named } from "module"
+        import type { Named as Renamed } from "module"
+        import type { default as NamedDefault } from "module"
+        import type A, { F } from 'module'
+
+        // partially typescript imports
+        import { Partial, type Removed } from "module"
+        import { Partial, type Removed as RenamedRemoved } from "module"
+
+        // misdirection
+        import type from 'module'
+        import { type } from 'module'
+        import { type as Renamed } from 'module'
+        import type, { A } from 'module'
+    `
+    expect: {
+        // fully typescript imports
+        // (ellided)
+
+        // partially typescript imports
+        import { Partial } from "module"
+        import { Partial } from "module"
+
+        // misdirection
+        import type from 'module'
+        import { type } from 'module'
+        import { type as Renamed } from 'module'
+        import type, { A } from 'module'
+    }
+}
+
+typescript_imports_incompatible_with_estree_test: {
+    parse = { experimental_typescript: true }
+    input: `
+        import { type 'string' as NamedStringType } from "module"
+        import { type default as NamedDefaultType } from "module"
+        import A, { type F } from 'module'
+    `
+    expect: {
+        import {  } from "module"
+        import {  } from "module"
+        import A, { } from "module"
+    }
+    no_mozilla_ast = true // ESTree can't represent the "{ }"
+}
+
+typescript_exports: {
+    parse = { experimental_typescript: true }
+    input: `
+        // fully typescript exports
+        export type X = 1
+        export interface Interface {}
+        export type { X }
+        export type { X as Y }
+        export type { X as default }
+        export type { X as 'stringly' }
+
+        // partially typescript exports
+        export { Value, type X }
+        export { OtherValue, type X as Y }
+        export { OtherValue, type X as default }
+        export { OtherValue, type X as 'stringly' }
+    `
+    expect: {
+        // fully typescript exports
+        // (ellided)
+
+        // partially typescript exports
+        export { Value }
+        export { OtherValue }
+        export { OtherValue }
+        export { OtherValue }
+    }
+}
+
+typescript_export_from: {
+    parse = { experimental_typescript: true }
+    input: `
+        // fully typescript export-from
+        export type * from 'module'
+        export type * as NamedStar from 'module'
+        export type { X } from 'module'
+        export type { X as Y } from 'module'
+        export type { default } from 'module'
+        export type { 'stringly' as default } from 'module'
+        export type { 'stringly' } from 'module'
+        export type { 'stringly' as 'otherstringly' } from 'module'
+
+        // partially typescript export-from
+        export { a, type X } from 'module'
+        export { a, type X as Y } from 'module'
+        export { a, type default } from 'module'
+        export { a, type 'stringly' as default } from 'module'
+        export { a, type 'stringly' } from 'module'
+        export { a, type 'stringly' as 'otherstringly' } from 'module'
+    `
+    expect: {
+        // fully typescript export-from
+        // (ellided)
+
+        // partially typescript export-from
+        export { a } from 'module'
+        export { a } from 'module'
+        export { a } from 'module'
+        export { a } from 'module'
+        export { a } from 'module'
+        export { a } from 'module'
+    }
 }

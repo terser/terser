@@ -223,6 +223,20 @@ import_all_statement: {
     expect_exact: 'import*as Lel from"lel";'
 }
 
+import_no_mappings: {
+    input: {
+        import { } from"module";
+    }
+    expect_exact: 'import{}from"module";'
+    no_mozilla_ast = true // in ESTree this is just `import "module"`
+}
+import_no_mappings_2: {
+    input: {
+        import "module";
+    }
+    expect_exact: 'import"module";'
+}
+
 import_meta: {
     input: {
         import.meta;
@@ -510,6 +524,16 @@ fat_arrow_as_param: {
         foo(x => (x, x), y => (y, y));
     }
     expect_exact: "foo(x=>x);foo(x=>x,y=>y);foo(x=>(x,x));foo(x=>(x,x),y=>(y,y));"
+}
+
+arrow_function_and_async_keyword: {
+    input: {
+        (async => 1);
+        (async () => 1);
+        (async (a) => 1);
+        (async(a));
+    }
+    expect_exact: "async=>1;async()=>1;async a=>1;async(a);"
 }
 
 default_assign: {

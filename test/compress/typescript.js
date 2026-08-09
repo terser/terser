@@ -11,6 +11,17 @@ type_aliases: {
     expect: { }
 }
 
+type_tuples: {
+    parse = { experimental_typescript: true }
+    input: `
+        type Named = [1, foo: 2]
+        type Optional = [1?]
+        type Optional2 = [foo?: 2]
+        type Rest = [...T]
+    `
+    expect: { }
+}
+
 type_object: {
     parse = { experimental_typescript: true }
     input: `
@@ -38,6 +49,36 @@ type_interface: {
         }
         interface ExtendsOne extends T1 {}
         interface ExtendsMany extends T1, T2, T3, NS.T4 {}
+    `
+    expect: { }
+}
+
+type_numeric_keys: {
+    parse = { experimental_typescript: true }
+    input: `
+        interface NumericKeys {
+            1: number
+            [2]: number
+            3(): number
+            [4](): number
+            5()
+            [6]()
+        }
+    `
+    expect: { }
+}
+
+type_string_keys: {
+    parse = { experimental_typescript: true }
+    input: `
+        interface StringKeys {
+            '1': string
+            ['2']: string
+            '3'(): string
+            ['4'](): string
+            '5'()
+            ['6']()
+        }
     `
     expect: { }
 }

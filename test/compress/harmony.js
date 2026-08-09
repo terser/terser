@@ -520,6 +520,16 @@ fat_arrow_as_param: {
     expect_exact: "foo(x=>x);foo(x=>x,y=>y);foo(x=>(x,x));foo(x=>(x,x),y=>(y,y));"
 }
 
+arrow_function_and_async_keyword: {
+    input: {
+        (async => 1);
+        (async () => 1);
+        (async (a) => 1);
+        (async(a));
+    }
+    expect_exact: "async=>1;async()=>1;async a=>1;async(a);"
+}
+
 default_assign: {
     options = {
         keep_fargs: false,

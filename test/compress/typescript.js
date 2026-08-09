@@ -405,3 +405,27 @@ typescript_export_from: {
         export { a } from 'module'
     }
 }
+
+typescript_disabled_type: {
+    parse = { experimental_typescript: false }
+    input: `
+        type
+        name = 1;
+    `
+    expect: {
+        type;
+        name = 1;
+    }
+}
+typescript_disabled_interface: {
+    parse = { experimental_typescript: false }
+    input: `
+        interface
+        name
+        {};
+    `
+    expect: {
+        interface;
+        name;
+    }
+}

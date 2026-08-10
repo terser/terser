@@ -406,8 +406,109 @@ typescript_export_from: {
     }
 }
 
+// Counter examples
+typescript_disabled_forward_declaration: {
+    bad_input: `function forward();`
+    expect_error: ({ pos: 18 })
+}
+typescript_disabled_async_forward_declaration: {
+    bad_input: `async function forward();`
+    expect_error: ({ pos: 24 })
+}
+typescript_disabled_method_forward_declaration: {
+    bad_input: `(class{forward();});`
+    expect_error: ({ pos: 16 })
+}
+typescript_disabled_type_parameters: {
+    bad_input: `function params<T>() {}`
+    expect_error: ({ pos: 15 })
+}
+typescript_disabled_call_type_parameters: {
+    bad_input: `params<T>();`
+    expect_error: ({ pos: 11 })
+}
+typescript_disabled_call_type_parameters_are_valid_js: {
+    input: `params<T>(1, 2);`
+    expect: { params < T > (1, 2); }
+}
+typescript_disabled_type_parameters_arrow: {
+    bad_input: `var x = <T>(arg) => null`
+    expect_error: ({ pos: 8 })
+}
+typescript_disabled_type_parameters_async_arrow: {
+    bad_input: `var x = lmao <T>(arg) => null`
+    expect_error: ({ pos: 22 })
+}
+typescript_disabled_arg_type: {
+    bad_input: `(function(arg: T) {})`
+    expect_error: ({ pos: 13 })
+}
+typescript_disabled_ret_type: {
+    bad_input: `(function(arg): T {})`
+    expect_error: ({ pos: 14 })
+}
+typescript_disabled_this_arg_type: {
+    bad_input: `(function(this: T) {})`
+    expect_error: ({ pos: 10 })
+}
+typescript_disabled_this_arg: {
+    bad_input: `(function(this) {})`
+    expect_error: ({ pos: 10 })
+}
+typescript_disabled_arrow_arg_type: {
+    bad_input: `var x = (arg: T) => null`
+    expect_error: ({ pos: 12 })
+}
+typescript_disabled_arrow_ret_type: {
+    bad_input: `var x = (arg): Ret => null`
+    expect_error: ({ pos: 13 })
+}
+typescript_disabled_typed_vardecl: {
+    bad_input: `var x: num`
+    expect_error: ({ pos: 5 })
+}
+typescript_disabled_declared_method: {
+    bad_input: `(class{meth();meth(){}})`
+    expect_error: ({ pos: 13 })
+}
+typescript_disabled_class_implements: {
+    bad_input: `class X implements T{}`
+    expect_error: ({ pos: 8 })
+}
+typescript_disabled_class_tricky_fields: {
+    input: `
+        class X {
+            private() {}
+            public() {}
+            protected() {}
+            readonly() {}
+            private
+            public
+            protected
+            readonly
+        }
+        console.log(new X);
+    `
+    expect_stdout: true
+}
+typescript_disabled_import_type: {
+    bad_input: `import type X from "module";`
+    expect_error: ({ pos: 12 })
+}
+typescript_disabled_import_type_2: {
+    bad_input: `import { type X } from "module";`
+    expect_error: ({ pos: 14 })
+}
+typescript_disabled_as: {
+    bad_input: `x as T;`
+    expect_error: ({ pos: 2 })
+}
+typescript_disabled_satisfies: {
+    bad_input: `x satisfies T;`
+    expect_error: ({ pos: 2 })
+}
+
 typescript_disabled_type: {
-    parse = { experimental_typescript: false }
     input: `
         type
         name = 1;
@@ -418,7 +519,6 @@ typescript_disabled_type: {
     }
 }
 typescript_disabled_interface: {
-    parse = { experimental_typescript: false }
     input: `
         interface
         name

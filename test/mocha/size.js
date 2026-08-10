@@ -13,4 +13,8 @@ describe("size", () => {
         assert.equal(parse("using x=null").size(), 12);
         assert.equal(parse("async()=>{await using x=null}").size(), 30);
     });
+    it("finds size of dynamic imports", () => {
+        assert.equal(parse("import()").size(), 8);
+        assert.equal(parse("import.source()").size(), 15);
+    });
 });

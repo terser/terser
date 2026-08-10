@@ -19,12 +19,12 @@ jobs:
         node-version: [ 10.x, 12.x, 14.x, 16.x, 20.x, 24.x ]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       # Tooling setup
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.49.2
+
+- Fixed a crash related to dynamic `import` expressions
+
 ## v5.49.1
 
 - Correctly parenthesize tagged template strings where the tag is `new something()`, which also has parentheses

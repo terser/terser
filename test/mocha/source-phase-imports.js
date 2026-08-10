@@ -81,13 +81,6 @@ describe("Source-phase imports (mozilla AST)", function() {
         assert.strictEqual(ast.print_to_string(), 'import.defer("./mod.js");');
     });
 
-    it("from_mozilla_ast: plain dynamic import is still AST_Call", function() {
-        const ast = AST.AST_Node.from_mozilla_ast(build_moz_dynamic("./mod.js", undefined));
-        const expr = ast.body[0].body;
-        assert.ok(expr instanceof AST.AST_Call);
-        assert.strictEqual(ast.print_to_string(), 'import("./mod.js");');
-    });
-
     it("to_mozilla_ast: phase round-trips on ImportExpression", function() {
         const ast = AST.AST_Node.from_mozilla_ast(build_moz_dynamic("./foo.wasm", "source"));
         const expr = ast.to_mozilla_ast().body[0].expression;

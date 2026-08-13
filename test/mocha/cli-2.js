@@ -82,6 +82,16 @@ describe("bin/terser (2)", function() {
             done();
         });
     });
+    it("Should work with --mangle reserved=[] for labeled statement", function(done) {
+        var command = tersercmd + " test/input/issue-1465/input.js --module -m reserved=['DEV','example']";
+
+        exec(command, function (err, stdout) {
+            if (err) throw err;
+
+            assert.strictEqual(stdout, "function example(){DEV:doAnExpensiveCheck();return normalCodePath()}\n");
+            done();
+        });
+    });
     it("Should work with --mangle reserved=false", function(done) {
         var command = tersercmd + " test/input/issue-505/input.js -m reserved=false";
 

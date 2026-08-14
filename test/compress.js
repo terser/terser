@@ -101,9 +101,16 @@ function as_template_string_code(ast) {
     }
 }
 
-function as_toplevel(test, input, mangle_options) {
+function as_toplevel(test, input, mangle_options, parse_options) {
     var toplevel, tpl_input;
     if (input instanceof AST.AST_BlockStatement) {
+        if (parse_options) {
+            throw new Error(tmpl("When providing `parse` options, use a template string as `input`. [{line},{col}]\n{code}", {
+                line: input.start.line,
+                col: input.start.col,
+                code: make_code(input, { beautify: false })
+            }));
+        }
         for (var i = 0; i < input.body.length; i++) {
             var stat = input.body[i];
             if (stat instanceof AST.AST_SimpleStatement && stat.body instanceof AST.AST_String)
@@ -115,7 +122,7 @@ function as_toplevel(test, input, mangle_options) {
         (tpl_input = as_template_string_code(input))
     ) {
         try {
-            var toplevel = parse(tpl_input);
+            var toplevel = parse(tpl_input, parse_options);
         } catch (error) {
             log(test, "!!! Cannot parse input\n---INPUT---\n{input}\n--PARSE ERROR--\n{error}\n\n", {
                 input: tpl_input,
@@ -313,7 +320,7 @@ async function run_compress_tests(test_files, in_child_process) {
             var bad_input = as_template_string_code(test.bad_input);
             if (bad_input != null) {
                 try {
-                    var input = parse(bad_input);
+                    var input = parse(bad_input, test.parse);
                 } catch (ex) {
                     if (!test.expect_error) {
                         log(test, "!!! Test is missing an `expect_error` clause\n", {});
@@ -349,7 +356,7 @@ async function run_compress_tests(test_files, in_child_process) {
                 log(test, "!!! Test cannot have an `expect_error` clause without a template string `bad_input`\n", {});
                 return false;
             } else {
-                var input = as_toplevel(test, test.input, test.mangle);
+                var input = as_toplevel(test, test.input, test.mangle, test.parse);
                 if (!input) return false;
                 var input_code = make_code(input, output_options);
                 var input_formatted = make_code(test.input, {

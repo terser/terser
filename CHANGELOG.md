@@ -1,5 +1,10 @@
 # Changelog
 
+## v5.50.0
+
+- Experimental TypeScript type stripping
+- Fixed a crash in mozilla AST conversion of imports
+
 ## v5.49.2
 
 - Fixed a crash related to dynamic `import` expressions

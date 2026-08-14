@@ -1,0 +1,8 @@
+name: "CodeQL config"
+
+paths-ignore: 
+  - test/**
+
+queries:
+  - name: Security and quality internal queries
+    uses: security-and-quality

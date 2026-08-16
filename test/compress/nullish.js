@@ -119,6 +119,41 @@ nullish_coalescing_boolean_context: {
     }
 }
 
+nullish_coalescing_left_operand_preserves_nullishness: {
+    options = {
+        booleans: true,
+        conditionals: true,
+    }
+
+    input: {
+        function f(a, b) {
+            return (a == null ? null : a.x) ?? b ? 1 : 2;
+        }
+        console.log(f(null, "fallback"));
+    }
+
+    expect_stdout: "1"
+}
+
+nullish_coalescing_right_operand_uses_boolean_context: {
+    options = {
+        booleans: true,
+        conditionals: true,
+    }
+
+    input: {
+        function f(a, b, c) {
+            return a ?? (b ? c : null) ? 1 : 2;
+        }
+    }
+
+    expect: {
+        function f(a, b, c) {
+            return a ?? (b && c) ? 1 : 2;
+        }
+    }
+}
+
 nullish_coalescing_mandatory_parens: {
     input: {
         (x ?? y) || z;

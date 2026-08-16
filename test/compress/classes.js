@@ -321,3 +321,123 @@ class_static_block_scope_2: {
     }
     expect_stdout: ["PASS", "PASS"]
 }
+
+drop_empty_constructor: {
+    options = { defaults: true }
+    input: {
+        class Foo {
+            constructor() {
+            }
+        }
+        console.log(typeof Foo);
+    }
+    expect: {
+        class Foo {
+        }
+        console.log(typeof Foo);
+    }
+    expect_stdout: "function"
+}
+
+drop_default_derived_constructor: {
+    options = { defaults: true }
+    input: {
+        class Bar {
+            constructor(...args) {
+                this.args = args;
+            }
+        }
+        class Foo extends Bar {
+            constructor() {
+                super(...arguments);
+            }
+        }
+        console.log(new Foo(1, "PASS", 3).args[1]);
+    }
+    expect: {
+        class Bar {
+            constructor(...args) {
+                this.args = args;
+            }
+        }
+        class Foo extends Bar {
+        }
+        console.log(new Foo(1, "PASS", 3).args[1]);
+    }
+    expect_stdout: "PASS"
+}
+
+keep_constructor_with_body: {
+    options = { toplevel: true, defaults: true }
+    input: {
+        class Foo {
+            constructor() {
+                this.x = "PASS";
+            }
+        }
+        console.log(new Foo().x);
+    }
+    expect_stdout: "PASS"
+}
+
+keep_constructor_with_params: {
+    options = { toplevel: true, defaults: true }
+    input: {
+        class Foo {
+            constructor(x) {
+            }
+        }
+        console.log(new Foo("PASS") instanceof Foo);
+    }
+    expect_stdout: "true"
+}
+
+keep_derived_constructor_with_extra_statement: {
+    options = { toplevel: true, defaults: true }
+    input: {
+        class Bar {
+            constructor() {
+                this.tag = "PASS";
+            }
+        }
+        class Foo extends Bar {
+            constructor() {
+                super(...arguments);
+                this.extra = true;
+            }
+        }
+        console.log(new Foo().tag, new Foo().extra);
+    }
+    expect_stdout: "PASS true"
+}
+
+keep_derived_constructor_with_params: {
+    options = { toplevel: true, defaults: true }
+    input: {
+        class Bar {
+            constructor(a) {
+                this.a = a;
+            }
+        }
+        class Foo extends Bar {
+            constructor(a) {
+                super(a);
+            }
+        }
+        console.log(new Foo("PASS").a);
+    }
+    expect_stdout: "PASS"
+}
+
+drop_empty_constructor_with_fields: {
+    options = { toplevel: true, defaults: true }
+    input: {
+        class Foo {
+            x = "PASS";
+            constructor() {
+            }
+        }
+        console.log(new Foo().x);
+    }
+    expect_stdout: "PASS"
+}

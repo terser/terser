@@ -339,6 +339,25 @@ drop_empty_constructor: {
     expect_stdout: "function"
 }
 
+keep_computed_constructor_key: {
+    options = { defaults: true }
+    input: {
+        class Foo {
+            ["constructor"]() {
+            }
+        }
+        console.log(new Foo().constructor === Foo);
+    }
+    expect: {
+        class Foo {
+            ["constructor"]() {
+            }
+        }
+        console.log(new Foo().constructor === Foo);
+    }
+    expect_stdout: "false"
+}
+
 drop_default_derived_constructor: {
     options = { defaults: true }
     input: {

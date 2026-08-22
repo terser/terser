@@ -70,6 +70,11 @@ instance:
 
 If no input file is specified, Terser will read from STDIN.
 
+By default (with no `--compress`/`-c` or `--mangle`/`-m`), Terser parses the
+input and prints it using the default format options. That removes unnecessary
+whitespace but does not run the compressor or mangler. Pass `--compress` and/or
+`--mangle` to enable those transforms.
+
 If you wish to pass your options before the input files, separate the two with
 a double dash to prevent input files being used as option arguments:
 

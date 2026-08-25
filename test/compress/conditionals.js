@@ -799,6 +799,20 @@ trivial_boolean_ternary_expressions : {
     }
 }
 
+issue_ternary_and_nullish_coalescing_operator: {
+    options = {
+        booleans: true,
+        conditionals: true,
+    }
+    input: {
+        globalThis.a = null
+        globalThis.b = 'not null'
+
+        ;(a == null ? null : a.x) ?? b ? console.log('PASS') : console.log('FAIL');
+    }
+    expect_stdout: true
+}
+
 issue_1154: {
     options = {
         booleans: true,

@@ -1379,7 +1379,25 @@ If you're not sure how to set an environment variable on your shell (the above e
 
 ## Stack traces
 
-In the terser CLI we use [source-map-support](https://npmjs.com/source-map-support) to produce good error stacks. In your own app, you're expected to enable source-map-support (read their docs) to have nice stack traces that will help you write good issues.
+The Terser CLI uses
+[source-map-support](https://npmjs.com/source-map-support) to produce useful
+error stacks. When using Terser through the Node.js API, enable Node.js'
+[native source map support](https://nodejs.org/api/cli.html#--enable-source-maps)
+so stack traces point back to the original source:
+
+```sh
+node --enable-source-maps your-script.js
+```
+
+If another tool launches the Node.js process, pass the flag through
+`NODE_OPTIONS` instead:
+
+```sh
+NODE_OPTIONS=--enable-source-maps your-command
+```
+
+On Node.js versions that do not support this flag, install and register the
+`source-map-support` package instead.
 
 <!-- REPORTING_ISSUES:END -->
 

@@ -11,7 +11,12 @@ https://opencollective.com/terser
 
 **Complete CLI command or `minify()` options used**
 
-<!-- Note: if you used the node API directly, you're expected to enable the source-map-support module such that your stack traces make sense. -->
+<!--
+If you used the Node.js API directly, enable source maps so stack traces make
+sense. Pass `--enable-source-maps` to Node.js, or set it through `NODE_OPTIONS`
+when another tool launches Node.js. Older Node.js versions can use the
+source-map-support package instead.
+-->
 
 **`terser` input**
 

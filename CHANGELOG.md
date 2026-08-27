@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.51.2
+
+- Roll back fix for ambiguously scoped default args, due to issues that came up without clear reproduction
+
 ## v5.51.1
 
 - Fix transforming code in dynamic import argument.

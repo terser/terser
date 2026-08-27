@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.51.1
+
+- Fix transforming code in dynamic import argument.
+
 ## v5.51.0
 
 - Pin (deoptimize) functions that use argnames scope in ambiguous way. IE when default args access other args, or variables outside the function.

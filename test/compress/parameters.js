@@ -242,3 +242,148 @@ accept_destructuring_async_word_with_default: {
     }
     expect_stdout: "PASS"
 }
+
+issue_1698: {
+    mangle = {}
+    input: {
+        const value = "outer";
+        function example(ref = { value }) {
+            const { value } = ref;
+            console.log("local value =", value);
+        }
+        example();
+    }
+    expect: {
+        const value = "outer";
+        function example(e = { value: value }) {
+            const { value: l } = e;
+            console.log("local value =", l);
+        }
+        example();
+    }
+    expect_stdout: "local value = outer"
+}
+
+default_value_shadowed_by_const: {
+    mangle = {}
+    input: {
+        const x = "X";
+        function f(a = x) {
+            const x = "inner";
+            return a + "/" + x;
+        }
+        console.log(f());
+    }
+    expect: {
+        const x = "X";
+        function f(n = x) {
+            const o = "inner";
+            return n + "/" + o;
+        }
+        console.log(f());
+    }
+    expect_stdout: "X/inner"
+}
+
+default_value_shadowed_by_let: {
+    mangle = {}
+    input: {
+        let x = "X";
+        function f(a = x) {
+            let x = "inner";
+            return a + "/" + x;
+        }
+        console.log(f());
+    }
+    expect: {
+        let x = "X";
+        function f(n = x) {
+            let e = "inner";
+            return n + "/" + e;
+        }
+        console.log(f());
+    }
+    expect_stdout: "X/inner"
+}
+
+default_value_shadowed_by_var: {
+    mangle = {}
+    input: {
+        var x = "X";
+        function f(a = x) {
+            var x = "inner";
+            return a + "/" + x;
+        }
+        console.log(f());
+    }
+    expect: {
+        var x = "X";
+        function f(n = x) {
+            var r = "inner";
+            return n + "/" + r;
+        }
+        console.log(f());
+    }
+    expect_stdout: "X/inner"
+}
+
+default_value_closure_shadowed_by_const: {
+    mangle = {}
+    input: {
+        const x = "outer";
+        function f(get = () => x) {
+            const x = "inner";
+            return get() + "/" + x;
+        }
+        console.log(f());
+    }
+    expect: {
+        const x = "outer";
+        function f(n = () => x) {
+            const o = "inner";
+            return n() + "/" + o;
+        }
+        console.log(f());
+    }
+    expect_stdout: "outer/inner"
+}
+
+default_value_shadowed_by_class: {
+    mangle = {}
+    input: {
+        class C { static tag = "outer"; }
+        function f(a = C) {
+            class C { static tag = "inner"; }
+            return a.tag + "/" + C.tag;
+        }
+        console.log(f());
+    }
+    expect: {
+        class C { static tag = "outer"; }
+        function f(t = C) {
+            class a { static tag = "inner"; }
+            return t.tag + "/" + a.tag;
+        }
+        console.log(f());
+    }
+    expect_stdout: "outer/inner"
+}
+
+default_value_references_earlier_param: {
+    mangle = {}
+    input: {
+        function f(a, b = a) {
+            const a2 = "x";
+            return b;
+        }
+        console.log(f("P"));
+    }
+    expect: {
+        function f(n, o = n) {
+            const c = "x";
+            return o;
+        }
+        console.log(f("P"));
+    }
+    expect_stdout: "P"
+}

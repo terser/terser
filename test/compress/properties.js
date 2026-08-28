@@ -1598,6 +1598,47 @@ join_object_assignments_4: {
     ]
 }
 
+// The object literal already contains a duplicate key before any
+// assignment is merged into it. Per spec, the last duplicate "wins"
+// when the literal is evaluated, so a subsequent assignment to that
+// key must be observable. join_object_assignments() must either leave
+// the assignment alone or merge it into the *winning* (last) property,
+// never into a property that gets shadowed away.
+join_object_assignments_duplicate_key: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        var obj = {
+            x: 1,
+            x: 2,
+        };
+        obj.x = 3;
+        console.log(obj.x, JSON.stringify(obj));
+    }
+    expect_stdout: [
+        "3 {\"x\":3}",
+    ]
+}
+
+join_object_assignments_duplicate_key_triple: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        var obj = {
+            x: 1,
+            x: 2,
+            x: 5,
+        };
+        obj.x = 9;
+        console.log(obj.x, JSON.stringify(obj));
+    }
+    expect_stdout: [
+        "9 {\"x\":9}",
+    ]
+}
+
 join_object_assignments_return_1: {
     options = {
         join_vars: true,

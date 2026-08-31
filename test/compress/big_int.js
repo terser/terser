@@ -93,6 +93,29 @@ big_int_math_counter_examples: {
     expect_stdout: true
 }
 
+big_int_mixed_types_have_side_effects: {
+    node_version = ">= 12"
+    options = {
+        side_effects: true
+    }
+    input: {
+        0n + 0;
+        0 - 0n;
+        0n * 0;
+        0 / 0n;
+        0n % 0;
+        0 ** 0n;
+        0n & 0;
+        0 | 0n;
+        0n ^ 0;
+        0 << 0n;
+        0n >> 0;
+        0n >>> 0n;
+    }
+    expect_exact: "0n+0;0-0n;0n*0;0/0n;0n%0;0**0n;0n&0;0|0n;0n^0;0<<0n;0n>>0;0n>>>0n;"
+    expect_stdout: true
+}
+
 big_int_slow_math_counter_examples: {
     node_version = ">= 12"
     options = {

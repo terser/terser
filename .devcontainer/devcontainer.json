@@ -1,0 +1,29 @@
+{
+	"name": "terser devcontainer",
+	"settings": {
+		"workbench.colorTheme": "Default Dark+",
+		"terminal.integrated.defaultProfile.linux": "bash"
+	},
+	"extensions": [
+		// VS Code specific
+		"coenraads.bracket-pair-colorizer",
+		"vscode-icons-team.vscode-icons",
+		"editorconfig.editorconfig",
+		// GitHub specific
+		"eamodio.gitlens",
+		"cschleiden.vscode-github-actions",
+		"redhat.vscode-yaml",
+		"bierner.markdown-preview-github-styles",
+		"ban.spellright",
+		// JS/TS specific
+		"dbaeumer.vscode-eslint",
+		"ms-vscode.vscode-typescript-next",
+		"ecmel.vscode-html-css",
+	],
+	"postCreateCommand": "npm install --save-dev",
+	"build": {
+		"dockerfile": "Dockerfile"
+	}
+}
+
+// Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)

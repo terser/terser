@@ -1,5 +1,18 @@
 # Changelog
 
+## v5.51.2
+
+- Roll back fix for ambiguously scoped default args, due to issues that came up without clear reproduction
+
+## v5.51.1
+
+- Fix transforming code in dynamic import argument.
+
+## v5.51.0
+
+- Pin (deoptimize) functions that use argnames scope in ambiguous way. IE when default args access other args, or variables outside the function.
+- Fix nullish coalescing `??` operator being considered a "boolean operator" sometimes causing booleans to be generated in its left side.
+
 ## v5.50.0
 
 - Experimental TypeScript type stripping

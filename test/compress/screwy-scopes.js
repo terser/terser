@@ -8,6 +8,8 @@
 // https://github.com/terser/terser/issues/1478
 // https://github.com/terser/terser/issues/91
 
+/* temporarily disabled due to: https://github.com/terser/terser/issues/1725 and https://github.com/terser/terser/issues/1724
+
 screwy_scope_1: {
     input: {
         console.log(
@@ -179,3 +181,4 @@ screwy_scope_ensemble: {
         "undefined",
     ]
 }
+*/

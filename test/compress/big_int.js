@@ -87,9 +87,10 @@ big_int_math_counter_examples: {
             mixing_types: 1 * 10n,
             bad_shift: 1n >>> 0n,
             bad_div: 1n / 0n,
+            bad_mod: 1n % 0n,
         });
     }
-    expect_exact: "console.log({mixing_types:1*10n,bad_shift:1n>>>0n,bad_div:1n/0n});"
+    expect_exact: "console.log({mixing_types:1*10n,bad_shift:1n>>>0n,bad_div:1n/0n,bad_mod:1n%0n});"
     expect_stdout: true
 }
 

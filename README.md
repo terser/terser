@@ -70,6 +70,10 @@ instance:
 
 If no input file is specified, Terser will read from STDIN.
 
+By default, Terser only reformats the input (e.g. removing unnecessary
+whitespace) and writes the result to STDOUT.  Compression and name mangling
+are opt-in: pass `--compress`, `--mangle`, or both to enable them.
+
 If you wish to pass your options before the input files, separate the two with
 a double dash to prevent input files being used as option arguments:
 

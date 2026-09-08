@@ -190,6 +190,18 @@ describe("bin/terser", function() {
 
         });
     });
+    it("Should warn that `--beautify`/`-b` is deprecated and beautify the output", function(done) {
+        var command = tersercmd + ' test/input/enclose/input.js -b';
+
+        exec(command, function (err, stdout, stderr) {
+            if (err) throw err;
+
+            assert.strictEqual(stdout, "function enclose() {\n    console.log(\"test enclose\");\n}\n\nenclose();\n");
+            assert.ok(stderr.includes("WARNING"), "should print a warning");
+            assert.ok(stderr.includes("deprecated"), "warning should mention deprecation");
+            done();
+        });
+    });
     it("Should process inline source map", function(done) {
         var command = tersercmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline";
 

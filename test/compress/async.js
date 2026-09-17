@@ -22,6 +22,14 @@ await_precedence_call: {
     expect_exact: "async function f3(){return(await foo())()}async function f4(){return await foo()()}"
 }
 
+await_precedence_template_tag: {
+    input: {
+        async function f1(){ return (await foo)`x`; }
+        async function f2(){ return await foo`x`; }
+    }
+    expect_exact: "async function f1(){return(await foo)`x`}async function f2(){return await(foo`x`)}"
+}
+
 async_function_declaration: {
     options = {
         side_effects: true,

@@ -131,6 +131,35 @@ describe("sourcemaps", function() {
         assert.deepStrictEqual(result.map, {"version":3,"sources":["0"],"names":["console","log"],"mappings":"AAAAA,QAAQC,IAAI"});
     });
 
+    describe('includeSources: false', () => {
+        it("Should ellide sources from `content`", async function() {
+            var result = await Terser.minify(read("./test/input/issue-1236/simple.js"), {
+                sourceMap: {
+                    content: read("./test/input/issue-1236/simple.js.map"),
+                    filename: "simple.min.js",
+                    includeSources: false
+                }
+            });
+            if (result.error) throw result.error;
+            var map = JSON.parse(result.map);
+            assert.equal(map.file, "simple.min.js");
+            assert.equal(map.sourcesContent, undefined);
+        });
+        it("Should ellide content of input files", async function() {
+            var result = await Terser.minify(read("./test/input/issue-1236/simple.js"), {
+                sourceMap: {
+                    url: 'simple.min.js',
+                    filename: "simple.min.js",
+                    includeSources: false,
+                }
+            });
+            if (result.error) throw result.error;
+            var map = JSON.parse(result.map);
+            assert.equal(map.file, "simple.min.js");
+            assert.equal(map.sourcesContent, undefined);
+        });
+    });
+
     describe("inSourceMap", function() {
         it("Should read the given string filename correctly when sourceMapIncludeSources is enabled", function() {
             var result = Terser.minify(read("./test/input/issue-1236/simple.js"), {

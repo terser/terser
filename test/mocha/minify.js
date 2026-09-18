@@ -209,7 +209,8 @@ describe("minify", function() {
                 compress: { toplevel: true },
                 sourceMap: {
                     content: "inline",
-                    url: "inline"
+                    url: "inline",
+                    includeSources: true,
                 }
             }).code + "\n";
             assert.strictEqual(code, readFileSync("test/input/issue-520/output.js", "utf8"));

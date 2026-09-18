@@ -1,3 +1,5 @@
+const assert = require('assert')
+
 function decodeMap(mapData) {
     const buffer = new Buffer(mapData.replace('data:application/json;charset=utf-8;base64,', ''), 'base64');
     return JSON.parse(buffer.toString());

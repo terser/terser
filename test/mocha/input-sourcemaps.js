@@ -26,7 +26,8 @@ describe("input sourcemaps", function() {
 
         var result = Terser.minify(transpiled, {
             sourceMap: {
-                content: transpilemap
+                content: transpilemap,
+                includeSources: true,
             }
         });
 

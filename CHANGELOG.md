@@ -1,5 +1,12 @@
 # Changelog
 
+## v5.51.3
+
+- Fix source code leak through sourceMap.content (input sourcemap)
+    - This change changes sourcemap output if including the original source code is desired. `includeSources` is now required to be explicitly set when an input sourcemap is used.
+- Don't crash when evaluating BigInt modulo by zero (#1731)
+- Keep parens around `yield` and `await` used as a template tag (#1740) (#1741)
+
 ## v5.51.2
 
 - Roll back fix for ambiguously scoped default args, due to issues that came up without clear reproduction

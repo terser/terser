@@ -316,3 +316,14 @@ issue_t60: {
     }
     expect_stdout: "1 2"
 }
+
+yield_as_template_tag: {
+    input: {
+        function* f1(){ return (yield foo)`x`; }
+        function* f2(){ return yield foo`x`; }
+        function* f3(){ return (yield* foo)`x`; }
+        function* f4(){ return yield* foo`x`; }
+        function* f5(service){ return (yield* (yield* service)`x`).length > 0; }
+    }
+    expect_exact: "function*f1(){return(yield foo)`x`}function*f2(){return yield foo`x`}function*f3(){return(yield*foo)`x`}function*f4(){return yield*foo`x`}function*f5(service){return(yield*(yield*service)`x`).length>0}"
+}

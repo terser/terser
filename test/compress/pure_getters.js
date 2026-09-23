@@ -183,6 +183,23 @@ impure_getter_2: {
     expect: {}
 }
 
+optional_chain_impure_getter: {
+    options = {
+        pure_getters: false,
+        side_effects: true,
+    }
+    input: {
+        var key = "bar";
+        this.foo?.bar;
+        this.foo?.[key];
+    }
+    expect: {
+        var key = "bar";
+        this.foo?.bar;
+        this.foo?.[key];
+    }
+}
+
 issue_2110_1: {
     options = {
         collapse_vars: true,

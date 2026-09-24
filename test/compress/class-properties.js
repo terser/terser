@@ -294,6 +294,36 @@ private_class_properties: {
     expect_stdout: "FooBar"
 }
 
+private_class_members_with_quote_keys: {
+    // https://github.com/terser/terser/issues/1743
+    // `quote_keys` must not touch private names: they are always
+    // identifiers and can never be quoted, unlike object/class keys.
+    format = {
+        quote_keys: true
+    }
+    input: {
+        class Foo {
+            #field = "a";
+            static #method() {
+                return "b";
+            }
+            get #getter() {
+                return "c";
+            }
+            set #setter(v) {
+                this.#field = v;
+            }
+            run() {
+                this.#setter = "x";
+                return this.#field + Foo.#method() + this.#getter;
+            }
+        }
+        console.log(new Foo().run());
+    }
+    expect_exact: 'class Foo{#field="a";static#method(){return"b"}get#getter(){return"c"}set#setter(v){this.#field=v}"run"(){this.#setter="x";return this.#field+Foo.#method()+this.#getter}}console.log((new Foo).run());'
+    expect_stdout: "xbc"
+}
+
 same_name_public_private: {
     input: {
         class A {

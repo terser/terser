@@ -7676,3 +7676,105 @@ conditional_chain_certain_and_uncertain_part: {
         console.log(foo)
     }
 }
+
+defun_reassigns_own_name_1: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        "use strict";
+        function log(fn) {
+            console.log(typeof fn);
+        }
+        var a = f();
+        console.log(a);
+        function f() {
+            log(f);
+            return (f = function() {
+                return "PASS";
+            })();
+        }
+    }
+    expect: {
+        "use strict";
+        var a = f();
+        console.log(a);
+        function f() {
+            (function(fn) {
+                console.log(typeof fn);
+            })(f);
+            return (f = function() {
+                return "PASS";
+            })();
+        }
+    }
+    expect_stdout: [
+        "function",
+        "PASS",
+    ]
+}
+
+defun_reassigns_own_name_2: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        "use strict";
+        var a = f();
+        console.log(a);
+        function f() {
+            console.log(typeof f);
+            f++;
+            return "PASS";
+        }
+    }
+    expect: {
+        "use strict";
+        var a = f();
+        console.log(a);
+        function f() {
+            console.log(typeof f);
+            f++;
+            return "PASS";
+        }
+    }
+    expect_stdout: [
+        "function",
+        "PASS",
+    ]
+}
+
+defun_reassigns_own_name_3: {
+    options = {
+        reduce_funcs: true,
+        reduce_vars: true,
+        toplevel: true,
+        unused: true,
+    }
+    input: {
+        "use strict";
+        var a = f();
+        console.log(a);
+        function f() {
+            f = function() {
+                return "FAIL";
+            };
+            return "PASS";
+        }
+    }
+    expect: {
+        "use strict";
+        var a = function() {
+            0;
+            return "PASS";
+        }();
+        console.log(a);
+    }
+    expect_stdout: "PASS"
+}

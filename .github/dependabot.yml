@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    open-pull-requests-limit: 10
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'npm'
+    directory: ''
+    open-pull-requests-limit: 10
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'npm'
+    directory: 'bin'
+    open-pull-requests-limit: 10
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'npm'
+    directory: 'dist'
+    open-pull-requests-limit: 10
+    schedule:
+      interval: 'daily'
+
+# Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)

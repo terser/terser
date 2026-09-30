@@ -94,6 +94,64 @@ big_int_math_counter_examples: {
     expect_stdout: true
 }
 
+big_int_increment: {
+    options = {
+        defaults: true,
+        toplevel: true
+    }
+    input: {
+        let i = 0n;
+        i++;
+        i++;
+        console.log(i);
+    }
+    expect_exact: "let i=0n;i++,i++,console.log(i);"
+    expect_stdout: "2n"
+}
+
+big_int_unary_plus: {
+    options = {
+        defaults: true
+    }
+    input: {
+        try {
+            console.log(+1n);
+        } catch (e) {
+            console.log("PASS");
+        }
+    }
+    expect_exact: 'try{console.log(+1n)}catch(e){console.log("PASS")}'
+    expect_stdout: "PASS"
+}
+
+big_int_huge_shift: {
+    node_version = ">= 12"
+    options = {
+        defaults: true
+    }
+    input: {
+        try {
+            console.log(1n << 2000000000n);
+        } catch (e) {
+            console.log("PASS");
+        }
+    }
+    expect_exact: 'try{console.log(1n<<2000000000n)}catch(e){console.log("PASS")}'
+    expect_stdout: "PASS"
+}
+
+big_int_shift: {
+    options = {
+        defaults: true
+    }
+    input: {
+        console.log(1n << 3n, 8n >> 2n, -8n >> 1n, 1n << -1n);
+        console.log(1n >> 2000n, -1n >> 2000n, 1n << -2000n, 0n << 2000n);
+    }
+    expect_exact: "console.log(8n,2n,-4n,0n),console.log(0n,-1n,0n,0n);"
+    expect_stdout: true
+}
+
 big_int_slow_math_counter_examples: {
     node_version = ">= 12"
     options = {

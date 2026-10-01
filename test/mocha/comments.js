@@ -364,6 +364,55 @@ describe("comments", function() {
         });
     });
 
+    describe("ascii_only_comments", function() {
+        // "\u0ca0_\u0ca0" is spelled out to keep this file ascii only
+        var code = "// preserve: \u0ca0\nvar x = \"\u0ca0\";";
+
+        it("Should escape non-ascii characters in comments when ascii_only is set", async function() {
+            var result = await minify(code, {
+                format: { ascii_only: true, comments: "all" }
+            });
+            if (result.error) throw result.error;
+            assert.strictEqual(result.code, "// preserve: \\u0ca0\nvar x=\"\\u0ca0\";");
+        });
+
+        it("Should keep non-ascii characters in comments when ascii_only_comments is disabled", async function() {
+            var result = await minify(code, {
+                format: {
+                    ascii_only: true,
+                    ascii_only_comments: false,
+                    comments: "all"
+                }
+            });
+            if (result.error) throw result.error;
+            assert.strictEqual(result.code, "// preserve: \u0ca0\nvar x=\"\\u0ca0\";");
+        });
+
+        it("Should escape comments only when ascii_only_comments is set on its own", async function() {
+            var result = await minify(code, {
+                format: { ascii_only_comments: true, comments: "all" }
+            });
+            if (result.error) throw result.error;
+            assert.strictEqual(result.code, "// preserve: \\u0ca0\nvar x=\"\u0ca0\";");
+        });
+
+        it("Should not escape ascii control characters in comments", async function() {
+            var result = await minify("/* first\nsecond\ttab \u0ca0 */\nvar x = 1;", {
+                format: { ascii_only: true, comments: "all" }
+            });
+            if (result.error) throw result.error;
+            assert.strictEqual(result.code, "/* first\nsecond\ttab \\u0ca0 */\nvar x=1;");
+        });
+
+        it("Should leave the shebang alone", async function() {
+            var result = await minify("#!/usr/bin/\u0ca0\nvar x = 1;", {
+                format: { ascii_only: true, comments: "all" }
+            });
+            if (result.error) throw result.error;
+            assert.strictEqual(result.code, "#!/usr/bin/\u0ca0\nvar x=1;");
+        });
+    });
+
     describe("Huge number of comments.", function() {
         it("Should parse and compress code with thousands of consecutive comments", async function() {
             var js = "function lots_of_comments(x) { return 7 -";

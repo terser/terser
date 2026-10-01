@@ -1002,6 +1002,10 @@ as "output options".
 - `ascii_only` (default `false`) -- escape Unicode characters in strings and
   regexps (affects directives with non-ascii characters becoming invalid)
 
+- `ascii_only_comments` (defaults to the value of `ascii_only`) -- escape
+  Unicode characters in the comments which are kept in the output. Set it to
+  `false` to keep them readable while the rest of the output stays ascii only.
+
 - `beautify` (default `false`) -- (DEPRECATED) whether to beautify the output.
   When using the legacy `-b` CLI flag, this is set to true by default.
 

@@ -2284,6 +2284,166 @@ issue_869_2: {
     expect_stdout: "PASS"
 }
 
+mangle_property_name_args: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var o = { p: 1 };
+        console.log(
+            Object.hasOwn(o, "p"),
+            o.hasOwnProperty("p"),
+            Object.prototype.hasOwnProperty.call(o, "p"),
+            o.propertyIsEnumerable("p"),
+            Reflect.has(o, "p"),
+            Reflect.get(o, "p"),
+            Object.getOwnPropertyDescriptor(o, "p").value
+        );
+    }
+    expect: {
+        var o = { o: 1 };
+        console.log(
+            Object.hasOwn(o, "o"),
+            o.hasOwnProperty("o"),
+            Object.prototype.hasOwnProperty.call(o, "o"),
+            o.propertyIsEnumerable("o"),
+            Reflect.has(o, "o"),
+            Reflect.get(o, "o"),
+            Object.getOwnPropertyDescriptor(o, "o").value
+        );
+    }
+    expect_stdout: "true true true true true 1 1"
+    node_version = ">= 16.9"
+}
+
+mangle_reflect_property_name_args: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var o = { p: 1, q: 2 };
+        Reflect.set(o, "p", 3);
+        Reflect.deleteProperty(o, "q");
+        Reflect.defineProperty(o, "abc", { value: 4, enumerable: true });
+        var desc = Reflect.getOwnPropertyDescriptor(o, "abc");
+        console.log(o.p, o.q, o.abc, desc.value);
+    }
+    expect: {
+        var o = { o: 1, l: 2 };
+        Reflect.set(o, "o", 3);
+        Reflect.deleteProperty(o, "l");
+        Reflect.defineProperty(o, "t", { value: 4, enumerable: true });
+        var desc = Reflect.getOwnPropertyDescriptor(o, "t");
+        console.log(o.o, o.l, o.t, desc.value);
+    }
+    expect_stdout: "3 undefined 4 4"
+}
+
+keep_names_only_named_by_string: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var obj = JSON.parse('{"flag":1}');
+        var o = { p: 2 };
+        console.log(obj.hasOwnProperty("flag"), Reflect.get(obj, "flag"), o.p);
+    }
+    expect: {
+        var obj = JSON.parse('{"flag":1}');
+        var o = { o: 2 };
+        console.log(obj.hasOwnProperty("flag"), Reflect.get(obj, "flag"), o.o);
+    }
+    expect_stdout: "true 1 2"
+}
+
+keep_names_only_named_by_string_keep_quoted: {
+    mangle = {
+        properties: {
+            keep_quoted: true,
+        },
+    }
+    input: {
+        var data = JSON.parse('{"flag":1}');
+        var o = { p: 2 };
+        var own = Object.prototype.hasOwnProperty.call(data, "flag");
+        console.log(own, Reflect.has(data, "flag"), o.p);
+    }
+    expect: {
+        var data = JSON.parse('{"flag":1}');
+        var o = { o: 2 };
+        var own = Object.prototype.hasOwnProperty.call(data, "flag");
+        console.log(own, Reflect.has(data, "flag"), o.o);
+    }
+    expect_stdout: "true true 2"
+}
+
+reserve_property_name_args_keep_quoted: {
+    mangle = {
+        properties: {
+            keep_quoted: true,
+        },
+    }
+    input: {
+        var o = { p: 1, q: 2 };
+        console.log(o.hasOwnProperty("p"), o.p, o.q);
+    }
+    expect: {
+        var o = { p: 1, o: 2 };
+        console.log(o.hasOwnProperty("p"), o.p, o.o);
+    }
+    expect_stdout: "true 1 2"
+}
+
+keep_property_name_args_keep_quoted_strict: {
+    mangle = {
+        properties: {
+            keep_quoted: "strict",
+        },
+    }
+    input: {
+        var o = { "p": 1, q: 2 };
+        console.log(o.hasOwnProperty("p"), Reflect.get(o, "p"), o.q);
+    }
+    expect: {
+        var o = { "p": 1, o: 2 };
+        console.log(o.hasOwnProperty("p"), Reflect.get(o, "p"), o.o);
+    }
+    expect_stdout: "true 1 2"
+}
+
+dont_mangle_unrelated_string_args: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var m = new Map([["p", 1]]);
+        var o = { p: 2 };
+        console.log(m.get("p"), o.p);
+    }
+    expect: {
+        var m = new Map([["p", 1]]);
+        var o = { o: 2 };
+        console.log(m.get("p"), o.o);
+    }
+    expect_stdout: "1 2"
+}
+
+property_name_arg_missing: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var o = { p: 1 };
+        Object.defineProperty(o);
+        Object.hasOwn(o);
+    }
+    expect: {
+        var o = { o: 1 };
+        Object.defineProperty(o);
+        Object.hasOwn(o);
+    }
+}
+
 issue_3188_1: {
     options = {
         collapse_vars: true,

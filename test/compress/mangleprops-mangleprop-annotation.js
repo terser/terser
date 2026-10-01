@@ -171,7 +171,7 @@ mangleprop_annotation_and_key: {
 
         "p" in object;
         /*@__KEY__*/"p" in object;
-        object.hasOwnProperty("someprop");
+        object.hasOwnProperty("p");
         object.hasOwnProperty(/*@__KEY__*/"p");
 
         console.log(Object.values(object));

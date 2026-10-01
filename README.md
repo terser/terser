@@ -355,6 +355,13 @@ of mangled property names.
 Using the name cache is not necessary if you compress all your files in a
 single call to Terser.
 
+Note that a new name is only checked against the properties of the files in
+the current call. If a later call has a property it can't mangle (because
+`regex` excludes it or `keep_quoted` keeps it) spelled like a name already in
+the cache, the two share that name in its output, and on the same object they
+overwrite each other. Listing such properties in `reserved` for every call
+prevents this.
+
 ### Mangling unquoted names (`--mangle-props keep_quoted`)
 
 Using quoted property name (`o["foo"]`) reserves the property name (`foo`)

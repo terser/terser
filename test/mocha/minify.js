@@ -219,6 +219,28 @@ describe("minify", function() {
         assert.equal(run_code(compressed), run_code(original));
     });
 
+    it("Should rename a property spelled like a name already in the cache", async function() {
+        // #1428: the cache gives `sb` to `o`, so the original `sb` has to
+        // move out of its way
+        var cache = { vars: { props: {} }, props: { props: { $o: "sb" } } };
+        var original = [
+            'var args = { sb: "sb", o: "o" };',
+            "console.log(args.sb, args.o);",
+        ].join("");
+        var result = await minify(original, {
+            compress: false,
+            mangle: {
+                properties: true,
+            },
+            nameCache: cache,
+        });
+        assert.strictEqual(result.code, [
+            'var args={o:"sb",sb:"o"};',
+            "console.log(args.o,args.sb);",
+        ].join(""));
+        assert.strictEqual(run_code(result.code), run_code(original));
+    });
+
     it("Should not parse invalid use of reserved words", async function() {
         await assert.doesNotReject(() => minify("function enum(){}"));
         await assert.doesNotReject(() => minify("function static(){}"));

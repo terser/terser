@@ -2539,6 +2539,26 @@ dont_flatten_proto: {
     expect_stdout: "object"
 }
 
+dont_mangle_option_keys: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        function show(node, value) {
+            node.focus({ preventScroll: true });
+            var fmt = new Intl.NumberFormat("en", { maximumFractionDigits: 1 });
+            return fmt.format(value) + { mine: 1 }.mine;
+        }
+    }
+    expect: {
+        function show(n, e) {
+            n.focus({ preventScroll: true });
+            var r = new Intl.NumberFormat("en", { maximumFractionDigits: 1 });
+            return r.format(e) + { t: 1 }.t;
+        }
+    }
+}
+
 mangle_properties_which_matches_pattern: {
     options = {
         defaults: true

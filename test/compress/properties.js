@@ -1948,6 +1948,48 @@ join_object_assignments_regex: {
     expect_stdout: "1"
 }
 
+join_object_assignments_computed_setter: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        const k = "x";
+        const o = {
+            set [k](v) { console.log("setter ran:", v); }
+        };
+        o.x = 1;
+    }
+    expect: {
+        const k = "x", o = {
+            set [k](v) { console.log("setter ran:", v); }
+        };
+        o.x = 1;
+    }
+    expect_stdout: "setter ran: 1"
+}
+
+join_object_assignments_computed_getter: {
+    options = {
+        join_vars: true,
+    }
+    input: {
+        const k = "x";
+        const o = {
+            get [k]() { return 4; }
+        };
+        o.x = 8;
+        console.log(o.x);
+    }
+    expect: {
+        const k = "x", o = {
+            get [k]() { return 4; }
+        };
+        o.x = 8;
+        console.log(o.x);
+    }
+    expect_stdout: "4"
+}
+
 issue_2816: {
     options = {
         join_vars: true,

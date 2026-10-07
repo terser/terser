@@ -3258,3 +3258,112 @@ regression_retain_var_in_eliminated_default: {
     }
     expect_stdout: "100"
 }
+
+issue_1729_case_block_defun: {
+    options = {
+        dead_code: true,
+        evaluate: true,
+        side_effects: true,
+        switches: true,
+    }
+    input: {
+        switch (0) {
+          case 0:
+            console.log(g());
+            break;
+          case 1:
+            function g() { return "fn"; }
+        }
+    }
+    expect: {
+        {
+            function g() {
+                return "fn";
+            }
+            console.log(g());
+        }
+    }
+    expect_stdout: "fn"
+}
+
+issue_1729_case_block_defun_strict: {
+    options = {
+        dead_code: true,
+        evaluate: true,
+        side_effects: true,
+        switches: true,
+    }
+    input: {
+        "use strict";
+        switch (0) {
+          case 0:
+            console.log(g());
+            break;
+          case 1:
+            function g() { return "fn"; }
+        }
+    }
+    expect: {
+        "use strict";
+        {
+            function g() {
+                return "fn";
+            }
+            console.log(g());
+        }
+    }
+    expect_stdout: "fn"
+}
+
+issue_1729_default_defun: {
+    options = {
+        dead_code: true,
+        evaluate: true,
+        side_effects: true,
+        switches: true,
+    }
+    input: {
+        switch (0) {
+          case 0:
+            console.log(g());
+            break;
+          default:
+            function g() { return "fn"; }
+        }
+    }
+    expect: {
+        {
+            function g() {
+                return "fn";
+            }
+            console.log(g());
+        }
+    }
+    expect_stdout: "fn"
+}
+
+issue_1729_nested_block_defun: {
+    options = {
+        dead_code: true,
+        evaluate: true,
+        side_effects: true,
+        switches: true,
+    }
+    input: {
+        switch (0) {
+          case 0:
+            console.log(typeof g);
+            break;
+          case 1: {
+            function g() { return "fn"; }
+          }
+        }
+    }
+    expect: {
+        var g;
+        console.log(typeof g);
+    }
+    expect_stdout: "undefined"
+    reminify: false
+}
+

@@ -46,8 +46,7 @@
   "dependencies": {
     "@jridgewell/source-map": "^0.3.3",
     "acorn": "^8.15.0",
-    "commander": "^2.20.0",
-    "source-map-support": "~0.5.20"
+    "commander": "^2.20.0"
   },
   "devDependencies": {
     "@ls-lint/ls-lint": "^1.11.2",
@@ -59,7 +58,8 @@
     "pre-commit": "^1.2.2",
     "rollup": "^2.79.2",
     "semver": "^7.5.1",
-    "source-map": "~0.8.0-beta.0"
+    "source-map": "~0.8.0-beta.0",
+    "source-map-support": "~0.5.20"
   },
   "overrides": {
     "serialize-javascript": "6.0.2",

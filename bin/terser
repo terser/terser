@@ -4,10 +4,6 @@
 
 require("../tools/exit.cjs");
 
-try {
-    require("source-map-support").install();
-} catch (err) {}
-
 const fs = require("fs");
 const path = require("path");
 const program = require("commander");

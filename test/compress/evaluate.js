@@ -587,6 +587,20 @@ unsafe_constant: {
     expect_stdout: true
 }
 
+unsafe_regexp_static_property: {
+    options = {
+        evaluate: true,
+        unsafe: true,
+    }
+    input: {
+        console.log(RegExp.$1, RegExp.lastMatch);
+    }
+    expect: {
+        console.log(RegExp.$1, RegExp.lastMatch);
+    }
+    expect_stdout: true
+}
+
 unsafe_object: {
     options = {
         evaluate: true,

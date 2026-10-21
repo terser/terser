@@ -175,3 +175,37 @@ delete_nullish_2: {
         delete null.deep?.key;
     }
 }
+
+issue_1632_pure_getters_false: {
+    options = {
+        defaults: false,
+        pure_getters: false,
+        side_effects: true,
+    }
+    input: {
+        this.foo?.bar;
+        this.foo?.[bar];
+        this.foo?.bar();
+        null.deep?.unused;
+    }
+    expect: {
+        this.foo?.bar;
+        this.foo?.[bar];
+        this.foo?.bar();
+        null.deep;
+    }
+}
+
+issue_1632_pure_getters_true: {
+    options = {
+        defaults: false,
+        pure_getters: true,
+        side_effects: true,
+    }
+    input: {
+        this.foo?.bar;
+        this.foo.bar;
+    }
+    expect: {
+    }
+}

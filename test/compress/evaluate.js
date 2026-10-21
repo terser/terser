@@ -2014,7 +2014,7 @@ null_conditional_chain_eval_2: {
     }
     expect: {
         null.deep
-        null.deep?.[side_effect()]
+        null.deep
         null.deep?.unused.but_might_throw
         null.deep?.call(1)
         null.deep?.(2)

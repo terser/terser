@@ -31,7 +31,7 @@ dot_properties: {
         a.foo = "bar";
         a["if"] = "if";
         a["*"] = "asterisk";
-        a["\u0EB3"] = "unicode";
+        a.\u0EB3 = "unicode";
         a[""] = "whitespace";
         a["1_1"] = "foo";
     }
@@ -56,7 +56,7 @@ dot_properties_es5: {
         a.foo = "bar";
         a.if = "if";
         a["*"] = "asterisk";
-        a["\u0EB3"] = "unicode";
+        a.\u0EB3 = "unicode";
         a[""] = "whitespace";
     }
 }
@@ -87,6 +87,24 @@ sub_properties: {
         a.NaN = 6;
         a.null = 7;
         a[void 0] = 8;
+    }
+}
+
+dot_properties_unicode_identifiers: {
+    // https://github.com/terser/terser/issues/480
+    options = {
+        evaluate: true,
+        properties: true,
+    }
+    input: {
+        object["À"] = 1;
+        object["fooÀbar"] = 2;
+        object["́"] = 3;
+    }
+    expect: {
+        object.À = 1;
+        object.fooÀbar = 2;
+        object["́"] = 3;
     }
 }
 

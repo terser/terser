@@ -2603,3 +2603,23 @@ mangle_undeclared_properties: {
         var r={o:function(){return a.t()}};
     }
 }
+
+dont_mangle_builtin_option_keys: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        function show(bytes, duration, failure) {
+            var text = bytes.toBase64({ alphabet: "base64url", omitPadding: true });
+            var rounded = duration.round({ largestUnit: "hour", smallestUnit: "minute" });
+            return [text, rounded, failure.errors, { mine: 1 }.mine];
+        }
+    }
+    expect: {
+        function show(t, a, e) {
+            var n = t.toBase64({ alphabet: "base64url", omitPadding: true });
+            var r = a.round({ largestUnit: "hour", smallestUnit: "minute" });
+            return [n, r, e.errors, { t: 1 }.t];
+        }
+    }
+}

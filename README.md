@@ -381,7 +381,8 @@ var o={foo:1,o:3};o.foo+=o.o,console.log(o.foo);
 
 You can also pass `--mangle-props debug` in order to mangle property names
 without completely obscuring them. For example the property `o.foo`
-would mangle to `o._$foo$_` with this option. This allows property mangling
+would mangle to `o._$foo$_` with this option, and a private field `this.#foo`
+to `this.#_$foo$_`. This allows property mangling
 of a large codebase while still being able to debug the code and identify
 where mangling is breaking things.
 

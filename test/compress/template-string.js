@@ -951,3 +951,40 @@ template_string_nested: {
         "0\\n 1",
     ]
 }
+
+issue_1770: {
+    options = {
+        evaluate: true,
+        reduce_vars: true,
+        unused: true,
+        passes: 3,
+    }
+    input: {
+        (_ => {
+            const foo = "aa";
+            const bar = "ab";
+            const baz = "ac";
+
+            const a = `${foo}${bar}${baz}`;
+            console.log(a);
+
+            const b = `${baz}${bar}${foo}`;
+            console.log(b);
+
+            const c = `${baz}${foo}${bar}`;
+            console.log(c);
+        })();
+    }
+    expect: {
+        (() => {
+            console.log("aaabac");
+            console.log("acabaa");
+            console.log("acaaab");
+        })();
+    }
+    expect_stdout: [
+        "aaabac",
+        "acabaa",
+        "acaaab",
+    ]
+}

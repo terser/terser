@@ -22,6 +22,18 @@ describe("String literals", function() {
     it("Should not throw syntax error if a string has a line continuation", async function() {
         var output = parse('var a = "a\\\nb";').print_to_string();
         assert.equal(output, 'var a="ab";');
+
+        var outputCR = parse('var a = "a\\\rb";').print_to_string();
+        assert.equal(outputCR, 'var a="ab";');
+
+        var outputCRLF = parse('var a = "a\\\r\nb";').print_to_string();
+        assert.equal(outputCRLF, 'var a="ab";');
+
+        var outputLS = parse('var a = "a\\\u2028b";').print_to_string();
+        assert.equal(outputLS, 'var a="ab";');
+
+        var outputPS = parse('var a = "a\\\u2029b";').print_to_string();
+        assert.equal(outputPS, 'var a="ab";');
     });
 
     it("Should throw error in strict mode if string contains escaped octalIntegerLiteral", async function() {

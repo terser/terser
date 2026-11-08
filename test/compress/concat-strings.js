@@ -221,3 +221,24 @@ concat_8: {
     }
     expect_stdout: true
 }
+
+issue_1780: {
+    options = {
+        evaluate: true,
+    }
+    input: {
+        var x = 5;
+        console.log("n=" + -x + 1);
+        console.log("[" + (x | 0) + 0 + "]");
+        console.log("flag:" + true + 1);
+        console.log("a" + undefined + 1);
+    }
+    expect: {
+        var x = 5;
+        console.log("n=" + -x + 1);
+        console.log("[" + (x | 0) + "0]");
+        console.log("flag:true1");
+        console.log("a" + void 0 + 1);
+    }
+    expect_stdout: "n=-51\n[50]\nflag:true1\naundefined1"
+}

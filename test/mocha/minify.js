@@ -561,4 +561,20 @@ describe("minify", function() {
             });
         });
     });
+
+    it("Should not assign to undeclared name when inlining an exported arrow (issue #1782)", async function() {
+        var js = [
+            "import * as B from './b.js';",
+            "const end = (x) => x;",
+            "export const wrap = (x) => end(B.map(x));",
+            "export const sync = (v) => wrap(B.make(v));",
+            "export const fold = (s, n) => {",
+            "  if (n === 0) return sync(s);",
+            "  return B.other(n);",
+            "};",
+        ].join("\n");
+        var result = await minify(js, { module: true });
+        assert.ok(result.code.includes("export const sync=o=>{return t=r.make(o),r.map(t);var t}"));
+        assert.ok(result.code.includes("export const fold=(o,t)=>{return 0===t?(a=o,e=r.make(a),r.map(e)):r.other(t);var a,e}"));
+    });
 });

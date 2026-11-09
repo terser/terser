@@ -143,3 +143,21 @@ return_void: {
         }
     }
 }
+
+issue_1773_async_generator: {
+    options = { defaults: true }
+    input: {
+        async function* g() { return undefined; }
+        async function* h() { if (x) return void 0; yield 1; }
+        async function* i() { yield 1; return undefined; }
+        function* s() { return undefined; }
+        async function a() { return undefined; }
+    }
+    expect: {
+        async function* g() { return void 0; }
+        async function* h() { if (x) return void 0; yield 1; }
+        async function* i() { return void(yield 1); }
+        function* s() { }
+        async function a() { }
+    }
+}

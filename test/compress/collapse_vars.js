@@ -6224,3 +6224,47 @@ shadowed_variable_3: {
     }
     expect_stdout: ["PASS", "PASS"]
 }
+
+collapse_vars_array_destructuring_assignment: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        function next(state) {
+            var lo = state.lo, hi = state.hi;
+            var pair = [lo, hi] = [hi, lo + hi];
+            return { lo: lo, hi: hi, pair: pair };
+        }
+        console.log(JSON.stringify(next({ lo: 1, hi: 2 })));
+    }
+    expect: {
+        function next(state) {
+            var lo = state.lo, hi = state.hi;
+            var pair = [lo, hi] = [hi, lo + hi];
+            return { lo: lo, hi: hi, pair: pair };
+        }
+        console.log(JSON.stringify(next({ lo: 1, hi: 2 })));
+    }
+    expect_stdout: '{"lo":2,"hi":3,"pair":[2,3]}'
+}
+
+collapse_vars_array_destructuring_rest_assignment: {
+    options = {
+        collapse_vars: true,
+    }
+    input: {
+        function f(a) {
+            var b = [...a] = [2];
+            return [a, b];
+        }
+        console.log(JSON.stringify(f(1)));
+    }
+    expect: {
+        function f(a) {
+            var b = [...a] = [2];
+            return [a, b];
+        }
+        console.log(JSON.stringify(f(1)));
+    }
+    expect_stdout: "[[2],[2]]"
+}

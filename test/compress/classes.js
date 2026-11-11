@@ -321,3 +321,29 @@ class_static_block_scope_2: {
     }
     expect_stdout: ["PASS", "PASS"]
 }
+
+class_expression_no_webkit: {
+    beautify = {
+        webkit: false,
+    }
+    input: {
+        console.log(class {
+            f(a = 1 / 2) {}
+        }.b = 2);
+    }
+    expect_exact: "console.log(class{f(a=1/2){}}.b=2);"
+    expect_stdout: "2"
+}
+
+class_expression_webkit: {
+    beautify = {
+        webkit: true,
+    }
+    input: {
+        console.log(class {
+            f(a = 1 / 2) {}
+        }.b = 2);
+    }
+    expect_exact: "console.log((class{f(a=1/2){}}).b=2);"
+    expect_stdout: "2"
+}

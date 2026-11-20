@@ -70,9 +70,6 @@ inline_within_extends_2: {
     expect: {
         class Baz extends(function(foo_base) {
             return class extends foo_base {
-                constructor() {
-                    super(...arguments);
-                }
                 second() {
                     return this[1];
                 }
@@ -84,9 +81,6 @@ inline_within_extends_2: {
                 }
             };
         }(Array))) {
-            constructor() {
-                super(...arguments);
-            }
         }
         console.log(new Baz(1, "PASS", 3).second());
     }

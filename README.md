@@ -283,7 +283,7 @@ in core JavaScript classes, which is what will break your code if you don't:
 
 1. Control all the code you're mangling
 2. Avoid using a module bundler, as they usually will call Terser on each file individually, making it impossible to pass mangled objects between modules.
-3. Avoid calling functions like `defineProperty` or `hasOwnProperty`, because they refer to object properties using strings and will break your code if you don't know what you are doing.
+3. Avoid passing property names around as strings. Terser handles `"prop" in obj`, `obj.hasOwnProperty("prop")` and the like, but not strings your own functions take (mark those with `/*@__KEY__*/`).
 
 An example:
 

@@ -2603,3 +2603,27 @@ mangle_undeclared_properties: {
         var r={o:function(){return a.t()}};
     }
 }
+
+dont_mangle_namespaced_builtin_members: {
+    mangle = {
+        properties: {},
+    }
+    input: {
+        var fmt = new Intl.DateTimeFormat("en");
+        var o = { p: 1 };
+        console.log(fmt.resolvedOptions(), fmt.formatRange(1, 2), o.p);
+        function span(date, other) {
+            var days = date.until(other).total({ unit: "day" });
+            return days + date.toPlainDate().dayOfWeek;
+        }
+    }
+    expect: {
+        var fmt = new Intl.DateTimeFormat("en");
+        var o = { t: 1 };
+        console.log(fmt.resolvedOptions(), fmt.formatRange(1, 2), o.t);
+        function span(n, t) {
+            var a = n.until(t).total({ unit: "day" });
+            return a + n.toPlainDate().dayOfWeek;
+        }
+    }
+}

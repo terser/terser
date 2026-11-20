@@ -1,5 +1,10 @@
 # Changelog
 
+## v4.8.2
+
+- Fix source code leak through sourceMap.content (input sourcemap)
+    - This change changes sourcemap output if including the original source code is desired. `includeSources` is now required to be explicitly set when an input sourcemap is used.
+
 ## v4.8.1
 
  - Security fix for RegExps that should not be evaluated (regexp DDOS)

@@ -1,5 +1,9 @@
 # Changelog
 
+## v5.51.4
+
+- Remove accidentally included source maps
+
 ## v5.51.3
 
 - Fix source code leak through sourceMap.content (input sourcemap)

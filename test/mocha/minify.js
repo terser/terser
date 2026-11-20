@@ -148,6 +148,28 @@ describe("minify", function() {
         assert.strictEqual(run_code(compressed), run_code(original));
     });
 
+    it("Should not rename an undeclared global to a cached name in a module", async function() {
+        var cache = {};
+        var compressed = "";
+
+        await for_each_async([
+            'import process from "node:process";export const pid=process.pid;',
+            "export const platform=process.platform;",
+        ], async function(code) {
+            var result = await minify(code, {
+                compress: false,
+                module: true,
+                nameCache: cache
+            });
+            compressed += result.code;
+        });
+        assert.strictEqual(compressed, [
+            'import o from"node:process";export const pid=o.pid;',
+            // A module's toplevel is its own, so `process` is still the global here.
+            "export const platform=process.platform;",
+        ].join(""));
+    });
+
     it("Should avoid mangled names in cache", async function() {
         var cache = {};
         var original = "";

@@ -263,6 +263,87 @@ shorthand_properties: {
     }
 }
 
+shorthand_proto_mangled: {
+    mangle = true;
+    input: {
+        function wrap(__proto__) {
+            return {__proto__};
+        }
+        console.log(Object.prototype.hasOwnProperty.call(wrap({}), "__proto__"));
+        var __proto__ = {};
+        console.log(Object.prototype.hasOwnProperty.call({__proto__, __proto__: null}, "__proto__"));
+    }
+    expect_exact: 'function wrap(_){return{["__proto__"]:_}}console.log(Object.prototype.hasOwnProperty.call(wrap({}),"__proto__"));var __proto__={};console.log(Object.prototype.hasOwnProperty.call({["__proto__"]:__proto__,__proto__:null},"__proto__"));'
+    expect_stdout: [
+        "true",
+        "true",
+    ]
+}
+
+shorthand_proto_es5: {
+    format = {
+        ecma: 5,
+    }
+    input: {
+        function wrap(__proto__) {
+            return {__proto__};
+        }
+        console.log(Object.prototype.hasOwnProperty.call(wrap({}), "__proto__"));
+    }
+    expect_exact: 'function wrap(__proto__){return{["__proto__"]:__proto__}}console.log(Object.prototype.hasOwnProperty.call(wrap({}),"__proto__"));'
+    expect_stdout: "true"
+}
+
+explicit_proto_property: {
+    mangle = true;
+    input: {
+        function wrap(value) {
+            return {__proto__: value};
+        }
+        console.log(Object.prototype.hasOwnProperty.call(wrap({}), "__proto__"));
+    }
+    expect_exact: 'function wrap(o){return{__proto__:o}}console.log(Object.prototype.hasOwnProperty.call(wrap({}),"__proto__"));'
+    expect_stdout: "false"
+}
+
+shorthand_proto_conditional: {
+    options = {
+        conditionals: true,
+    }
+    input: {
+        function f(c, __proto__) {
+            return c ? {__proto__} : {__proto__: __proto__};
+        }
+        var value = {marker: 42};
+        console.log(Object.prototype.hasOwnProperty.call(f(true, value), "__proto__"));
+        console.log(f(false, value).marker);
+    }
+    expect_exact: 'function f(c,__proto__){return c?{["__proto__"]:__proto__}:{__proto__:__proto__}}var value={marker:42};console.log(Object.prototype.hasOwnProperty.call(f(true,value),"__proto__"));console.log(f(false,value).marker);'
+    expect_stdout: [
+        "true",
+        "42",
+    ]
+}
+
+shorthand_proto_conditional_reverse: {
+    options = {
+        conditionals: true,
+    }
+    input: {
+        function f(c, __proto__) {
+            return c ? {__proto__: __proto__} : {__proto__};
+        }
+        var value = {marker: 42};
+        console.log(f(true, value).marker);
+        console.log(Object.prototype.hasOwnProperty.call(f(false, value), "__proto__"));
+    }
+    expect_exact: 'function f(c,__proto__){return c?{__proto__:__proto__}:{["__proto__"]:__proto__}}var value={marker:42};console.log(f(true,value).marker);console.log(Object.prototype.hasOwnProperty.call(f(false,value),"__proto__"));'
+    expect_stdout: [
+        "42",
+        "true",
+    ]
+}
+
 concise_methods: {
     beautify = {
         ecma: 2015

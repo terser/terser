@@ -147,7 +147,8 @@ relational: {
         "bar" >= "bar";
     }
     expect: {
-        bar();
+        foo() in foo();
+        foo() instanceof bar();
         bar();
         bar(), bar();
         bar();

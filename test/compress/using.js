@@ -512,6 +512,27 @@ multiple_await_using_can_be_joined_with_join_vars: {
     }
 }
 
+multiple_using_preserves_comments_with_join_vars: {
+    options = {
+        join_vars: true,
+    }
+    format = {
+        comments: "some",
+    }
+    input: {
+        function f() {
+            using a = g();
+            using b = h();
+            /* @license MIT */
+            using c = k(); /* @copyright End */
+        }
+    }
+    expect_exact: [
+        "function f(){using a=g(),b=h(),",
+        "/* @license MIT */c=k();/* @copyright End */}",
+    ]
+}
+
 using_should_be_kept_with_defaults_unsafe: {
     options = {
         defaults: true,

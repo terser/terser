@@ -207,3 +207,27 @@ avoid_spread_this: {
 
     expect_stdout: "[ 'PA', 'SS' ]"
 }
+
+// https://github.com/terser/terser/issues/1799
+object_spread_dont_inline_proto: {
+    options = {
+        defaults: true
+    }
+    input: {
+        function make() {
+            const o = { ...{ __proto__: { inherited: 1 }, own: 2 } };
+            return "inherited" in o;
+        }
+        console.log(make());
+        const p = { x: 1 };
+        const q = { __proto__: null, ...{ __proto__: p, own: 2 } };
+        console.log(Object.getPrototypeOf(q) === null, "x" in q, q.own);
+        const r = { ...{ "__proto__": p, own: 3 } };
+        console.log("x" in r, r.own);
+    }
+    expect_stdout: [
+        "false",
+        "true false 2",
+        "false 3",
+    ]
+}

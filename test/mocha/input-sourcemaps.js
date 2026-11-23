@@ -28,7 +28,8 @@ describe("input sourcemaps", function() {
 
         var result = await minify(transpiled, {
             sourceMap: {
-                content: transpilemap
+                content: transpilemap,
+                includeSources: true,
             }
         });
 
@@ -96,7 +97,8 @@ describe("input sourcemaps", function() {
         var result = await minify(inputFile, {
             sourceMap: {
                 content: JSON.parse(generator.toString()),
-                url: 'inline'
+                url: 'inline',
+                includeSources: true,
             }
         });
 

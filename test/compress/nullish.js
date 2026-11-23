@@ -175,3 +175,95 @@ delete_nullish_2: {
         delete null.deep?.key;
     }
 }
+
+issue_1801_evaluate_only: {
+    options = {
+        ecma: 2020,
+        defaults: false,
+        evaluate: true,
+    }
+    input: {
+        var o = {
+            f() {
+                return this === o ? "direct" : "indirect";
+            },
+            g: 1,
+        };
+        console.log((null ?? o.f)());
+        console.log((undefined ?? o.f)());
+        console.log(delete (null ?? o.g), "g" in o);
+        console.log(delete (undefined ?? o.g), "g" in o);
+        console.log(typeof (null ?? o.f));
+    }
+    expect: {
+        var o = {
+            f() {
+                return this === o ? "direct" : "indirect";
+            },
+            g: 1,
+        };
+        console.log((0, o.f)());
+        console.log((0, o.f)());
+        console.log((0, o.g, true), "g" in o);
+        console.log((0, o.g, true), "g" in o);
+        console.log(typeof o.f);
+    }
+    node_version: ">=14"
+    expect_stdout: [
+        "indirect",
+        "indirect",
+        "true true",
+        "true true",
+        "function",
+    ]
+}
+
+issue_1801_defaults: {
+    options = {
+        ecma: 2020,
+        defaults: true,
+    }
+    input: {
+        var o = {
+            f() {
+                return this === o ? "direct" : "indirect";
+            },
+            g: 1,
+        };
+        console.log((null ?? o.f)());
+        console.log(((1 ? null : 0) ?? o.f)());
+        console.log((null ?? o?.f)());
+        console.log(function() {
+            var ev = "local";
+            return (null ?? eval)("typeof ev");
+        }());
+        console.log(delete (null ?? o.g), "g" in o);
+        console.log(delete ((1 ? null : 0) ?? o.g), "g" in o);
+        console.log(null ?? o.g);
+    }
+    expect: {
+        var o = {
+            f() {
+                return this === o ? "direct" : "indirect";
+            },
+            g: 1,
+        };
+        console.log((0, o.f)()),
+        console.log((0, o.f)()),
+        console.log((0, o?.f)()),
+        console.log((0, eval)("typeof ev")),
+        console.log((o.g, !0), "g" in o),
+        console.log((o.g, !0), "g" in o),
+        console.log(o.g);
+    }
+    node_version: ">=14"
+    expect_stdout: [
+        "indirect",
+        "indirect",
+        "indirect",
+        "undefined",
+        "true true",
+        "true true",
+        "1",
+    ]
+}

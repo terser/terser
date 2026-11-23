@@ -77,7 +77,7 @@ describe("bin/terser", function() {
         var command = [
             tersercmd,
             "--source-map", "content=" + mapFile,
-            "--source-map", "url=inline",
+            "--source-map", "url=inline,includeSources",
             "-f", "wrap_func_args",
         ].join(" ");
 
@@ -191,7 +191,7 @@ describe("bin/terser", function() {
         });
     });
     it("Should process inline source map", function(done) {
-        var command = tersercmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline";
+        var command = tersercmd + " test/input/issue-520/input.js -mc toplevel --source-map content=inline,url=inline,includeSources";
 
         exec(command, function (err, stdout) {
             if (err) throw err;

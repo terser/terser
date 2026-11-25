@@ -453,6 +453,72 @@ nested_private_properties_can_be_mangled: {
     }
 }
 
+private_properties_mangle_debug: {
+    mangle = {
+        properties: {
+            debug: "",
+        },
+    }
+    input: {
+        class X {
+            aaaaaa = "P"
+            #aaaaaa = "A"
+            #bbbbbb() {
+                return "SS"
+            }
+            log() {
+                console.log(this.aaaaaa + this.#aaaaaa + this.#bbbbbb() + (#aaaaaa in this))
+            }
+        }
+
+        new X().log()
+    }
+    expect: {
+        class X {
+            _$aaaaaa$_ = "P"
+            #_$aaaaaa$_ = "A"
+            #_$bbbbbb$_() {
+                return "SS"
+            }
+            log() {
+                console.log(this._$aaaaaa$_ + this.#_$aaaaaa$_ + this.#_$bbbbbb$_() + (#_$aaaaaa$_ in this))
+            }
+        }
+
+        new X().log()
+    }
+    expect_stdout: "PASStrue"
+}
+
+private_properties_mangle_debug_suffix: {
+    mangle = {
+        properties: {
+            debug: "XYZ",
+        },
+    }
+    input: {
+        class X {
+            #aaaaaa = "PASS"
+            log() {
+                console.log(this.#aaaaaa)
+            }
+        }
+
+        new X().log()
+    }
+    expect: {
+        class X {
+            #_$aaaaaa$XYZ_ = "PASS"
+            log() {
+                console.log(this.#_$aaaaaa$XYZ_)
+            }
+        }
+
+        new X().log()
+    }
+    expect_stdout: "PASS"
+}
+
 allow_private_field_with_in_operator : {
     mangle = {
         properties: true

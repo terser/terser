@@ -1236,3 +1236,47 @@ collapse_rhs_lhs: {
     }
     expect_stdout: "1 3"
 }
+
+issue_1758_1: {
+    options = {
+        defaults: true,
+        pure_getters: false,
+    }
+    input: {
+        "use strict";
+        (function () {
+            var log = [];
+            var source = {
+                get p() {
+                    log.push("getter ran");
+                    return 1;
+                },
+            };
+            var copy = { ...source };
+            console.log(log.length);
+        })();
+    }
+    expect_stdout: "1"
+}
+
+issue_1758_2: {
+    options = {
+        defaults: true,
+        pure_getters: "strict",
+    }
+    input: {
+        "use strict";
+        (function () {
+            var log = [];
+            var source = {
+                get p() {
+                    log.push("getter ran");
+                    return 1;
+                },
+            };
+            var copy = { a: 1, ...source, b: 2 };
+            console.log(log.length);
+        })();
+    }
+    expect_stdout: "1"
+}

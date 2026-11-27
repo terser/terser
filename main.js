@@ -8,13 +8,14 @@ export { run_cli as _run_cli } from "./lib/cli.js";
 export async function _default_options() {
     const defs = {};
 
-    Object.keys(infer_options({ 0: 0 })).forEach((component) => {
-        const options = infer_options({
+    const base = await infer_options({ 0: 0 });
+    for (const component of Object.keys(base)) {
+        const options = await infer_options({
             [component]: {0: 0}
         });
 
         if (options) defs[component] = options;
-    });
+    }
     return defs;
 }
 
